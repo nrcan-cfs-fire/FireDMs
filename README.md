@@ -21,3 +21,15 @@ The broad axioms of this framework are as follows:
 A single core logic module (i) reads an R list object that contains ecozone (i.e. relative abundance of spruce vs pine and resprouters vs non-resprouter broadleaf forest) and ecozone x severity-dependent variables. (ii) creates the DM as a list object (with each DM paired from->to as an row in the list object.
 
 The DMs could be re-created per geospatial unit eventually, but otherwise are designed to be run annual when the median Drought Code of burning (from FireM3 hotspots) is known, as well as the relative proportion of differing forest types burned.
+
+Subroutines:
+
+0) Read user-inputted values relevant to various ecozones and severity levels (from csv to list?)
+
+1a) Read (or create) ecozone-level summaries of distribution of traits related to fire (tap root vs shallow root; resprouter vs non-resprouter) based on (a) NFI GP distribution or better (b) user provided burned area polygons
+
+1b) Compute median Drought Code values for all fires in ecozone either from (a) climatology or (b) as query against FireM3 data for a given year.
+
+2) Compute the ecozone-specific DMs and store as list file
+
+

@@ -30,6 +30,6 @@ Subroutines:
 
 1b) Compute median Drought Code values for all fires in ecozone either from (a) climatology or (b) as query against FireM3 data for a given year.
 
-2) Compute the ecozone-specific DMs and store as list file
+2) Compute the ecozone-specific DMs and store as nested list file, where each ecozone is its own list, and those lists are merged into another list: https://statisticsglobe.com/create-nested-list-in-r
 
 

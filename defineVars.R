@@ -46,25 +46,33 @@ VarDefs <- read.csv("~/FireDMs/FireDMTableDefs.csv")
 # do I need to load each of these into the environment?  No, since I need to look up each per ecozone each time.....
 # so each equation down below should be per ecozone and severity class when building the DM, don't want to load these into the environment itself
 
-#template to query VarDefs, have to give ecozone and variable name each time:
+#template to query VarDefs, have to give ecozone and variable name each time (this is not severity class dependent):
 #VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == "BP"]
 
+#example of query for value as part of DM computation with severity dependence:
+#VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == "BP" & VarDefs$SeverityClass == "Mod"]
 
 
 
 
+## start loop:
 
-  
-  #then here, since we can't import equations (or don't want to), start spelling out each flux:
-
-### do this in a loop, for each ecozone:
-
-#softwood merch
+ecozone <- c("BP") #loop this later on
 
 
 
+# SW Merch to SW Merch (survival of conifers)
+#simple example, just referencing the VarDefs csv there:
+SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == "BP" & VarDefs$SeverityClass == "Low"])
+SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Mod"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == "BP" & VarDefs$SeverityClass == "Mod"])
+SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "High"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == "BP" & VarDefs$SeverityClass == "High"])
 
+#but, I'm not doing this easily across all three severity classes, no need to run it across each severity class as its own line....
+
+## end loop
   
   # final step: once you have a list each built by ecozone, then build a higher-level list called "FireDM"
   FireDM <- list(LA,TP,TSW,BSW,BP,P,TC,BC,PM,MC,HP,TSW,BSE)
+
+  #then, create a tabular DM for inspection, for a given ecozone and a given severity class:
   

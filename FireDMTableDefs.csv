@@ -1,0 +1,19 @@
+Pool,Plain.Language.Name,Variable.Name,Ecozone,Value,SeverityClass,InterimValue
+Branch,Softwood small branch fraction of total branchwood,SW.SmBranch.frac.of.tot.BW,BP,0.5,NA,TRUE
+Branch,Hardwood small branch fraction of total branchwood,HW.SmBranch.frac.of.tot.BW,BP,0.5,NA,TRUE
+Other,"Softwood branchwood as portion of total ""other"" pool",SW.BW.frac.of.other,BP,0.4,NA,TRUE
+Other,"Hardwood branchwood as portion of total ""other"" pool",HW.BW.frac.of.other,BP,0.4,NA,TRUE
+Other,"Hardwood Bark as portion of ""other"" pool",HW.bark.frac.of.other,BP,0.1,NA,TRUE
+Other,"Softwood Bark as portion of ""other"" pool",SW.bark.frac.of.other,BP,0.1,NA,TRUE
+Other,Hardwood small trees as portion of other pool,HW.SmTree.frac.of.other,BP,0.5,NA,TRUE
+Other,Softwood small trees as portion of other pool,SW.SmTree.frac.of.other,BP,0.5,NA,TRUE
+Other,"Softwood stumps as portion of ""other"" pool",SW.stumps.frac.of.other,BP,0.1,NA,TRUE
+Other,"Hardwood stumps as portion of ""other"" pool",HW.stumps.frac.of.other,BP,0.1,NA,TRUE
+Roots,Softwood Portion of coarse roots in duff,SW.prop.Coarse.Root.duff,BP,0.5,NA,TRUE
+Roots,Softwood portion of fine roots in duff,SW.prop.Fine.Root.duff,BP,0.5,NA,TRUE
+Roots,Hardwood portion of coarse roots in duff,HW.prop.Coarse.Root.duff,BP,0.5,NA,TRUE
+Roots,Hardwood portion of fine roots in duff,HW.prop.Fine.Root.duff,BP,0.5,NA,TRUE
+SubMerch,Softwood SubMerch Coarse Branchwood fraction of total AG Biomass,SW.SubMerch.Coarse.BranchWood.frac.total,BP,0.1,NA,TRUE
+SubMerch,Hardwood SubMerch Coarse Branchwood fraction of total AG Biomass,HW.SubMerch.Coarse.BranchWood.frac.total,BP,0.1,NA,TRUE
+AGFastDOM,Woody Debris Portion of AGFastDOM,CWD.frac.of.AGFastDOM,BP,0.5,NA,TRUE
+Snag,Median DBH of snags,Snag.Median.DBH,BP,15,NA,TRUE

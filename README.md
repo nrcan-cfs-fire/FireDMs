@@ -13,11 +13,11 @@ The broad axioms of this framework are as follows:
 4) In submerchantable trees, mortality = CFB		
 5) In submerchantable trees, mortality is <= 1
 
-6a) In merchantable stands, CFB < mortality		
-6b)Survival = 1 - mortality	
-6c) CFB < survival	
-6d) The girdled fraction of trees = mortality - CFB	
-6e) Survival <= 1 and also >= 0	
+6) In merchantable stands, CFB < mortality		
+7)Survival = 1 - mortality	
+8) CFB < survival	
+9) The girdled fraction of trees = mortality - CFB	
+10) Survival <= 1 and also >= 0	
 
 A single core logic module (i) reads an R list object that contains ecozone (i.e. relative abundance of spruce vs pine and resprouters vs non-resprouter broadleaf forest) and ecozone x severity-dependent variables. (ii) creates the DM as a list object (with each DM paired from->to as an row in the list object.
 

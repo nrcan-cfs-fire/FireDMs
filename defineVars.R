@@ -1,6 +1,7 @@
 #just starting to lay down some variable names
 
 #level 0 - global vars - not nested, just a list on its own
+library(tidyverse)
 
 
 #populate the values first:
@@ -32,13 +33,36 @@ BP$Ecozone.name <- c("BP")
 
 
 
+#list of ecozone-specific terms (with and without severity dependence)
+#first, import blank template that works for a single ecozone:
+VarDefs.generic <- as.data.frame(read.csv("~/FireDMs/VarDefsGeneric.csv"))
+VarDefs.generic <- VarDefs.generic[,1:7]
 
-#import generic list of source-sink equations
+#then, replicate for each severity level*ecozone
+
+#use slice from dplyr and each to replicate the template for each ecozone
+VarDefs <- VarDefs.generic %>% slice(rep(1:n(), each = length(ecozones.list)))
+
+#fill in ecozone names:
+VarDefs$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(VarDefs.generic))
+
+#Once this is done and filled, load the canonical version: 
+VarDefs <- read.csv("~/FireDMs/FireDMTableDefs.csv")
+
+
+
+
+#sink-source DM list:
+#first, import blank template that works for a single ecozone:
+SourceSinkGeneric <- read.csv("~/FireDMs/SourceSinkGeneric.csv")
+
+
+#then, replicate for each severity level*ecozone
+
+#Once this is done and filled, load the canonical version: 
 SourceSink <- read.csv("~/FireDMs/SourceSinkLong.csv")
 
-#then, import the variable definitions:
 
-VarDefs <- read.csv("~/FireDMs/FireDMTableDefs.csv")
 
 #not run, just testing data frame loading:
 #VarDefs$Variable.Name[2]

@@ -1,301 +1,301 @@
-Ecozone,FluxID,Source,Sink,ProcessSynonym,Pseudocode,Notes,SeverityClass,Value
-,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,"f(severity class,ecozone)",Ellen provides,Low,
-,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,mortality rate of conifers,Note: not accounting for trees killed that immediately fall to ground,Low,
-,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,Low,
-,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,(1-Mortality)*(1-CFB),Ellen provides,Low,
-,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,Low,
-,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Low,
-,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Low,
-,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Low,
-,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",Low,
-,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",Low,
-,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,Low,
-,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,Low,
-,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Low,
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,Low,
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Low,
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,
-,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,Low,
-,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",Low,
-,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,Low,
-,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,Low,
-,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,Low,
-,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,Low,
-,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,Low,
-,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,Low,
-,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,Low,
-,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,Low,
-,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,Low,
-,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,Low,
-,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,Low,
-,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,Low,
-,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Low,
-,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Low,
-,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Low,
-,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,Low,
-,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,Low,
-,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,Low,
-,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,Low,
-,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Low,
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,Low,
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,Low,
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Low,
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Low,
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Low,
-,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Low,
-,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,Low,
-,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,Low,
-,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,Low,
-,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,Low,
-,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,Low,
-,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,Low,
-,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,Low,
-,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,Low,
-,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,Low,
-,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,Low,
-,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",Low,
-,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,Low,
-,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,Low,
-,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,Low,
-,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,Low,
-,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,Low,
-,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,Low,
-,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,Low,
-,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,Low,
-,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,Low,
-,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,Low,
-,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,Low,
-,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,Low,
-,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,Low,
-,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,Low,
-,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,Low,
-,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,Low,
-,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,Low,
-,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,Low,
-,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,Low,
-,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,Low,
-,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Low,
-,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Low,
-,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,Low,
-,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,Low,
-,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,Low,
-,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",Low,
-,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",Low,
-,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,Low,
-,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,Low,
-,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,Low,
-,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,Low,
-,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Low,
-,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Low,
-,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,Low,
-,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,Low,
-,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,Low,
-,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,Low,
-,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,Low,
-,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,Low,
-,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,Low,
-,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,"f(severity class,ecozone)",Ellen provides,Mod,
-,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,mortality rate of conifers,Note: not accounting for trees killed that immediately fall to ground,Mod,
-,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,Mod,
-,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,(1-Mortality)*(1-CFB),Ellen provides,Mod,
-,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,Mod,
-,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Mod,
-,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Mod,
-,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Mod,
-,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",Mod,
-,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",Mod,
-,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,Mod,
-,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,Mod,
-,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Mod,
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,Mod,
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Mod,
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,
-,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,Mod,
-,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",Mod,
-,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,Mod,
-,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,Mod,
-,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,Mod,
-,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,Mod,
-,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,Mod,
-,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,Mod,
-,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,Mod,
-,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,Mod,
-,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,Mod,
-,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,Mod,
-,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,Mod,
-,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,Mod,
-,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Mod,
-,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Mod,
-,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Mod,
-,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,Mod,
-,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,Mod,
-,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,Mod,
-,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,Mod,
-,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Mod,
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,Mod,
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,Mod,
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Mod,
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Mod,
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Mod,
-,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Mod,
-,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,Mod,
-,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,Mod,
-,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,Mod,
-,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,Mod,
-,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,Mod,
-,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,Mod,
-,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,Mod,
-,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,Mod,
-,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,Mod,
-,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,Mod,
-,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",Mod,
-,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,Mod,
-,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,Mod,
-,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,Mod,
-,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,Mod,
-,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,Mod,
-,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,Mod,
-,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,Mod,
-,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,Mod,
-,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,Mod,
-,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,Mod,
-,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,Mod,
-,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,Mod,
-,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,Mod,
-,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,Mod,
-,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,Mod,
-,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,Mod,
-,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,Mod,
-,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,Mod,
-,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,Mod,
-,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,Mod,
-,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Mod,
-,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Mod,
-,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,Mod,
-,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,Mod,
-,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,Mod,
-,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",Mod,
-,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",Mod,
-,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,Mod,
-,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,Mod,
-,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,Mod,
-,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,Mod,
-,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Mod,
-,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Mod,
-,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,Mod,
-,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,Mod,
-,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,Mod,
-,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,Mod,
-,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,Mod,
-,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,Mod,
-,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,Mod,
-,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,"f(severity class,ecozone)",Ellen provides,High,
-,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,mortality rate of conifers,Note: not accounting for trees killed that immediately fall to ground,High,
-,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,High,
-,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,(1-Mortality)*(1-CFB),Ellen provides,High,
-,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,High,
-,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,High,
-,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,High,
-,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,High,
-,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",High,
-,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",High,
-,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,High,
-,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,High,
-,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,High,
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,High,
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,High,
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,
-,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,High,
-,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",High,
-,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,High,
-,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,High,
-,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,High,
-,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,High,
-,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,High,
-,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,High,
-,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,High,
-,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,High,
-,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,High,
-,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,High,
-,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,High,
-,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,High,
-,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,High,
-,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,High,
-,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,High,
-,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,High,
-,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,High,
-,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,High,
-,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,High,
-,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,High,
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,High,
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,High,
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,High,
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,High,
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,High,
-,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,High,
-,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,High,
-,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,High,
-,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,High,
-,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,High,
-,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,High,
-,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,High,
-,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,High,
-,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,High,
-,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,High,
-,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,High,
-,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",High,
-,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,High,
-,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,High,
-,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,High,
-,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,High,
-,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,High,
-,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,High,
-,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,High,
-,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,High,
-,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,High,
-,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,High,
-,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,High,
-,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,High,
-,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,High,
-,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,High,
-,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,High,
-,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,High,
-,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,High,
-,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,High,
-,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,High,
-,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,High,
-,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",High,
-,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",High,
-,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,High,
-,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,High,
-,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,High,
-,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",High,
-,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",High,
-,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,High,
-,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,High,
-,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,High,
-,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,High,
-,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,High,
-,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,High,
-,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,High,
-,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,High,
-,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,High,
-,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,High,
-,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,High,
-,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,High,
-,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,High,
+Ecozone,FluxID,Source,Sink,ProcessSynonym,Pseudocode,Notes,SeverityClass,Value,InterimValue
+,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,1-mortality rate,Ellen provides,Low,0.8,TRUE
+,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,1-mortality rate,Ellen provides,Mod,0.5,TRUE
+,1,Softwood Merchantable,Softwood Merchantable,Survival rate of large conifers,1-mortality rate,Ellen provides,High,0.1,TRUE
+,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,"f(severity class,ecozone) from field obs",Note: not accounting for trees killed that immediately fall to ground,Low,0.2,TRUE
+,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,"f(severity class,ecozone) from field obs",Note: not accounting for trees killed that immediately fall to ground,Mod,0.5,TRUE
+,2,Softwood Merchantable,Softwood Stem Snag,Mortality rate of large conifers,"f(severity class,ecozone) from field obs",Note: not accounting for trees killed that immediately fall to ground,High,0.9,TRUE
+,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,Low,0,TRUE
+,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,Mod,0,TRUE
+,3,Softwood Merchantable,Black Carbon,Live conifer to BC rate,0,live stemwood to BC should be precisely 0,High,0,TRUE
+,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,"IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])",Ellen provides,Low,0.8,TRUE
+,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,"IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])",Ellen provides,Mod,0,TRUE
+,4,Softwood Foliage,Softwood Foliage,Green fraction of canopy remaining intact after fire,"IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])",Ellen provides,High,0,TRUE
+,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,Low,0,TRUE
+,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,Mod,0.2,TRUE
+,5,Softwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall (heat-killed but not burned),Mortality-CFB,Ellen provides,High,0,TRUE
+,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Low,0,TRUE
+,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Mod,0.45,TRUE
+,6,Softwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,High,0.9,TRUE
+,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Low,0,TRUE
+,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Mod,0.01,TRUE
+,7,Softwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,High,0.01,TRUE
+,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Low,0.01,TRUE
+,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Mod,0.05,TRUE
+,8,Softwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,High,0.09,TRUE
+,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",Low,,TRUE
+,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",Mod,,TRUE
+,9,Softwood Other,Softwood Other,"unconsumed Live branches, stumps and small trees including bark","(1-(mortality rate of conifers)*branch fraction of ""other"" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(global mortality of submerch conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)","Note: unconsumed but dead bark remains in ""other"" pool here?",High,,TRUE
+,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",Low,,TRUE
+,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",Mod,,TRUE
+,10,Softwood Other,Softwood Branch Snag,"Portion of ""other"" pool as killed by fire but unconsumed branches",[CFB*(branch fract of other)+(fraction of branches consumed)]+[(mort-CFB)*(brach fract of other)],"Note: taking into account that large diameter branches don't get consumed in a crown fire, so they convert to snags. Also: given the mortality-CFB can sometimes be positive or negative, enforcing a min value of zero here.",High,,TRUE
+,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,Low,,TRUE
+,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,Mod,,TRUE
+,11,Softwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO2,Assuming small trees (<1.3 height?) burn alongside litter,High,,TRUE
+,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,Low,,TRUE
+,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,Mod,,TRUE
+,12,Softwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCH4,,High,,TRUE
+,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Low,,TRUE
+,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Mod,,TRUE
+,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,High,,TRUE
+,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,Low,,TRUE
+,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,Mod,,TRUE
+,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,1-(global mortality of submerch conifers in severity class),,High,,TRUE
+,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Low,,TRUE
+,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Mod,,TRUE
+,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,High,,TRUE
+,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,,TRUE
+,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,,TRUE
+,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,,TRUE
+,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,,TRUE
+,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,,TRUE
+,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,,TRUE
+,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,,TRUE
+,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,,TRUE
+,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,,TRUE
+,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,Low,,TRUE
+,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,Mod,,TRUE
+,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,1-(conifer mortality rate),,High,,TRUE
+,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",Low,,TRUE
+,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",Mod,,TRUE
+,20,Softwood Coarse Roots,Above Ground Fast soil C,Coarse Roots killed in fire but not combusted in organic soil,(conifer mortality rate)*(conifer coarse root fraction in organic soil),"Note: assuming even if duff burns, coarse live roots don't burn alongside",High,,TRUE
+,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,Low,,TRUE
+,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,Mod,,TRUE
+,21,Softwood Coarse Roots,Below Ground Fast soil C,Coarse Roots killed in fire but not combusted in mineral soil,(conifer mortality rate)*(conifer coarse root fraction in mineral soil),,High,,TRUE
+,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,Low,,TRUE
+,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,Mod,,TRUE
+,22,Softwood Fine Roots,Softwood Fine Roots,Surviving fine roots,1-(conifer mortality rate),,High,,TRUE
+,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,Low,,TRUE
+,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,Mod,,TRUE
+,23,Softwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed),,High,,TRUE
+,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,Low,,TRUE
+,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,Mod,,TRUE
+,24,Softwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(fine root fraction in mineral soil),,High,,TRUE
+,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,Low,,TRUE
+,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,Mod,,TRUE
+,25,Softwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO2,,High,,TRUE
+,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,Low,,TRUE
+,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,Mod,,TRUE
+,26,Softwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCH4,,High,,TRUE
+,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,Low,,TRUE
+,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,Mod,,TRUE
+,27,Softwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*SmoulderingCO,,High,,TRUE
+,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,Low,,TRUE
+,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,Mod,,TRUE
+,28,Hardwood Merchantable,Hardwood Merchantable,Survival rate of broadleaf trees,"f(severity class,ecozone)",Ellen provides,High,,TRUE
+,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,Low,,TRUE
+,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,Mod,,TRUE
+,29,Hardwood Merchantable,Hardwood Stem Snag,Mortality rate of broadleaves,mortality rate of broadleafs,Note: not accounting for trees killed that immediately fall to ground,High,,TRUE
+,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,Low,,TRUE
+,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,Mod,,TRUE
+,30,Hardwood Merchantable,Black Carbon,Live broadleaf stemwood to black carbon (incomplete combustion) rate,0,live stemwood to BC should be precisely 0,High,,TRUE
+,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,Low,,TRUE
+,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,Mod,,TRUE
+,31,Hardwood Foliage,Hardwood Foliage,Green fraction of canopy,(1-Mortality)*(1-CFB),Ellen provides,High,,TRUE
+,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,Low,,TRUE
+,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,Mod,,TRUE
+,32,Hardwood Foliage,Above Ground Very Fast soil C,Post-fire litterfall,Mortality-CFB,Ellen provides,High,,TRUE
+,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Low,,TRUE
+,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,Mod,,TRUE
+,33,Hardwood Foliage,CO2,Crown Fraction Burned,CFB*FlamingCO2,Ellen provides,High,,TRUE
+,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Low,,TRUE
+,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,Mod,,TRUE
+,34,Hardwood Foliage,CH4,Crown Fraction Burned,CFB*FlamingCH4,Ellen provides,High,,TRUE
+,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Low,,TRUE
+,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,Mod,,TRUE
+,35,Hardwood Foliage,CO,Crown Fraction Burned,CFB*FlamingCO,Ellen provides,High,,TRUE
+,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,Low,,TRUE
+,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,Mod,,TRUE
+,36,Hardwood Other,Hardwood Other,"Surviving Live branches, stumps and small trees including bark","((1-mortality rate of deciduous)*branch fraction of ""other"" pool)+(1-CFB*stump fraction of other pool)+(1-small tree combustion rate f(severity)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)",,High,,TRUE
+,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,Low,,TRUE
+,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,Mod,,TRUE
+,37,Hardwood Other,Hardwood Branch Snag,"Portion of ""other"" pool as dead but unburned large branches","(mortality rate of deciduous*branch fraction of ""other"" pool)",,High,,TRUE
+,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,Low,,TRUE
+,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,Mod,,TRUE
+,38,Hardwood Other,CO2,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO2,,High,,TRUE
+,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,Low,,TRUE
+,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,Mod,,TRUE
+,39,Hardwood Other,CH4,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCH4,,High,,TRUE
+,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Low,,TRUE
+,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Mod,,TRUE
+,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,High,,TRUE
+,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,Low,,TRUE
+,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,Mod,,TRUE
+,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,1-(global mortality of submerch conifers in severity class),,High,,TRUE
+,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,Low,,TRUE
+,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,Mod,,TRUE
+,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,0,,High,,TRUE
+,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,,TRUE
+,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,,TRUE
+,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,,TRUE
+,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,,TRUE
+,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,,TRUE
+,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,,TRUE
+,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,,TRUE
+,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,,TRUE
+,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,,TRUE
+,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Low,,TRUE
+,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Mod,,TRUE
+,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,High,,TRUE
+,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Low,,TRUE
+,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Mod,,TRUE
+,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,High,,TRUE
+,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Low,,TRUE
+,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Mod,,TRUE
+,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,High,,TRUE
+,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Low,,TRUE
+,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Mod,,TRUE
+,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,High,,TRUE
+,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,Low,,TRUE
+,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,Mod,,TRUE
+,50,Hardwood Fine Roots,Above Ground Very Fast soil C,Fine roots killed but not burned in organic soil,(conifer mortality rate)*(coarse root fraction in organic soil),,High,,TRUE
+,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,Low,,TRUE
+,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,Mod,,TRUE
+,51,Hardwood Fine Roots,Below Ground Very Fast soil C,Fine roots killed but not burned in mineral soil,(conifer mortality rate)*(coarse root fraction in mineral soil),,High,,TRUE
+,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,Low,,TRUE
+,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,Mod,,TRUE
+,52,Hardwood Fine Roots,CO2,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO2,,High,,TRUE
+,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,Low,,TRUE
+,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,Mod,,TRUE
+,53,Hardwood Fine Roots,CH4,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCH4,,High,,TRUE
+,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,Low,,TRUE
+,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,Mod,,TRUE
+,54,Hardwood Fine Roots,CO,Fine roots combusted alongside duff,(fraction of duff consumed)*(coarse root fraction in organic soil)*FlamingCO,,High,,TRUE
+,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,Low,,TRUE
+,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,Mod,,TRUE
+,55,Aboveground Very Fast DOM,Above Ground Very Fast soil C,"Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter",0,all litter burns,High,,TRUE
+,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,Low,,TRUE
+,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,Mod,,TRUE
+,56,Aboveground Very Fast DOM,CO2,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO2,,High,,TRUE
+,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,Low,,TRUE
+,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,Mod,,TRUE
+,57,Aboveground Very Fast DOM,CH4,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCH4,,High,,TRUE
+,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,Low,,TRUE
+,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,Mod,,TRUE
+,58,Aboveground Very Fast DOM,CO,Combusted fraction of litter layer,(Aboveground Very Fast DOM)*FlamingCO,,High,,TRUE
+,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,Low,,TRUE
+,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,Mod,,TRUE
+,59,Belowground Very Fast DOM,Below Ground Very Fast soil C,"Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter",~1,,High,,TRUE
+,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",Low,,TRUE
+,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",Mod,,TRUE
+,60,Aboveground Fast DOM,Above Ground Fast soil C,"Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter",1-[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)],"***Needs renaming, logic good ***Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff",High,,TRUE
+,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,Low,,TRUE
+,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,Mod,,TRUE
+,61,Aboveground Fast DOM,CO2,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO2+Root Fraction of pool*SmoulderingCO2),,High,,TRUE
+,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,Low,,TRUE
+,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,Mod,,TRUE
+,62,Aboveground Fast DOM,CH4,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCH4+Root Fraction of pool*SmoulderingCH4),,High,,TRUE
+,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,Low,,TRUE
+,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,Mod,,TRUE
+,63,Aboveground Fast DOM,CO,Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM),[(litter surface area fraction burned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]*(Woody debris fraction of pool)*FlamingCO+Root Fraction of pool*SmoulderingCO),,High,,TRUE
+,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,Low,,TRUE
+,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,Mod,,TRUE
+,64,Belowground Fast DOM,Below Ground Fast soil C,"Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ò5 diameter",~1,Is it the case that all the Fast DOM goes to fast soil C???,High,,TRUE
+,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,Low,,TRUE
+,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,Mod,,TRUE
+,65,Medium DOM,Medium Soil C,Uncombusted Coarse woody debris on the ground,1-combustion rate of CWD,,High,,TRUE
+,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,Low,,TRUE
+,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,Mod,,TRUE
+,66,Medium DOM,CO2,Combusted fraction of CWD,f(severty)*SmoulderingCO2,,High,,TRUE
+,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,Low,,TRUE
+,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,Mod,,TRUE
+,67,Medium DOM,CH4,Combusted fraction of CWD,f(severty)*SmoulderingCH4,,High,,TRUE
+,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,Low,,TRUE
+,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,Mod,,TRUE
+,68,Medium DOM,CO,Combusted fraction of CWD,f(severty)*SmoulderingCO,,High,,TRUE
+,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,Low,,TRUE
+,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,Mod,,TRUE
+,69,Medium DOM,Black Carbon,Medium DOM converted to Black Carbon,,See Koroscil Msc thesis. Assume that some % of fire production actually lasts in the soil?,High,,TRUE
+,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,Low,,TRUE
+,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,Mod,,TRUE
+,70,Aboveground Slow DOM,Above Ground slow soil C,Uncombusted fraction of duff and peat horizons,1-(fraction of duff consumed),,High,,TRUE
+,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,Low,,TRUE
+,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,Mod,,TRUE
+,71,Aboveground Slow DOM,CO2,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO2,,High,,TRUE
+,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,Low,,TRUE
+,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,Mod,,TRUE
+,72,Aboveground Slow DOM,CH4,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCH4,,High,,TRUE
+,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,Low,,TRUE
+,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,Mod,,TRUE
+,73,Aboveground Slow DOM,CO,Combusted Fraction of duff and peat horizons,(fraction of duff consumed)*SmoulderingCO,,High,,TRUE
+,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,Low,,TRUE
+,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,Mod,,TRUE
+,74,Belowground Slow DOM,Below Ground Slow soil C,Uncombusted fraction of Humified organic matter in the mineral soil,1,,High,,TRUE
+,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,Low,,TRUE
+,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,Mod,,TRUE
+,75,Softwood Stem Snag,Medium Soil C,Fraction of conifer snags that fall to ground but not combusted,[1-(Softwood snag combustion fraction f(severity)]*(snag fall rate),,High,,TRUE
+,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,Low,,TRUE
+,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,Mod,,TRUE
+,76,Softwood Stem Snag,Softwood Stem Snag,Uncombusted fraction of conifer snags (still upright),[1-(Softwood snag combustion fraction f(severity)]*(1-snag fall rate),,High,,TRUE
+,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,Low,,TRUE
+,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,Mod,,TRUE
+,77,Softwood Stem Snag,CO2,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO2,From Patrick's data - to get radial consumption depth and a mean merch DBH per ecozone,High,,TRUE
+,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,Low,,TRUE
+,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,Mod,,TRUE
+,78,Softwood Stem Snag,CH4,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCH4,,High,,TRUE
+,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,Low,,TRUE
+,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,Mod,,TRUE
+,79,Softwood Stem Snag,CO,Combusted fraction of conifer snags,(softwood snag combustion fraction f(severity))*FlamingCO,,High,,TRUE
+,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,Low,,TRUE
+,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,Mod,,TRUE
+,80,Softwood Stem Snag,Black Carbon,Portion of conifer snags that are converted to Black Carbon upon burning,,,High,,TRUE
+,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Low,,TRUE
+,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Mod,,TRUE
+,81,Softwood Branch Snag,Above Ground Fast soil C,Portion of conifer snag branches that falls onto the ground?,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",High,,TRUE
+,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Low,,TRUE
+,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",Mod,,TRUE
+,82,Softwood Branch Snag,Softwood Branch Snag,Unaltered fraction,[1-(Softwood branch snag combustion fraction f(severity)]*0.5,"Assuming half of all unburned branches on snags fall to the ground, half of them remain on the snag",High,,TRUE
+,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,Low,,TRUE
+,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,Mod,,TRUE
+,83,Softwood Branch Snag,CO2,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO2,,High,,TRUE
+,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,Low,,TRUE
+,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,Mod,,TRUE
+,84,Softwood Branch Snag,CH4,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCH4,,High,,TRUE
+,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,Low,,TRUE
+,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,Mod,,TRUE
+,85,Softwood Branch Snag,CO,Portion of conifer branch snags that are combusted,(softwood branch snag combustion fraction f(severity))*FlamingCO,,High,,TRUE
+,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",Low,,TRUE
+,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",Mod,,TRUE
+,86,Hardwood Stem Snag,Medium Soil C,Portion of deciduous snags that falls onto the ground?,[1-(Hardwood snag combustion fraction f(severity)]*0.8,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years.",High,,TRUE
+,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",Low,,TRUE
+,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",Mod,,TRUE
+,87,Hardwood Stem Snag,Hardwood Stem Snag,Unaltered stem snag fraction,[1-(Hardwood snag combustion fraction f(severity)]*0.2,"Not sure if we have any data on the stem snag fall rate over the longer term, but most stems that don't burn do fall down over the years. Assuming 80% fall over time?",High,,TRUE
+,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,Low,,TRUE
+,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,Mod,,TRUE
+,88,Hardwood Stem Snag,CO2,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO2,,High,,TRUE
+,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,Low,,TRUE
+,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,Mod,,TRUE
+,89,Hardwood Stem Snag,CH4,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCH4,,High,,TRUE
+,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,Low,,TRUE
+,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,Mod,,TRUE
+,90,Hardwood Stem Snag,CO,Combusted fraction of deciduous snags,(hardwood snag combustion fraction f(severity))*FlamingCO,,High,,TRUE
+,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,Low,,TRUE
+,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,Mod,,TRUE
+,91,Hardwood Stem Snag,Black Carbon,Portion of deciduous snags that are converted to Black Carbon upon burning,,,High,,TRUE
+,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Low,,TRUE
+,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Mod,,TRUE
+,92,Hardwood Branch Snag,Above Ground Fast soil C,Portion of deciduous snag branches that falls onto the ground?,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,High,,TRUE
+,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Low,,TRUE
+,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,Mod,,TRUE
+,93,Hardwood Branch Snag,Hardwood Branch Snag,Portion of deciduous snag branches that survive a fire,[1-(Hardwood branch snag combustion fraction f(severity)]*0.5,Assuming half of the unburned snag branches survive and fall to the ground,High,,TRUE
+,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,Low,,TRUE
+,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,Mod,,TRUE
+,94,Hardwood Branch Snag,CO2,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO2,,High,,TRUE
+,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,Low,,TRUE
+,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,Mod,,TRUE
+,95,Hardwood Branch Snag,CH4,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCH4,,High,,TRUE
+,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,Low,,TRUE
+,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,Mod,,TRUE
+,96,Hardwood Branch Snag,CO,Combusted fraction of deciduous snag branches,(hardwood branch snag combustion fraction f(severity))*FlamingCO,,High,,TRUE
+,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,Low,,TRUE
+,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,Mod,,TRUE
+,97,Black Carbon,Black Carbon,Unburned black carbon fraction,,see https://doi.org/10.1071/WF12190 and onwards for PyrC production and loss estimates,High,,TRUE
+,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,Low,,TRUE
+,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,Mod,,TRUE
+,98,Black Carbon,CO2,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO2,,High,,TRUE
+,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,Low,,TRUE
+,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,Mod,,TRUE
+,99,Black Carbon,CH4,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCH4,,High,,TRUE
+,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,Low,,TRUE
+,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,Mod,,TRUE
+,100,Black Carbon,CO,Black carbon combustion fraction,(fraction of total black carbon pool in duff)*(duff DOB/total duff pool)*SmoulderingCO,,High,,TRUE

@@ -1,8 +1,22 @@
+---
+title: "Dynamic calculations of fire Disturbance Matrices for GCBM including fire severity"
+author: "Thompson and Whitman"
+format: pdf
+editor: visual
+---
 
+## Quarto
 
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(kableExtra)
+library(tinytex)
 
 #populate the values first:
 global.vars <- list(0.9, 0.01, 0.09, 0.77, 0.03, 0.21)
@@ -14,6 +28,11 @@ names(global.vars) <- array(c("FlamingCO2","FlamingCO","FlamingCH4","Smouldering
 
 ecozones.list <- list("LA","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 
+```
+
+You can add options to executable code like this
+
+```{r computeDuffConsump, echo=FALSE,message=FALSE, warning=FALSE}
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022):
 Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 
@@ -31,7 +50,9 @@ BP <- list(ecozones.list[1],Median.DC[1],Forest.Floor.Load[1],Forest.Floor.consu
 names(BP) <- c("Ecozone.name","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m2","Forest.Floor.consump.kg.m2","Forest.Floor.consump.frac")
 BP$Ecozone.name <- c("BP")
 
+```
 
+```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 
 #list of ecozone-specific terms (with and without severity dependence)
 #first, import blank template that works for a single ecozone:
@@ -70,23 +91,9 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 #SourceSink <- read.csv("~/FireDMs/SourceSinkLong.csv")
 
 
+```
 
-#not run, just testing data frame loading:
-#VarDefs$Variable.Name[2]
-#VarDefs$Value[2]
-# do I need to load each of these into the environment?  No, since I need to look up each per ecozone each time.....
-# so each equation down below should be per ecozone and severity class when building the DM, don't want to load these into the environment itself
-
-#template to query VarDefs, have to give ecozone and variable name each time (this is not severity class dependent):
-#VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == "BP"]
-
-#example of query for value as part of DM computation with severity dependence:
-#VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == "BP" & VarDefs$SeverityClass == "Mod"]
-
-
-
-
-## start loop:
+```{r DefineDMvalues, echo=FALSE,message=FALSE, warning=FALSE}
 
 
 
@@ -150,17 +157,10 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & Source
    
 }
 
-#optional step to create a hierarchical list structure (for easier plotting)
+```
 
-#make each ecozone it's own subset list:
-
-
-#then merge back in piecemeal, so that each ecozone list is there in a hierarchy?  Not 100% necessary, could just keep it as the long list
-#FireDM <- list(LA,TP,TSW,BSW,BP,P,TC,BC,PM,MC,HP,TSW,BSE)
-
-  #then, create a tabular DM for inspection, for a given ecozone and a given severity class:
-  
-  #example of ecozone-specific extraction
+```{r makeTables, echo=FALSE,message=FALSE, warning=FALSE}
+ #example of ecozone-specific extraction
   SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$FluxID < 9 & SourceSink$SeverityClass == "Mod"]
   
   # and then do the source as rows and sink as column?
@@ -191,6 +191,4 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & Source
   kbl(DM.temp[1:8,1:8],col.names = c("Softwood Merchantable", "Softwood Stem Snag","Black Carbon","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO")) %>%
     kable_styling(full_width = F, html_font = "Cambria")
     
-  
-  #, col.names = c("Softwood Merchantable", "Softwood Stem Snag","Black Carbon","Softwood Foliage", "CO2", "CH4", "CO"), row.names = c("Softwood Merchantable", "Softwood Stem Snag","Black Carbon","Softwood Foliage", "CO2", "CH4", "CO"))
-  
+```

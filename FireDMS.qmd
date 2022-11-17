@@ -24,6 +24,7 @@ names(global.vars) <- array(c("FlamingCO2","FlamingCO","FlamingCH4","Smouldering
 #DID NOT RUN:
 #global.vars$FlamingCO2 #returns desired value as double
 
+#can add/subtract ecozones here as needed.  Note that Mixedwood Plains not included here (but could/should be)
 ecozones.list <- list("LA","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 
 ```
@@ -33,7 +34,7 @@ ecozones.list <- list("LA","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","T
 To be expanded later, but duff consumption can be calculated annually using the median hotspot Drought Code and de Groot's FFFC equations, as applied to median FFFL values. Could also be done per fire using fire-specific DC and mapped FFFC values as well. Need to compute this above for use below.
 
 ```{r computeDuffConsump, echo=FALSE,message=FALSE, warning=FALSE}
-#load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022):
+#load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
 Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 
 # then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
@@ -44,11 +45,17 @@ Forest.Floor.consump.kg.m2 <- 0.016872*Median.DC^0.71*Forest.Floor.Load^0.671
 Forest.Floor.consump.frac <- Forest.Floor.consump.kg.m2/Forest.Floor.Load
 
 
-# start creating a simple list object per ecozone
+# start creating a single list object to encapsulate all the modelling:
+#where FFFC is "Forest Floor Fuel Consumption" a la de Groot's naming convention:
 
-BP <- list(ecozones.list[1],Median.DC[1],Forest.Floor.Load[1],Forest.Floor.consump.kg.m2[1],Forest.Floor.consump.frac[1])
-names(BP) <- c("Ecozone.name","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m2","Forest.Floor.consump.kg.m2","Forest.Floor.consump.frac")
-BP$Ecozone.name <- c("BP")
+FFFC <- as.data.frame(cbind(ecozones.list,Median.DC,Forest.Floor.Load,round(Forest.Floor.consump.kg.m2,digits = 2),round(Forest.Floor.consump.frac,digits = 2)))
+names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m2","Forest.Floor.consump.kg.m2","Forest.Floor.consump.frac")
+## for example:
+#FFFC$Ecozone.name[1]
+
+### and to query values:
+FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == "BP"]
+
 
 ```
 
@@ -69,7 +76,8 @@ VarDefs <- VarDefs.generic %>% slice(rep(1:n(), each = length(ecozones.list)))
 #fill in ecozone names:
 VarDefs$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(VarDefs.generic))
 
-#Once this is done and filled, load the canonical version: 
+#Once this is done and filled in with data from observations, load the canonical version: 
+# this will overwrite the above loop
 #NOT RUN (YET)
 #VarDefs <- read.csv("~/nrcan-cfs-fire/FireDMs/FireDMTableDefs.csv")
 
@@ -89,6 +97,7 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 
 #Once this is done and filled, load the canonical version: 
+# this will overwrite the above loop
 #NOT RUN (YET)
 #SourceSink <- read.csv("~/FireDMs/SourceSinkLong.csv")
 

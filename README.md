@@ -16,7 +16,7 @@ The broad axioms of this framework are as follows:
 5) In submerchantable trees, mortality is <= 1
 
 6) In merchantable stands, CFB < mortality		
-7)Survival = 1 - mortality	
+7) Survival = 1 - mortality	
 8) CFB < survival	
 9) The girdled fraction of trees = mortality - CFB	
 10) Survival <= 1 and also >= 0	

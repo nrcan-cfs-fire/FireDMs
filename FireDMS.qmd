@@ -137,7 +137,7 @@ With both generic ecozone variables as well as severity-specific variables defin
 ```
 
 
-Note that rather than defining softwood crown fraction burned as a variable called "SW.CFB" for each ecozone, there is a row in the VarDefs table that represents SW.CFB in each ecozone and for each severity class, thus avoiding the creation of large lists of manually entered variable names and values in the R environment. Instead, these values can be programmatically entered via external analysis of plot data (not covered here).
+Note that rather than defining softwood crown fraction burned as a variable called "SW.CFB.Boreal.Plains" for each ecozone, there is a row in the VarDefs table that represents SW.CFB in each ecozone and for each severity class, thus avoiding the creation of large lists of manually entered variable names and values in the R environment. Instead, these values can be programmatically entered via external analysis of plot data (not covered here).
 
 ```{r DefineDMvalues, echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -148,7 +148,7 @@ for (i in seq(1:max(SourceSink$FluxID))) {
   ecozone <- as.character(ecozones.list[i]) #run this loop once for every ecozone, but have to cycle through all the fluxIDs
   
 #FluxID: 1
-#Source: SW Merch 
+#Source: Softwood (SW) Merch 
 #sink: SW Merch
 #Plain Language Summary of flux: survival of conifers
 #Pseudocode: survival = 1-mortality
@@ -195,7 +195,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 3 & Source
 #sink: SW Foliage
 #PLS: Green fraction of canopy remaining intact after fire
 #Pseudocode: IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])
-#Notes: have to use logical statement here,
+#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
+#note2: given definition of CFB, this includes all foliage in merch and submerch
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) 
 
@@ -249,12 +250,165 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & Source
 #Pseudocode: CFB*FlamingCO
 #Notes: 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Low"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Low"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Mod"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Mod"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "High"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "High"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
 
+
+#FluxID: 9
+#Source: SW Other
+#sink: SW Other
+#PLS: surviving Live branches, stumps, small trees and bark
+#Pseudocode: =(1-(mortality rate of conifers)*branch fraction of "other" pool)+(1-(medium DOM consumption rate)*stump fraction of other pool)+(1-(mortality of small tree conifers in severity class)*small tree fraction of other pool)+(1-CFB*bark fraction of other pool)
+#Notes: 
+
+### trying this for now (not working), or else this could just be 1-(consumption + killed of other pool)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 9 & SourceSink$SeverityClass == "Low"] <- (1-VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone])+(1-VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone]) + (1-VarDefs$Value[VarDefs$Variable.Name == "SmTree.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone])+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone])
+
+
+#FluxID: 10
+#Source: SW Other
+#sink: SW Branch Snag
+#PLS: Portion of "other" pool as killed by fire but otherwise unconsumed branches
+#Pseudocode: (CFB * (1-SW.LgBranch.Comb.Frac))*SW.BW.frac.of.other
+
+#Notes:  #since 1-SW.LgBranch.Comb.Frac is the snag creation rate
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] *
+(1 - VarDefs$Value[VarDefs$Variable.Name == "SW.LgBranch.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) * VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone]                                                                                                                     
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] *
+(1 - VarDefs$Value[VarDefs$Variable.Name == "SW.LgBranch.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])) * VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone]  
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] *
+(1 - VarDefs$Value[VarDefs$Variable.Name == "SW.LgBranch.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])) * VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone]   
+                                                                                                                      
+#FluxID: 11
+#Source: SW Other
+#sink: CO2
+#PLS: Proportional Combustion sum of branches, stumps, small trees and bark (mix of flaming and smouldering)
+#Pseudocode:   (Flux10*FlamingCO2)+
+# (Stumps.frac.of.other*DOM.Comb.Rate*SmoulderingCO2)+
+# (Litter.frac.burned*SmTree.frac.other*FlamingCO2)+
+# (Bark.frac.other*Bark.Comb.Frac*FlamingCO2)
+
+#Notes:  works so far and gives reasonable values of ~0.17, 0.19, 0.2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "Low"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Low"] * global.vars$FlamingCO2 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "Mod"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Mod"] * global.vars$FlamingCO2 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO2)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "High"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "High"] * global.vars$FlamingCO2 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
+
+#FluxID: 12
+#Source: SW Other
+#sink: CH4
+#PLS: Proportional Combustion sum of branches, stumps, small trees and bark (mix of flaming and smouldering)
+#Pseudocode:   (Flux10*FlamingCH4)+
+# (Stumps.frac.of.other*DOM.Comb.Rate*SmoulderingCH4)+
+# (Litter.frac.burned*SmTree.frac.other*FlamingCH4)+
+# (Bark.frac.other*Bark.Comb.Frac*FlamingCH4)
+
+#Notes:  works so far and gives reasonable values of ~0.017, 0.019, 0.02
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Low"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Low"] * global.vars$FlamingCH4 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCH4)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Mod"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Mod"] * global.vars$FlamingCH4 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCH4)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "High"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "High"] * global.vars$FlamingCH4 +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
+
+#FluxID: 13
+#Source: SW Other
+#sink: CO
+#PLS: Proportional Combustion sum of branches, stumps, small trees and bark (mix of flaming and smouldering)
+#Pseudocode:   (Flux10*FlamingCO)+
+# (Stumps.frac.of.other*DOM.Comb.Rate*SmoulderingCO)+
+# (Litter.frac.burned*SmTree.frac.other*FlamingCO)+
+# (Bark.frac.other*Bark.Comb.Frac*FlamingCO)
+
+#Notes:  works so far 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Low"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Low"] * global.vars$FlamingCO +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Mod"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "Mod"] * global.vars$FlamingCO +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "High"] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & SourceSink$SeverityClass == "High"] * global.vars$FlamingCO +  
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO)
+
+
+#FluxID: 14
+#Source: SW SubMerch
+#sink: SW SubMerch
+#PLS: Understory conifer survival rate
+#Pseudocode:  =1-(mortality of submerch conifers in severity class) 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 14 & SourceSink$SeverityClass == "Low"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 14 & SourceSink$SeverityClass == "Mod"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 14 & SourceSink$SeverityClass == "High"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+
+#FluxID: 15
+#Source: SW SubMerch
+#sink: SW Branch Snag
+#PLS: Understory conifer stems killed but not consumed
+#Pseudocode:  = SubMerch mortality, since live understory trees don't get consumed in the fire, 
+
+#notes: submerch trees assumed to not have large enough branches to avoid consumption in fire.  Equal to 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 15 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 15 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 15 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+
+#FluxID: 16
+#Source: SW SubMerch
+#sink: CO2
+#PLS: Understory Conifer consumption rate
+#Pseudocode:  = 0 !IF! this is only about submerch stems 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 16 & SourceSink$SeverityClass == "Low"] <- 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 16 & SourceSink$SeverityClass == "Mod"] <-0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 16 & SourceSink$SeverityClass == "High"] <- 0
+
+#FluxID: 17
+#Source: SW SubMerch
+#sink: CH4
+#PLS: Understory Conifer consumption rate
+#Pseudocode:  = 0 !IF! this is only about submerch stems 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 17 & SourceSink$SeverityClass == "Low"] <- 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 17 & SourceSink$SeverityClass == "Mod"] <-0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 17 & SourceSink$SeverityClass == "High"] <- 0
+
+#FluxID: 18
+#Source: SW SubMerch
+#sink: CO
+#PLS: Understory Conifer consumption rate
+#Pseudocode:  = 0 !IF! this is only about submerch stems 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & SourceSink$SeverityClass == "Low"] <- 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & SourceSink$SeverityClass == "Mod"] <-0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & SourceSink$SeverityClass == "High"] <- 0
 
 ## end loop
 

@@ -398,6 +398,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 17 & Sourc
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 17 & SourceSink$SeverityClass == "High"] <- 0
 
+
 #FluxID: 18
 #Source: SW SubMerch
 #sink: CO
@@ -409,6 +410,47 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & Sourc
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & SourceSink$SeverityClass == "Mod"] <-0
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 18 & SourceSink$SeverityClass == "High"] <- 0
+
+#FluxID: 19
+#Source: SW Coarse roots
+#sink: SW Coarse roots
+#PLS: Surviving coarse roots in conifers
+#Pseudocode:  =1-(conifer mortality rate)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 19 & SourceSink$SeverityClass == "Low"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 19 & SourceSink$SeverityClass == "Mod"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 19 & SourceSink$SeverityClass == "High"] <- 1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+#FluxID: 20
+#Source: SW Coarse roots
+#sink: Above Ground Fast soil C
+#PLS: Coarse Roots killed in fire but not combusted in organic soil
+#Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in organic soil)
+#Note: assuming even if duff burns, coarse live roots don't burn alongsides SW.prop.Coarse.Root.duff
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 20 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 20 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 20 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone]
+
+
+#FluxID: 21
+#Source: SW Coarse roots
+#sink: Below Ground Fast soil C
+#PLS: Coarse Roots killed in fire but not combusted since they are in mineral soil
+#Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in mineral soil)
+#Note: assuming even if duff burns, coarse live roots don't burn alongsides SW.prop.Coarse.Root.duff
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * (1 -  VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * (1 -  VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Coarse.Root.duff" & VarDefs$Ecozone == ecozone])
+
+
 
 ## end loop
 

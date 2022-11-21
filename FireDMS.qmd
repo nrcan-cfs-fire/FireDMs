@@ -524,6 +524,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & Sourc
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
 
+
+
 #FluxID: 22
 #Source: SW fine roots
 #sink: SW fine roots
@@ -537,6 +539,81 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & Sourc
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "Mod"] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 23 & SourceSink$FluxID <= 27 & SourceSink$SeverityClass == "Mod"])
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "High"] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 23 & SourceSink$FluxID <= 27 & SourceSink$SeverityClass == "High"])
+
+
+
+
+
+#Fluxes 28:54 Hardwoods
+
+
+
+
+#FluxID: 55
+#Source: Aboveground Very Fast DOM
+#sink: Aboveground Very Fast DOM
+#PLS: Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter
+#Pseudocode:  =Unburned.litter.area(from plot data)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 55 & SourceSink$SeverityClass == "Low"] <-  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 55 & SourceSink$SeverityClass == "Mod"] <-  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 55 & SourceSink$SeverityClass == "High"] <-  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+
+#FluxID: 56
+#Source: Aboveground Very Fast DOM
+#sink: CO2
+#PLS: Burned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter
+#Pseudocode:  =1-Unburned.litter.area(from plot data)*Flaming
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 56 & SourceSink$SeverityClass == "Low"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 56 & SourceSink$SeverityClass == "Mod"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 56 & SourceSink$SeverityClass == "High"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO2
+
+
+#FluxID: 57
+#Source: Aboveground Very Fast DOM
+#sink: CH4
+#PLS: Burned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter
+#Pseudocode:  =1-Unburned.litter.area(from plot data)*Flaming
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 57 & SourceSink$SeverityClass == "Low"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 57 & SourceSink$SeverityClass == "Mod"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 57 & SourceSink$SeverityClass == "High"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCH4
+
+
+#FluxID: 58
+#Source: Aboveground Very Fast DOM
+#sink: CO
+#PLS: Burned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter
+#Pseudocode:  =1-Unburned.litter.area(from plot data)*Flaming
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & SourceSink$SeverityClass == "Low"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & SourceSink$SeverityClass == "Mod"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & SourceSink$SeverityClass == "High"] <- (1 -  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO
+
+
+#FluxID: 59
+#Source: Belowground Very Fast DOM
+#sink: Belowground Very Fast Soil C
+#PLS: Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter
+#Pseudocode:  == 1, since dead roots in the mineral soil are not combusted
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 59 & SourceSink$SeverityClass == "Low"] <- 1 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & SourceSink$SeverityClass == "Mod"] <- 1
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & SourceSink$SeverityClass == "High"] <- 1
+
+
 
 ## end loop
 

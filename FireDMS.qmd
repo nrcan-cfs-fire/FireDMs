@@ -19,7 +19,7 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 #populate the values first:
 global.vars <- list(0.9, 0.01, 0.09, 0.77, 0.03, 0.21)
 #then label names
-names(global.vars) <- array(c("FlamingCO2","FlamingCO","FlamingCH4","SmoulderingCO2","SmoulderingCO","SmoulderingCH4"))
+names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
 
 #DID NOT RUN:
 #global.vars$FlamingCO2 #returns desired value as double
@@ -266,7 +266,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & Source
 
 ### trying this for now (not working), or else this could just be 1-(consumption + killed of other pool)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 9 & SourceSink$SeverityClass == "Low"] <- (1-VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone])+(1-VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone]) + (1-VarDefs$Value[VarDefs$Variable.Name == "SmTree.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone])+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 9 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.BW.frac.of.other" & VarDefs$Ecozone == ecozone]) + (1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone]) + (1 - VarDefs$Value[VarDefs$Variable.Name == "SmTree.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone]) + (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone])
 
 
 #FluxID: 10
@@ -452,6 +452,92 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & Sourc
 
 
 
+#FluxID: 23
+#Source: SW fine roots
+#sink: Above Ground Very Fast soil C
+#PLS: Fine roots killed but not burned in organic soil
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#notes: 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 23 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]))
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 23 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]))
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 23 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone]))
+
+
+#FluxID: 24
+#Source: SW fine roots
+#sink: Below Ground Very Fast soil C
+#PLS: Fine roots killed but not burned in mineral soil
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in mineral soil)
+#notes: 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 24 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 24 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 24 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone])
+
+
+
+
+#FluxID: 25
+#Source: SW fine roots
+#sink: CO2
+#PLS: Fine roots combusted in duff
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
+
+
+#FluxID: 26
+#Source: SW fine roots
+#sink: CH4
+#PLS: Fine roots combusted in duff
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
+
+
+
+#FluxID: 27
+#Source: SW fine roots
+#sink: CO
+#PLS: Fine roots combusted in duff
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
+
+#FluxID: 22
+#Source: SW fine roots
+#sink: SW fine roots
+#PLS: Surviving fine roots
+#Pseudocode:  =1-(combustion rate of fine roots+mortality rate of fine roots)
+#notes: computed at end of fine roots calculations, even though listed as Flux 22
+# NOTE: debug needed on high severity, giving value of -0.002, so rounding problem??
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "Low"] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 23 & SourceSink$FluxID <= 27 & SourceSink$SeverityClass == "Low"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "Mod"] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 23 & SourceSink$FluxID <= 27 & SourceSink$SeverityClass == "Mod"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "High"] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 23 & SourceSink$FluxID <= 27 & SourceSink$SeverityClass == "High"])
+
 ## end loop
 
   # final step in loop: once you have a list each built by ecozone, then build a higher-level list called "FireDM"
@@ -459,6 +545,14 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & Sourc
 }
 
 ```
+
+And make a checksum table to ensure all the major pools sum of up 1:
+
+```{r checkSum, echo=FALSE,message=FALSE, warning=FALSE}
+
+```
+
+
 
 In a final step, a classical tabular DM is show, with row and column names precisely matching those in the Sink and Source columns in the SourceSink table:
 

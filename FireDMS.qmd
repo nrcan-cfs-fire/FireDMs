@@ -25,7 +25,7 @@ names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","Smouldering
 #global.vars$FlamingCO2 #returns desired value as double
 
 #can add/subtract ecozones here as needed.  Note that Mixedwood Plains not included here (but could/should be)
-ecozones.list <- list("LA","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 
 ```
 

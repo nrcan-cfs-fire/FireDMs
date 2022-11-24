@@ -17,9 +17,12 @@ library(formatR)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 #populate the values first:
-global.vars <- list(0.9, 0.01, 0.09, 0.765, 0◘.027, 0.208)
+global.vars <- list(0.9, 0.01, 0.09, 0.765, 0.027, 0.208)
 #then label names
 names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
+
+#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
+
 
 #DID NOT RUN:
 #global.vars$FlamingCO2 #returns desired value as double
@@ -28,6 +31,14 @@ names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","Smouldering
 ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 
 ```
+
+```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE }
+kbl(as.data.frame(global.vars)) %>%
+  kable_minimal()  %>%
+          kable_styling(latex_options = "scale_down")
+```
+
+where CO2 is responsible for 90% of emissions in the flaming phase, but only 76.5% of emissions in the smouldering phase, with a doubling of CO and CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however.
 
 ## Duff Consumption
 
@@ -57,6 +68,12 @@ names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m
 #FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == "BP"]
 
 ## TO DO: output a simple table for the above
+```
+
+```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
+kbl(FFFC) %>%
+  kable_minimal()  %>%
+          kable_styling(latex_options = "scale_down")
 ```
 
 ## Constructing fire DMs from abstractions
@@ -135,7 +152,6 @@ With both generic ecozone variables as well as severity-specific variables defin
 ```{r snip2}
 #SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
 ```
-
 
 Note that rather than defining softwood crown fraction burned as a variable called "SW.CFB.Boreal.Plains" for each ecozone, there is a row in the VarDefs table that represents SW.CFB in each ecozone and for each severity class, thus avoiding the creation of large lists of manually entered variable names and values in the R environment. Instead, these values can be programmatically entered via external analysis of plot data (not covered here).
 
@@ -1565,32 +1581,31 @@ for (i in seq(1:length(source.list.checksum))) {
 
 ```
 
-
-
 In a final step, a classical tabular DM is show, with row and column names precisely matching those in the Sink and Source columns in the SourceSink table:
 
 ```{r makeTables, echo=FALSE,message=FALSE, warning=FALSE}
- #example of ecozone-specific extraction NOT RUN
-  #SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$FluxID < 9 & SourceSink$SeverityClass == "Mod"]
-  
-  # and then do the source as rows and sink as column?
-##single cell reference: SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == "Softwood Merchantable" & SourceSink$Sink == "Softwood Merchantable" & SourceSink$SeverityClass == "Mod"]
-  
-  
+ 
+## replace any NAs with blanks in kable tables
+options(knitr.kable.NA = '')
+
   ### list for columns and rows in visual DM: can be any order, not linked to FluxID or anything:
+### text here must exactly match the name of rows in SinkSource, however:
+
   sink.col.list <- c("Softwood Merchantable", "Softwood Stem Snag","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO")
   source.row.list <- c("Softwood Merchantable", "Softwood Stem Snag","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO")
 
   
   ###make this a function with attributes of ecozone and severity class:
   
+  DMTables <- function(ecozone, SeverityClass) {
+  
   DM.temp <- as.data.frame(array(NA,c(length(sink.col.list),length(sink.col.list))))
   
-  for (j in seq(1:8)) {
-    for (k in seq(1:8)) {
+  for (j in seq(1:length(sink.col.list))) {
+    for (k in seq(1:length(sink.col.list))) {
      
       #if the pair is blank, then return NA, otherwise, look through the list of sink/source pairs for the ecozone and severity level and return that value 
-      ifelse(is.na(SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == "Mod"]),NA,DM.temp[j,k] <- SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == "Mod"])
+      ifelse(is.na(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass]),NA,DM.temp[j,k] <- SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass])
      
       
     }
@@ -1600,8 +1615,16 @@ In a final step, a classical tabular DM is show, with row and column names preci
   rownames(DM.temp) <- source.row.list
   kbl(DM.temp[1:length(sink.col.list),1:length(sink.col.list)],col.names = c("Softwood Merchantable", "Softwood Stem Snag","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO"), align = "c",caption = "Example moderate severity DM in Boreal Plains") %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
-column_spec(2:length(sink.col.list), width = "2cm") %>%
+column_spec(2:(length(sink.col.list)+1), width = "2cm") %>%
 column_spec(1, width = "3cm") %>%
   kableExtra::landscape() %>%
           kable_styling(latex_options = "scale_down")
+  
+ 
+  
+  }
+  
+ ##example of function, for BP and moderate severity:
+   DMTables(ecozone = "BP", SeverityClass = "Mod")
+  
 ```

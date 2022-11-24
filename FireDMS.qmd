@@ -17,7 +17,7 @@ library(formatR)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 #populate the values first:
-global.vars <- list(0.9, 0.01, 0.09, 0.77, 0.03, 0.21)
+global.vars <- list(0.9, 0.01, 0.09, 0.765, 0◘.027, 0.208)
 #then label names
 names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
 
@@ -1343,9 +1343,9 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & Sourc
 #FluxID: 83
 #Source: Softwood Branch Snag
 #sink: CO2
-#PLS: Unaltered fraction of snag branches
+#PLS: Combusted fraction of snag branches
 #Pseudocode: = (SW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
-#notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
+#notes:   
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 83 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 81 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO2
 
@@ -1357,9 +1357,9 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 83 & Sourc
 #FluxID: 84
 #Source: Softwood Branch Snag
 #sink: CH4
-#PLS: Unaltered fraction of snag branches
+#PLS: Combusted fraction of snag branches
 #Pseudocode: = (SW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
-#notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
+#notes: 
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 84 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 81 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCH4
 
@@ -1372,15 +1372,166 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 84 & Sourc
 #FluxID: 85
 #Source: Softwood Branch Snag
 #sink: CO
-#PLS: Unaltered fraction of snag branches
+#PLS: Combusted fraction of snag branches
 #Pseudocode: = (SW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
-#notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
+#notes: 
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 85 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 81 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 85 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 81 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 85 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 81 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 82 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO
+
+
+#FluxID: 86
+#Source: Hardwood Stem Snag
+#sink: Medium Soil C
+#PLS: Fraction of deciduous snags that fall to ground but not combusted (i.e. fall after the passage of the fire and due to the fire)
+#Pseudocode: =[1-(HW.Snag.Comb.Frac]*(Snag.Fall.Frac)
+#notes: assume no combustion of these snags otherwise
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+
+#FluxID: 87
+#Source: Hardwood Stem Snag
+#sink: Hardwood Stem Snag
+#PLS: Uncombusted fraction of deciduous snags (still upright)
+#Pseudocode: =[1-(HW.Snag.Comb.Frac)]*(1-Snag.Fall.Frac)
+#notes: assume no combustion of these snags otherwise
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+
+#FluxID: 88
+#Source: Hardwood Stem Snag
+#sink: CO2
+#PLS: Uncombusted fraction of deciduous snags (still upright)
+#Pseudocode: =[1-HW.Snag.Comb.Frac-Snag.Fall.Frac)*Flaming
+#notes: assume no combustion of these snags otherwise
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 88 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 88 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 88 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO2
+
+#FluxID: 89
+#Source: Hardwood Stem Snag
+#sink: CH4
+#PLS: Uncombusted fraction of deciduous snags (still upright)
+#Pseudocode: =[1-HW.Snag.Comb.Frac-Snag.Fall.Frac)*Flaming
+#notes: snags not remaining upright nor fallen down are combusted
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 89 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 89 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 89 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCH4
+
+
+#FluxID: 90
+#Source: Hardwood Stem Snag
+#sink: CO
+#PLS: Uncombusted fraction of deciduous snags (still upright)
+#Pseudocode: =[1-HW.Snag.Comb.Frac-Snag.Fall.Frac)*HW.Snag.Comb.Frac*Flaming
+#notes: snags not remaining upright nor fallen down are combusted
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 90 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 90 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 90 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 86 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 87 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO
+
+#FluxID: 91
+#Source: Hardwood Stem Snag
+#sink: Black Carbon
+#PLS: Uncombusted fraction of deciduous snags (still upright)
+#Pseudocode: =[1-HW.Snag.Comb.Frac-Snag.Fall.Frac)*BlackCarbon
+#notes: no black carbon production for now, will need to estimate based on field data
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 91 & SourceSink$SeverityClass == "Low"] <- 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 91 & SourceSink$SeverityClass == "Mod"] <- 0
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 91 & SourceSink$SeverityClass == "High"] <- 0
+
+
+#FluxID: 92
+#Source: Hardwood Branch Snag
+#sink: Above Ground Fast soil C
+#PLS: Portion of deciduous snag branches that falls onto the ground
+#Pseudocode: =[1-(HW.Snag.BW.Comb.Frac)]*Snag.Fall.Frac
+#notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
+
+
+#FluxID: 93
+#Source: Hardwood Branch Snag
+#sink: Hardwood Branch Snag
+#PLS: Unaltered fraction of snag branches
+#Pseudocode: =[1-(HW.Snag.BW.Comb.Frac)]*(1-Snag.Fall.Frac)
+#notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) * (1 - VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+
+#FluxID: 94
+#Source: Hardwood Branch Snag
+#sink: CO2
+#PLS: Combusted fraction of snag branches
+#Pseudocode: = (HW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
+#notes: 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 94 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 94 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO2
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 94 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO2
+
+
+#FluxID: 95
+#Source: Hardwood Branch Snag
+#sink: CH4
+#PLS: Combusted fraction of snag branches
+#Pseudocode: = (HW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
+#notes: 
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 95 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 95 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCH4
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 95 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCH4
+
+
+
+#FluxID: 96
+#Source: Hardwood Branch Snag
+#sink: CO
+#PLS: Combusted fraction of snag branches
+#Pseudocode: = (HW.Snag.BW.Comb.Frac)*(Snag.Fall.Frac)
+#notes:  
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Low"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Low"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO
 
 
 ## end loop

@@ -134,15 +134,15 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Pseudocode,Notes,SeverityClass,Value,I
 ,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,,TRUE
 ,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,,TRUE
 ,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,,TRUE
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Low,,TRUE
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Mod,,TRUE
-,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,High,,TRUE
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Low,,TRUE
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Mod,,TRUE
-,47,Hardwood Coarse roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,High,,TRUE
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Low,,TRUE
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Mod,,TRUE
-,48,Hardwood Coarse roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,High,,TRUE
+,46,Hardwood Coarse Roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Low,,TRUE
+,46,Hardwood Coarse Roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,Mod,,TRUE
+,46,Hardwood Coarse Roots,Hardwood Coarse roots,Surviving deciduous coarse roots,1-deciduous mortality rate,,High,,TRUE
+,47,Hardwood Coarse Roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Low,,TRUE
+,47,Hardwood Coarse Roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,Mod,,TRUE
+,47,Hardwood Coarse Roots,Above Ground Fast soil C,Deciduous coarse roots in the duff that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in organic soil),,High,,TRUE
+,48,Hardwood Coarse Roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Low,,TRUE
+,48,Hardwood Coarse Roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,Mod,,TRUE
+,48,Hardwood Coarse Roots,Below Ground Fast soil C,Deciduous coarse roots in the mineral soil that are killed but unconsumed,(deciduous mortality rate)*(deciduous coarse root fraction in mineral soil),,High,,TRUE
 ,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Low,,TRUE
 ,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,Mod,,TRUE
 ,49,Hardwood Fine Roots,Hardwood Fine Roots,Surviving fine roots,1-conifer mortality rate,,High,,TRUE

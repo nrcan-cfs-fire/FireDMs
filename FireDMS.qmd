@@ -3,6 +3,7 @@ title: "Dynamic calculations of fire Disturbance Matrices for GCBM including fir
 author: "Thompson and Whitman"
 format: pdf
 editor: visual
+bibliography: references.bib
 ---
 
 ## Global Variables
@@ -35,24 +36,33 @@ ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","T
 ```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE }
 kbl(as.data.frame(global.vars)) %>%
   kable_minimal()  %>%
-          kable_styling(latex_options = "scale_down")
+          kable_styling(latex_options = "scale_down") %>%
+  kable_styling(latex_options = "hold_position")
 ```
 
 where CO2 is responsible for 90% of emissions in the flaming phase, but only 76.5% of emissions in the smouldering phase, with a doubling of CO and CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however.
 
 ## Duff Consumption
 
-To be expanded later, but duff consumption can be calculated annually using the median hotspot Drought Code and de Groot's FFFC equations, as applied to median FFFL values. Could also be done per fire using fire-specific DC and mapped FFFC values as well. Need to compute this above for use below.
+While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In this scheme, we utilize the Forest Floor Fuel Consumption (FFFC) model of [@degroot2009], modified to only account for fuel horizons below the litter layer:
+
+$$
+FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+$$
+
+where DC is the Fire Weather Index Drought Code and FFFL is the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data). LL is the Litter Load, and is typically on the order of 0.2 kg/m2 for most boreal forest upland and peatland sites ([@thompson2017]). This distinction is necessary due to the flaming phase consumption of the litter layer as opposed to the smouldering phase consumption of deeper horizons. While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, here we use ecozone-averaged fuel loads and decadal composites of Drought Code to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
 
 ```{r computeDuffConsump, echo=FALSE,message=FALSE, warning=FALSE}
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
 Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
+Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across a range of boreal forest sites, doi: 10.1139/cjfr-2016-0475
 
 # then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
 Forest.Floor.Load <- c(1.7,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
 
-Forest.Floor.Load <- Forest.Floor.Load - 0.25 ### subtract average litter load (from 10.1139/cjfr-2016-0475)
-Forest.Floor.consump.kg.m2 <- 0.016872*Median.DC^0.71*Forest.Floor.Load^0.671
+Forest.Floor.Load <- Forest.Floor.Load - Litter.Load
+
+Forest.Floor.consump.kg.m2 <- 0.016872*Median.DC^0.71*Forest.Floor.Load^0.671 - Litter.Load
 Forest.Floor.consump.frac <- Forest.Floor.consump.kg.m2/Forest.Floor.Load
 
 
@@ -67,13 +77,14 @@ names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m
 ### and to query values:
 #FFFC$Forest.Floor.consump.frac[FFFC$Ecozone == "BP"]
 
-## TO DO: output a simple table for the above
+
 ```
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
 kbl(FFFC) %>%
   kable_minimal()  %>%
-          kable_styling(latex_options = "scale_down")
+          kable_styling(latex_options = "scale_down") %>%
+  kable_styling(latex_options = "hold_position")
 ```
 
 ## Constructing fire DMs from abstractions
@@ -128,7 +139,8 @@ An example of the variable definition template is as follows:
 ```{r varDefsExample, echo=FALSE, message=FALSE, warning=FALSE}
 kbl(head(VarDefs)) %>%
   kable_minimal()  %>%
-          kable_styling(latex_options = "scale_down")
+          kable_styling(latex_options = "scale_down") %>%
+  kable_styling(latex_options = "hold_position")
 
 
 
@@ -141,7 +153,8 @@ A second template defines each flux in a Disturbance Matrix, with Source and Sin
 ```{r SinkSourceExample, echo=FALSE, message=FALSE, warning=FALSE}
 kbl(head(SourceSink)) %>%
   kable_minimal() %>%
-          kable_styling(latex_options = "scale_down")
+          kable_styling(latex_options = "scale_down") %>%
+  kable_styling(latex_options = "hold_position") 
 
 
 
@@ -1615,10 +1628,11 @@ options(knitr.kable.NA = '')
   rownames(DM.temp) <- source.row.list
   kbl(DM.temp[1:length(sink.col.list),1:length(sink.col.list)],col.names = c("Softwood Merchantable", "Softwood Stem Snag","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO"), align = "c",caption = "Example moderate severity DM in Boreal Plains") %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
-column_spec(2:(length(sink.col.list)+1), width = "2cm") %>%
+column_spec(2:(length(sink.col.list) + 1), width = "2cm") %>%
 column_spec(1, width = "3cm") %>%
   kableExtra::landscape() %>%
-          kable_styling(latex_options = "scale_down")
+          kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "hold_position")
   
  
   

@@ -11,6 +11,18 @@ Note: what is target format and home for this? Is it too niche to be anything ot
 
 ## Introduction
 
+-   general introduction on forest carbon accounting in Canada (1 paragraph)
+
+-   then talk about how fire in many years is the largest disturbance by area, and that current estimates broadly assume full severity when mapped by NBAC. But, we know that \<100% of burned area is high severity from Ellen's work and others.
+
+-   to support recent advances in operational burn severity mapping for Canada, the CBM DMs also need to be upgraded.
+
+-   In this document, we outline the evidence-based fire DMs proposed.
+
+-   From a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires.
+
+-   Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies (could be wildfire, experimental fires, or prescribed fires).
+
 ## Methods
 
 ### Combustion gas emission ratios
@@ -56,6 +68,10 @@ kbl(as.data.frame(global.vars)) %>%
 
 where CO2 is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO2, CH4, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 5% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH4.
 
+### Canopy mortality from plot and remotely sensed data
+
+Ellen to insert methods here
+
 ### Duff Consumption
 
 While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In this scheme, we utilize the Forest Floor Fuel Consumption (FFFC) model of [@degroot2009], modified to only account for fuel horizons below the litter layer:
@@ -100,6 +116,10 @@ kbl(FFFC) %>%
           kable_styling(latex_options = "scale_down") %>%
   kable_styling(latex_options = "hold_position")
 ```
+
+### Key calculations in fire C emissions
+
+Go over 4-5 key equations: CFB From mortality, etc. Spell out the equations.
 
 ## Constructing fire disturbance matrices
 
@@ -1659,11 +1679,11 @@ column_spec(1, width = "3cm") %>%
 
 ## Results
 
-### 
+Compare high severity-only C estimates from prior DMs to those with mixed severity.
 
 ## Discussion
 
-### Comparison to prior wildfire emissions estimates
+### Comparison to prior wildfire emissions estimates (assumption of 100% CFB or else based on FWI+spread day alone).
 
 ## Conclusions
 

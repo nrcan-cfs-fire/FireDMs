@@ -7,6 +7,17 @@ bibliography: references.bib
 date: "`r Sys.Date()`"
 ---
 
+```{r loadLibsEtc, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(tinytex)
+library(formatR)
+library(data.table)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+
+ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+```
+
 Note: what is target format and home for this? Is it too niche to be anything other than a info report, or something in *Carbon Balance and Management*?
 
 ## Introduction
@@ -25,52 +36,85 @@ Note: what is target format and home for this? Is it too niche to be anything ot
 
 ## Methods
 
-### Combustion gas emission ratios
+### Relevant biomass pools of CBM
 
-Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering. They are defined in a global variables table:
+Short section explaining the pool definitions most relevant to fire.
 
-```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(kableExtra)
-library(tinytex)
-library(formatR)
-knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+### Logical structure
 
-#populate the values first:
-global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16)
+To simpllify the process of the creation of the DMs as a distillation of the complexities of fire severity and combustion patterns, the following logical axioms are proposed and maintained throughout:
 
-#The provided 0.9,0.01,0.09 represents an MCE of 0.90 and therefore a mixed plume very similar to that from ARCTAS data by Simpson et al 2011 (10.5194/acp-11-6445-2011)
+1.  DMs should be in terms of mortality, not survival
 
-#here we use values directly from CFFEPS-FireWork
+2.  Crown Fraction Burned (CFB) is a mass-based estimate of the portion of foliage consumed in flaming, and is inclusive of merchantable and submerchantable trees, both broadleaf and needleleaf
 
-##note these5
+3.  Snags are inclusive of both those killed by prior fire as well as those killed by all other causes
 
-#then label names
-names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
+4.  In submerchantable trees, mortality = CFB
 
-#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
+5.  In submerchantable trees, mortality is \<= 1
 
+6.  In merchantable stands, CFB \< mortality
 
-#DID NOT RUN:
-#global.vars$FlamingCO2 #returns desired value as double
+7.  Survival = 1 - mortality
 
-#can add/subtract ecozones here as needed.  Note that Mixedwood Plains not included here (but could/should be)
-ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+8.  CFB \< survival
 
-```
+9.  The girdled fraction of trees = mortality - CFB
 
-```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE }
-kbl(as.data.frame(global.vars)) %>%
-  kable_minimal()  %>%
-          kable_styling(latex_options = "scale_down") %>%
-  kable_styling(latex_options = "hold_position")
-```
+10. Survival \<= 1 and also \>= 0
 
-where CO2 is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO2, CH4, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 5% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH4.
+Of these, Crown Fraction Burned (CFB) is both highly critical and a concept used primarily in fire behaviour science but not carbon accounting nor fire ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System documentation, and provides a simple continuous 0-100 variable for only the consumption of foliage (inclusive of both conifer and broadleaf), as opposed to ordinal and less precise systems like Crown Fire Severity Index that allows the user to specify moreso which pools of canopy biomass are consumed, but not the degree to which a given pool is consumed.
 
 ### Canopy mortality from plot and remotely sensed data
 
 Ellen to insert methods here
+
+... the resulting field-based estimates of crown mortality by ecozone are as follows:
+
+```{r MortByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
+
+##load Ellen's data (InterimValue==False)
+VarDefs <- read.csv("~/nrcan-cfs-fire/FireDMs/FireDMTableDefs.csv")
+
+VarDefs$SeverityClass <- factor(VarDefs$SeverityClass,levels = c("Low", "Mod", "High"))
+
+#subset to just the variable of interest:
+VarDefs.SW.Mort <- VarDefs[VarDefs$Variable.Name == "SW.Mort",]
+
+
+
+VarDefs.dt <- as.data.table(VarDefs.SW.Mort)
+
+SW.Mort.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
+
+kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as dervied from median values from field studies") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+The other key ecozone and severity-dependent variable provided by field data is the area-wise fraction of completely unburned forest floor, which varies widely by severity class:
+
+```{r UnBurnedForestFloorByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
+
+##load Ellen's data (InterimValue==False)
+
+
+#subset to just the variable of interest:
+VarDefs.Unburned.Litter <- VarDefs[VarDefs$Variable.Name == "Unburned.litter.area",]
+
+
+
+VarDefs.dt <- as.data.table(VarDefs.Unburned.Litter)
+
+Unburned.Litter.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
+
+kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
 
 ### Duff Consumption
 
@@ -83,6 +127,8 @@ $$
 where DC is the Fire Weather Index Drought Code and FFFL is the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data). LL is the Litter Load, and is typically on the order of 0.2 kg/m2 for most boreal forest upland and peatland sites ([@thompson2017]). This distinction is necessary due to the flaming phase consumption of the litter layer as opposed to the smouldering phase consumption of deeper horizons. While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, here we use ecozone-averaged fuel loads and decadal composites of Drought Code to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
 
 ```{r computeDuffConsump, echo=FALSE,message=FALSE, warning=FALSE}
+
+
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
 Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across a range of boreal forest sites, doi: 10.1139/cjfr-2016-0475
@@ -111,7 +157,7 @@ names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Forest.Floor.Load.kg.m
 ```
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
-kbl(FFFC) %>%
+kbl(FFFC, caption = "Fire Weather, fuel loading, and forest floor consumption values per ecozone") %>%
   kable_minimal()  %>%
           kable_styling(latex_options = "scale_down") %>%
   kable_styling(latex_options = "hold_position")
@@ -121,22 +167,61 @@ kbl(FFFC) %>%
 
 Go over 4-5 key equations: CFB From mortality, etc. Spell out the equations.
 
+### Combustion gas emission ratios
+
+Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering. They are defined in a global variables table:
+
+```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+#populate the values first:
+global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16)
+
+#The provided 0.9,0.01,0.09 represents an MCE of 0.90 and therefore a mixed plume very similar to that from ARCTAS data by Simpson et al 2011 (10.5194/acp-11-6445-2011)
+
+#here we use values directly from CFFEPS-FireWork
+
+##note these5
+
+#then label names
+names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
+
+#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
+
+
+#DID NOT RUN:
+#global.vars$FlamingCO2 #returns desired value as double
+
+#can add/subtract ecozones here as needed.  Note that Mixedwood Plains not included here (but could/should be)
+
+
+```
+
+```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE }
+kbl(as.data.frame(global.vars), caption = "Emissions ratios in flaming and smouldering phase, updated to reflect values used in Canada's operational wildfire smoke emissions model, CFFEPS-Firework") %>%
+  kable_minimal()  %>%
+          kable_styling(latex_options = "scale_down") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+where CO2 is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO2, CH4, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 5% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH4.
+
 ## Constructing fire disturbance matrices
 
 ```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 
 #list of ecozone-specific terms (with and without severity dependence)
 #first, import blank template that works for a single ecozone:
-VarDefs.generic <- as.data.frame(read.csv("~/nrcan-cfs-fire/FireDMs/VarDefsGeneric.csv"))
-VarDefs.generic <- VarDefs.generic[,1:7]
+#VarDefs.generic <- as.data.frame(read.csv("~/nrcan-cfs-fire/FireDMs/VarDefsGeneric.csv"))
+#VarDefs.generic <- VarDefs.generic[,1:7]
 
 #then, replicate for each severity level*ecozone
 
 #use slice from dplyr and each to replicate the template for each ecozone
-VarDefs <- VarDefs.generic %>% slice(rep(1:n(), each = length(ecozones.list)))
+#VarDefs <- VarDefs.generic %>% slice(rep(1:n(), each = length(ecozones.list)))
 
 #fill in ecozone names:
-VarDefs$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(VarDefs.generic))
+#VarDefs$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(VarDefs.generic))
 
 #Once this is done and filled in with data from observations, load the canonical version: 
 # this will overwrite the above loop
@@ -171,7 +256,7 @@ First, a generic template for a fire DM is loaded, that can represent any ecozon
 An example of the variable definition template is as follows:
 
 ```{r varDefsExample, echo=FALSE, message=FALSE, warning=FALSE}
-kbl(head(VarDefs)) %>%
+kbl(head(VarDefs), caption = "Example of stored fire disturbance matrix precursor variable information") %>%
   kable_minimal()  %>%
           kable_styling(latex_options = "scale_down") %>%
   kable_styling(latex_options = "hold_position")
@@ -185,7 +270,7 @@ A plain language name for each variable is provided right in the data, as well.
 A second template defines each flux in a Disturbance Matrix, with Source and Sink defined as precise character variables, and a plain language summary ("Process Synonym") included to tie this flux back to language used in the fire science literature. Pseudocode and notes are included in each flux, which is repeated for each fire severity class and ecozone. There are 3900 total fluxes, though many do not have sufficient information to describe differences between ecozones. Many of these are computed automatically, tying back into variables such as Crown Fraction Burned.
 
 ```{r SinkSourceExample, echo=FALSE, message=FALSE, warning=FALSE}
-kbl(head(SourceSink)) %>%
+kbl(head(SourceSink), caption = "Sample of disturbance matrix data file") %>%
   kable_minimal() %>%
           kable_styling(latex_options = "scale_down") %>%
   kable_styling(latex_options = "hold_position") 
@@ -194,11 +279,7 @@ kbl(head(SourceSink)) %>%
 
 ```
 
-With both generic ecozone variables as well as severity-specific variables defined and the pseudocode for each flux included, actual DM values are computed as references to tables, subset by ecozone and severity class:
-
-```{r snip2}
-#SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
-```
+With both generic ecozone variables as well as severity-specific variables defined and the pseudocode for each flux included, actual DM values are computed as references to tables, subset by ecozone and severity class.
 
 Note that rather than defining softwood crown fraction burned as a variable called "SW.CFB.Boreal.Plains" for each ecozone, there is a row in the VarDefs table that represents SW.CFB in each ecozone and for each severity class, thus avoiding the creation of large lists of manually entered variable names and values in the R environment. Instead, these values can be programmatically entered via external analysis of plot data (not covered here).
 
@@ -241,6 +322,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & Source
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+
+
 
 #FluxID: 3
 #Source: SW Merch 
@@ -1690,5 +1773,14 @@ Compare high severity-only C estimates from prior DMs to those with mixed severi
 ## Data availability
 
 FAIR principle statement
+
+Appendix A: list of fluxes and corresponding fire-related plain-language summary.
+
+```{r SinkSourceGenericAppendix,  echo=FALSE, message=FALSE, warning=FALSE }
+
+
+
+kbl(SourceSinkGeneric[SourceSinkGeneric$SeverityClass == 'Low',3:5],row.names = FALSE)
+```
 
 ## References

@@ -26,9 +26,7 @@ The broad axioms of this framework are as follows:
 9) The girdled fraction of trees = mortality - CFB	
 10) Survival <= 1 and also >= 0	
 
-A single core logic module (i) reads an R list object that contains ecozone (i.e. relative abundance of spruce vs pine and resprouters vs non-resprouter broadleaf forest) and ecozone x severity-dependent variables. (ii) creates the DM as a list object (with each DM paired from->to as an row in the list object.
 
-The DMs could be re-created per geospatial unit eventually, but otherwise are designed to be run annual when the median Drought Code of burning (from FireM3 hotspots) is known, as well as the relative proportion of differing forest types burned.
 
 
 

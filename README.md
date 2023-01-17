@@ -1,5 +1,5 @@
 # FireDMs
-Programmatically-defined disturbance matrices for the geospatial Carbon Budget Model
+Programmatically-defined fire disturbance matrices for the geospatial Carbon Budget Model
 
 See pdf summary of project so far: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/FireDMS.pdf
 

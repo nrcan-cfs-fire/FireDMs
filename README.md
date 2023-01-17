@@ -7,6 +7,7 @@ Summary Presentation is here: https://041gc-my.sharepoint.com/:p:/g/personal/dan
 
 The actual GCM-compatible fire DM outputs are here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/SourceSinkGeneric.csv (can change that name as needed).  The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
 
+The file https://github.com/nrcan-cfs-fire/FireDMs/blob/main/FireDMTableDefs.csv is populated by an outside process that uses field observations of fire ecosystem impacts from Composite Burn Index plots, stratified by severity class and ecozone to populated values (typically median values from a severity class * ecozone combination).
 
 With severity mapping, a new approach to fire disturbanace matrices in the GCBM is required.
 

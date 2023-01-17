@@ -28,6 +28,6 @@ The broad axioms of this framework are as follows:
 10) Survival <= 1 and also >= 0	
 
 
-
+Note that https://github.com/nrcan-cfs-fire/FireDMs/blob/main/VarDefsGeneric.csv is depreciated from an earlier process, and builds the DMs generically using non-field derived values, and is useful for testing but otherwise integral to the process.
 
 

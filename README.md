@@ -5,6 +5,9 @@ See pdf summary of project so far: https://github.com/nrcan-cfs-fire/FireDMs/blo
 
 Summary Presentation is here: https://041gc-my.sharepoint.com/:p:/g/personal/daniel_thompson_nrcan-rncan_gc_ca/EbAvLIlDK6BCiFe7O-VvU9MBnt5mPgOR7qGvJtFW1qJFbA?e=qkG0Oe
 
+The actual GCM-compatible fire DM outputs are here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/SourceSinkGeneric.csv (can change that name as needed).  The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
+
+
 With severity mapping, a new approach to fire disturbanace matrices in the GCBM is required.
 
 This repo creates DMs for CBM using a logical and programmatic technique that borrow from (1) field observations; (2) combustion physics and observations; (3) knowledge of fire ecology-related plant traits; and (4) broad distributions of forest species across Canadian ecozones.

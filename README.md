@@ -5,7 +5,7 @@ See pdf summary of project so far: https://github.com/nrcan-cfs-fire/FireDMs/blo
 
 Summary Presentation is here: https://041gc-my.sharepoint.com/:p:/g/personal/daniel_thompson_nrcan-rncan_gc_ca/EbAvLIlDK6BCiFe7O-VvU9MBnt5mPgOR7qGvJtFW1qJFbA?e=qkG0Oe
 
-The actual GCM-compatible fire DM outputs are here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/SourceSinkGeneric.csv (can change that name as needed).  The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
+The actual GCM-compatible fire DM outputs are here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/FireDM-currents.csv (can change that name as needed).  The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
 
 The file https://github.com/nrcan-cfs-fire/FireDMs/blob/main/FireDMTableDefs.csv is populated by an outside process that uses field observations of fire ecosystem impacts from Composite Burn Index plots, stratified by severity class and ecozone to populated values (typically median values from a severity class * ecozone combination).
 
@@ -20,7 +20,6 @@ The broad axioms of this framework are as follows:
 3) Snags are inclusive of both those killed by prior fire as well as those killed by all other causes		
 4) In submerchantable trees, mortality = CFB		
 5) In submerchantable trees, mortality is <= 1
-
 6) In merchantable stands, CFB < mortality		
 7) Survival = 1 - mortality	
 8) CFB < survival	

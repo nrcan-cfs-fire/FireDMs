@@ -398,7 +398,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & Source
 
 #FluxID: 5
 #Source: SW Foliage
-#sink: Above Ground Very Fast soil C
+#sink: Above Ground Very Fast DOM
 #PLS: Post-fire litterfall (heat-killed but not burned, then falls to ground within the season)
 #Pseudocode: Remainder of all fluxes above.
 #Notes: assume 100% of heat-killed litter falls within the year of fire
@@ -583,7 +583,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 19 & Sourc
 
 #FluxID: 20
 #Source: SW Coarse roots
-#sink: Above Ground Fast soil C
+#sink: Above Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted in organic soil
 #Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in organic soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides SW.prop.Coarse.Root.duff
@@ -597,7 +597,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 20 & Sourc
 
 #FluxID: 21
 #Source: SW Coarse roots
-#sink: Below Ground Fast soil C
+#sink: Below Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted since they are in mineral soil
 #Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in mineral soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides SW.prop.Coarse.Root.duff
@@ -612,7 +612,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 21 & Sourc
 
 #FluxID: 23
 #Source: SW fine roots
-#sink: Above Ground Very Fast soil C
+#sink: Above Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in organic soil
 #Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: 
@@ -626,7 +626,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 23 & Sourc
 
 #FluxID: 24
 #Source: SW fine roots
-#sink: Below Ground Very Fast soil C
+#sink: Below Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in mineral soil
 #Pseudocode:  =(conifer mortality rate)*(fine root fraction in mineral soil)
 #notes: 
@@ -766,7 +766,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & Sourc
 
 #FluxID: 32
 #Source: HW Foliage
-#sink: Above Ground Very Fast soil C
+#sink: Above Ground Very Fast DOM
 #PLS: Post-fire litterfall (heat-killed but not burned, then falls to ground within the season)
 #Pseudocode: Mortality-CFB
 #Notes: assume 100% of heat-killed litter falls within the year of fire
@@ -992,7 +992,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & Sourc
 
 #FluxID: 47
 #Source: HW Coarse roots
-#sink: Above Ground Fast soil C
+#sink: Above Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted in organic soil
 #Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in organic soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides HW.prop.Coarse.Root.duff
@@ -1006,7 +1006,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & Sourc
 
 #FluxID: 48
 #Source: HW Coarse roots
-#sink: Below Ground Fast soil C
+#sink: Below Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted since they are in mineral soil
 #Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in mineral soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides HW.prop.Coarse.Root.duff
@@ -1022,7 +1022,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & Sourc
 
 #FluxID: 50
 #Source: HW fine roots
-#sink: Above Ground Very Fast soil C
+#sink: Above Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in organic soil
 #Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: 
@@ -1036,7 +1036,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & Sourc
 
 #FluxID: 51
 #Source: HW fine roots
-#sink: Below Ground Very Fast soil C
+#sink: Below Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in mineral soil
 #Pseudocode:  =(conifer mortality rate)*(fine root fraction in mineral soil)
 #notes: 
@@ -1167,7 +1167,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & Sourc
 
 #FluxID: 59
 #Source: Belowground Very Fast DOM
-#sink: Belowground Very Fast Soil C
+#sink: Belowground Very Fast DOM
 #PLS: Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter
 #Pseudocode:  == 1, since dead roots in the mineral soil are not combusted
 
@@ -1179,7 +1179,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 59 & Sourc
 
 #FluxID: 60
 #Source: Aboveground Fast DOM
-#sink: Above Ground Fast soil C
+#sink: Above Ground Fast DOM
 #PLS: Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately ≥5 and <75 mm diameter
 #Pseudocode: =[(litter surface area fraction unburned*woody debris portion of AGFastDOM)+(Dead coarse root fraction of AGFastDOM*(fraction of duff consumed)]
 #*Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff
@@ -1233,7 +1233,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 63 & Sourc
 
 #FluxID: 64
 #Source: Belowground Fast DOM
-#sink: Below Ground Fast soil C
+#sink: Below Ground Fast DOM
 #PLS: Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ≥5 diameter
 #Pseudocode: =~ 1, since no combustion within mineral soil
 
@@ -1243,7 +1243,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 64 & Sourc
 
 #FluxID: 65
 #Source: Medium DOM
-#sink: Medium Soil C
+#sink: Medium DOM
 #PLS: Uncombusted Coarse woody debris on the ground
 #Pseudocode: =(1-(fraction of duff consumed))*(1-unburned litter area)
 #note: could be from field data, here assuming burns at same rate as duff
@@ -1316,7 +1316,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 69 & Sourc
 
 #FluxID: 70
 #Source: Aboveground Slow DOM
-#sink: Above Ground slow soil C
+#sink: Above Ground slow DOM
 #PLS: Uncombusted fraction of duff horizons
 #Pseudocode: =1-(fraction of duff consumed)
 #note: see CaMP for slow DOM in peat layers
@@ -1369,7 +1369,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 73 & Sourc
 
 #FluxID: 74
 #Source: Belowground Slow DOM
-#sink: Below Ground Slow soil C
+#sink: Below Ground Slow DOM
 #PLS: Uncombusted fraction of Humified organic matter in the mineral soil
 #Pseudocode: ==0
 #notes: no combustion 
@@ -1382,7 +1382,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & Sourc
 
 #FluxID: 75
 #Source: Softwood Stem Snag
-#sink: Medium Soil C
+#sink: Medium DOM
 #PLS: Fraction of conifer snags that fall to ground but not combusted (i.e. fall after the passage of the fire and due to the fire)
 #Pseudocode: =[1-(SW.Snag.Comb.Frac]*(Snag.Fall.Frac)
 #notes: assumeno combustion of these snags otherwise
@@ -1463,7 +1463,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 80 & Sourc
 
 #FluxID: 81
 #Source: Softwood Branch Snag
-#sink: Above Ground Fast soil C
+#sink: Above Ground Fast DOM
 #PLS: Portion of conifer snag branches that falls onto the ground
 #Pseudocode: =[1-(SW.Snag.BW.Comb.Frac)]*Snag.Fall.Frac
 #notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
@@ -1533,7 +1533,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 85 & Sourc
 
 #FluxID: 86
 #Source: Hardwood Stem Snag
-#sink: Medium Soil C
+#sink: Medium DOM
 #PLS: Fraction of deciduous snags that fall to ground but not combusted (i.e. fall after the passage of the fire and due to the fire)
 #Pseudocode: =[1-(HW.Snag.Comb.Frac]*(Snag.Fall.Frac)
 #notes: assume no combustion of these snags otherwise
@@ -1614,7 +1614,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 91 & Sourc
 
 #FluxID: 92
 #Source: Hardwood Branch Snag
-#sink: Above Ground Fast soil C
+#sink: Above Ground Fast DOM
 #PLS: Portion of deciduous snag branches that falls onto the ground
 #Pseudocode: =[1-(HW.Snag.BW.Comb.Frac)]*Snag.Fall.Frac
 #notes: Assuming half of all unconsumed portions branches on snags fall to the ground, half of them remain on the snag.  No field data to this effect.  
@@ -1702,7 +1702,7 @@ And make a checksum table to ensure all the major pools sum of up 1:
 ##example calc:
 #sum(SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == "Softwood Merchantable" & SourceSink$SeverityClass == "Mod"])
 
-source.list.checksum <- c("Softwood Merchantable", "Softwood Foliage","Softwood Other","Softwood Submerchantable", "Softwood Coarse Roots","Softwood Fine Roots","Aboveground Very Fast DOM","Aboveground Fast DOM","Medium DOM","Aboveground Slow DOM","Softwood Stem Snag","Softwood Branch Snag","Hardwood Merchantable", "Hardwood Foliage","Hardwood Other","Hardwood Submerchantable","Hardwood Coarse Roots","Hardwood Fine Roots","Hardwood Stem Snag","Hardwood Branch Snag") 
+source.list.checksum <- c("Softwood Merchantable", "Softwood Foliage","Softwood Other","Softwood Submerchantable", "Softwood Coarse Roots","Softwood Fine Roots","Aboveground Very Fast DOM","Aboveground Fast DOM","Medium DOM","Aboveground Slow DOM","Softwood Stem Snag","Softwood Branch Snag","Hardwood Merchantable", "Hardwood Foliage","Hardwood Other","Hardwood Submerchantable","Hardwood Coarse roots","Hardwood Fine Roots","Hardwood Stem Snag","Hardwood Branch Snag") 
 
 #checksum for a single ecozone, single severity level:
 
@@ -1727,8 +1727,8 @@ options(knitr.kable.NA = '')
   ### list for columns and rows in visual DM: can be any order, not linked to FluxID or anything:
 ### text here must exactly match the name of rows in SinkSource, however:
 
-  sink.col.list <- c("Softwood Merchantable", "Softwood Stem Snag","Medium DOM","Medium Soil C","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO")
-  source.row.list <- c("Softwood Merchantable", "Softwood Stem Snag","Medium DOM","Medium Soil C","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO")
+  sink.col.list <- c("Softwood Merchantable", "Softwood Stem Snag","Medium DOM","Softwood Foliage","Above Ground Very Fast DOM", "CO2", "CH4", "CO")
+  source.row.list <- c("Softwood Merchantable", "Softwood Stem Snag","Medium DOM","Softwood Foliage","Above Ground Very Fast DOM", "CO2", "CH4", "CO")
 
   
   ###make this a function with attributes of ecozone and severity class:
@@ -1741,7 +1741,7 @@ options(knitr.kable.NA = '')
     for (k in seq(1:length(sink.col.list))) {
      
       #if the pair is blank, then return NA, otherwise, look through the list of sink/source pairs for the ecozone and severity level and return that value 
-      ifelse(is.na(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass]),NA,DM.temp[j,k] <- SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass])
+      ifelse(is.na(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass]),NA,DM.temp[j,k] <- SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == source.row.list[j] & SourceSink$Sink == sink.col.list[k] & SourceSink$SeverityClass == SeverityClass])
      
       
     }
@@ -1750,7 +1750,7 @@ options(knitr.kable.NA = '')
   } 
   rownames(DM.temp) <- source.row.list
   kbl(DM.temp[1:length(sink.col.list),1:length(sink.col.list)],col.names = c("Softwood Merchantable", "Softwood Stem Snag","Medium DOM
-","Medium Soil C","Softwood Foliage","Above Ground Very Fast soil C", "CO2", "CH4", "CO"), align = "c",caption = paste0(SeverityClass, " severity Disturbance Matrix in ", ecozone)) %>%
+","Softwood Foliage","Above Ground Very Fast DOM", "CO2", "CH4", "CO"), align = "c",caption = paste0(SeverityClass, " severity Disturbance Matrix in ", ecozone)) %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
 column_spec(2:(length(sink.col.list) + 1), width = "2cm") %>%
 column_spec(1, width = "3cm") %>%

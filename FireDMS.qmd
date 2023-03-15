@@ -177,18 +177,20 @@ Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout
 
 
 #populate the values first:
-global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16)
 
+
+####OPTION 1 (preferred)
+#values directly from CFFEPS-FireWork
+#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
+##global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16) ##Note: this is the stoichiometrically correct ratio, which includes non-CH4 hydrocarbons AND total PM, so CO2+CO+CH4 is only ~0.96
+
+####OPTION 2 (simple)
 #The provided 0.9,0.01,0.09 represents an MCE of 0.90 and therefore a mixed plume very similar to that from ARCTAS data by Simpson et al 2011 (10.5194/acp-11-6445-2011)
+global.vars <- list(0.9,0.01,0.09,0.9,0.01,0.09) ##using the same mixed plume from the current CBM, so flaming is the same as smouldering
 
-#here we use values directly from CFFEPS-FireWork
-
-##note these5
 
 #then label names
 names(global.vars) <- array(c("FlamingCO2","FlamingCH4","FlamingCO","SmoulderingCO2","SmoulderingCH4","SmoulderingCO"))
-
-#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
 
 
 #DID NOT RUN:
@@ -341,20 +343,18 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 3 & Source
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 3 & SourceSink$SeverityClass == "High"] <- 0
 
 
-#FluxID: 4
+#FluxID: 5
 #Source: SW Foliage
-#sink: SW Foliage
-#PLS: Green fraction of canopy remaining intact after fire
-#Pseudocode: IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])
-#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
-#note2: given definition of CFB, this includes all foliage in merch and submerch
+#sink: Above Ground Very Fast DOM
+#PLS: Post-fire litterfall (heat-killed but not burned, then falls to ground within the season)
+#Pseudocode: Remainder of all fluxes above.
+#Notes: assume 100% of heat-killed litter falls within the year of fire
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == 'SW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] - VarDefs$Value[VarDefs$Variable.Name == 'SW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == 'SW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] - VarDefs$Value[VarDefs$Variable.Name == 'SW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod']
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Mod"] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])) 
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "High"] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])) - (VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])) 
-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == 'SW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] - VarDefs$Value[VarDefs$Variable.Name == 'SW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']
 
 
 #FluxID: 6
@@ -396,18 +396,25 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & Source
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "High"] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]
 
-#FluxID: 5
+
+
+  #FluxID: 4
 #Source: SW Foliage
-#sink: Above Ground Very Fast DOM
-#PLS: Post-fire litterfall (heat-killed but not burned, then falls to ground within the season)
-#Pseudocode: Remainder of all fluxes above.
-#Notes: assume 100% of heat-killed litter falls within the year of fire
+#sink: SW Foliage
+#PLS: Green fraction of canopy remaining intact after fire
+#Pseudocode: remainder of (consumed+litterfall)
+#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
+#note2: given definition of CFB, this includes all foliage in merch and submerch
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Low"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Low"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Low"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Mod"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Mod"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Mod"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Mod"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "High"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "High"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "High"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "High"])
+ 
+
+
+
 
 #FluxID: 10
 #Source: SW Other
@@ -728,13 +735,13 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & Sourc
 #PLS: Mortality rate of large broadleaf (includes those with and without burned foliage)
 #Pseudocode: as provided from field data, f(ecozone, severity class)
 #Notes: mortality >= CFB; may not be the case in extremely fire-tolerant stands, but valid the vast majority of the time
-#Notes2: just pulling Softwood CFB 
+#Notes2: just pulling Softwood Mortality from field data
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
 
 #FluxID: 30
 #Source: HW Merch 
@@ -749,20 +756,6 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 30 & Sourc
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 30 & SourceSink$SeverityClass == 'High'] <- 0
 
-
-#FluxID: 31
-#Source: HW Foliage
-#sink: HW Foliage
-#PLS: Green fraction of canopy remaining intact after fire
-#Pseudocode: IF([(1-Mortality)-CFB]<0,0,[(1-Mortality)-CFB])
-#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
-#note2: given definition of CFB, this includes all foliage in merch and submerch
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'Low'] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])) 
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'Mod'] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod']) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])) 
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'High'] <- ifelse((1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']) < 0,0,(1 - (VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])) - (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])) 
 
 #FluxID: 32
 #Source: HW Foliage
@@ -816,7 +809,18 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & Sourc
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & SourceSink$SeverityClass == 'High'] <- global.vars$FlamingCO *  VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']
 
+#FluxID: 31
+#Source: HW Foliage
+#sink: HW Foliage
+#PLS: Green fraction of canopy remaining intact after fire
+#Pseudocode: Remainder of fluxes 32:35 above
+#note2: given definition of CFB, this includes all foliage in merch and submerch
 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'Low'] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 32 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 33 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 34 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & SourceSink$SeverityClass == "Low"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'Mod'] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 32 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 33 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 34 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & SourceSink$SeverityClass == "Mod"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 31 & SourceSink$SeverityClass == 'High'] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 32 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 33 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 34 & SourceSink$SeverityClass == "High"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & SourceSink$SeverityClass == "High"])
 
 #FluxID: 37
 #Source: HW Other
@@ -826,14 +830,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 35 & Sourc
 
 #Notes:  #since 1-HW.LgBranch.Comb.Frac is the snag creation rate
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'Low'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] *
-                                                                                                                    (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]            
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'Low'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]            
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'Mod'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] *
-                                                                                                                    (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'Mod'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]  
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'High'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] *
-                                                                                                                     (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]   
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & SourceSink$SeverityClass == 'High'] <- (VarDefs$Value[VarDefs$Variable.Name == 'HW.CFB' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.LgBranch.Comb.Frac' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])) * VarDefs$Value[VarDefs$Variable.Name == 'HW.BW.frac.of.other' & VarDefs$Ecozone == ecozone]   
 
 #FluxID: 38
 #Source: HW Other

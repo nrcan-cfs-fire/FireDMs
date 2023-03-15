@@ -1372,14 +1372,14 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 73 & Sourc
 #Source: Belowground Slow DOM
 #sink: Below Ground Slow DOM
 #PLS: Uncombusted fraction of Humified organic matter in the mineral soil
-#Pseudocode: ==0
+#Pseudocode: == 1
 #notes: no combustion 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "Low"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Low"])*global.vars$SmoulderingCO
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "Low"] <- 1
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Mod"])*global.vars$SmoulderingCO
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "Mod"] <- 1
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "High"])*global.vars$SmoulderingCO
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & SourceSink$SeverityClass == "High"] <- 1
 
 #FluxID: 75
 #Source: Softwood Stem Snag

@@ -1712,7 +1712,7 @@ source.list.checksum <- c("Softwood Merchantable", "Softwood Foliage","Softwood 
 for (i in seq(1:length(source.list.checksum))) {
 
   print(source.list.checksum[i])
-  print(sum(SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.list.checksum[i] & SourceSink$SeverityClass == "High"]))
+  print(sum(SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == source.list.checksum[i] & SourceSink$SeverityClass == "Mod"]))
 }
 
 

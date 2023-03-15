@@ -721,11 +721,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & Sourc
 #Pseudocode: survival = 1-mortality
 #Notes:  by axiom, survival = 1-mortality,
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Mod"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Mod"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "High"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "High"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
 
 
 

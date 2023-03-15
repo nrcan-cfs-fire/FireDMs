@@ -1383,7 +1383,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 74 & Sourc
 #sink: Medium Soil C
 #PLS: Fraction of conifer snags that fall to ground but not combusted (i.e. fall after the passage of the fire and due to the fire)
 #Pseudocode: =[1-(SW.Snag.Comb.Frac]*(Snag.Fall.Frac)
-#notes: assumeno combustion of these snags otherwise
+#notes: assume no combustion of these snags otherwise
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 75 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) * VarDefs$Value[VarDefs$Variable.Name == "Snag.Fall.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]
 
@@ -1690,7 +1690,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & Sourc
 
 ```
 
-And make a checksum table to ensure all the major pools sum of up 1:
+A classic checksum table to ensure all the major pools sum of up 1 is presented below (Boreal Plains, high severity), but keep in mind that the sum of combusted pools is longer precisely 1.0 since particulate matter and non-methane hydrocarbons are accounted as leaving the biomass pool but have no corresponding atmospheric pool at the moment:
 
 ```{r checkSum, echo=FALSE,message=FALSE, warning=FALSE}
 ##example calc:

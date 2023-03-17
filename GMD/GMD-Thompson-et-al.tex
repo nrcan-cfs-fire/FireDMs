@@ -1,0 +1,843 @@
+%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%% ---------------------------------
+%% This template should be used for copernicus.cls
+%% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
+%% For further assistance please contact Copernicus Publications at: production@copernicus.org
+%% https://publications.copernicus.org/for_authors/manuscript_preparation.html
+
+%% copernicus_rticles_template (flag for rticles template detection - do not remove!)
+
+%% Please use the following documentclass and journal abbreviations for discussion papers and final revised papers.
+
+%% 2-column papers and discussion papers
+\documentclass[, manuscript]{copernicus}
+
+
+
+%% Journal abbreviations (please use the same for preprints and final revised papers)
+
+% Advances in Geosciences (adgeo)
+% Advances in Radio Science (ars)
+% Advances in Science and Research (asr)
+% Advances in Statistical Climatology, Meteorology and Oceanography (ascmo)
+% Annales Geophysicae (angeo)
+% Archives Animal Breeding (aab)
+% Atmospheric Chemistry and Physics (acp)
+% Atmospheric Measurement Techniques (amt)
+% Biogeosciences (bg)
+% Climate of the Past (cp)
+% DEUQUA Special Publications (deuquasp)
+% Drinking Water Engineering and Science (dwes)
+% Earth Surface Dynamics (esurf)
+% Earth System Dynamics (esd)
+% Earth System Science Data (essd)
+% E&G Quaternary Science Journal (egqsj)
+% EGUsphere (egusphere) | This is only for EGUsphere preprints submitted without relation to an EGU journal.
+% European Journal of Mineralogy (ejm)
+% Fossil Record (fr)
+% Geochronology (gchron)
+% Geographica Helvetica (gh)
+% Geoscience Communication (gc)
+% Geoscientific Instrumentation, Methods and Data Systems (gi)
+% Geoscientific Model Development (gmd)
+% History of Geo- and Space Sciences (hgss)
+% Hydrology and Earth System Sciences (hess)
+% Journal of Bone and Joint Infection (jbji)
+% Journal of Micropalaeontology (jm)
+% Journal of Sensors and Sensor Systems (jsss)
+% Magnetic Resonance (mr)
+% Mechanical Sciences (ms)
+% Natural Hazards and Earth System Sciences (nhess)
+% Nonlinear Processes in Geophysics (npg)
+% Ocean Science (os)
+% Polarforschung - Journal of the German Society for Polar Research (polf)
+% Primate Biology (pb)
+% Proceedings of the International Association of Hydrological Sciences (piahs)
+% Safety of Nuclear Waste Disposal (sand)
+% Scientific Drilling (sd)
+% SOIL (soil)
+% Solid Earth (se)
+% The Cryosphere (tc)
+% Weather and Climate Dynamics (wcd)
+% Web Ecology (we)
+% Wind Energy Science (wes)
+
+% Pandoc citation processing
+
+% The "Technical instructions for LaTex" by Copernicus require _not_ to insert any additional packages.
+% 
+% tightlist command for lists without linebreak
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+%%\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+%
+\begin{document}
+
+
+\title{Incorporating fire severity for refined carbon emissions
+estimates of boreal and temperate forest fires in the Generic Carbon
+Budget Model (GCBM)}
+
+
+\Author[1]{Dan K.}{Thompson}
+\Author[2]{Ellen}{Whitman}
+\Author[1]{Chelene}{Hanes}
+\Author[3]{PFC Carbon Team (exactly who TBD)}{Copernicus}
+
+
+\affil[1]{Natural Resources Canada, Canadian Forest Service, Great Lakes
+Forestry Centre, Sault Ste. Marie, Canada}
+\affil[2]{Natural Resources Canada, Canadian Forest Service, Northern
+Forestry Centre, Edmonton, Canada}
+\affil[3]{Natural Resources Canada, Canadian Forest Service, Pacific
+Forestry Centre, Victoria, Canada}
+
+\runningtitle{Fire Severity and Forest Carbon Budget Models}
+
+\runningauthor{Thompson et al.}
+
+
+\correspondence{Dan K.\ Thompson\ (daniel.thompson@nrcan-rncan.gc.ca)}
+
+
+
+\received{}
+\pubdiscuss{} %% only important for two-stage journals
+\revised{}
+\accepted{}
+\published{}
+
+%% These dates will be inserted by Copernicus Publications during the typesetting process.
+
+
+\firstpage{1}
+
+\maketitle
+
+
+\begin{abstract}
+The abstract goes here. It can also be on \emph{multiple lines}.
+\end{abstract}
+
+
+\copyrightstatement{His Majesty the King in Right of Canada as
+represented by the Minister of Natural Resources Canada. This work is
+distributed under the Creative Commons Attribution 4.0 License.}
+
+
+\#Introduction
+
+\begin{itemize}
+\item
+  general introduction on forest carbon accounting in Canada (1
+  paragraph)
+\item
+  then talk about how fire in many years is the largest disturbance by
+  area, and that current estimates broadly assume full severity when
+  mapped by NBAC. But, we know that \textless100\% of burned area is
+  high severity from Ellen's work and others.
+\item
+  to support recent advances in operational burn severity mapping for
+  Canada, the CBM DMs also need to be upgraded.
+\item
+  In this document, we outline the evidence-based fire DMs proposed.
+\item
+  From a blend of aggregated field data linked to remotely sensed
+  severity, as well as insights from fire physics and experimental
+  fires.
+\item
+  Key knowledge gaps are also highlighted, with interim solutions
+  presented until further quantification can be done in field studies
+  (could be wildfire, experimental fires, or prescribed fires).
+\end{itemize}
+
+\section{Methods}
+
+\subsection{Biomass pools of the Generic Carbon Budget Model}
+
+Short section explaining the pool definitions most relevant to fire.
+
+\subsection{Axioms of forest carbon budget after fire}
+
+To simplify the process of the creation of the DMs as a distillation of
+the complexities of fire severity and combustion patterns, the following
+logical axioms are proposed and maintained throughout:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  DMs should be in terms of mortality, not survival
+\item
+  Crown Fraction Burned (CFB) is a mass-based estimate of the portion of
+  foliage consumed in flaming, and is inclusive of merchantable and
+  submerchantable trees, both broadleaf and needleleaf
+\item
+  Snags are inclusive of both those killed by prior fire as well as
+  those killed by all other causes
+\item
+  In submerchantable trees, mortality = CFB
+\item
+  In submerchantable trees, mortality is \textless= 1
+\item
+  In merchantable stands, CFB \textless{} mortality
+\item
+  Survival = 1 - mortality
+\item
+  CFB \textless{} survival
+\item
+  The girdled fraction of trees = mortality - CFB
+\item
+  Survival \textless= 1 and also \textgreater= 0
+\end{enumerate}
+
+Of these, Crown Fraction Burned (CFB) is both highly critical and a
+concept used primarily in fire behaviour science but not carbon
+accounting nor fire ecology. CFB was introduced in the 1992 Fire
+Behaviour Prediction System documentation, and provides a simple
+continuous 0-100 variable for only the consumption of foliage (inclusive
+of both conifer and broadleaf), as opposed to ordinal and less precise
+systems like Crown Fire Severity Index that allows the user to specify
+moreso which pools of canopy biomass are consumed, but not the degree to
+which a given pool is consumed.
+
+\subsection{Canopy mortality from plot and remotely sensed data}
+
+Ellen to insert methods here
+
+\ldots{} the resulting field-based estimates of crown mortality by
+ecozone are as follows:
+
+\begin{table}
+
+\caption{\label{tab:MortByEcozone}Softwood fractional mortality by ecozone, as dervied from median values from field studies}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+AM & 0.28 & 0.34 & 0.95\\
+\hline
+BC & 0.24 & 0.65 & 0.98\\
+\hline
+BP & 0.45 & 0.81 & 1.00\\
+\hline
+BSE & 0.45 & 0.81 & 1.00\\
+\hline
+BSW & 0.45 & 0.81 & 1.00\\
+\hline
+HP & 0.45 & 0.81 & 1.00\\
+\hline
+MC & 0.28 & 0.74 & 0.98\\
+\hline
+MP & 0.28 & 0.34 & 0.95\\
+\hline
+P & 0.45 & 0.81 & 1.00\\
+\hline
+PM & 0.13 & 0.38 & 0.97\\
+\hline
+TC & 0.24 & 0.65 & 0.98\\
+\hline
+TP & 0.45 & 0.81 & 1.00\\
+\hline
+TSE & 0.10 & 0.81 & 1.00\\
+\hline
+TSW & 0.10 & 0.81 & 1.00\\
+\hline
+\end{tabular}
+\end{table}
+
+The other key ecozone and severity-dependent variable provided by field
+data is the area-wise fraction of completely unburned forest floor,
+which varies widely by severity class:
+
+\begin{table}
+
+\caption{\label{tab:UnBurnedForestFloorByEcozone}Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+AM & 0.14 & 0.06 & 0.02\\
+\hline
+BC & 0.14 & 0.06 & 0.02\\
+\hline
+BP & 0.14 & 0.06 & 0.02\\
+\hline
+BSE & 0.20 & 0.08 & 0.05\\
+\hline
+BSW & 0.20 & 0.08 & 0.05\\
+\hline
+HP & 0.20 & 0.08 & 0.05\\
+\hline
+MC & 0.14 & 0.06 & 0.02\\
+\hline
+MP & 0.14 & 0.06 & 0.02\\
+\hline
+P & 0.14 & 0.06 & 0.02\\
+\hline
+PM & 0.14 & 0.06 & 0.02\\
+\hline
+TC & 0.14 & 0.06 & 0.02\\
+\hline
+TP & 0.14 & 0.16 & 0.03\\
+\hline
+TSE & 0.20 & 0.08 & 0.05\\
+\hline
+TSW & 0.20 & 0.08 & 0.05\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Duff Consumption}
+
+While consumption of fine fuels in the litter layer of the forest floor
+is nearly complete for any given fire intensity, consumption of deeper
+organic soil horizons (F+H layers in upland forests and upper peat
+layers in wetlands) is more drought dependent. In this scheme, we
+utilize the Forest Floor Fuel Consumption (FFFC) model of
+\citep{degroot2009}, modified to only account for fuel horizons below
+the litter layer:
+
+\begin{equation}
+FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+\end{equation}
+
+where DC is the Fire Weather Index Drought Code and FFFL is the Forest
+Floor Fuel Load (with ecozone averages given in \citep{letang2012} or
+site-level data). LL is the Litter Load, and is typically on the order
+of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland
+sites (\citep{thompson2017}). This distinction is necessary due to the
+flaming phase consumption of the litter layer as opposed to the
+smouldering phase consumption of deeper horizons. While ultimately this
+scheme can be used on individual fires with estimated or measured fuel
+loading and specific Drought Code values, here we use ecozone-averaged
+fuel loads and decadal composites of Drought Code to provide
+representative values. Specifically, a median Drought Code of detected
+fire hotspots in Canada from 2003-2021 using the same data as the
+Canadian CFEEPS-FireWork wildfire air quality model of \citep{chen2019}
+is presented below, along with proportional consumption values of the
+forest floor by ecozone:
+
+\begin{table}
+
+\caption{\label{tab:DuffConsumpTable}Fire Weather, fuel loading, and duff consumption values per ecozone}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Ecozone & Median.DC.of.burning & Median.Duff.Load.kg.m2 & Duff.consump.kg.m2 & Duff.consump.frac\\
+\hline
+AM & 270 & 10.65 & 4.14 & 0.4\\
+\hline
+TP & 369 & 14.75 & 6.57 & 0.45\\
+\hline
+TSW & 297 & 1.45 & 0.98 & 0.82\\
+\hline
+BSW & 239 & 8.55 & 3.23 & 0.39\\
+\hline
+BP & 242 & 9.55 & 3.53 & 0.38\\
+\hline
+P & 242 & 9.55 & 3.53 & 0.38\\
+\hline
+TC & 254 & 8.06 & 3.24 & 0.41\\
+\hline
+BC & 250 & 8.06 & 3.2 & 0.41\\
+\hline
+PM & 268 & 14.95 & 5.24 & 0.36\\
+\hline
+MC & 452 & 5.75 & 3.94 & 0.72\\
+\hline
+HP & 204 & 7.65 & 2.63 & 0.36\\
+\hline
+TSE & 98 & 1.45 & 0.31 & 0.26\\
+\hline
+BSE & 123 & 10.65 & 2.26 & 0.22\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Key calculations in fire C emissions}
+
+Go over 4-5 key equations: CFB From mortality, etc. Spell out the
+equations.
+
+\subsection{Combustion gas emission ratios}
+
+Certain variables, like the fractionation of CO2:CH4:CO, are constant
+throughout ecozones, but vary by flaming vs smouldering. They are
+defined in a global variables table:
+
+\begin{table}
+
+\caption{\label{tab:globalVarsEmissions}Emissions ratios in flaming and smouldering phase, updated to reflect values used in Canada's operational wildfire smoke emissions model, CFFEPS-Firework}
+\centering
+\begin{tabular}[t]{r|r|r|r|r|r}
+\hline
+FlamingCO2 & FlamingCH4 & FlamingCO & SmoulderingCO2 & SmoulderingCH4 & SmoulderingCO\\
+\hline
+0.9 & 0.01 & 0.09 & 0.9 & 0.01 & 0.09\\
+\hline
+\end{tabular}
+\end{table}
+
+where CO\textsubscript{2} is responsible for 90\% of emissions in the
+flaming phase, but only 90\% of emissions in the smouldering phase, with
+a doubling of CO emissions and tripling of CH\textsubscript{4}
+emissions. With a Global Warming Potential of CO equal to 1.9 and
+CH\textsubscript{4} of 25, the Global Warming Potential per unit of
+biomass consumption in the smouldering phase is 1 times higher in global
+warming potential compared to flaming, not including differential
+aerosol production and injection heights, however. Note that these
+proposed emissions factors for flaming vs smouldering are aligned with
+those currently used in Canada's operational wildfire smoke air quality
+model, FireWork \citep{chen2019}. With flaming and smouldering each
+contributing roughly equally to wildfire emissions, these distinct
+flaming and smouldering emissions rates correspond well with aircraft
+smoke chemistry observations by \citep{simpson2011} and
+\citep{hayden2022} and are themselves very similar to prior emissions
+factors used in CBM. Note that as current described, the sum of
+CO\textsubscript{2}, CH\textsubscript{4}, and CO emissions from
+wildfires only represent approximately 95\% of the fire carbon mass
+emitted to the atmosphere, with 0.5-2.0\% of biomass emitted as
+particulate matter (e.g.~PM2.5, but also PM1 and PM10 classes of
+particulates at 1 and 10 um diameters, respectively), and an additional
+5\% \citep{hayden2022} to as little as 1\% \citep{simon2010} composed of
+non-methane organic gases that have a large range in global warming
+potentials as compared to CH\textsubscript{4}.
+
+\subsection{Construction fire disturbance matrices}
+
+First, a generic template for a fire DM is loaded, that can represent
+any ecozone. It comes in two parts: (1) a list of variables, some
+biophysical and not relating to fire severity (such as the portion of
+live branchwood that falls into the smaller size fraction); or (2)
+severity-specific variables (such as Crown Fraction Burn) for a severity
+class. The template is loaded, and replicated across the list of
+ecozones (or any spatial unit) desired. Other processes, such as the
+analysis of field data, can then be used to fill in ecozone-specific
+variables in severity classes.
+
+An example of the variable definition template is as follows:
+
+\begin{table}[!h]
+
+\caption{\label{tab:varDefsExample}Example of stored fire disturbance matrix precursor variable information}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|l|l|l|r|l|l|l}
+\hline
+Ecozone & Pool & Plain.Language.Name & Variable.Name & Value & SeverityClass & InterimValue & Notes\\
+\hline
+AM & Branch & Softwood small branch fraction of total branchwood & SW.SmBranch.frac.of.tot.BW & 0.5 & NA & TRUE & \\
+\hline
+AM & Branch & Hardwood small branch fraction of total branchwood & HW.SmBranch.frac.of.tot.BW & 0.5 & NA & TRUE & \\
+\hline
+AM & Other & Softwood branchwood as portion of total "other" pool & SW.BW.frac.of.other & 0.4 & NA & TRUE & \\
+\hline
+AM & Other & Hardwood branchwood as portion of total "other" pool & HW.BW.frac.of.other & 0.4 & NA & TRUE & \\
+\hline
+AM & Other & Hardwood Bark as portion of "other" pool & HW.bark.frac.of.other & 0.1 & NA & TRUE & \\
+\hline
+AM & Other & Softwood Bark as portion of "other" pool & SW.bark.frac.of.other & 0.1 & NA & TRUE & \\
+\hline
+\end{tabular}}
+\end{table}
+
+A plain language name for each variable is provided right in the data,
+as well.
+
+A second template defines each flux in a Disturbance Matrix, with Source
+and Sink defined as precise character variables, and a plain language
+summary (``Process Synonym'') included to tie this flux back to language
+used in the fire science literature. Pseudocode and notes are included
+in each flux, which is repeated for each fire severity class and
+ecozone. There are 3900 total fluxes, though many do not have sufficient
+information to describe differences between ecozones. Many of these are
+computed automatically, tying back into variables such as Crown Fraction
+Burned.
+
+\begin{table}[!h]
+
+\caption{\label{tab:SinkSourceExample}Sample of disturbance matrix data file}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|r|l|l|l|l|l|l|r|l}
+\hline
+Ecozone & FluxID & Source & Sink & ProcessSynonym & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
+\hline
+AM & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+P & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
+\hline
+\end{tabular}}
+\end{table}
+
+With both generic ecozone variables as well as severity-specific
+variables defined and the pseudocode for each flux included, actual DM
+values are computed as references to tables, subset by ecozone and
+severity class.
+
+Note that rather than defining softwood crown fraction burned as a
+variable called ``SW.CFB.Boreal.Plains'' for each ecozone, there is a
+row in the VarDefs table that represents SW.CFB in each ecozone and for
+each severity class, thus avoiding the creation of large lists of
+manually entered variable names and values in the R environment.
+Instead, these values can be programmatically entered via external
+analysis of plot data (not covered here).
+
+\section{Results}
+
+\subsection{2021 Fires in British Columbia, Canada}
+
+Give quick summary here, show overview map of all the fires, and also an
+example of the GCBM biomass pools and also severity
+
+\#Conclusions
+
+The conclusion goes here.
+
+\section{Appendix A: list of fluxes and corresponding fire-related
+plain-language summary.}
+
+\begin{table}[!h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|l|l}
+\hline
+Source & Sink & ProcessSynonym\\
+\hline
+Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers\\
+\hline
+Softwood Merchantable & Softwood Stem Snag & Mortality rate of large conifers\\
+\hline
+Softwood Merchantable & Black Carbon & Live conifer to BC rate\\
+\hline
+Softwood Foliage & Softwood Foliage & Green fraction of canopy remaining intact after fire\\
+\hline
+Softwood Foliage & Aboveground Very Fast DOM & Post-fire litterfall (heat-killed but not burned)\\
+\hline
+Softwood Foliage & CO2 & Crown Fraction Burned\\
+\hline
+Softwood Foliage & CH4 & Crown Fraction Burned\\
+\hline
+Softwood Foliage & CO & Crown Fraction Burned\\
+\hline
+Softwood Other & Softwood Other & unconsumed Live branches, stumps and small trees including bark\\
+\hline
+Softwood Other & Softwood Branch Snag & Portion of "other" pool as killed by fire but unconsumed branches\\
+\hline
+Softwood Other & CO2 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Other & CH4 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Other & CO & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & Softwood Submerchantable & Understory conifer survival rate\\
+\hline
+Softwood Submerchantable & Softwood Branch Snag & Understory conifer branches killed but not consumed\\
+\hline
+Softwood Submerchantable & CO2 & Understory Conifer consumption rate\\
+\hline
+Softwood Submerchantable & CH4 & Understory Conifer consumption rate\\
+\hline
+Softwood Submerchantable & CO & Understory Conifer consumption rate\\
+\hline
+Softwood Coarse Roots & Softwood Coarse Roots & Surviving coarse roots in conifers\\
+\hline
+Softwood Coarse Roots & Aboveground Fast DOM & Coarse Roots killed in fire but not combusted in organic soil\\
+\hline
+Softwood Coarse Roots & Belowground Fast DOM & Coarse Roots killed in fire but not combusted in mineral soil\\
+\hline
+Softwood Fine Roots & Softwood Fine Roots & Surviving fine roots\\
+\hline
+Softwood Fine Roots & Aboveground Very Fast DOM & Fine roots killed but not burned in organic soil\\
+\hline
+Softwood Fine Roots & Belowground Very Fast DOM & Fine roots killed but not burned in mineral soil\\
+\hline
+Softwood Fine Roots & CO2 & Fine roots combusted alongside duff\\
+\hline
+Softwood Fine Roots & CH4 & Fine roots combusted alongside duff\\
+\hline
+Softwood Fine Roots & CO & Fine roots combusted alongside duff\\
+\hline
+Hardwood Merchantable & Hardwood Merchantable & Survival rate of broadleaf trees\\
+\hline
+Hardwood Merchantable & Hardwood Stem Snag & Mortality rate of broadleaves\\
+\hline
+Hardwood Merchantable & Black Carbon & Live broadleaf stemwood to black carbon (incomplete combustion) rate\\
+\hline
+Hardwood Foliage & Hardwood Foliage & Green fraction of canopy\\
+\hline
+Hardwood Foliage & Aboveground Very Fast DOM & Post-fire litterfall\\
+\hline
+Hardwood Foliage & CO2 & Crown Fraction Burned\\
+\hline
+Hardwood Foliage & CH4 & Crown Fraction Burned\\
+\hline
+Hardwood Foliage & CO & Crown Fraction Burned\\
+\hline
+Hardwood Other & Hardwood Other & Surviving Live branches, stumps and small trees including bark\\
+\hline
+Hardwood Other & Hardwood Branch Snag & Portion of "other" pool as dead but unburned large branches\\
+\hline
+Hardwood Other & CO2 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Other & CH4 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Other & CO & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & Hardwood Submerchantable & Understory broadleaf survival rate\\
+\hline
+Hardwood Submerchantable & Hardwood Branch Snag & Understory broadleaf mortality rate\\
+\hline
+Hardwood Submerchantable & CO2 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Submerchantable & CH4 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Submerchantable & CO & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Coarse roots & Hardwood Coarse roots & Surviving deciduous coarse roots\\
+\hline
+Hardwood Coarse roots & Aboveground Fast DOM & Deciduous coarse roots in the duff that are killed but unconsumed\\
+\hline
+Hardwood Coarse roots & Belowground Fast DOM & Deciduous coarse roots in the mineral soil that are killed but unconsumed\\
+\hline
+Hardwood Fine Roots & Hardwood Fine Roots & Surviving fine roots\\
+\hline
+Hardwood Fine Roots & Aboveground Very Fast DOM & Fine roots killed but not burned in organic soil\\
+\hline
+Hardwood Fine Roots & Belowground Very Fast DOM & Fine roots killed but not burned in mineral soil\\
+\hline
+Hardwood Fine Roots & CO2 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Fine Roots & CH4 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Fine Roots & CO & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & Aboveground Very Fast DOM & Unburned fraction of The L horizonb comprised of foliar litter plus dead fine roots, approximately <5 mm diameter\\
+\hline
+Aboveground Very Fast DOM & CO2 & Combusted fraction of litter layer\\
+\hline
+Aboveground Very Fast DOM & CH4 & Combusted fraction of litter layer\\
+\hline
+Aboveground Very Fast DOM & CO & Combusted fraction of litter layer\\
+\hline
+Belowground Very Fast DOM & Belowground Very Fast DOM & Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter\\
+\hline
+Aboveground Fast DOM & Aboveground Fast DOM & Uncombusted Fine and small woody debris plus dead coarse roots in the forest floor, approximately <75 mm diameter\\
+\hline
+Aboveground Fast DOM & CO2 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Aboveground Fast DOM & CH4 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Aboveground Fast DOM & CO & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Belowground Fast DOM & Belowground Fast DOM & Uncombusted fraction of Dead coarse roots in the mineral soil, approximately <f2>5 diameter\\
+\hline
+Medium DOM & Medium DOM & Uncombusted Coarse woody debris on the ground\\
+\hline
+Medium DOM & CO2 & Combusted fraction of CWD\\
+\hline
+Medium DOM & CH4 & Combusted fraction of CWD\\
+\hline
+Medium DOM & CO & Combusted fraction of CWD\\
+\hline
+Medium DOM & Black Carbon & Medium DOM converted to Black Carbon\\
+\hline
+Aboveground Slow DOM & Aboveground Slow DOM & Uncombusted fraction of duff and peat horizons\\
+\hline
+Aboveground Slow DOM & CO2 & Combusted Fraction of duff and peat horizons\\
+\hline
+Aboveground Slow DOM & CH4 & Combusted Fraction of duff and peat horizons\\
+\hline
+Aboveground Slow DOM & CO & Combusted Fraction of duff and peat horizons\\
+\hline
+Belowground Slow DOM & Belowground Slow DOM & Uncombusted fraction of Humified organic matter in the mineral soil\\
+\hline
+Softwood Stem Snag & Medium DOM & Fraction of conifer snags that fall to ground but not combusted\\
+\hline
+Softwood Stem Snag & Softwood Stem Snag & Uncombusted fraction of conifer snags (still upright)\\
+\hline
+Softwood Stem Snag & CO2 & Combusted fraction of conifer snags\\
+\hline
+Softwood Stem Snag & CH4 & Combusted fraction of conifer snags\\
+\hline
+Softwood Stem Snag & CO & Combusted fraction of conifer snags\\
+\hline
+Softwood Stem Snag & Black Carbon & Portion of conifer snags that are converted to Black Carbon upon burning\\
+\hline
+Softwood Branch Snag & Aboveground Fast DOM & Portion of conifer snag branches that falls onto the ground?\\
+\hline
+Softwood Branch Snag & Softwood Branch Snag & Unaltered fraction\\
+\hline
+Softwood Branch Snag & CO2 & Portion of conifer branch snags that are combusted\\
+\hline
+Softwood Branch Snag & CH4 & Portion of conifer branch snags that are combusted\\
+\hline
+Softwood Branch Snag & CO & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & Medium DOM & Portion of deciduous snags that falls onto the ground?\\
+\hline
+Hardwood Stem Snag & Hardwood Stem Snag & Unaltered stem snag fraction\\
+\hline
+Hardwood Stem Snag & CO2 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Stem Snag & CH4 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Stem Snag & CO & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Stem Snag & Black Carbon & Portion of deciduous snags that are converted to Black Carbon upon burning\\
+\hline
+Hardwood Branch Snag & Aboveground Fast DOM & Portion of deciduous snag branches that falls onto the ground?\\
+\hline
+Hardwood Branch Snag & Hardwood Branch Snag & Portion of deciduous snag branches that survive a fire\\
+\hline
+Hardwood Branch Snag & CO2 & Combusted fraction of deciduous snag branches\\
+\hline
+Hardwood Branch Snag & CH4 & Combusted fraction of deciduous snag branches\\
+\hline
+Hardwood Branch Snag & CO & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & Black Carbon & Unburned black carbon fraction\\
+\hline
+Black Carbon & CO2 & Black carbon combustion fraction\\
+\hline
+Black Carbon & CH4 & Black carbon combustion fraction\\
+\hline
+Black Carbon & CO & Black carbon combustion fraction\\
+\hline
+\end{tabular}}
+\end{table}
+
+\section{Appendix B: annual variability in observed Drought Code during
+wildfire spread, and impact on ecozone-level DM calculations}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-1.pdf}
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-2.pdf}
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-3.pdf}
+
+
+
+\codedataavailability{This article was produced from an RMarkdown
+document with underlying data, available at
+https://github.com/nrcan-cfs-fire/FireDMs} %% use this section when having data sets and software code available
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{Figures and tables in appendices}
+
+Regarding figures and tables in appendices, the following two options
+are possible depending on your general handling of figures and tables in
+the manuscript environment:
+
+\subsection{Option 1}
+
+If you sorted all figures and tables into the sections of the text,
+please also sort the appendix figures and appendix tables into the
+respective appendix sections. They will be correctly named
+automatically.
+
+\subsection{Option 2}
+
+If you put all figures after the reference list, please insert appendix
+tables and figures after the normal tables and figures.
+
+To rename them correctly to A1, A2, etc., please add the following
+commands in front of them: \texttt{\textbackslash{}appendixfigures}
+needs to be added in front of appendix figures
+\texttt{\textbackslash{}appendixtables} needs to be added in front of
+appendix tables
+
+Please add \texttt{\textbackslash{}clearpage} between each table and/or
+figure. Further guidelines on figures and tables can be found below.
+\noappendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authorcontribution{Thompson and Whitman contributed to the concept and
+code design with the assistance of Hanes.} %% optional section
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\competinginterests{The authors declare no competing
+interests.} %% this section is mandatory even if you declare that no competing interests are present
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\disclaimer{The algorithm and results presented only apply to boreal and
+temperate forest ecosystems where sufficient ground plots of fire
+severity are available. As a data-driven model, this framework is not
+suitable for other ecosystems nor agricultural or forestry biomass
+burning practices.} %% optional section
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgements}
+Thanks to (insert names here)
+\end{acknowledgements}
+
+%% REFERENCES
+%% DN: pre-configured to BibTeX for rticles
+
+%% The reference list is compiled as follows:
+%%
+%% \begin{thebibliography}{}
+%%
+%% \bibitem[AUTHOR(YEAR)]{LABEL1}
+%% REFERENCE 1
+%%
+%% \bibitem[AUTHOR(YEAR)]{LABEL2}
+%% REFERENCE 2
+%%
+%% \end{thebibliography}
+
+%% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
+%% authors experienced with BibTeX only have to include the following two lines:
+%%
+\bibliographystyle{copernicus}
+\bibliography{references.bib}
+%%
+%% URLs and DOIs can be entered in your BibTeX file as:
+%%
+%% URL = {http://www.xyz.org/~jones/idx_g.htm}
+%% DOI = {10.5194/xyz}
+
+
+%% LITERATURE CITATIONS
+%%
+%% command                        & example result
+%% \citet{jones90}|               & Jones et al. (1990)
+%% \citep{jones90}|               & (Jones et al., 1990)
+%% \citep{jones90,jones93}|       & (Jones et al., 1990, 1993)
+%% \citep[p.~32]{jones90}|        & (Jones et al., 1990, p.~32)
+%% \citep[e.g.,][]{jones90}|      & (e.g., Jones et al., 1990)
+%% \citep[e.g.,][p.~32]{jones90}| & (e.g., Jones et al., 1990, p.~32)
+%% \citeauthor{jones90}|          & Jones et al.
+%% \citeyear{jones90}|            & 1990
+
+
+\end{document}

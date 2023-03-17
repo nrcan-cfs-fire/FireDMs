@@ -15,6 +15,7 @@ library(formatR)
 library(data.table)
 library(directlabels)
 library(ggrepel)
+library(rticles)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
@@ -210,7 +211,7 @@ kbl(as.data.frame(global.vars), caption = "Emissions ratios in flaming and smoul
 
 where CO2 is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH4 emissions. With a Global Warming Potential of CO equal to 1.9 and CH4 of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO2, CH4, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 5% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH4.
 
-## Constructing fire disturbance matrices
+## Construction fire disturbance matrices
 
 ```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 

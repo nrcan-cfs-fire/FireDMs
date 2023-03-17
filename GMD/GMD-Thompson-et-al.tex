@@ -131,7 +131,24 @@ Forestry Centre, Victoria, Canada}
 
 
 \begin{abstract}
-The abstract goes here. It can also be on \emph{multiple lines}.
+Wildfire is the most impactful natural disturbance to Canada's boreal
+and temperate forest biomes. Current representations of fire impact on
+forest carbon stocks is limited to a single parameterization of fire
+severity (i.e.~the fraction of biomass consumed) that assumes only high
+severity fires, despite a large and increasing evidence base of
+widespread mixed-severity wildfire. In this submodel of the larger
+Generic Carbon Budget Model for forest carbon accounting, field
+measurements of biomass consumption as related to satellite-derived burn
+severity maps are interpretted from a fire physics and ecology
+perspective to derive algorithms to describe forest carbon fluxes in the
+immediate aftermath of fires. Compared to the baseline high
+severity-only representation, this mixed severity modelling framework
+changes modelled total Carbon flux to the atmosphere by {[}\#\#\#{]}\%,
+with the largest changes in {[}pool{]}. Per fire energy release rates as
+detected by satellite yield a favourable rank correlation with this
+severity-only method, and regional estimates of atmospheric CO release
+by satellite compare favourably to outputs from this severity-driven
+model.
 \end{abstract}
 
 
@@ -140,7 +157,7 @@ represented by the Minister of Natural Resources Canada. This work is
 distributed under the Creative Commons Attribution 4.0 License.}
 
 
-\#Introduction
+\section{Introduction}
 
 \begin{itemize}
 \item
@@ -215,166 +232,10 @@ systems like Crown Fire Severity Index that allows the user to specify
 moreso which pools of canopy biomass are consumed, but not the degree to
 which a given pool is consumed.
 
-\subsection{Canopy mortality from plot and remotely sensed data}
+\subsection{Ground plot and remotely sensed fire severity data}
 
-Ellen to insert methods here
-
-\ldots{} the resulting field-based estimates of crown mortality by
-ecozone are as follows:
-
-\begin{table}
-
-\caption{\label{tab:MortByEcozone}Softwood fractional mortality by ecozone, as dervied from median values from field studies}
-\centering
-\begin{tabular}[t]{l|r|r|r}
-\hline
-Ecozone & Low & Mod & High\\
-\hline
-AM & 0.28 & 0.34 & 0.95\\
-\hline
-BC & 0.24 & 0.65 & 0.98\\
-\hline
-BP & 0.45 & 0.81 & 1.00\\
-\hline
-BSE & 0.45 & 0.81 & 1.00\\
-\hline
-BSW & 0.45 & 0.81 & 1.00\\
-\hline
-HP & 0.45 & 0.81 & 1.00\\
-\hline
-MC & 0.28 & 0.74 & 0.98\\
-\hline
-MP & 0.28 & 0.34 & 0.95\\
-\hline
-P & 0.45 & 0.81 & 1.00\\
-\hline
-PM & 0.13 & 0.38 & 0.97\\
-\hline
-TC & 0.24 & 0.65 & 0.98\\
-\hline
-TP & 0.45 & 0.81 & 1.00\\
-\hline
-TSE & 0.10 & 0.81 & 1.00\\
-\hline
-TSW & 0.10 & 0.81 & 1.00\\
-\hline
-\end{tabular}
-\end{table}
-
-The other key ecozone and severity-dependent variable provided by field
-data is the area-wise fraction of completely unburned forest floor,
-which varies widely by severity class:
-
-\begin{table}
-
-\caption{\label{tab:UnBurnedForestFloorByEcozone}Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.}
-\centering
-\begin{tabular}[t]{l|r|r|r}
-\hline
-Ecozone & Low & Mod & High\\
-\hline
-AM & 0.14 & 0.06 & 0.02\\
-\hline
-BC & 0.14 & 0.06 & 0.02\\
-\hline
-BP & 0.14 & 0.06 & 0.02\\
-\hline
-BSE & 0.20 & 0.08 & 0.05\\
-\hline
-BSW & 0.20 & 0.08 & 0.05\\
-\hline
-HP & 0.20 & 0.08 & 0.05\\
-\hline
-MC & 0.14 & 0.06 & 0.02\\
-\hline
-MP & 0.14 & 0.06 & 0.02\\
-\hline
-P & 0.14 & 0.06 & 0.02\\
-\hline
-PM & 0.14 & 0.06 & 0.02\\
-\hline
-TC & 0.14 & 0.06 & 0.02\\
-\hline
-TP & 0.14 & 0.16 & 0.03\\
-\hline
-TSE & 0.20 & 0.08 & 0.05\\
-\hline
-TSW & 0.20 & 0.08 & 0.05\\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Duff Consumption}
-
-While consumption of fine fuels in the litter layer of the forest floor
-is nearly complete for any given fire intensity, consumption of deeper
-organic soil horizons (F+H layers in upland forests and upper peat
-layers in wetlands) is more drought dependent. In this scheme, we
-utilize the Forest Floor Fuel Consumption (FFFC) model of
-\citep{degroot2009}, modified to only account for fuel horizons below
-the litter layer:
-
-\begin{equation}
-FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
-\end{equation}
-
-where DC is the Fire Weather Index Drought Code and FFFL is the Forest
-Floor Fuel Load (with ecozone averages given in \citep{letang2012} or
-site-level data). LL is the Litter Load, and is typically on the order
-of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland
-sites (\citep{thompson2017}). This distinction is necessary due to the
-flaming phase consumption of the litter layer as opposed to the
-smouldering phase consumption of deeper horizons. While ultimately this
-scheme can be used on individual fires with estimated or measured fuel
-loading and specific Drought Code values, here we use ecozone-averaged
-fuel loads and decadal composites of Drought Code to provide
-representative values. Specifically, a median Drought Code of detected
-fire hotspots in Canada from 2003-2021 using the same data as the
-Canadian CFEEPS-FireWork wildfire air quality model of \citep{chen2019}
-is presented below, along with proportional consumption values of the
-forest floor by ecozone:
-
-\begin{table}
-
-\caption{\label{tab:DuffConsumpTable}Fire Weather, fuel loading, and duff consumption values per ecozone}
-\centering
-\begin{tabular}[t]{l|l|l|l|l}
-\hline
-Ecozone & Median.DC.of.burning & Median.Duff.Load.kg.m2 & Duff.consump.kg.m2 & Duff.consump.frac\\
-\hline
-AM & 270 & 10.65 & 4.14 & 0.4\\
-\hline
-TP & 369 & 14.75 & 6.57 & 0.45\\
-\hline
-TSW & 297 & 1.45 & 0.98 & 0.82\\
-\hline
-BSW & 239 & 8.55 & 3.23 & 0.39\\
-\hline
-BP & 242 & 9.55 & 3.53 & 0.38\\
-\hline
-P & 242 & 9.55 & 3.53 & 0.38\\
-\hline
-TC & 254 & 8.06 & 3.24 & 0.41\\
-\hline
-BC & 250 & 8.06 & 3.2 & 0.41\\
-\hline
-PM & 268 & 14.95 & 5.24 & 0.36\\
-\hline
-MC & 452 & 5.75 & 3.94 & 0.72\\
-\hline
-HP & 204 & 7.65 & 2.63 & 0.36\\
-\hline
-TSE & 98 & 1.45 & 0.31 & 0.26\\
-\hline
-BSE & 123 & 10.65 & 2.26 & 0.22\\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Key calculations in fire C emissions}
-
-Go over 4-5 key equations: CFB From mortality, etc. Spell out the
-equations.
+Ellen to insert methods here - including the figure of where the samples
+are from etc.
 
 \subsection{Combustion gas emission ratios}
 
@@ -420,102 +281,190 @@ particulates at 1 and 10 um diameters, respectively), and an additional
 non-methane organic gases that have a large range in global warming
 potentials as compared to CH\textsubscript{4}.
 
+\subsection{Litter layer area-wise consumption by severity class}
+
+The other key ecozone and severity-dependent variable provided by field
+data is the area-wise fraction of completely unburned forest floor,
+which varies widely by severity class:
+
+\begin{table}
+
+\caption{\label{tab:UnBurnedForestFloorByEcozone}Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+AM & 0.14 & 0.06 & 0.02\\
+\hline
+BC & 0.14 & 0.06 & 0.02\\
+\hline
+BP & 0.14 & 0.06 & 0.02\\
+\hline
+BSE & 0.20 & 0.08 & 0.05\\
+\hline
+BSW & 0.20 & 0.08 & 0.05\\
+\hline
+HP & 0.20 & 0.08 & 0.05\\
+\hline
+MC & 0.14 & 0.06 & 0.02\\
+\hline
+MP & 0.14 & 0.06 & 0.02\\
+\hline
+P & 0.14 & 0.06 & 0.02\\
+\hline
+PM & 0.14 & 0.06 & 0.02\\
+\hline
+TC & 0.14 & 0.06 & 0.02\\
+\hline
+TP & 0.14 & 0.16 & 0.03\\
+\hline
+TSE & 0.20 & 0.08 & 0.05\\
+\hline
+TSW & 0.20 & 0.08 & 0.05\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Woody Debris Consumption}
+
+\subsection{Duff Consumption}
+
+While consumption of fine fuels in the litter layer of the forest floor
+is nearly complete for any given fire intensity, consumption of deeper
+organic soil horizons (F+H layers in upland forests and upper peat
+layers in wetlands) is more drought dependent. In this scheme, we
+utilize the Forest Floor Fuel Consumption (FFFC) model of
+\citep{degroot2009}, modified to only account for fuel horizons below
+the litter layer:
+
+\begin{equation}
+FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+\end{equation}
+
+where DC is the Fire Weather Index Drought Code and FFFL is the Forest
+Floor Fuel Load (with ecozone averages given in \citep{letang2012} or
+site-level data). LL is the Litter Load, and is typically on the order
+of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland
+sites \citep{thompson2017}. This distinction is necessary due to the
+flaming phase consumption of the litter layer as opposed to the
+smouldering phase consumption of deeper horizons (see previous section).
+While ultimately this scheme can be used on individual fires with
+estimated or measured fuel loading and specific Drought Code values, for
+the purposes of this first assessment, an ecozone-averaged fuel load and
+decadal composites of Drought Code is used to provide representative
+values. Specifically, a median Drought Code of detected fire hotspots in
+Canada from 2003-2021 using the same data as the Canadian
+CFEEPS-FireWork wildfire air quality model of \citep{chen2019} is
+presented below, along with proportional consumption values of the
+forest floor by ecozone:
+
+\begin{table}
+
+\caption{\label{tab:DuffConsumpTable}Fire Weather, fuel loading, and duff consumption values per ecozone}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Ecozone & Median.DC.of.burning & Median.Duff.Load.kg.m2 & Duff.consump.kg.m2 & Duff.consump.frac\\
+\hline
+AM & 270 & 10.65 & 4.14 & 0.4\\
+\hline
+TP & 369 & 14.75 & 6.57 & 0.45\\
+\hline
+TSW & 297 & 1.45 & 0.98 & 0.82\\
+\hline
+BSW & 239 & 8.55 & 3.23 & 0.39\\
+\hline
+BP & 242 & 9.55 & 3.53 & 0.38\\
+\hline
+P & 242 & 9.55 & 3.53 & 0.38\\
+\hline
+TC & 254 & 8.06 & 3.24 & 0.41\\
+\hline
+BC & 250 & 8.06 & 3.2 & 0.41\\
+\hline
+PM & 268 & 14.95 & 5.24 & 0.36\\
+\hline
+MC & 452 & 5.75 & 3.94 & 0.72\\
+\hline
+HP & 204 & 7.65 & 2.63 & 0.36\\
+\hline
+TSE & 98 & 1.45 & 0.31 & 0.26\\
+\hline
+BSE & 123 & 10.65 & 2.26 & 0.22\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Drivers of C losses in the tree canopy}
+
+\subsubsection{Overstory tree mortality and consumption}
+
+\begin{table}
+
+\caption{\label{tab:MortByEcozone}Softwood fractional mortality by ecozone, as dervied from median values from field studies}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+AM & 0.28 & 0.34 & 0.95\\
+\hline
+BC & 0.24 & 0.65 & 0.98\\
+\hline
+BP & 0.45 & 0.81 & 1.00\\
+\hline
+BSE & 0.45 & 0.81 & 1.00\\
+\hline
+BSW & 0.45 & 0.81 & 1.00\\
+\hline
+HP & 0.45 & 0.81 & 1.00\\
+\hline
+MC & 0.28 & 0.74 & 0.98\\
+\hline
+MP & 0.28 & 0.34 & 0.95\\
+\hline
+P & 0.45 & 0.81 & 1.00\\
+\hline
+PM & 0.13 & 0.38 & 0.97\\
+\hline
+TC & 0.24 & 0.65 & 0.98\\
+\hline
+TP & 0.45 & 0.81 & 1.00\\
+\hline
+TSE & 0.10 & 0.81 & 1.00\\
+\hline
+TSW & 0.10 & 0.81 & 1.00\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Understory tree mortality and consumption}
+
+Foliage, then roots
+
+\subsubsection{Snag consumption}
+
+\subsubsection{Other biomass pools: stumps and bark}
+
 \subsection{Construction fire disturbance matrices}
-
-First, a generic template for a fire DM is loaded, that can represent
-any ecozone. It comes in two parts: (1) a list of variables, some
-biophysical and not relating to fire severity (such as the portion of
-live branchwood that falls into the smaller size fraction); or (2)
-severity-specific variables (such as Crown Fraction Burn) for a severity
-class. The template is loaded, and replicated across the list of
-ecozones (or any spatial unit) desired. Other processes, such as the
-analysis of field data, can then be used to fill in ecozone-specific
-variables in severity classes.
-
-An example of the variable definition template is as follows:
-
-\begin{table}[!h]
-
-\caption{\label{tab:varDefsExample}Example of stored fire disturbance matrix precursor variable information}
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}[t]{l|l|l|l|r|l|l|l}
-\hline
-Ecozone & Pool & Plain.Language.Name & Variable.Name & Value & SeverityClass & InterimValue & Notes\\
-\hline
-AM & Branch & Softwood small branch fraction of total branchwood & SW.SmBranch.frac.of.tot.BW & 0.5 & NA & TRUE & \\
-\hline
-AM & Branch & Hardwood small branch fraction of total branchwood & HW.SmBranch.frac.of.tot.BW & 0.5 & NA & TRUE & \\
-\hline
-AM & Other & Softwood branchwood as portion of total "other" pool & SW.BW.frac.of.other & 0.4 & NA & TRUE & \\
-\hline
-AM & Other & Hardwood branchwood as portion of total "other" pool & HW.BW.frac.of.other & 0.4 & NA & TRUE & \\
-\hline
-AM & Other & Hardwood Bark as portion of "other" pool & HW.bark.frac.of.other & 0.1 & NA & TRUE & \\
-\hline
-AM & Other & Softwood Bark as portion of "other" pool & SW.bark.frac.of.other & 0.1 & NA & TRUE & \\
-\hline
-\end{tabular}}
-\end{table}
-
-A plain language name for each variable is provided right in the data,
-as well.
-
-A second template defines each flux in a Disturbance Matrix, with Source
-and Sink defined as precise character variables, and a plain language
-summary (``Process Synonym'') included to tie this flux back to language
-used in the fire science literature. Pseudocode and notes are included
-in each flux, which is repeated for each fire severity class and
-ecozone. There are 3900 total fluxes, though many do not have sufficient
-information to describe differences between ecozones. Many of these are
-computed automatically, tying back into variables such as Crown Fraction
-Burned.
-
-\begin{table}[!h]
-
-\caption{\label{tab:SinkSourceExample}Sample of disturbance matrix data file}
-\centering
-\resizebox{\linewidth}{!}{
-\begin{tabular}[t]{l|r|l|l|l|l|l|l|r|l}
-\hline
-Ecozone & FluxID & Source & Sink & ProcessSynonym & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
-\hline
-AM & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-P & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.8 & TRUE\\
-\hline
-\end{tabular}}
-\end{table}
-
-With both generic ecozone variables as well as severity-specific
-variables defined and the pseudocode for each flux included, actual DM
-values are computed as references to tables, subset by ecozone and
-severity class.
-
-Note that rather than defining softwood crown fraction burned as a
-variable called ``SW.CFB.Boreal.Plains'' for each ecozone, there is a
-row in the VarDefs table that represents SW.CFB in each ecozone and for
-each severity class, thus avoiding the creation of large lists of
-manually entered variable names and values in the R environment.
-Instead, these values can be programmatically entered via external
-analysis of plot data (not covered here).
 
 \section{Results}
 
 \subsection{2021 Fires in British Columbia, Canada}
 
 Give quick summary here, show overview map of all the fires, and also an
-example of the GCBM biomass pools and also severity
+example of the GCBM biomass pools and also severity classes on a fire or
+two from Ellen
 
-\#Conclusions
+Then compare old vs new fire DM scheme for individual fires as a biplot
+
+Then show sum of FRP per fire (GOES) as compared to our severity-based
+scheme here
+
+MOPITT?
+
+\section{Conclusions}
 
 The conclusion goes here.
 
@@ -735,9 +684,108 @@ Black Carbon & CO & Black carbon combustion fraction\\
 \section{Appendix B: annual variability in observed Drought Code during
 wildfire spread, and impact on ecozone-level DM calculations}
 
-\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-1.pdf}
-\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-2.pdf}
-\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-3.pdf}
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf}
+
+\section{Appendix C: DM template (can delete in final draft)}
+
+First, a generic template for a fire DM is loaded, that can represent
+any ecozone. It comes in two parts: (1) a list of variables, some
+biophysical and not relating to fire severity (such as the portion of
+live branchwood that falls into the smaller size fraction); or (2)
+severity-specific variables (such as Crown Fraction Burn) for a severity
+class. The template is loaded, and replicated across the list of
+ecozones (or any spatial unit) desired. Other processes, such as the
+analysis of field data, can then be used to fill in ecozone-specific
+variables in severity classes.
+
+An example of the variable definition template is as follows:
+
+\begin{table}[!h]
+
+\caption{\label{tab:varDefsExample}Example of stored fire disturbance matrix precursor variable information}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|l|l|l|r|l|l|l}
+\hline
+Ecozone & Pool & Plain.Language.Name & Variable.Name & Value & SeverityClass & InterimValue & Notes\\
+\hline
+AM & Branch & Softwood small branch fraction of total branchwood & SW.SmBranch.frac.of.tot.BW & 0.5 &  & TRUE & \\
+\hline
+AM & Branch & Hardwood small branch fraction of total branchwood & HW.SmBranch.frac.of.tot.BW & 0.5 &  & TRUE & \\
+\hline
+AM & Other & Softwood branchwood as portion of total "other" pool & SW.BW.frac.of.other & 0.4 &  & TRUE & \\
+\hline
+AM & Other & Hardwood branchwood as portion of total "other" pool & HW.BW.frac.of.other & 0.4 &  & TRUE & \\
+\hline
+AM & Other & Hardwood Bark as portion of "other" pool & HW.bark.frac.of.other & 0.1 &  & TRUE & \\
+\hline
+AM & Other & Softwood Bark as portion of "other" pool & SW.bark.frac.of.other & 0.1 &  & TRUE & \\
+\hline
+\end{tabular}}
+\end{table}
+
+A plain language name for each variable is provided right in the data,
+as well.
+
+A second template defines each flux in a Disturbance Matrix, with Source
+and Sink defined as precise character variables, and a plain language
+summary (``Process Synonym'') included to tie this flux back to language
+used in the fire science literature. Pseudocode and notes are included
+in each flux, which is repeated for each fire severity class and
+ecozone. There are 3900 total fluxes, though many do not have sufficient
+information to describe differences between ecozones. Many of these are
+computed automatically, tying back into variables such as Crown Fraction
+Burned.
+
+\begin{table}[!h]
+
+\caption{\label{tab:SinkSourceExample}Sample of disturbance matrix data file}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{l|r|l|l|l|l|l|l|r|l}
+\hline
+Ecozone & FluxID & Source & Sink & ProcessSynonym & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
+\hline
+AM & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+\hline
+TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+\hline
+TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.9 & TRUE\\
+\hline
+BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+\hline
+BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+\hline
+P & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+\hline
+\end{tabular}}
+\end{table}
+
+With both generic ecozone variables as well as severity-specific
+variables defined and the pseudocode for each flux included, actual DM
+values are computed as references to tables, subset by ecozone and
+severity class.
+
+Note that rather than defining softwood crown fraction burned as a
+variable called ``SW.CFB.Boreal.Plains'' for each ecozone, there is a
+row in the VarDefs table that represents SW.CFB in each ecozone and for
+each severity class, thus avoiding the creation of large lists of
+manually entered variable names and values in the R environment.
+Instead, these values can be programmatically entered via external
+analysis of plot data (not covered here).
+
+\section{Appendix D: Representative photos}
+
+Photos of: (1) partial litter consumption; (2) partial vs full duff
+consumption; (3) mortality but not consumption of understory trees with
+live overstory; (4) mortality but not consumption of overstory trees;
+(5) mixedwood severity example showing consumption of broadleaf foliage;
+(6) woody debris consumption; (7) snag preferential consumption relative
+to little to no bole consumpotion in live trees
 
 
 
@@ -752,7 +800,7 @@ https://github.com/nrcan-cfs-fire/FireDMs} %% use this section when having data 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
-\section{Figures and tables in appendices}
+\section{List of fluxes and corresponding fire-related plain-language summary}
 
 Regarding figures and tables in appendices, the following two options
 are possible depending on your general handling of figures and tables in

@@ -280,14 +280,15 @@ A major distinction is made between softwood and hardwood trees, where in Canada
 
 ```{=tex}
 \begin{equation}
-FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
 \end{equation}
 ```
 
 
 ```{=tex}
 \begin{equation}
-FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract)
+SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
 \end{equation}
 ```
 

@@ -198,7 +198,7 @@ logical axioms are proposed and maintained throughout:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  DMs should be in terms of mortality, not survival
+  Disturbance matrice are to be in terms of mortality, not survival
 \item
   Crown Fraction Burned (CFB) is a mass-based estimate of the portion of
   foliage consumed in flaming, and is inclusive of merchantable and
@@ -234,8 +234,8 @@ which a given pool is consumed.
 
 \subsection{Ground plot and remotely sensed fire severity data}
 
-Ellen to insert methods here - including the figure of where the samples
-are from etc.
+!!!Ellen to insert methods here - including the figure of where the
+samples are from etc.
 
 \subsection{Combustion gas emission ratios}
 
@@ -283,9 +283,12 @@ potentials as compared to CH\textsubscript{4}.
 
 \subsection{Litter layer area-wise consumption by severity class}
 
-The other key ecozone and severity-dependent variable provided by field
-data is the area-wise fraction of completely unburned forest floor,
-which varies widely by severity class:
+The litter layer forms the first biomass pool in which a spreading fire
+consumes fuel. In low-severity fires, the litter layer may be consumed
+little to no underlying duff material consumed, nor any tree mortality
+(!ref). Logically, since litter consumption is required for the ignition
+of the underlying duff layer, this litter area-wise fractional
+consumption also informs and constrains duff consumption.
 
 \begin{table}
 
@@ -325,8 +328,6 @@ TSW & 0.20 & 0.08 & 0.05\\
 \hline
 \end{tabular}
 \end{table}
-
-\subsection{Woody Debris Consumption}
 
 \subsection{Duff Consumption}
 
@@ -396,9 +397,28 @@ BSE & 123 & 10.65 & 2.26 & 0.22\\
 \end{tabular}
 \end{table}
 
+Little data is available on the fraction of woody debris consumption
+alongside fire severity measurements. Coarse woody debris of overstory
+stems that makes up the majority of woody debris biomass in Canada's
+boreal and temperate forests (!ref), with its moisture and consumption
+patterns largely follows the moisture regime of the Drought Code
+\citep{mcalpine1995}. As a result, in this modelling framework, the
+proportion of woody debris consumption (!!give diameter range of Med
+DOM) is assumed proportional to that of the duff consumption given in
+the equation above.
+
 \subsection{Drivers of C losses in the tree canopy}
 
 \subsubsection{Overstory tree mortality and consumption}
+
+Though numerous process-driven tree mortality models are present and
+show significant skill in predicting tree mortality based on fire
+behaviour (i.e.~flame length, rate of spread) (!ref FOFEM, Johnson etc),
+since the driving data in this model is satellite-derived fire severity
+over the landscape scale, fire behaviour metrics such as flame length
+are not available as a continuous mapped product. Instead, softwood and
+hardwood overstory mortality is calculated per ecozone as a function of
+satellite-observed fire severity:
 
 \begin{table}
 
@@ -438,6 +458,79 @@ TSW & 0.10 & 0.81 & 1.00\\
 \hline
 \end{tabular}
 \end{table}
+
+And since large-diameter, live trees killed by fire do not experience
+significant live stemwood consumption, the entirity of the live stemwood
+biomass pool that is killed is transferred to the snag pool.
+
+Crown Fraction Burned (CFB) speaks to the fraction of the live canopy
+that is itself consumed in the flaming front. The alternate outcomes
+being survival of the foliage, or the mortality of the tree without
+canopy consumption, resulting in the dropping of foliage onto the forest
+floor. From the axioms stated earlier, the CFB must be lower than or
+equal to the mortality rate, using the assumption that any partial crown
+consumption is likely sufficient to result in mortality (!ref?). From
+field studies (!Ellen to provide details here\ldots.) , the following
+ecozone-specific CFB values are found:
+
+\begin{table}
+
+\caption{\label{tab:CFBByEcozone}Softwood crown fraction burned by ecozone, as dervied from median values from field studies}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+AM & 0.0 & 0.34 & 0.95\\
+\hline
+BC & 0.0 & 0.65 & 0.98\\
+\hline
+BP & 0.0 & 0.81 & 1.00\\
+\hline
+BSE & 0.0 & 0.81 & 1.00\\
+\hline
+BSW & 0.0 & 0.81 & 1.00\\
+\hline
+HP & 0.0 & 0.81 & 1.00\\
+\hline
+MC & 0.0 & 0.74 & 1.00\\
+\hline
+MP & 0.0 & 0.34 & 0.95\\
+\hline
+P & 0.0 & 0.81 & 1.00\\
+\hline
+PM & 0.0 & 0.38 & 0.97\\
+\hline
+TC & 0.0 & 0.65 & 1.00\\
+\hline
+TP & 0.0 & 0.81 & 1.00\\
+\hline
+TSE & 0.1 & 0.81 & 1.00\\
+\hline
+TSW & 0.1 & 0.81 & 1.00\\
+\hline
+\end{tabular}
+\end{table}
+
+A major distinction is made between softwood and hardwood trees, where
+in Canada's boreal forests, a large fraction of hardwood trees
+(specifically of the genii Populous and Betula) are able to resprout
+even when the main stem has been killed by an intense forest fire
+(!ref). Accordingly, the root mortality rates differ greatly between
+softwoods and hardwoods. Concurrently, the fraction of fine roots
+contained within the combustible forest floor layers can be a majority
+of the fine root biomass, and burns alongside the organic soils. As a
+result, the calculation for softwood fine root consumption and mortality
+are as follows, using Softwood as an example:
+
+\begin{equation}
+SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
+\end{equation}
+
+\begin{equation}
+SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
+SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
+\end{equation}
 
 \subsubsection{Understory tree mortality and consumption}
 

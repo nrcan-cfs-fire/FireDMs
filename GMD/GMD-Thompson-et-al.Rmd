@@ -111,7 +111,7 @@ Short section explaining the pool definitions most relevant to fire.
 
 To simplify the process of the creation of the DMs as a distillation of the complexities of fire severity and combustion patterns, the following logical axioms are proposed and maintained throughout:
 
-1.  DMs should be in terms of mortality, not survival
+1.  Disturbance matrice are to be in terms of mortality, not survival
 
 2.  Crown Fraction Burned (CFB) is a mass-based estimate of the portion of foliage consumed in flaming, and is inclusive of merchantable and submerchantable trees, both broadleaf and needleleaf
 
@@ -135,7 +135,7 @@ Of these, Crown Fraction Burned (CFB) is both highly critical and a concept used
 
 ## Ground plot and remotely sensed fire severity data
 
-Ellen to insert methods here - including the figure of where the samples are from etc.
+!!!Ellen to insert methods here - including the figure of where the samples are from etc.
 
 ## Combustion gas emission ratios
 
@@ -171,8 +171,7 @@ VarDefs <- read.csv("~/nrcan-cfs-fire/FireDMs/FireDMTableDefs.csv")
 
 VarDefs$SeverityClass <- factor(VarDefs$SeverityClass,levels = c("Low", "Mod", "High"))
 
-#subset to just the variable of interest:
-VarDefs.SW.Mort <- VarDefs[VarDefs$Variable.Name == "SW.Mort",]
+
 
 ```
 
@@ -265,6 +264,9 @@ Though numerous process-driven tree mortality models are present and show signif
 
 ```{r MortByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
 
+#subset to just the variable of interest:
+VarDefs.SW.Mort <- VarDefs[VarDefs$Variable.Name == "SW.Mort",]
+
 VarDefs.dt <- as.data.table(VarDefs.SW.Mort)
 
 SW.Mort.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
@@ -275,7 +277,27 @@ kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as dervie
   #kable_styling(latex_options = "hold_position")
 ```
 
-A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire (!ref).  Accordingly, the root mortality rates differ greatly between softwoods and hardwoods.  Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a majority of the fine root biomass, and burns alongside the organic soils.  As a result, the calculation for softwood fine root consumption and mortality are as follows:
+And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirity of the live stemwood biomass pool that is killed is transferred to the snag pool.
+
+Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front.  The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor.  From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using the assumption that any partial crown consumption is likely sufficient to result in mortality (!ref?).  From field studies (!Ellen to provide details here....) , the following ecozone-specific CFB values are found:
+
+
+```{r CFBByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
+
+#subset to just the variable of interest:
+VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",]
+
+VarDefs.dt.SW.CFB <- as.data.table(VarDefs.SW.CFB)
+
+SW.CFB.wide <- dcast(VarDefs.dt.SW.CFB,Ecozone~SeverityClass,value.var = "Value")
+
+kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervied from median values from field studies") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire (!ref).  Accordingly, the root mortality rates differ greatly between softwoods and hardwoods.  Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a majority of the fine root biomass, and burns alongside the organic soils.  As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
 
 
 ```{=tex}
@@ -287,7 +309,7 @@ SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fr
 
 ```{=tex}
 \begin{equation}
-SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract)
+SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
 SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
 \end{equation}
 ```
@@ -711,7 +733,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 24 & Sourc
 #Source: SW fine roots
 #sink: CO2
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(fraction of duff consumed)
 #notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2

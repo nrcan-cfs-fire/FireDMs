@@ -81,6 +81,10 @@ output:
 
 -   to support recent advances in operational burn severity mapping for Canada, the CBM DMs also need to be upgraded.
 
+-   something about dynamic veg models like landis and how they represent fire disturbance -then how most MRV models and quickly how they do fire disturbance -even a bit on the GFED/GFAS world too
+
+that ESSD frames it well, worth reading the intro part in detail) (recent Smyth and Campbell papers too) (other recent Canadian fire-carbon things, Walker - esp is supports consistent patterns in proportional carbon loss)
+
 -   In this document, we outline the evidence-based fire DMs proposed.
 
 -   From a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires.
@@ -260,7 +264,7 @@ Little data is available on the fraction of woody debris consumption alongside f
 
 ### Overstory tree mortality and consumption
 
-Though numerous process-driven tree mortality models are present and show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread) (!ref FOFEM, Johnson etc), since the driving data in this model is satellite-derived fire severity over the landscape scale, fire behaviour metrics such as flame length are not available as a continuous mapped product.  Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity:
+Though numerous process-driven tree mortality models are present and show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread) (!ref FOFEM, Johnson etc), since the driving data in this model is satellite-derived fire severity over the landscape scale, fire behaviour metrics such as flame length are not available as a continuous mapped product. Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity:
 
 ```{r MortByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -279,8 +283,7 @@ kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as dervie
 
 And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirity of the live stemwood biomass pool that is killed is transferred to the snag pool.
 
-Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front.  The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor.  From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using the assumption that any partial crown consumption is likely sufficient to result in mortality (!ref?).  From field studies (!Ellen to provide details here....) , the following ecozone-specific CFB values are found:
-
+Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using the assumption that any partial crown consumption is likely sufficient to result in mortality (!ref?). From field studies (!Ellen to provide details here....) , the following ecozone-specific CFB values are found:
 
 ```{r CFBByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -297,32 +300,34 @@ kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervie
   #kable_styling(latex_options = "hold_position")
 ```
 
-A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire (!ref).  Accordingly, the root mortality rates differ greatly between softwoods and hardwoods.  Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a majority of the fine root biomass, and burns alongside the organic soils.  As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
+The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single well-observed high severity fire in Taiga Plains by Santin 2015.
 
+A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire (!ref). Accordingly, the root mortality rates differ greatly between softwoods and hardwoods. Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a majority of the fine root biomass, and burns alongside the organic soils. As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
 
 ```{=tex}
 \begin{equation}
 SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
 \end{equation}
 ```
-
-
 ```{=tex}
 \begin{equation}
 SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
 SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
 \end{equation}
 ```
+In contrast, the larger diameter of the coarse root biomass pool prevents its consumption during any smouldering of the duff layer, and the mortality rate of coarse roots is simply proportional to that of the stemwood overall.
 
 ### Understory tree mortality and consumption
 
-Foliage, then roots
+Understory (or small diameter overstory) tree mortality is defined seperately in the model, but given the lack of data on diameter classes in the severity data, robust field data on differing mortality rates of smaller diameter trees is not available, and so the understory tree mortality rate is set equal to the overstory rate as defined in the table above. Note that trees with a top height less than 1.4 m are not considered in this pool, and instead are lumped into the "other" pool.
 
-### Snag consumption
+### Snag and stump consumption
 
-### Other biomass pools: stumps and bark
+Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood (see <https://doi.org/10.1002/ecs2.2744>). <!-- !!There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
 
 ## Construction fire disturbance matrices
+
+Give total number of global parameters, and parameters per ecozone, and then total parameters, and what % of total parameters we have so far filled with data
 
 ```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -367,7 +372,7 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 ```
 
-# Results
+# Results and example applications
 
 ```{r DefineDMvalues, echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -1848,6 +1853,16 @@ column_spec(1, width = "3cm") %>%
   
 ```
 
+## Field case studies
+
+ICFME has detailed, for high severity.
+
+Another option would be Lafoe Creek mixedwood burns, which would need some sort of CFB and mortality estimate. Is the pre-fire fuel load documented somewhere?
+
+Pelican would work too, less on the bark consumption etc though.
+
+And last, maybe something from Carrot lake or similarly well-observed BC fire?
+
 ## 2021 Fires in British Columbia, Canada
 
 Give quick summary here, show overview map of all the fires, and also an example of the GCBM biomass pools and also severity classes on a fire or two from Ellen
@@ -1857,6 +1872,8 @@ Then compare old vs new fire DM scheme for individual fires as a biplot
 Then show sum of FRP per fire (GOES) as compared to our severity-based scheme here
 
 MOPITT?
+
+#Discussion
 
 # Conclusions
 

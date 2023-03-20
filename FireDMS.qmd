@@ -1823,8 +1823,6 @@ DC.year$DC50 <- ifelse(DC.year$DC50<20,20,DC.year$DC50)
 DC.year$Duff.consump.frac <- ifelse(DC.year$Duff.consump.frac > 0.95, 0.95,DC.year$Duff.consump.frac)
 ```
 
-
-
 ```{r AnnualDC-Vis, echo=FALSE,message=FALSE, warning=FALSE}
  
    ### the graphs, all time series: (1) annual DC by year; (2) absolute consumption values by year; (3) fractional consumption values by year; (4) will add in burned area by ecozone by year eventually too

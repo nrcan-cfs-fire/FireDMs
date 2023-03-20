@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.17)  18 MAR 2023 11:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.17)  20 MAR 2023 10:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -638,49 +638,50 @@ Overfull \hbox (7.13127pt too wide) in paragraph at lines 133--153
 [1
 
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Overfull \hbox (1.48157pt too wide) in paragraph at lines 242--245
+Overfull \hbox (1.48157pt too wide) in paragraph at lines 254--257
 \T1/ptm/m/n/10 Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering.
  []
 
-[3] [4] [5]
-Overfull \hbox (309.00578pt too wide) detected at line 533
+[3] [4] [5] [6]
+Overfull \hbox (309.00578pt too wide) detected at line 553
 $\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
  []
 
-[6] [7]
+[7]
 
-LaTeX Warning: Float too large for page by 598.40453pt on input line 775.
+LaTeX Warning: Float too large for page by 598.40453pt on input line 830.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=107, 289.08pt x 216.81pt>
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=103, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 780.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 835.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=108, 289.08pt x 216.81pt>
+[8]
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=114, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 782.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 837.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=109, 289.08pt x 216.81pt>
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=115, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 784.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 839.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-[8 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
+[9 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[9 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 915.
+[10 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 970.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [10] (./GMD-Thompson-et-al.bbl [11]
+) [11] (./GMD-Thompson-et-al.bbl [12]
 Underfull \hbox (badness 1946) in paragraph at lines 46--50
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
@@ -690,20 +691,20 @@ Underfull \hbox (badness 2809) in paragraph at lines 46--50
 \T1/ptm/m/n/9 and Strum, M.: The development and uses of EPA's SPECIATE database, Atmospheric Pollution Research, 1, 196--206,
  []
 
-) [12] [13] [14] (./GMD-Thompson-et-al.aux) ) 
+) [13] [14] [15] (./GMD-Thompson-et-al.aux) ) 
 Here is how much of TeX's memory you used:
- 17376 strings out of 477984
- 281722 string characters out of 5837495
+ 17377 strings out of 477984
+ 281724 string characters out of 5837495
  1899382 words of memory out of 5000000
  37177 multiletter control sequences out of 15000+600000
  551589 words of font info for 91 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,10n,90p,394b,555s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,10n,90p,394b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (14 pages, 158600 bytes).
+Output written on GMD-Thompson-et-al.pdf (15 pages, 161004 bytes).
 PDF statistics:
- 244 PDF objects out of 1000 (max. 8388607)
- 200 compressed objects within 2 object streams
- 77 named destinations out of 1000 (max. 500000)
+ 250 PDF objects out of 1000 (max. 8388607)
+ 204 compressed objects within 3 object streams
+ 78 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

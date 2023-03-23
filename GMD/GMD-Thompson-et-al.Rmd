@@ -323,7 +323,7 @@ Understory (or small diameter overstory) tree mortality is defined seperately in
 
 ### Snag and stump consumption
 
-Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood (see <https://doi.org/10.1002/ecs2.2744>). <!-- !!There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
+Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood <!-- !!(see https://doi.org/10.1002/ecs2.2744). There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
 
 ## Construction fire disturbance matrices
 
@@ -1871,9 +1871,11 @@ Then compare old vs new fire DM scheme for individual fires as a biplot
 
 Then show sum of FRP per fire (GOES) as compared to our severity-based scheme here
 
+Can also look for area-weighted differences in intensity between fires, using both sum FRP and FireDM approach
+
 MOPITT?
 
-#Discussion
+# Discussion
 
 # Conclusions
 

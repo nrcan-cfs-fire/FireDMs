@@ -1877,6 +1877,15 @@ MOPITT?
 
 # Discussion
 
+-some discussion points (unordered) so far
+
+-   given the generic nature of these DMs and their simple relative simplicity, can be added to other frameworks like LANDIS (see Stenzel 2019 as well, they do some of that).
+
+```{=html}
+<!-- -->
+```
+-   paragraph on extended impacts like delayed stem mortality, rapid snag fall, and changes (or not) in duff decomposition rates. Not (as of yet) covered in this 1-timestep pulse disturbance described here.
+
 # Conclusions
 
 The conclusion goes here.

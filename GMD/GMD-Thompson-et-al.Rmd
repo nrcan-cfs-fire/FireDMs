@@ -11,9 +11,6 @@ author:
     surname: Whitman
     affiliation: 2
     email: ellen.whitman@nrcan-rncan.gc.ca
-  - given_name: Chelene
-    surname: Hanes
-    affiliation: 1
   - given_name: PFC Carbon Team (exactly who TBD)
     surname: Copernicus
     # authors can have multiple affiliations, which can also be used to mark deceased coauthors
@@ -1853,7 +1850,7 @@ column_spec(1, width = "3cm") %>%
   
 ```
 
-## Field case studies
+## Field case studies (for consideration)
 
 ICFME has detailed, for high severity.
 
@@ -1863,17 +1860,16 @@ Pelican would work too, less on the bark consumption etc though.
 
 And last, maybe something from Carrot lake or similarly well-observed BC fire?
 
-## 2021 Fires in British Columbia, Canada
+Compare each pool's observed vs modelled relative consumption rates using (ideally) dNBR to drive severity class from the real data.
+
+## 1990-2020(1) GCBM BC annual C stocks estimates with new fire DM scheme
 
 Give quick summary here, show overview map of all the fires, and also an example of the GCBM biomass pools and also severity classes on a fire or two from Ellen
 
-Then compare old vs new fire DM scheme for individual fires as a biplot
+Then compare old vs new fire DM scheme for some (all?) individual fires as a biplot
 
-Then show sum of FRP per fire (GOES) as compared to our severity-based scheme here
+Then the annual GCBM runs with old and new scheme.
 
-Can also look for area-weighted differences in intensity between fires, using both sum FRP and FireDM approach
-
-MOPITT?
 
 # Discussion
 

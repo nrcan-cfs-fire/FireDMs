@@ -597,6 +597,39 @@ filled with data
 
 \subsection{Field case studies (for consideration)}
 
+\begin{verbatim}
+### table with rows are CBM pools, columns are obs and
+### modelled exp fires
+
+### variables specifically measured during an experimental
+### fire, in the verbiage of the fire DMs:
+exp.fire.table.defs <- c("SW.CFB", "HW.CFB", "SW.Mort", "HW.Mort",
+    "SW.SubMerch.Mort", "HW.SubMerch.Mort", "SmTree.Mort", "SW.Snag.Comb.Frac",
+    "HW.Snag.Comb.Frac", "MedDOM.Comb.Frac")
+
+## then, take the list above, and look up the same row but
+## the column 'Plain.Language.Name' in FireDMTableDefs.csv:
+## exp.fire.table.labels <-
+
+## note that Duff.consump.frac is an ecozone variable, not
+## in FireDMTableDefs.csv
+
+## list of all possible CBM pools measured during an
+## experimental fire:
+exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",
+    "Aboveground Fast DOM", "Medium DOM", "Aboveground Slow DOM",
+    "Softwood Stem Snag", "Hardwood Other", "Hardwood Stem Snag")
+
+### fun idea: ternary plots of live vs combusted vs dead
+### for each of these fires, modelled vs observed?
+### https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
+### with the colour being the fuel type/leading spp and
+### size being total emissions?  can we draw lines in
+### between pairs of mod vs obs in that package? TernaryApp
+### function in the package should apparently let you draw
+### connected points?
+\end{verbatim}
+
 ICFME has detailed, for high severity.
 
 Another option would be Lafoe Creek mixedwood burns, which would need
@@ -618,10 +651,40 @@ Give quick summary here, show overview map of all the fires, and also an
 example of the GCBM biomass pools and also severity classes on a fire or
 two from Ellen
 
+\begin{verbatim}
+## maybe just a figure of the fires labelled by year and
+## perhaps a pie(?) chart of their severity portions as
+## mapped?
+\end{verbatim}
+
 Then compare old vs new fire DM scheme for some (all?) individual fires
 as a biplot
 
+\begin{verbatim}
+### let's assume all the GCBM processing has been done.
+
+### biplot of CO2e total per fire, comparing old scheme vs
+### new.  Gets you an idea of how it scales vs size of
+### fire.  Colour for ecozone within BC?
+\end{verbatim}
+
 Then the annual GCBM runs with old and new scheme.
+
+\begin{verbatim}
+### let's assume all the GCBM processing has been done.
+
+### times series or biplot?  Time series seems the one they
+### default too. Maybe both?
+
+### Just the two lines (old vs new) as CO2e per year, or do
+### we get to also show anything else?  Maybe annual PM2.5
+### gets in an appendix, since there's no old vs new.
+
+### fun followup graph: with the new system only (?) total
+### area burned vs total CO2e, showing that there's not as
+### much of a constant slope as you think?  That the
+### CO2e/ha can really vary between years.
+\end{verbatim}
 
 \section{Discussion}
 

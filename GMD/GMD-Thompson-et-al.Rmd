@@ -75,7 +75,11 @@ output:
 
 -   then talk about how fire in many years is the largest disturbance by area, and that current estimates broadly assume full severity when mapped by NBAC. But, we know that \<100% of burned area is high severity from Ellen's work and others.
 
--   to support recent advances in operational burn severity mapping for Canada, the CBM DMs also need to be upgraded.
+-   current use of RU and average (or random draw) from table/list when used to determine C impacts of disturbance doesn't reflect the fact that fire's burn preferrentially in the boreal in older conifer stands [@bernier2016].
+
+-   Similarly, we also know that average severity is lower but also more variables in forest ecosystems like xeric boreal pines, as compared to higher and less variable severity in poorly drained spruce forests
+
+-   to support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020] , the CBM DMs also need to be upgraded.
 
 -   something about dynamic veg models like landis and how they represent fire disturbance -then how most MRV models and quickly how they do fire disturbance -even a bit on the GFED/GFAS world too
 
@@ -152,9 +156,15 @@ Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout
 #Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
 ##global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16) ##Note: this is the stoichiometrically correct ratio, which includes non-CH4 hydrocarbons AND total PM, so CO2+CO+CH4 is only ~0.96
 
+
+#### OPTION 1A (interim use March 2023)
+global.vars <- list(0.926, 0.004, 0.07, 0.827, 0.013, 0.16) ##Note: this retains the emissions ratios for CO2:CO:CH4 for the major gases, but excludes PM and non-CH$ hydrocarbons.  Just for interim use to evaluate the smouldering component.
+
+
+
 ####OPTION 2 (simple)
 #The provided 0.9,0.01,0.09 represents an MCE of 0.90 and therefore a mixed plume very similar to that from ARCTAS data by Simpson et al 2011 (10.5194/acp-11-6445-2011)
-global.vars <- list(0.9,0.01,0.09,0.9,0.01,0.09) ##using the same mixed plume from the current CBM, so flaming is the same as smouldering
+###global.vars <- list(0.9,0.01,0.09,0.9,0.01,0.09) ##using the same mixed plume from the current CBM, so flaming is the same as smouldering
 
 
 #then label names
@@ -319,7 +329,7 @@ Understory (or small diameter overstory) tree mortality is defined seperately in
 
 ### Snag and stump consumption
 
-Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood <!-- !!(see https://doi.org/10.1002/ecs2.2744). There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
+Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood <!-- !!(see doi:10.1002/ecs2.2744). There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
 
 ## Construction fire disturbance matrices
 
@@ -1872,7 +1882,6 @@ exp.fire.pools <- c("Softwood Foliage","Softwood Other","Aboveground Very Fast D
 ### can we draw lines in between pairs of mod vs obs in that package? TernaryApp function in the package should apparently let you draw connected points?
 ```
 
-
 ICFME has detailed, for high severity.
 
 Another option would be Lafoe Creek mixedwood burns, which would need some sort of CFB and mortality estimate. Is the pre-fire fuel load documented somewhere?
@@ -1886,14 +1895,15 @@ Compare each pool's observed vs modelled relative consumption rates using (ideal
 ## 1990-2020(1) GCBM BC annual C stocks estimates with new fire DM scheme
 
 Give quick summary here, show overview map of all the fires, and also an example of the GCBM biomass pools and also severity classes on a fire or two from Ellen
+
 ```{r BC-overview-map}
 
 ##maybe just a figure of the fires labelled by year and perhaps a pie(?) chart of their severity portions as mapped?
 
 ```
 
-
 Then compare old vs new fire DM scheme for some (all?) individual fires as a biplot
+
 ```{r biplot}
 
 ### let's assume all the GCBM processing has been done.
@@ -1902,8 +1912,8 @@ Then compare old vs new fire DM scheme for some (all?) individual fires as a bip
 
 ```
 
-
 Then the annual GCBM runs with old and new scheme.
+
 ```{r time-series-BC-wildfires}
 
 ### let's assume all the GCBM processing has been done.
@@ -1915,7 +1925,6 @@ Then the annual GCBM runs with old and new scheme.
 ### fun followup graph: with the new system only (?) total area burned vs total CO2e, showing that there's not as much of a constant slope as you think?  That the CO2e/ha can really vary between years.
 
 ```
-
 
 # Discussion
 

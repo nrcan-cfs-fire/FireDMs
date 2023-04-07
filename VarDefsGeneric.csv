@@ -29,9 +29,9 @@ Ecozone,Pool,Plain.Language.Name,Variable.Name,Value,SeverityClass,InterimValue
 ,Snag,Hardwood Snag Combustion Fraction,HW.Snag.Comb.Frac,0.75,High,TRUE
 ,Other,"Hardwood stumps as portion of ""other"" pool",HW.stumps.frac.of.other,0.1,NA,TRUE
 ,SubMerch,Hardwood SubMerch Coarse Branchwood fraction of total AG Biomass,HW.SubMerch.Coarse.BranchWood.frac.total,0.1,NA,TRUE
-,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,0.25,Low,TRUE
-,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,0.5,Mod,TRUE
-,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,1,High,TRUE
+,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,0.2,Low,TRUE
+,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,0.4,Mod,TRUE
+,MedDOM,Combustion rate of Medium DOM (medium woody debris),MedDOM.Comb.Frac,0.8,High,TRUE
 ,Other,Mortality of small trees in severity class (height < 1.3m),SmTree.Mort,0.7,Low,TRUE
 ,Other,Mortality of small trees in severity class (height < 1.3m),SmTree.Mort,0.95,Mod,TRUE
 ,Other,Mortality of small trees in severity class (height < 1.3m),SmTree.Mort,1,High,TRUE

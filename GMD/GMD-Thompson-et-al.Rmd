@@ -1339,21 +1339,20 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 64 & Sourc
 #Source: Medium DOM
 #sink: Medium DOM
 #PLS: Uncombusted Coarse woody debris on the ground
-#Pseudocode: =(1-(fraction of duff consumed))*(1-unburned litter area)
+#Pseudocode: =(1-unburned litter area)*(1-MedDOM.Comb.Frac)
 #note: could be from field data, here assuming burns at same rate as duff
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*(1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*(1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*(1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))
-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) 
 
 #FluxID: 66
 #Source: Medium DOM
 #sink: CO2
 #PLS: Combusted Coarse woody debris on the ground
-#Pseudocode: =(1-(fraction of duff consumed))*(1-unburned litter area)*smouldering
+#Pseudocode: =(1-Flux65)*smoulderingCO2
 #note: could be from field data, here assuming burns at same rate as duff
 #high values are probably on the high end, would need field data
 

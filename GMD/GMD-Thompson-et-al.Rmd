@@ -104,7 +104,8 @@ library(ggrepel)
 library(rticles)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
-ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+#ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","SuP","SeP","AM","MP")
 ```
 
 ## Biomass pools of the Generic Carbon Budget Model

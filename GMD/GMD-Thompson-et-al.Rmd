@@ -1099,40 +1099,40 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 45 & Sourc
 #Source: HW Coarse roots
 #sink: HW Coarse roots
 #PLS: Surviving coarse roots in conifers
-#Pseudocode:  =1-(conifer mortality rate)
+#Pseudocode:  =1-((HW mortality rate)*(1-HW Resproute Rate))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'Low'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'Low'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'Mod'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod']
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'Mod'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'High'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'High'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])
 
 #FluxID: 47
 #Source: HW Coarse roots
 #sink: Above Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted in organic soil
-#Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in organic soil)
+#Pseudocode:  =(HW mortality rate*(1-HW Resproute Rate))*(conifer coarse root fraction in organic soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides HW.prop.Coarse.Root.duff
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])* VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])* VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 47 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])* VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone]
 
 
 #FluxID: 48
 #Source: HW Coarse roots
 #sink: Below Ground Fast DOM
 #PLS: Coarse Roots killed in fire but not combusted since they are in mineral soil
-#Pseudocode:  =(conifer mortality rate)*(conifer coarse root fraction in mineral soil)
+#Pseudocode:  =(conifer mortality rate)*(1-HW ReSprout rate)*(conifer coarse root fraction in mineral soil)
 #Note: assuming even if duff burns, coarse live roots don't burn alongsides HW.prop.Coarse.Root.duff
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])*(1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1 -  VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])*(1 -  VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1 -  VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])*(1 -  VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Coarse.Root.duff' & VarDefs$Ecozone == ecozone])
 
 
 
@@ -1141,28 +1141,28 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 48 & Sourc
 #Source: HW fine roots
 #sink: Above Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in organic soil
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(conifer mortality rate)*(1-HW ReSprout rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
 
 #FluxID: 51
 #Source: HW fine roots
 #sink: Below Ground Very Fast DOM
 #PLS: Fine roots killed but not burned in mineral soil
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in mineral soil)
+#Pseudocode:  =(conifer mortality rate)*(1-HW ReSprout rate)*(fine root fraction in mineral soil)
 #notes: 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])*(1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'Mod'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Mod'])*(1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & SourceSink$SeverityClass == 'High'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'High'])*(1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone])
 
 
 
@@ -1217,7 +1217,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 54 & Sourc
 #PLS: Surviving fine roots
 #Pseudocode:  =1-(combustion rate of fine roots+mortality rate of fine roots)
 #notes: computed at end of fine roots calculations, even though listed as Flux 22
-# NOTE: debug needed on high severity, giving value of -0.002, so rounding problem??
+
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 49 & SourceSink$SeverityClass == 'Low'] <- 1 - sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 50 & SourceSink$FluxID <= 54 & SourceSink$SeverityClass == 'Low'])
 

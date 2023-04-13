@@ -104,8 +104,14 @@ library(ggrepel)
 library(rticles)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
+#original list
 #ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
-ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","SuP","SeP","AM","MP")
+
+#complete list, ordered by decreasing CNFDB burned area:
+#ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","SuP","SeP","AM","MP")
+
+##working list as of 2023-04-13 that has all the data we need, no MP, no P
+ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM")
 ```
 
 ## Biomass pools of the Generic Carbon Budget Model
@@ -205,6 +211,9 @@ The litter layer forms the first biomass pool in which a spreading fire consumes
 
 
 #subset to just the variable of interest:
+
+
+
 VarDefs.Unburned.Litter <- VarDefs[VarDefs$Variable.Name == "Unburned.litter.area",]
 
 
@@ -212,6 +221,10 @@ VarDefs.Unburned.Litter <- VarDefs[VarDefs$Variable.Name == "Unburned.litter.are
 VarDefs.dt <- as.data.table(VarDefs.Unburned.Litter)
 
 Unburned.Litter.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
+
+###then re-order the Ecozone factor (via https://stackoverflow.com/a/46130642)
+
+Unburned.Litter.wide <- Unburned.Litter.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
 
 kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.") %>%
   kable_minimal()#  %>%
@@ -234,6 +247,7 @@ where DC is the Fire Weather Index Drought Code and FFFL is the Forest Floor Fue
 
 
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
+Ecozones.fffc <- c("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across a range of boreal forest sites, doi: 10.1139/cjfr-2016-0475
 
@@ -249,8 +263,12 @@ Duff.consump.frac <- Duff.consump.kg.m2/(Duff.Load - Litter.Load)
 # start creating a single list object to encapsulate all the modelling:
 #where FFFC is "Forest Floor Fuel Consumption" a la de Groot's naming convention:
 
-FFFC <- as.data.frame(cbind(ecozones.list,Median.DC,Duff.Load,round(Duff.consump.kg.m2,digits = 2),round(Duff.consump.frac,digits = 2)))
+FFFC <- as.data.frame(cbind(Ecozones.fffc,Median.DC,Duff.Load,round(Duff.consump.kg.m2,digits = 2),round(Duff.consump.frac,digits = 2)))
 names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Duff.Load.kg.m2","Duff.consump.kg.m2","Duff.consump.frac")
+
+##re-order data.frame by ecozones.list order
+FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
+
 ## for example:
 #FFFC$Ecozone.name[1]
 
@@ -282,6 +300,8 @@ VarDefs.dt <- as.data.table(VarDefs.SW.Mort)
 
 SW.Mort.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
 
+SW.Mort.wide <- SW.Mort.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+
 kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as dervied from median values from field studies") %>%
   kable_minimal()#  %>%
           #kable_styling(latex_options = "scale_down") %>%
@@ -300,6 +320,8 @@ VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",]
 VarDefs.dt.SW.CFB <- as.data.table(VarDefs.SW.CFB)
 
 SW.CFB.wide <- dcast(VarDefs.dt.SW.CFB,Ecozone~SeverityClass,value.var = "Value")
+
+SW.CFB.wide <- SW.CFB.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
 
 kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervied from median values from field studies") %>%
   kable_minimal()#  %>%

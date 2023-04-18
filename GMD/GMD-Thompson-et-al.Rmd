@@ -11,9 +11,23 @@ author:
     surname: Whitman
     affiliation: 2
     email: ellen.whitman@nrcan-rncan.gc.ca
-  - given_name: PFC Carbon Team (exactly who TBD)
-    surname: Copernicus
+  - given_name: Ben
+    surname: Hudson
     affiliation: 3
+    email: benjamin.hudson@nrcan-rncan.gc.ca
+  - given_name: Chelene
+    surname: Hanes
+    affiliation: 1
+    email: chelene.hanes@nrcan-rncan.gc.ca
+  - given_name: Vinicius
+    surname: Manvailer Goncalves
+    affiliation: 3
+    email: 
+  - given_name: Werner
+    surname: Kurz
+    affiliation: 3
+    email: werner.kurz@nrcan-rncan.gc.ca
+    
 
 affiliation:
   - code: 1
@@ -41,7 +55,7 @@ availability:
   codedata: This article was produced from an RMarkdown document with underlying data, available at https://github.com/nrcan-cfs-fire/FireDMs
 
 
-authorcontribution: Thompson and Whitman contributed to the concept and code design with the assistance of Hanes.  
+authorcontribution: Thompson and Whitman contributed to the concept and code design with the assistance of Hanes, Hudson
 
 disclaimer: The algorithm and results presented only apply to boreal and temperate forest ecosystems where sufficient ground plots of fire severity are available.  As a data-driven model, this framework is not suitable for other ecosystems nor agricultural or forestry biomass burning practices.
 
@@ -75,9 +89,9 @@ output:
 
 -   then talk about how fire in many years is the largest disturbance by area, and that current estimates broadly assume full severity when mapped by NBAC. But, we know that \<100% of burned area is high severity from Ellen's work and others.
 
--   current use of RU and average (or random draw) from table/list when used to determine C impacts of disturbance doesn't reflect the fact that fire's burn preferrentially in the boreal in older conifer stands [@bernier2016].
+    Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting 0.5-2.5 Mha of Canada's 355 Mha forested area in a typical year (Hanes NFDB update). In Canada's reliable 40-year burned area record, \### years have exceeded 5 Mha of burned area, largely in continental boreal and dry temperate forests west of the Great Lakes. Of this, managed forest accounts for xxx% of the area burned between 1980 and 2022; publicly-owned forest under long-term licence to private timber companies forms the vast majority of Canada's managed forest (Stinson), allowing for simplified and harmonized forest inventory and carbon modelling across jurisdictions (ref??). Burned area is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area (Stocks 2003). Lightning-caused fires account for approximately half of all ignitions and between xxx and xxxx% of burned area, but no distinction is made between human and lightning ignition for carbon accounting purposes. Annual burned area mapping at 30 metre resolution is conducted using a composite of satellite and aerial mapping; the relatively small number of large fires, and their slow vegetation regeneration (Wulder/White paper) allows for reliable mapping using multispectral imagery such as Landsat within the year of the fire (Whitman severity paper).
 
--   Similarly, we also know that average severity is lower but also more variables in forest ecosystems like xeric boreal pines, as compared to higher and less variable severity in poorly drained spruce forests
+    In CBM-CFS, spatially referenced stand lists representing large homogenous stands that fall within spatial units (ecozone-provincial intersections) are randomly (??) drawn, even when applying precisely mapped burned areas. In Canada's forests, a combination of disturbance history (), soils, and less frequently topographic variables determine leading tree species; at local scales (1-100 ha), tree species plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests do burn, they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018].
 
 -   to support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020] , the CBM DMs also need to be upgraded.
 
@@ -1885,10 +1899,14 @@ column_spec(1, width = "3cm") %>%
 
 ```{r exp-fire-valid}
 
-###table with rows are CBM pools, columns are obs and modelled exp fires
+###table with rows are CBM pools, columns (paird) are obs and modelled exp fires
+
+### fires that would work:
+
+### ICFME (SW TP High); Sharpsands 2007 (SW BSE High), Lafoe (HW BSE Low), CWS C-7 burns (SW MC Mod), Carrot lake (SW MC High)
 
 ### variables specifically measured during an experimental fire, in the verbiage of the fire DMs:
-exp.fire.table.defs <- c("SW.CFB","HW.CFB","SW.Mort","HW.Mort","SW.SubMerch.Mort","HW.SubMerch.Mort","SmTree.Mort","SW.Snag.Comb.Frac","HW.Snag.Comb.Frac","MedDOM.Comb.Frac")
+exp.fire.table.defs <- c("SW.CFB","HW.CFB","SW.Mort","HW.Mort","SW.SubMerch.Mort","HW.SubMerch.Mort","SmTree.Mort","SW.Snag.Comb.Frac","HW.Snag.Comb.Frac","MedDOM.Comb.Frac", "Duff.consump.frac")
 
 ##then, take the list above, and look up the same row but the column "Plain.Language.Name" in FireDMTableDefs.csv:
 ## exp.fire.table.labels <-

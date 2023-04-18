@@ -85,25 +85,19 @@ output:
 
 # Introduction
 
--   general introduction on forest carbon accounting in Canada (1 paragraph)
+-   general introduction on forest carbon accounting in Canada (1 paragraph) and the concept of fire severity overall, and how these two relate.
 
--   then talk about how fire in many years is the largest disturbance by area, and that current estimates broadly assume full severity when mapped by NBAC. But, we know that \<100% of burned area is high severity from Ellen's work and others.
+    Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting 0.5-2.5 Mha of Canada's 355 Mha forested area in a typical year [@hanes2019]. In Canada's reliable 40-year burned area record, \### years have exceeded 5 Mha of burned area, largely in continental boreal and dry temperate forests west of the Great Lakes. Of this, managed forest accounts for xxx% of the area burned between 1980 and 2022; publicly-owned forest under long-term licence to private timber companies forms the vast majority of Canada's managed forest [@stinson2019], allowing for simplified and harmonized forest inventory and carbon modelling across jurisdictions (ref??). Burned area is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area [@stocks2002]. Lightning-caused fires account for approximately half of all ignitions and between xxx and xxxx% of burned area, but no distinction is made between human and lightning ignition for carbon accounting purposes. Annual burned area mapping at 30 metre resolution is conducted using a composite of satellite and aerial mapping; the relatively small number of large fires, and their slow vegetation regeneration [@white2017] allows for reliable mapping using multispectral imagery such as Landsat within the year of the fire [@whitman2018].
 
-    Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting 0.5-2.5 Mha of Canada's 355 Mha forested area in a typical year (Hanes NFDB update). In Canada's reliable 40-year burned area record, \### years have exceeded 5 Mha of burned area, largely in continental boreal and dry temperate forests west of the Great Lakes. Of this, managed forest accounts for xxx% of the area burned between 1980 and 2022; publicly-owned forest under long-term licence to private timber companies forms the vast majority of Canada's managed forest (Stinson), allowing for simplified and harmonized forest inventory and carbon modelling across jurisdictions (ref??). Burned area is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area (Stocks 2003). Lightning-caused fires account for approximately half of all ignitions and between xxx and xxxx% of burned area, but no distinction is made between human and lightning ignition for carbon accounting purposes. Annual burned area mapping at 30 metre resolution is conducted using a composite of satellite and aerial mapping; the relatively small number of large fires, and their slow vegetation regeneration (Wulder/White paper) allows for reliable mapping using multispectral imagery such as Landsat within the year of the fire (Whitman severity paper).
+    In CBM-CFS, spatially referenced stand lists representing large homogenous stands that fall within spatial units (ecozone-provincial intersections) are randomly (??) drawn, even when applying precisely mapped burned areas. In Canada's forests, a combination of disturbance history (), soils, and less frequently topographic variables determine leading tree species; at local scales (1-100 ha), tree species plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests do burn, they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Currently, biomass consumption estimates are based on observed fire weather (and modelled using the Canadian Fire Behaviour Prediction Systems) at the time of satellite fire activity detection, but applied only at this spatially-referenced aggregated scale. Thus, important biases in fire activity towards older and moderate to poorly-drained forests are not resolved, and only a regionally-averaged fire severity is applied.
 
-    In CBM-CFS, spatially referenced stand lists representing large homogenous stands that fall within spatial units (ecozone-provincial intersections) are randomly (??) drawn, even when applying precisely mapped burned areas. In Canada's forests, a combination of disturbance history (), soils, and less frequently topographic variables determine leading tree species; at local scales (1-100 ha), tree species plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests do burn, they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018].
-
--   to support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020] , the CBM DMs also need to be upgraded.
+    To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020] , the CBM DMs also need to be upgraded.
 
 -   something about dynamic veg models like landis and how they represent fire disturbance -then how most MRV models and quickly how they do fire disturbance -even a bit on the GFED/GFAS world too
 
 that ESSD frames it well, worth reading the intro part in detail) (recent Smyth and Campbell papers too) (other recent Canadian fire-carbon things, Walker - esp is supports consistent patterns in proportional carbon loss)
 
--   In this document, we outline the evidence-based fire DMs proposed.
-
--   From a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires.
-
--   Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies (could be wildfire, experimental fires, or prescribed fires).
+In this document, we outline the evidence-based fire Disturbance Matrices updated and designed for a spatially-explicit update to the CBM, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
 
 # Methods
 
@@ -297,7 +291,27 @@ kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per
   #kable_styling(latex_options = "hold_position")
 ```
 
-Little data is available on the fraction of woody debris consumption alongside fire severity measurements. Coarse woody debris of overstory stems that makes up 60-80% of woody debris biomass in Canada's boreal and temperate forests [@hanes2021], with its moisture and consumption patterns largely follows the moisture regime of the Drought Code [@mcalpine1995]. As a result, in this modelling framework, the proportion of woody debris consumption (!!give diameter range of Med DOM) is assumed proportional to that of the duff consumption given in the equation above.
+Little data is available on the fraction of woody debris consumption alongside fire severity measurements. Coarse woody debris of overstory stems that makes up 60-80% of woody debris biomass in Canada's boreal and temperate forests [@hanes2021], with its moisture and consumption patterns largely follows the moisture regime of the Drought Code [@mcalpine1995]. In this modelling framework, the proportion of coarse (\>7.5 cm diameter) and medium (\>0.5 cm and \<7.5 cm) woody debris consumption is estimated based on detailed measurements of consumption from experimental fires. Coarse Woody Debris is responsible for approximately 50-75% of the total woody debris load in most ecozones, and approximately 60% of the total woody debris consumption. Ecozone-level CWD consumption rates are summarized as:
+
+```{r CWDByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
+
+#subset to just the variables of interest:
+
+VarDefs.CWD <- VarDefs[VarDefs$Variable.Name == "MedDOM.Comb.Frac",]
+
+VarDefs.dt <- as.data.table(VarDefs.CWD)
+
+CWD.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
+
+CWD.wide <- DWD.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+
+kbl(CWD.wide, caption = "Coarse Woody debris consumption rates from pre/post measurements in experimental fires") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+Note that where historical burn severity data is not available, and instead the fire classification type of surface, intermittent crowning, and active crown fire are used as proxies for low, moderate, and high severity fire, respectively. Fine woody debris \<0.5 cm in diameter is consumed at the exact same rate as the litter pool (see section above).
 
 ## Drivers of C losses in the tree canopy
 
@@ -345,7 +359,7 @@ kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervie
 
 The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single well-observed high severity fire in Taiga Plains by Santin 2015.
 
-A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality largely equal to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. As a result, the cgculation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
+A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (specifically of the genii Populous and Betula) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality largely equal to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. As a result, the calulation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
 
 ```{=tex}
 \begin{equation}
@@ -1932,6 +1946,8 @@ And last, maybe something from Carrot lake or similarly well-observed BC fire?
 
 Compare each pool's observed vs modelled relative consumption rates using (ideally) dNBR to drive severity class from the real data.
 
+Use exactly the FBP DataFrame, no need for anything duplicating that otherwise. Am going to compute proportional combustion from the FBP Data frame anyways.
+
 ## 1990-2020(1) GCBM BC annual C stocks estimates with new fire DM scheme
 
 Give quick summary here, show overview map of all the fires, and also an example of the GCBM biomass pools and also severity classes on a fire or two from Ellen
@@ -2079,3 +2095,5 @@ Note that rather than defining softwood crown fraction burned as a variable call
 # Appendix D: Representative photos
 
 Photos of: (1) partial litter consumption; (2) partial vs full duff consumption; (3) mortality but not consumption of understory trees with live overstory; (4) mortality but not consumption of overstory trees; (5) mixedwood severity example showing consumption of broadleaf foliage; (6) woody debris consumption; (7) snag preferential consumption relative to little to no bole consumpotion in live trees
+
+Give lat/long, year, ecozone, severity class, and leading spp for each photo, maybe other relevant metrics? From some of the experimental fires mostly??

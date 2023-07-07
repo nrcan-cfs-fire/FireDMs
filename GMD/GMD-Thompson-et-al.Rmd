@@ -1127,7 +1127,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 45 & Sourc
 #Source: HW Coarse roots
 #sink: HW Coarse roots
 #PLS: Surviving coarse roots in conifers
-#Pseudocode:  =1-((HW mortality rate)*(1-HW Resproute Rate))
+#Pseudocode:  =1-((HW mortality rate)*(1-HW Resprout Rate))
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 46 & SourceSink$SeverityClass == 'Low'] <- 1 - VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low']* (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])
 

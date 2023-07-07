@@ -175,6 +175,16 @@ Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout
 #### OPTION 1A (interim use March 2023)
 global.vars <- list(0.926, 0.004, 0.07, 0.827, 0.013, 0.16) ##Note: this retains the emissions ratios for CO2:CO:CH4 for the major gases, but excludes PM and non-CH$ hydrocarbons.  Just for interim use to evaluate the smouldering component.
 
+#### OPTION 1B (interim use July 2023)
+
+### Hayden et al showed that x% of total carbon goes into total PM (assume 50%? carbon content), and x% of total PM goes into PM2.5, so the CFFEPS values in Option 1A, but minus the PM phase (which is accounted for below in their own fluxes)
+global.vars <- list(0.0, 0.00, 0.00, 0.0, 0.00, 0.0)
+
+### the mass fraction of non-methane organic gases from Hayden et al is 31.2 g/kg (0.0312), what is the %C of that 31.2 g?
+
+
+
+
 
 
 ####OPTION 2 (simple)
@@ -207,7 +217,7 @@ kbl(as.data.frame(global.vars), caption = "Emissions ratios in flaming and smoul
   #kable_styling(latex_options = "hold_position")
 ```
 
-where CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH~4~ emissions. With a Global Warming Potential of CO equal to 1.9 and CH~4~ of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO~2~, CH~4~, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 5% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH~4~.
+where CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH~4~ emissions. With a Global Warming Potential of CO equal to 1.9 and CH~4~ of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. Note that these proposed emissions factors for flaming vs smouldering are aligned with those currently used in Canada's operational wildfire smoke air quality model, FireWork [@chen2019]. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions rates correspond well with aircraft smoke chemistry observations by [@simpson2011] and [@hayden2022] and are themselves very similar to prior emissions factors used in CBM. Note that as current described, the sum of CO~2~, CH~4~, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 3% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH~4~.
 
 ## Litter layer area-wise consumption by severity class
 

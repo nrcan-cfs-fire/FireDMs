@@ -109,6 +109,7 @@ library(formatR)
 library(data.table)
 library(directlabels)
 library(ggrepel)
+library(gtools)
 library(rticles)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
@@ -219,7 +220,7 @@ VarDefs$SeverityClass <- factor(VarDefs$SeverityClass,levels = c("Low", "Mod", "
 
 ```
 
-```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE }
+```{r globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE}
 kbl(CarbonEFs_pivot_wider, caption = "Emissions factors in flaming and smouldering phase, expressed as portion of unburned biomass carbon content") %>%
   kable_minimal()  #%>%
           #kable_styling(latex_options = "scale_down") %>%
@@ -270,7 +271,34 @@ FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
 ```
 where DC is the Fire Weather Index Drought Code and FFFL is the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data). LL is the Litter Load, and is typically on the order of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland sites [@thompson2017]. This distinction is necessary due to the flaming phase consumption of the litter layer as opposed to the smouldering phase consumption of deeper horizons (see previous section). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code is used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
 
-```{r computeDuffConsump, echo=FALSE,message=FALSE, warning=FALSE}
+```{r computeDuffConsump, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+#load the raw de Groot forest floor data: 
+
+FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
+
+##First, logit transform the data, then apply basically Kerry's model?
+
+### for now, filter our values > 1
+
+#FFFC_Data <- FFFC_Data %>% filter(Frac_load_consump < 1)
+
+FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump)
+
+FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.00001, max = 1.01)
+
+##kerry's version of this data is 0.0168*DC^0.71*Load^0.671
+
+#FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)+(Load*b)+c,
+#                 data = FFFC_Data,
+#                 start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
+#summary(FFFC.Frac.Consume.nls)
+
+FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)*(Load^b)+c,
+                 data = FFFC_Data,
+                 start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
+#summary(FFFC.Frac.Consume.nls)
 
 
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
@@ -281,11 +309,12 @@ Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across 
 # then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
 Duff.Load <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
 
-Duff.Load <- Duff.Load - Litter.Load
+#Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
+Duff.consump.frac.logit <- Median.DC^0.33*Duff.Load^(-0.171)-4.8
 
-Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
-Duff.consump.frac <- Duff.consump.kg.m2/(Duff.Load - Litter.Load)
+Duff.consump.frac <- inv.logit(Duff.consump.frac.logit)
 
+Duff.consump.kg.m2 <- Duff.consump.frac * Duff.Load
 
 # start creating a single list object to encapsulate all the modelling:
 #where FFFC is "Forest Floor Fuel Consumption" a la de Groot's naming convention:

@@ -299,15 +299,15 @@ defined in a global variables table:
 \hline
 Spp & Flaming & Smouldering\\
 \hline
-CO2 & 0.880 & 0.729\\
+CO2 & 0.868 & 0.703\\
 \hline
 CO & 0.070 & 0.161\\
 \hline
-PM10 & 0.016 & 0.033\\
+PM10 & 0.022 & 0.048\\
 \hline
 NMOG & 0.016 & 0.035\\
 \hline
-PM25 & 0.013 & 0.028\\
+PM25 & 0.019 & 0.040\\
 \hline
 CH4 & 0.005 & 0.013\\
 \hline
@@ -316,12 +316,12 @@ BC & 0.001 & 0.000\\
 \end{tabular}
 \end{table}
 
-where CO\textsubscript{2} is responsible for 88\% of emissions in the
-flaming phase, but only 72.9\% of emissions in the smouldering phase,
+where CO\textsubscript{2} is responsible for 86.8\% of emissions in the
+flaming phase, but only 70.3\% of emissions in the smouldering phase,
 with a doubling of CO emissions and tripling of CH\textsubscript{4}
 emissions. With a Global Warming Potential of CO equal to 1.9 and
 CH\textsubscript{4} of 25, the Global Warming Potential per unit of
-biomass consumption in the smouldering phase is 1.19 times higher in
+biomass consumption in the smouldering phase is 1.18 times higher in
 global warming potential compared to flaming, not including differential
 aerosol production and injection heights, however. Note that these
 proposed emissions factors for flaming vs smouldering are aligned with
@@ -395,30 +395,26 @@ While consumption of fine fuels in the litter layer of the forest floor
 is nearly complete for any given fire intensity, consumption of deeper
 organic soil horizons (F+H layers in upland forests and upper peat
 layers in wetlands) is more drought dependent. In this scheme, we
-utilize the Forest Floor Fuel Consumption (FFFC) model of
-\citep{degroot2009}, modified to only account for fuel horizons below
-the litter layer:
+utilize the Forest Floor Fuel Consumption (FFFC) model and data of
+\citep{degroot2009}, modified to compute the relative amount of
+consumption (scalar from 0 to 1) rather than an absolute value in
+\unit{0.2\,kg\,m^{-2}}:
 
 \begin{equation}
-FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+logit(\frac{FFFC}{FFFL}) = DC^{0.33}(FFFL)^{-0.17}-4.85
 \end{equation}
 
-where DC is the Fire Weather Index Drought Code and FFFL is the Forest
+where DC is the Fire Weather Index Drought Code, and FFFL is the Forest
 Floor Fuel Load (with ecozone averages given in \citep{letang2012} or
-site-level data). LL is the Litter Load, and is typically on the order
-of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland
-sites \citep{thompson2017}. This distinction is necessary due to the
-flaming phase consumption of the litter layer as opposed to the
-smouldering phase consumption of deeper horizons (see previous section).
-While ultimately this scheme can be used on individual fires with
-estimated or measured fuel loading and specific Drought Code values, for
-the purposes of this first assessment, an ecozone-averaged fuel load and
-decadal composites of Drought Code is used to provide representative
-values. Specifically, a median Drought Code of detected fire hotspots in
-Canada from 2003-2021 using the same data as the Canadian
-CFEEPS-FireWork wildfire air quality model of \citep{chen2019} is
-presented below, along with proportional consumption values of the
-forest floor by ecozone:
+site-level data where observed). While ultimately this scheme can be
+used on individual fires with estimated or measured fuel loading and
+specific Drought Code values, for the purposes of this first assessment,
+an ecozone-averaged fuel load and decadal composites of Drought Code is
+used to provide representative values. Specifically, a median Drought
+Code of detected fire hotspots in Canada from 2003-2021 using the same
+data as the Canadian CFEEPS-FireWork wildfire air quality model of
+\citep{chen2019} is presented below, along with proportional consumption
+values of the forest floor by ecozone:
 
 \begin{table}
 

@@ -401,7 +401,7 @@ consumption (scalar from 0 to 1) rather than an absolute value in
 \unit{0.2\,kg\,m^{-2}}:
 
 \begin{equation}
-logit(\frac{FFFC}{FFFL}) = DC^{0.33}(FFFL)^{-0.17}-4.85
+logit \left( \frac{FFFC}{FFFL}\right) = DC^{0.33}(FFFL)^{-0.17}-4.85
 \end{equation}
 
 where DC is the Fire Weather Index Drought Code, and FFFL is the Forest
@@ -689,6 +689,38 @@ then total parameters, and what \% of total parameters we have so far
 filled with data
 
 \section{Results and example applications}
+
+\begin{landscape}\begin{table}[!h]
+
+\caption{\label{tab:makeTables}High severity Disturbance Matrix in BP}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}}
+\hline
+  & Softwood Merchantable & Softwood Stem Snag & Medium DOM
+ & Softwood Foliage & Above Ground Very Fast DOM & CO2 & CH4 & CO & PM25\\
+\hline
+Softwood Merchantable & 0 & 1 &  &  &  &  &  &  & \\
+\hline
+Softwood Stem Snag &  & 0 & 0.90000 &  &  & 0.0868000 & 0.0005000 & 0.0070000 & 0.0019000\\
+\hline
+Medium DOM &  &  & 0.57624 &  &  & 0.2979033 & 0.0055089 & 0.0682254 & 0.0169504\\
+\hline
+Softwood Foliage &  &  &  & 0.057 &  & 0.8680000 & 0.0050000 & 0.0700000 & 0.0190000\\
+\hline
+Above Ground Very Fast DOM &  &  &  &  &  &  &  &  & \\
+\hline
+CO2 &  &  &  &  &  &  &  &  & \\
+\hline
+CH4 &  &  &  &  &  &  &  &  & \\
+\hline
+CO &  &  &  &  &  &  &  &  & \\
+\hline
+PM25 &  &  &  &  &  &  &  &  & \\
+\hline
+\end{tabular}}
+\end{table}
+\end{landscape}
 
 \subsection{Field case studies (for consideration)}
 
@@ -1025,6 +1057,108 @@ Black Carbon & CH4 & Black carbon combustion fraction\\
 \hline
 Black Carbon & CO & Black carbon combustion fraction\\
 \hline
+Softwood Foliage & PM25 & Crown Fraction Burned\\
+\hline
+Softwood Other & PM25 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & PM25 & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & PM25 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & PM25 & Crown Fraction Burned\\
+\hline
+Hardwood Other & PM25 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & PM25 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & PM25 & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & PM25 & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & PM25 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & PM25 & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & PM25 & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & PM25 & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & PM25 & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & PM25 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & PM25 & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & PM25 & Black carbon combustion fraction\\
+\hline
+Softwood Foliage & PM10 & Crown Fraction Burned\\
+\hline
+Softwood Other & PM10 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & PM10 & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & PM10 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & PM10 & Crown Fraction Burned\\
+\hline
+Hardwood Other & PM10 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & PM10 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & PM10 & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & PM10 & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & PM10 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & PM10 & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & PM10 & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & PM10 & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & PM10 & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & PM10 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & PM10 & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & PM10 & Black carbon combustion fraction\\
+\hline
+Softwood Foliage & NMOG & Crown Fraction Burned\\
+\hline
+Softwood Other & NMOG & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & NMOG & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & NMOG & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & NMOG & Crown Fraction Burned\\
+\hline
+Hardwood Other & NMOG & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & NMOG & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & NMOG & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & NMOG & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & NMOG & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & NMOG & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & NMOG & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & NMOG & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & NMOG & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & NMOG & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & NMOG & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & NMOG & Black carbon combustion fraction\\
+\hline
 \end{tabular}}
 \end{table}
 
@@ -1093,21 +1227,21 @@ Burned.
 \caption{\label{tab:SinkSourceExample}Sample of disturbance matrix data file}
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}[t]{l|r|l|l|l|l|l|l|r|l}
+\begin{tabular}[t]{l|r|l|l|l|l|r|l|l|l|r|l}
 \hline
-Ecozone & FluxID & Source & Sink & ProcessSynonym & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
+Ecozone & FluxID & Source & Sink & ProcessSynonym & Phase & CORefFluxID & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
 \hline
-BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.9 & TRUE\\
+TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 0.9 & TRUE\\
 \hline
-BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-BC & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BC & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-BSE & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BSE & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
 \end{tabular}}
 \end{table}

@@ -266,7 +266,7 @@ While consumption of fine fuels in the litter layer of the forest floor is nearl
 
 ```{=tex}
 \begin{equation}
-logit(\frac{FFFC}{FFFL}) = DC^{0.33}(FFFL)^{-0.17}-4.85
+logit \left( \frac{FFFC}{FFFL}\right) = DC^{0.33}(FFFL)^{-0.17}-4.85
 \end{equation}
 ```
 where DC is the Fire Weather Index Drought Code, and FFFL is the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code is used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
@@ -1872,6 +1872,36 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & Sourc
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & SourceSink$SeverityClass == "Mod"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "Mod"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "Mod"])*global.vars$FlamingCO
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 96 & SourceSink$SeverityClass == "High"] <- (1 - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 92 & SourceSink$SeverityClass == "High"] - SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 93 & SourceSink$SeverityClass == "High"])*global.vars$FlamingCO
+
+### Black Carbon -> black carbon and BC to atm emissions are FluxID 97-100
+
+#FluxID: 101-117
+#Source: misc
+#sink: PM2.5
+#PLS: Combustion emissions to 2.5 micron particulate matter
+#Pseudocode: = CORefFluxID * (CO to PM/NMOG ratio)
+#notes:  
+
+###now, loop through the PM2.5, PM10, and NMOG EFs, using the ratio of PM:CO(or NMOG) and phase to define them in bulk:
+
+###do this in a loop for the PM2.5 range:
+
+## here is the fluxID of interest to grab the CO of:
+
+for(FluxIDLoop in seq(from=101,to=117)){
+a <- SourceSink$CORefFluxID[SourceSink$FluxID == FluxIDLoop & SourceSink$SeverityClass == "Low" & SourceSink$Ecozone == ecozone]
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == FluxIDLoop & SourceSink$SeverityClass == "Low"] <-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == a & SourceSink$SeverityClass == "Low"]*ifelse(unique(SourceSink$Phase[SourceSink$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == FluxIDLoop & SourceSink$SeverityClass == "Mod"] <-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == a & SourceSink$SeverityClass == "Mod"]*ifelse(unique(SourceSink$Phase[SourceSink$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == FluxIDLoop & SourceSink$SeverityClass == "High"] <-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == a & SourceSink$SeverityClass == "High"]*ifelse(unique(SourceSink$Phase[SourceSink$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+}
+
+
 
 
 ## end loop

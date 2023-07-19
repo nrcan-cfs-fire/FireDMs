@@ -298,7 +298,19 @@ FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.
 FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)*(Load^b)+c,
                  data = FFFC_Data,
                  start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
-#summary(FFFC.Frac.Consume.nls)
+summary(FFFC.Frac.Consume.nls)
+
+### do a predict.nls (not run)
+
+nls.pred <- inv.logit(predict(FFFC.Frac.Consume.nls,newdata=FFFC_Data))
+
+FFFC_Data <- cbind(FFFC_Data,nls.pred)
+
+ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point() + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
+
+
+
+
 
 
 #load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
@@ -2016,7 +2028,7 @@ write.csv(SourceSink.export,"FireDM-currents.csv")
 
 ```
 
-```{r checkSum-not-run, echo=FALSE, message=FALSE, warning=FALSE}
+```{r checkSum-not-run, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ##example calc:
 #sum(SourceSink$Value[SourceSink$Ecozone == "BP" & SourceSink$Source == "Softwood Merchantable" & SourceSink$SeverityClass == "Mod"])
 

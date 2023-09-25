@@ -8,17 +8,17 @@ Ecozone,Pool,Plain.Language.Name,Variable.Name,Value,SeverityClass,InterimValue
 ,Merch,Hardwood Crown Fraction Burned,HW.CFB,0,Low,TRUE
 ,Merch,Hardwood Crown Fraction Burned,HW.CFB,0.5,Mod,TRUE
 ,Merch,Hardwood Crown Fraction Burned,HW.CFB,1,High,TRUE
-,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.25,Low,TRUE
-,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.5,Mod,TRUE
-,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.75,High,TRUE
+,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.22,Low,TRUE
+,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.22,Mod,TRUE
+,Branch,Hardwood Large Branch Combustion Fraction,HW.LgBranch.Comb.Frac,0.22,High,TRUE
 ,Merch,Mortality Rate of Hardwood Merch,HW.Mort,0.82,Low,TRUE
 ,Merch,Mortality Rate of Hardwood Merch,HW.Mort,1,Mod,TRUE
 ,Merch,Mortality Rate of Hardwood Merch,HW.Mort,1,High,TRUE
 ,Roots,Hardwood portion of coarse roots in duff,HW.prop.Coarse.Root.duff,0.5,NA,TRUE
 ,Roots,Hardwood portion of fine roots in duff,HW.prop.Fine.Root.duff,0.5,NA,TRUE
-,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.25,Low,TRUE
-,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.5,Mod,TRUE
-,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.75,High,TRUE
+,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.8,Low,TRUE
+,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.8,Mod,TRUE
+,Branch,Hardwood Small Branch Combustion Fraction,HW.SmBranch.Comb.Frac,0.8,High,TRUE
 ,Branch,Hardwood small branch fraction of total branchwood,HW.SmBranch.frac.of.tot.BW,0.5,NA,TRUE
 ,Other,Hardwood small trees as portion of other pool,HW.SmTree.frac.of.other,0.5,NA,TRUE
 ,Snag,Hardwood Snag Branch Combustion Fraction,HW.Snag.BW.Comb.Frac,0.25,Low,TRUE
@@ -44,17 +44,17 @@ Ecozone,Pool,Plain.Language.Name,Variable.Name,Value,SeverityClass,InterimValue
 ,Merch,Softwood Crown Fraction Burned,SW.CFB,0,Low,TRUE
 ,Merch,Softwood Crown Fraction Burned,SW.CFB,0.5,Mod,TRUE
 ,Merch,Softwood Crown Fraction Burned,SW.CFB,1,High,TRUE
-,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.25,Low,TRUE
-,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.5,Mod,TRUE
-,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.75,High,TRUE
+,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.22,Low,TRUE
+,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.22,Mod,TRUE
+,Branch,Softwood Large Branch Combustion Fraction,SW.LgBranch.Comb.Frac,0.22,High,TRUE
 ,Merch,Mortality Rate of Softwood Merch,SW.Mort,0.3,Low,TRUE
 ,Merch,Mortality Rate of Softwood Merch,SW.Mort,0.95,Mod,TRUE
 ,Merch,Mortality Rate of Softwood Merch,SW.Mort,1,High,TRUE
 ,Roots,Softwood Portion of coarse roots in duff,SW.prop.Coarse.Root.duff,0.5,NA,TRUE
 ,Roots,Softwood portion of fine roots in duff,SW.prop.Fine.Root.duff,0.5,NA,TRUE
-,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.25,Low,TRUE
-,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.5,Mod,TRUE
-,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.75,High,TRUE
+,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.8,Low,TRUE
+,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.8,Mod,TRUE
+,Branch,Softwood Small Branch Combustion Fraction,SW.SmBranch.Comb.Frac,0.8,High,TRUE
 ,Branch,Softwood small branch fraction of total branchwood,SW.SmBranch.frac.of.tot.BW,0.5,NA,TRUE
 ,Other,Softwood small trees as portion of other pool,SW.SmTree.frac.of.other,0.5,NA,TRUE
 ,Snag,Softwood Snag Branch Combustion Fraction,SW.Snag.BW.Comb.Frac,0.25,Low,TRUE

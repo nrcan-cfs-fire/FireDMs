@@ -345,7 +345,7 @@ FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
 ```
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
-kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per ecozone") %>%
+kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per ecozone",col.names = c("Ecozone", "Median Drought Code of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "% consumption")) %>%
   kable_minimal()  #%>%
           #kable_styling(latex_options = "scale_down") %>%
   #kable_styling(latex_options = "hold_position")
@@ -419,22 +419,22 @@ kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervie
   #kable_styling(latex_options = "hold_position")
 ```
 
-The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single well-observed high severity fire in Taiga Plains by Santin 2015.
+The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single set well-observed high severity fires in the Taiga Plains by [santín2015].
 
 A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (see Appendix E) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality equal precisely to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Though GCBM can resolve a species list down to the pixel level, currently an ecozone-level regional average composition of hardwood species with resprouting traits is used and is shown below:
 
 ```{r ReSproutByEcozone, echo=FALSE, message=FALSE, warning=FALSE}
 
 #subset to just the variable of interest:
-VarDefs.HW.ReSprout <- VarDefs[VarDefs$Variable.Name == "HW.ReSprout",]
+VarDefs.HW.ReSprout <- VarDefs[VarDefs$Variable.Name == "HW.ReSprout" & VarDefs$SeverityClass == "Mod",]
 
 VarDefs.dt.HW.ReSprout <- as.data.table(VarDefs.HW.ReSprout)
 
-SW.CFB.wide <- dcast(VarDefs.dt.SW.CFB,Ecozone~SeverityClass,value.var = "Value")
+HW.ReSprout.wide <- dcast(VarDefs.dt.HW.ReSprout,Ecozone~SeverityClass,value.var = "Value")
 
-SW.CFB.wide <- SW.CFB.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+HW.ReSprout.wide <- HW.ReSprout.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
 
-kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervied from median values from field studies") %>%
+kbl(HW.ReSprout.wide, caption = "Ecozone-level average fraction of hardwood overstory species that do not suffer extensive belowgroud biomass mortality after fire", col.names = c("Ecozone", "Resprout Fraction"),digits = c(2)) %>%
   kable_minimal()#  %>%
           #kable_styling(latex_options = "scale_down") %>%
   #kable_styling(latex_options = "hold_position")
@@ -522,7 +522,17 @@ for (j in seq(1:length(ecozones.list))) {
 
   #print(j)
 
-    
+
+  ### need to set bark consumption to 34% of mortality.  Can do this before the fluxID stuff, but within the ecozone loops
+  
+  
+VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*0.34
+
+  VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*0.34
+  
+  VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*0.34
+  
+  
 #FluxID: 1
 #Source: Softwood (SW) Merch 
 #sink: SW Merch
@@ -2317,4 +2327,17 @@ Give lat/long, year, ecozone, severity class, and leading spp for each photo, ma
 
 # Appendix E: List of Resprouting Hardwoods of Canada
 
-Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
+Alnus spp. 
+Arbutus men. 
+Betula all. 
+Betula pap. 
+Betula pop. 
+Fraxinus ame. 
+Fraxinus nig. 
+Fraxinus pen. 
+Populus bal. 
+Populus gra. 
+Populus tre. 
+Populus tri. 
+Quercus spp. 
+Salix spp.

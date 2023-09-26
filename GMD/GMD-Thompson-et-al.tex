@@ -442,7 +442,7 @@ values of the forest floor by ecozone:
 \centering
 \begin{tabular}[t]{l|l|l|l|l}
 \hline
-Ecozone & Median.DC.of.burning & Median.Duff.Load.kg.m2 & Duff.consump.kg.m2 & Duff.consump.frac\\
+Ecozone & Median Drought Code of Burning & Median FFFL kg m-2 & FFFC kg m-2 & \% consumption\\
 \hline
 BSW & 239 & 8.8 & 3.12 & 0.35\\
 \hline
@@ -472,6 +472,18 @@ P & 242 & 9.8 & 3.34 & 0.34\\
 \hline
 \end{tabular}
 \end{table}
+
+Note that the maximum upland Forest Floor Fuel Load is approximately 30
+kg m-2 \citep{letang2012}; higher values are typically seen only in peat
+ecosystems, where the above Forest Floor Fuel Consumption scheme does
+not apply. For Canadian peatlands, the CaMP model \citep{bona2020} is
+instead used in CBM. Within CaMP, a separate peatland water model driven
+by Drought Code determines the thickness of the unsaturated peat layer,
+and an amount approximating 12\% of the thickness of the unsaturated
+peat is consumed as smouldering consumption. The peat-specific carbon
+pools and fire Disturbance Matrices are fully described in
+\citep{bona2020}; large peatland trees will still utilize the DM scheme
+described below.
 
 Little data is available on the fraction of woody debris consumption
 alongside fire severity measurements. Coarse woody debris of overstory
@@ -593,9 +605,9 @@ the field data and disturbance modelling undertaken here only accounts
 for tree mortality within the calender year of the fire, and delayed
 mortality of over one year has been documented in boreal low and
 moderate severity fires \citep{angers2011}where less than half of total
-mortality occurs after the year of the fire. The modelling here does not
-account for delayed mortality, but rather than routine is a function of
-the larger mortality schemes in GCBM.
+mortality occurs after the year of the fire. Thus, the modelling here
+does not account for delayed mortality that may extend upwards of 5
+years after fire.
 
 Crown Fraction Burned (CFB) speaks to the fraction of the live canopy
 that is itself consumed in the flaming front. The alternate outcomes
@@ -605,8 +617,8 @@ floor. From the axioms stated earlier, the CFB must be lower than or
 equal to the mortality rate, using field studies that show any partial
 crown consumption is likely sufficient to result in high rates if not
 complete mortality \citep{hood2017}, which is the case in Canada's trees
-with primarily thin bark. From field studies (!Ellen to provide details
-here\ldots.) , the following ecozone-specific CFB values are found:
+with primarily thin bark. From field studies, the following
+ecozone-specific CFB values are found:
 
 \begin{table}
 
@@ -652,23 +664,66 @@ consumption rates can be defined by severity class. At the moment,
 lacking robust field data on bark biomass consumption rates across
 ecozones and severity classes (which are a small portion of the overall
 biomass), the bark proportional consumption rate is set to 34\% of the
-overstory mortality rate, based only on a single well-observed high
-severity fire in Taiga Plains by Santin 2015.
+overstory mortality rate, based only on a single set well-observed high
+severity fires in the Taiga Plains by {[}santín2015{]}.
 
 A major distinction is made between softwood and hardwood trees, where
-in Canada's boreal forests, a large fraction of hardwood trees
-(specifically of the genii Populous and Betula) are able to resprout
-even when the main stem has been killed by an intense forest fire
-\citep{brown1987}. Accordingly, the root mortality rates differ greatly
-between softwoods and hardwoods, with softwood root mortality largely
-equal to stem mortality, while in resprouting hardwoods, little root
-mortality is observed even after intense fire
-\citep{pérez-izquierdo2019}. Concurrently, the fraction of fine roots
-contained within the combustible forest floor layers can be a close to
-or exceeding 50\% of the fine root biomass \citep{strong1985}, and burns
-alongside the organic soils \citep{benscoter2011}. As a result, the
-calulation for softwood fine root consumption and mortality are as
-follows, using Softwood as an example:
+in Canada's boreal forests, a large fraction of hardwood trees (see
+Appendix E) are able to resprout even when the main stem has been killed
+by an intense forest fire \citep{brown1987}. Accordingly, the root
+mortality rates differ greatly between softwoods and hardwoods, with
+softwood root mortality equal precisely to stem mortality, while in
+resprouting hardwoods, little root mortality is observed even after
+intense fire \citep{pérez-izquierdo2019}. Though GCBM can resolve a
+species list down to the pixel level, currently an ecozone-level
+regional average composition of hardwood species with resprouting traits
+is used and is shown below:
+
+\begin{table}
+
+\caption{\label{tab:ReSproutByEcozone}Ecozone-level average fraction of hardwood overstory species that do not suffer extensive belowgroud biomass mortality after fire}
+\centering
+\begin{tabular}[t]{l|r}
+\hline
+Ecozone & Resprout Fraction\\
+\hline
+BSW & 0.75\\
+\hline
+TP & 0.75\\
+\hline
+TSW & 0.94\\
+\hline
+BP & 0.99\\
+\hline
+BC & 0.76\\
+\hline
+BSE & 0.67\\
+\hline
+TSE & 0.78\\
+\hline
+MC & 0.97\\
+\hline
+HP & 0.80\\
+\hline
+TC & 0.27\\
+\hline
+PM & 0.39\\
+\hline
+AM & 0.76\\
+\hline
+MP & 0.32\\
+\hline
+P & 0.99\\
+\hline
+\end{tabular}
+\end{table}
+
+Concurrently, the fraction of fine roots contained within the
+combustible forest floor layers can be a close to or exceeding 50\% of
+the fine root biomass \citep{strong1985}, and burns alongside the
+organic soils \citep{benscoter2011}. As a result, the calulation for
+softwood fine root consumption and mortality are as follows, using
+Softwood as an example:
 
 \begin{equation}
 SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
@@ -1286,11 +1341,17 @@ consumption; (3) mortality but not consumption of understory trees with
 live overstory; (4) mortality but not consumption of overstory trees;
 (5) mixedwood severity example showing consumption of broadleaf foliage;
 (6) woody debris consumption; (7) snag preferential consumption relative
-to little to no bole consumpotion in live trees
+to little to no bole consumption in live trees
 
 Give lat/long, year, ecozone, severity class, and leading spp for each
 photo, maybe other relevant metrics? From some of the experimental fires
 mostly??
+
+\section{Appendix E: List of Resprouting Hardwoods of Canada}
+
+Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus
+ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre.
+Populus tri. Quercus spp. Salix spp.
 
 
 

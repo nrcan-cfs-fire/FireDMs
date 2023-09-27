@@ -290,14 +290,14 @@ FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.
 
 ##kerry's version of this data is 0.0168*DC^0.71*Load^0.671
 
-#FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)+(Load*b)+c,
-#                 data = FFFC_Data,
-#                 start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
+#FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)+(Load^b)+c,
+                 #data = FFFC_Data,
+                 #start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
 #summary(FFFC.Frac.Consume.nls)
 
 FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)*(Load^b)+c,
-                 data = FFFC_Data,
-                 start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
+               data = FFFC_Data,
+               start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
 summary(FFFC.Frac.Consume.nls)
 
 ### do a predict.nls (not run)
@@ -306,7 +306,7 @@ nls.pred <- inv.logit(predict(FFFC.Frac.Consume.nls,newdata=FFFC_Data))
 
 FFFC_Data <- cbind(FFFC_Data,nls.pred)
 
-ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point() + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
+ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point(aes(colour = factor(FuelType))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
 
 
 

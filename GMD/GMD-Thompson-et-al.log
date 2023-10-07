@@ -1,11 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.29)  6 APR 2023 21:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.25)  26 SEP 2023 06:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **GMD-Thompson-et-al.tex
 (./GMD-Thompson-et-al.tex
-LaTeX2e <2022-11-01> patch level 1
-L3 programming layer <2023-02-22> (./copernicus.cls
+LaTeX2e <2023-06-01> patch level 1
+L3 programming layer <2023-08-29>
+(./copernicus.cls
 Document Class: copernicus 2022/03/25 9.46 Copernicus papers
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fixltx2e.sty
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
@@ -19,7 +20,7 @@ Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 )
 Additional configuration file copernicus.cfg used
 (./copernicus.cfg) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fleqn.clo
 File: fleqn.clo 2016/12/29 v1.2b Standard LaTeX option (flush left equations)
 \mathindent=\skip48
@@ -30,7 +31,7 @@ Applying: [2015/01/01] Make \] robust on input line 74.
 LaTeX Info: Redefining \] on input line 75.
 Already applied: [0000/00/00] Make \] robust on input line 83.
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2022/07/02 v1.4n Standard LaTeX file (size option)
+File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count185
 \c@section=\count186
@@ -52,7 +53,7 @@ File: size10.clo 2022/07/02 v1.4n Standard LaTeX file (size option)
 \UL@box=\box52
 \UL@hyphenbox=\box53
 \UL@skip=\skip53
-\UL@hook=\toks16
+\UL@hook=\toks17
 \UL@height=\dimen142
 \UL@pe=\count193
 \UL@pixel=\dimen143
@@ -66,21 +67,21 @@ Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/regexpatch/regexpatch.sty (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2023-02-22 L3 programming layer (loader) 
+Package: expl3 2023-08-29 L3 programming layer (loader) 
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count194
 \l__pdf_internal_box=\box55
 ))
 Package: regexpatch 2021/03/21 v0.2f Extending etoolbox patching commands
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2023-02-02 L3 Experimental document command parser
+Package: xparse 2023-08-29 L3 Experimental document command parser
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2021/02/14 v1.3d Input encoding file
-\inpenc@prehook=\toks17
-\inpenc@posthook=\toks18
+\inpenc@prehook=\toks18
+\inpenc@posthook=\toks19
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2023/03/28 3.87 The Babel package
+Package: babel 2023/09/12 v3.94 The Babel package
 \babel@savecnt=\count195
 \U@D=\dimen145
 \l@unhyphenated=\language3
@@ -88,16 +89,16 @@ Package: babel 2023/03/28 3.87 The Babel package
 \bbl@readstream=\read2
 \bbl@dirlevel=\count196
 Package babel Info: You haven't specified a language as a class or package
-(babel)             option. I'll load 'nil'. Reported on input line 4429.
+(babel)             option. I'll load 'nil'. Reported on input line 4295.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
-Language: nil 2023/03/28 3.87 Nil language
+Language: nil 2023/09/12 v3.94 Nil language
 \l@nil=\language4
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen146
 \ar@mcellbox=\box56
 \extrarowheight=\dimen147
-\NC@list=\toks19
+\NC@list=\toks20
 \extratabsurround=\skip54
 \backup@length=\skip55
 \ar@cellbox=\box57
@@ -109,12 +110,12 @@ Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
 \TX@target=\dimen151
 \TX@delta=\dimen152
 \TX@cols=\count197
-\TX@ftn=\toks20
+\TX@ftn=\toks21
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
-\KV@toks@=\toks21
+\KV@toks@=\toks22
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
@@ -138,21 +139,21 @@ Package color Info: Driver file: pdftex.def on input line 149.
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks22
+\@emptytoks=\toks23
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2022/04/08 v2.17n AMS math features
+Package: amsmath 2023/05/13 v2.17o AMS math features
 \@mathmargin=\skip56
 For additional information on amsmath, use the `?' option.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks23
+\@emptytoks=\toks24
 \ex@=\dimen155
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
@@ -190,34 +191,34 @@ LaTeX Info: Redefining \Relbar on input line 971.
 \dotsspace@=\muskip16
 \c@parentequation=\count271
 \dspbrk@lvl=\count272
-\tag@help=\toks24
+\tag@help=\toks25
 \row@=\count273
 \column@=\count274
 \maxfields@=\count275
-\andhelp@=\toks25
+\andhelp@=\toks26
 \eqnshift@=\dimen158
 \alignsep@=\dimen159
 \tagshift@=\dimen160
 \tagwidth@=\dimen161
 \totwidth@=\dimen162
 \lineht@=\dimen163
-\@envbody=\toks26
+\@envbody=\toks27
 \multlinegap=\skip57
 \multlinetaggap=\skip58
-\mathdisplay@stack=\toks27
+\mathdisplay@stack=\toks28
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2020/05/29 v2.20.6
-\thm@style=\toks28
-\thm@bodyfont=\toks29
-\thm@headfont=\toks30
-\thm@notefont=\toks31
-\thm@headpunct=\toks32
+\thm@style=\toks29
+\thm@bodyfont=\toks30
+\thm@headfont=\toks31
+\thm@notefont=\toks32
+\thm@headpunct=\toks33
 \thm@preskip=\skip59
 \thm@postskip=\skip60
 \thm@headsep=\skip61
-\dth@everypar=\toks33
+\dth@everypar=\toks34
 )
 \affilsep=\skip62
 \@affilsep=\skip63
@@ -261,12 +262,12 @@ Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environ
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count285
-\float@exts=\toks34
+\float@exts=\toks35
 \float@box=\box60
-\@float@everytoks=\toks35
+\@float@everytoks=\toks36
 \@floatcapt=\box61
 )
-\@float@every@algorithm=\toks36
+\@float@every@algorithm=\toks37
 \c@algorithm=\count286
 )
 \c@figscheme=\count287
@@ -274,9 +275,9 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@listings=\count289
 \c@boxes=\count290
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2023/03/12 v3.6j Customizing captions (AR)
+Package: caption 2023/07/31 v3.6n Customizing captions (AR)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen165
 \captionmargin=\dimen166
 \caption@leftmargin=\dimen167
@@ -287,7 +288,7 @@ Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
 \caption@hangindent=\dimen172
 Package caption Info: Unknown document class (or package),
 (caption)             standard defaults will be used.
-Package caption Info: \@makecaption = \long macro:#1#2->\def \@tempa {figure}\ifx \@captype \@tempa \if@stage@final \vskip 0.7\abovecaptionskip \else \vskip \abovecaptionskip \goodbreak \fi \fi {\let \in@caption \relax \reset@font \small {\bfseries #1.} #2\par }\if@cop@home \ifonline \ifnum \csname c@\@captype \endcsname =1 \immediate \write \@auxout {\string \gdef \string \@num \@captype {}}\hypertarget {\@captype }{}\fi \fi \fi \def \@tempa {table}\ifx \@captype \@tempa \vskip \abovecaptionskip \if@stage@final \else \goodbreak \fi \fi  on input line 1176.
+Package caption Info: \@makecaption = \long macro:#1#2->\def \@tempa {figure}\ifx \@captype \@tempa \if@stage@final \vskip 0.7\abovecaptionskip \else \vskip \abovecaptionskip \goodbreak \fi \fi {\let \in@caption \relax \reset@font \small {\bfseries #1.} #2\par }\if@cop@home \ifonline \ifnum \csname c@\@captype \endcsname =1 \immediate \write \@auxout {\string \gdef \string \@num \@captype {}}\hypertarget {\@captype }{}\fi \fi \fi \def \@tempa {table}\ifx \@captype \@tempa \vskip \abovecaptionskip \if@stage@final \else \goodbreak \fi \fi  on input line 1170.
 )
 
 Package caption Warning: Unknown document class (or package),
@@ -300,7 +301,7 @@ Package caption Info: float package is loaded.
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count293
 \lst@gtempboxa=\box62
-\lst@token=\toks37
+\lst@token=\toks38
 \lst@length=\count294
 \lst@currlwidth=\dimen173
 \lst@column=\count295
@@ -335,7 +336,7 @@ Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
 \rotFPtop=\skip70
 \rotFPbot=\skip71
 \rot@float@box=\box64
-\rot@mess@toks=\toks38
+\rot@mess@toks=\toks39
 )
 
 Class copernicus Warning: Cannot find lineno.sty; proceeding without it.
@@ -352,7 +353,7 @@ LaTeX Font Info:    Trying to load font information for U+psy on input line 64.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/upsy.fd
 File: upsy.fd 2001/06/04 font definitions for U/psy.
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2023-02-07 v7.00v Hypertext links for LaTeX
+Package: hyperref 2023-07-08 v7.01b Hypertext links for LaTeX
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
@@ -378,7 +379,7 @@ Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2022-05-17 v2.50 Cross-referencing by name of section
+Package: nameref 2023-08-07 v2.53 Cross-referencing by name of section
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
@@ -387,68 +388,69 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count303
+) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count304
 )
 \@linkdim=\dimen178
-\Hy@linkcounter=\count304
-\Hy@pagecounter=\count305
+\Hy@linkcounter=\count305
+\Hy@pagecounter=\count306
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2023-02-07 v7.00v Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2023-07-08 v7.01b Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
-) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmds.sty
-Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count306
+\Hy@SavedSpaceFactor=\count307
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2023-02-07 v7.00v Hyperref: PDF Unicode definition (HO)
+File: puenc.def 2023-07-08 v7.01b Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
-Package hyperref Info: Option `bookmarks' set `false' on input line 4060.
-Package hyperref Info: Hyper figures OFF on input line 4177.
-Package hyperref Info: Link nesting OFF on input line 4182.
-Package hyperref Info: Hyper index ON on input line 4185.
-Package hyperref Info: Plain pages OFF on input line 4192.
-Package hyperref Info: Backreferencing OFF on input line 4197.
+Package hyperref Info: Option `bookmarks' set `false' on input line 4050.
+Package hyperref Info: Hyper figures OFF on input line 4167.
+Package hyperref Info: Link nesting OFF on input line 4172.
+Package hyperref Info: Hyper index ON on input line 4175.
+Package hyperref Info: Plain pages OFF on input line 4182.
+Package hyperref Info: Backreferencing OFF on input line 4187.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks OFF on input line 4431.
-\c@Hy@tempcnt=\count307
-LaTeX Info: Redefining \url on input line 4763.
+Package hyperref Info: Bookmarks OFF on input line 4440.
+\c@Hy@tempcnt=\count308
+LaTeX Info: Redefining \url on input line 4772.
 \XeTeXLinkMargin=\dimen179
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count308
+\Fld@menulength=\count309
 \Field@Width=\dimen180
 \Fld@charsize=\dimen181
-Package hyperref Info: Hyper figures OFF on input line 6042.
-Package hyperref Info: Link nesting OFF on input line 6047.
-Package hyperref Info: Hyper index ON on input line 6050.
-Package hyperref Info: backreferencing OFF on input line 6057.
-Package hyperref Info: Link coloring OFF on input line 6062.
-Package hyperref Info: Link coloring with OCG OFF on input line 6067.
-Package hyperref Info: PDF/A mode OFF on input line 6072.
+Package hyperref Info: Hyper figures OFF on input line 6051.
+Package hyperref Info: Link nesting OFF on input line 6056.
+Package hyperref Info: Hyper index ON on input line 6059.
+Package hyperref Info: backreferencing OFF on input line 6066.
+Package hyperref Info: Link coloring OFF on input line 6071.
+Package hyperref Info: Link coloring with OCG OFF on input line 6076.
+Package hyperref Info: PDF/A mode OFF on input line 6081.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count309
-\c@Item=\count310
-\c@Hfootnote=\count311
+\Hy@abspage=\count310
+\c@Item=\count311
+\c@Hfootnote=\count312
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2023-02-07 v7.00v Hyperref driver for pdfTeX
+File: hpdftex.def 2023-07-08 v7.01b Hyperref driver for pdfTeX
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 )
-\Fld@listcount=\count312
-\c@bookmark@seq@number=\count313
+\Fld@listcount=\count313
+\c@bookmark@seq@number=\count314
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
@@ -458,7 +460,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip72
 )
-\c@reaction=\count314
+\c@reaction=\count315
 \tabularwidth=\dimen182
 Package color Info: Redefining color textcol on input line 2754.
 Package color Info: Redefining color bgcol on input line 2755.
@@ -471,30 +473,30 @@ Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
 \LTright=\skip74
 \LTpre=\skip75
 \LTpost=\skip76
-\LTchunksize=\count315
+\LTchunksize=\count316
 \LTcapwidth=\dimen183
 \LT@head=\box65
 \LT@firsthead=\box66
 \LT@foot=\box67
 \LT@lastfoot=\box68
 \LT@gbox=\box69
-\LT@cols=\count316
-\LT@rows=\count317
-\c@LT@tables=\count318
-\c@LT@chunks=\count319
-\LT@p@ftn=\toks39
+\LT@cols=\count317
+\LT@rows=\count318
+\c@LT@tables=\count319
+\c@LT@chunks=\count320
+\LT@p@ftn=\toks40
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen184
 \WF@size=\dimen185
-\c@WF@wrappedlines=\count320
+\c@WF@wrappedlines=\count321
 \WF@box=\box70
-\WF@everypar=\toks40
+\WF@everypar=\toks41
 Package: wrapfig 2003/01/31  v 3.6
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2022/06/20 v1.0f Color table columns (DPC)
-\everycr=\toks41
+\everycr=\toks42
 \minrowclearance=\skip77
-\rownum=\count321
+\rownum=\count322
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
 Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
@@ -508,16 +510,16 @@ Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box71
-\sift@deathcycles=\count322
+\sift@deathcycles=\count323
 \@vwid@loff=\dimen186
 \@vwid@roff=\dimen187
 )
-\c@taburow=\count323
-\tabu@nbcols=\count324
-\tabu@cnt=\count325
-\tabu@Xcol=\count326
-\tabu@alloc=\count327
-\tabu@nested=\count328
+\c@taburow=\count324
+\tabu@nbcols=\count325
+\tabu@cnt=\count326
+\tabu@Xcol=\count327
+\tabu@alloc=\count328
+\tabu@nested=\count329
 \tabu@target=\dimen188
 \tabu@spreadtarget=\dimen189
 \tabu@naturalX=\dimen190
@@ -527,8 +529,8 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \abovetabulinesep=\dimen194
 \belowtabulinesep=\dimen195
 \tabustrutrule=\dimen196
-\tabu@thebody=\toks42
-\tabu@footnotes=\toks43
+\tabu@thebody=\toks43
+\tabu@footnotes=\toks44
 \tabu@box=\box72
 \tabu@arstrutbox=\box73
 \tabu@hleads=\box74
@@ -548,8 +550,8 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen197
-\c@nlinenum=\count329
-\TeXr@lab=\toks44
+\c@nlinenum=\count330
+\TeXr@lab=\toks45
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
@@ -609,111 +611,136 @@ Package caption Info: rotating package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count330
+\c@lstlisting=\count331
 Package hyperref Info: Link coloring OFF on input line 89.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 130.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 133.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 130.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 133.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package xcolor Warning: Incompatible color definition on input line 130.
+Package xcolor Warning: Incompatible color definition on input line 133.
 
 
-Package xcolor Warning: Incompatible color definition on input line 132.
+Package xcolor Warning: Incompatible color definition on input line 135.
 
 
-Overfull \hbox (18.51033pt too wide) in paragraph at lines 132--152
+Overfull \hbox (18.51033pt too wide) in paragraph at lines 135--155
 [][]\T1/ptm/b/n/10 Abstract.[] \T1/ptm/m/n/10 Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes. Current representations
  []
 
 
-Overfull \hbox (7.13127pt too wide) in paragraph at lines 132--152
+Overfull \hbox (7.13127pt too wide) in paragraph at lines 135--155
 \T1/ptm/m/n/10 high severity-only representation, this mixed severity modelling framework changes modelled total Carbon flux to the atmosphere
  []
 
 [1
 
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}] [2]
-Overfull \hbox (1.48157pt too wide) in paragraph at lines 264--267
+Overfull \hbox (1.48157pt too wide) in paragraph at lines 290--293
 \T1/ptm/m/n/10 Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering.
  []
 
-[3] [4] [5] [6]
-Overfull \hbox (309.00578pt too wide) detected at line 576
-$\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
- []
-
-[7]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 611.
+[3] [4]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 419.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [8]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 642.
+) [5]
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 435.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 642--642
+<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf, id=111, 469.755pt x 325.215pt>
+File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf Graphic file (type pdf)
+<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf>
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf  used on input line 437.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+[6 <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf>] [7] [8] [9]
+Overfull \hbox (309.00578pt too wide) detected at line 735
+$\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
+ []
+
+[10] [11] [12
+
+]
+Overfull \hbox (12.38623pt too wide) in paragraph at lines 839--839
 []\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
  []
 
-[9]
+[13
 
-LaTeX Warning: Float too large for page by 598.40453pt on input line 935.
+] [14]
 
-[10]
+LaTeX Warning: Float too large for page by 1194.03366pt on input line 1238.
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=162, 289.08pt x 216.81pt>
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=210, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 940.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 1243.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=163, 289.08pt x 216.81pt>
+[15]
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=217, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 942.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 1245.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=164, 289.08pt x 216.81pt>
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=218, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 944.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 1247.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-[11 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
+[16 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[12 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>] [13] (./GMD-Thompson-et-al.bbl [14] [15]
-Underfull \hbox (badness 1946) in paragraph at lines 55--56
+[17 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>] [18] (./GMD-Thompson-et-al.bbl [19]
+Underfull \hbox (badness 1142) in paragraph at lines 19--20
+[]\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
+ []
+
+[20]
+Underfull \hbox (badness 1946) in paragraph at lines 61--62
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
 
 
-Underfull \hbox (badness 2809) in paragraph at lines 55--56
+Underfull \hbox (badness 2809) in paragraph at lines 61--62
 \T1/ptm/m/n/9 and Strum, M.: The development and uses of EPA's SPECIATE database, Atmospheric Pollution Research, 1, 196--206,
  []
 
-) [16] [17] [18] (./GMD-Thompson-et-al.aux) ) 
+
+Underfull \hbox (badness 1867) in paragraph at lines 76--77
+\T1/ptm/m/n/9 of forest disturbance and recovery for Canada using Landsat time series, Remote Sensing of Environment, 194, 303^^U321,
+ []
+
+) [21] [22] [23] (./GMD-Thompson-et-al.aux)
+ ***********
+LaTeX2e <2023-06-01> patch level 1
+L3 programming layer <2021/03/21>
+ ***********
+ ) 
 Here is how much of TeX's memory you used:
- 17478 strings out of 477985
- 283443 string characters out of 5837494
- 1899382 words of memory out of 5000000
- 37260 multiletter control sequences out of 15000+600000
- 551882 words of font info for 92 fonts, out of 8000000 for 9000
+ 17679 strings out of 476893
+ 280976 string characters out of 5807272
+ 1987785 words of memory out of 5000000
+ 38560 multiletter control sequences out of 15000+600000
+ 597664 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,10n,90p,721b,629s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (18 pages, 175839 bytes).
+ 90i,12n,93p,721b,629s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on GMD-Thompson-et-al.pdf (23 pages, 210650 bytes).
 PDF statistics:
- 316 PDF objects out of 1000 (max. 8388607)
- 267 compressed objects within 3 object streams
- 94 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 383 PDF objects out of 1000 (max. 8388607)
+ 324 compressed objects within 4 object streams
+ 108 named destinations out of 1000 (max. 500000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

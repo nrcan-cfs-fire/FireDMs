@@ -96,7 +96,10 @@ Budget Model (GCBM)}
 
 \Author[1]{Dan K.}{Thompson}
 \Author[2]{Ellen}{Whitman}
-\Author[3]{PFC Carbon Team (exactly who TBD)}{Copernicus}
+\Author[3]{Ben}{Hudson}
+\Author[1]{Chelene}{Hanes}
+\Author[3]{Vinicius}{Manvailer Goncalves}
+\Author[3]{Werner}{Kurz}
 
 
 \affil[1]{Natural Resources Canada, Canadian Forest Service, Great Lakes
@@ -158,52 +161,75 @@ distributed under the Creative Commons Attribution 4.0 License.}
 
 \section{Introduction}
 
-\begin{itemize}
-\item
-  general introduction on forest carbon accounting in Canada (1
-  paragraph)
-\item
-  then talk about how fire in many years is the largest disturbance by
-  area, and that current estimates broadly assume full severity when
-  mapped by NBAC. But, we know that \textless100\% of burned area is
-  high severity from Ellen's work and others.
-\item
-  current use of RU and average (or random draw) from table/list when
-  used to determine C impacts of disturbance doesn't reflect the fact
-  that fire's burn preferrentially in the boreal in older conifer stands
-  \citep{bernier2016}.
-\item
-  Similarly, we also know that average severity is lower but also more
-  variables in forest ecosystems like xeric boreal pines, as compared to
-  higher and less variable severity in poorly drained spruce forests
-\item
-  to support recent advances in operational burn severity mapping for
-  Canada \citep{whitman2020} alongside multi-decade reliable burned area
-  records that provide certainty on fire start and end dates
-  \citep{hall2020} , the CBM DMs also need to be upgraded.
-\item
-  something about dynamic veg models like landis and how they represent
-  fire disturbance -then how most MRV models and quickly how they do
-  fire disturbance -even a bit on the GFED/GFAS world too
-\end{itemize}
+general introduction on forest carbon accounting in Canada (1-2
+paragraphs) and the concept of fire severity overall, and how these two
+relate. Managed vs unmanaged forest natural disturbance accounting in
+Canada, explain that part.
+
+Wildfire is on par with insects as the largest stand-replacing
+disturbance process in Canada's forest, impacting \textasciitilde1-3 Mha
+of Canada's 355 Mha forested area in a typical year \citep{hanes2019}.
+In Canada's reliable 40-year burned area record, six years have exceeded
+4 Mha of burned area, largely in continental boreal and dry temperate
+forests west of the Great Lakes. Of this, managed forest accounts for
+xxx\% of the area burned between 1980 and 2022; publicly-owned forest
+under long-term licence to private timber companies forms the vast
+majority of Canada's managed forest \citep{stinson2019}, allowing for
+simplified and harmonized forest inventory and carbon modelling across
+jurisdictions (ref??). Burned area is dominated by a relatively small
+number of very large fires, with 3\% of fires constituting 97\% of the
+burned area \citep{stocks2002}. Lightning-caused fires account for
+approximately half of all ignitions and between xxx and xxxx\% of burned
+area, but no distinction is made between human and lightning ignition
+for carbon accounting purposes. Annual burned area mapping at 30 metre
+resolution is conducted using a composite of satellite and aerial
+mapping; the relatively small number of large fires, and their slow
+vegetation regeneration \citep{white2017} allows for reliable mapping
+using multispectral imagery such as Landsat within the year of the fire
+\citep{whitman2018}.
+
+In CBM-CFS, spatially referenced stand lists representing large
+homogenous stands that fall within spatial units (ecozone-provincial
+intersections) are randomly (??) drawn, even when applying precisely
+mapped burned areas. In Canada's forests, a combination of disturbance
+history (), soils, and less frequently topographic variables determine
+leading tree species; at local scales (1-100 ha), tree species plays a
+major role in determining ecosystem susceptibility to fire
+\citep{bernier2016} where older, conifer-dominated forests burn at very
+high rates relative to adjacent deciduous or mixed stands. Even when
+deciduous and mixed forests do burn, they do so at consistently lower
+severity compared to all but the most xeric conifer forests
+\citep{whitman2018}. Currently, biomass consumption estimates are based
+on observed fire weather (and modelled using the Canadian Fire Behaviour
+Prediction Systems) at the time of satellite fire activity detection,
+but applied only at this spatially-referenced aggregated scale. Thus,
+important biases in fire activity towards older and moderate to
+poorly-drained forests are not resolved, and only a regionally-averaged
+fire severity is applied.
+
+To support recent advances in operational burn severity mapping for
+Canada \citep{whitman2020} alongside multi-decade reliable burned area
+records that provide certainty on fire start and end dates
+\citep{hall2020} , the CBM DMs also need to be upgraded.
+
+something about dynamic veg models like landis and how they represent
+fire disturbance -then how most MRV models and quickly how they do fire
+disturbance -even a bit on the GFED/GFAS world too
 
 that ESSD frames it well, worth reading the intro part in detail)
 (recent Smyth and Campbell papers too) (other recent Canadian
 fire-carbon things, Walker - esp is supports consistent patterns in
 proportional carbon loss)
 
-\begin{itemize}
-\item
-  In this document, we outline the evidence-based fire DMs proposed.
-\item
-  From a blend of aggregated field data linked to remotely sensed
-  severity, as well as insights from fire physics and experimental
-  fires.
-\item
-  Key knowledge gaps are also highlighted, with interim solutions
-  presented until further quantification can be done in field studies
-  (could be wildfire, experimental fires, or prescribed fires).
-\end{itemize}
+In this document, we outline the evidence-based fire Disturbance
+Matrices updated and designed for a spatially-explicit update to the
+CBM, anchored in a three severity class paradigm. These fire carbon flux
+models are built from a blend of aggregated field data linked to
+remotely sensed severity, as well as insights from fire physics and
+experimental fires. Key knowledge gaps are also highlighted, with
+interim solutions presented until further quantification can be done in
+field studies, such as from further wildfire observations, experimental
+fires, or prescribed fires.
 
 \section{Methods}
 
@@ -267,23 +293,35 @@ defined in a global variables table:
 
 \begin{table}
 
-\caption{\label{tab:globalVarsEmissions}Emissions ratios in flaming and smouldering phase, updated to reflect values used in Canada's operational wildfire smoke emissions model, CFFEPS-Firework}
+\caption{\label{tab:globalVarsEmissions}Emissions factors in flaming and smouldering phase, expressed as portion of unburned biomass carbon content}
 \centering
-\begin{tabular}[t]{r|r|r|r|r|r}
+\begin{tabular}[t]{l|r|r}
 \hline
-FlamingCO2 & FlamingCH4 & FlamingCO & SmoulderingCO2 & SmoulderingCH4 & SmoulderingCO\\
+Spp & Flaming & Smouldering\\
 \hline
-0.926 & 0.004 & 0.07 & 0.827 & 0.013 & 0.16\\
+CO2 & 0.868 & 0.703\\
+\hline
+CO & 0.070 & 0.161\\
+\hline
+PM10 & 0.022 & 0.048\\
+\hline
+NMOG & 0.016 & 0.035\\
+\hline
+PM25 & 0.019 & 0.040\\
+\hline
+CH4 & 0.005 & 0.013\\
+\hline
+BC & 0.000 & 0.000\\
 \hline
 \end{tabular}
 \end{table}
 
-where CO\textsubscript{2} is responsible for 92.6\% of emissions in the
-flaming phase, but only 82.7\% of emissions in the smouldering phase,
+where CO\textsubscript{2} is responsible for 86.8\% of emissions in the
+flaming phase, but only 70.3\% of emissions in the smouldering phase,
 with a doubling of CO emissions and tripling of CH\textsubscript{4}
 emissions. With a Global Warming Potential of CO equal to 1.9 and
 CH\textsubscript{4} of 25, the Global Warming Potential per unit of
-biomass consumption in the smouldering phase is 1.26 times higher in
+biomass consumption in the smouldering phase is 1.18 times higher in
 global warming potential compared to flaming, not including differential
 aerosol production and injection heights, however. Note that these
 proposed emissions factors for flaming vs smouldering are aligned with
@@ -299,7 +337,7 @@ wildfires only represent approximately 95\% of the fire carbon mass
 emitted to the atmosphere, with 0.5-2.0\% of biomass emitted as
 particulate matter (e.g.~PM2.5, but also PM1 and PM10 classes of
 particulates at 1 and 10 um diameters, respectively), and an additional
-5\% \citep{hayden2022} to as little as 1\% \citep{simon2010} composed of
+3\% \citep{hayden2022} to as little as 1\% \citep{simon2010} composed of
 non-methane organic gases that have a large range in global warming
 potentials as compared to CH\textsubscript{4}.
 
@@ -320,33 +358,33 @@ fractional consumption also informs and constrains duff consumption.
 \hline
 Ecozone & Low & Mod & High\\
 \hline
-AM & 0.14 & 0.06 & 0.02\\
+BSW & 0.20 & 0.08 & 0.05\\
 \hline
-BC & 0.14 & 0.06 & 0.02\\
+TP & 0.14 & 0.16 & 0.03\\
+\hline
+TSW & 0.20 & 0.08 & 0.05\\
 \hline
 BP & 0.14 & 0.06 & 0.02\\
 \hline
+BC & 0.14 & 0.06 & 0.02\\
+\hline
 BSE & 0.20 & 0.08 & 0.05\\
 \hline
-BSW & 0.20 & 0.08 & 0.05\\
+TSE & 0.20 & 0.08 & 0.05\\
+\hline
+MC & 0.14 & 0.06 & 0.02\\
 \hline
 HP & 0.20 & 0.08 & 0.05\\
 \hline
-MC & 0.14 & 0.06 & 0.02\\
+TC & 0.14 & 0.06 & 0.02\\
+\hline
+PM & 0.14 & 0.06 & 0.02\\
+\hline
+AM & 0.14 & 0.06 & 0.02\\
 \hline
 MP & 0.14 & 0.06 & 0.02\\
 \hline
 P & 0.14 & 0.06 & 0.02\\
-\hline
-PM & 0.14 & 0.06 & 0.02\\
-\hline
-TC & 0.14 & 0.06 & 0.02\\
-\hline
-TP & 0.14 & 0.16 & 0.03\\
-\hline
-TSE & 0.20 & 0.08 & 0.05\\
-\hline
-TSW & 0.20 & 0.08 & 0.05\\
 \hline
 \end{tabular}
 \end{table}
@@ -357,30 +395,46 @@ While consumption of fine fuels in the litter layer of the forest floor
 is nearly complete for any given fire intensity, consumption of deeper
 organic soil horizons (F+H layers in upland forests and upper peat
 layers in wetlands) is more drought dependent. In this scheme, we
-utilize the Forest Floor Fuel Consumption (FFFC) model of
-\citep{degroot2009}, modified to only account for fuel horizons below
-the litter layer:
+utilize the Forest Floor Fuel Consumption (FFFC) model and data of
+\citep{degroot2009}, modified to compute the relative amount of
+consumption (scalar from 0 to 1) rather than an absolute value in
+\unit{0.2\,kg\,m^{-2}}:
 
 \begin{equation}
-FFFC = 0.016872 DC^{0.71}(FFFL-LL)^{0.671}-LL
+logit \left( \frac{FFFC}{FFFL}\right) = DC^{0.33}(FFFL)^{-0.17}-4.85
 \end{equation}
 
-where DC is the Fire Weather Index Drought Code and FFFL is the Forest
+where DC is the Fire Weather Index Drought Code, and FFFL is the Forest
 Floor Fuel Load (with ecozone averages given in \citep{letang2012} or
-site-level data). LL is the Litter Load, and is typically on the order
-of \unit{0.2\,kg\,m^{-2}} for most boreal forest upland and peatland
-sites \citep{thompson2017}. This distinction is necessary due to the
-flaming phase consumption of the litter layer as opposed to the
-smouldering phase consumption of deeper horizons (see previous section).
-While ultimately this scheme can be used on individual fires with
-estimated or measured fuel loading and specific Drought Code values, for
-the purposes of this first assessment, an ecozone-averaged fuel load and
-decadal composites of Drought Code is used to provide representative
-values. Specifically, a median Drought Code of detected fire hotspots in
-Canada from 2003-2021 using the same data as the Canadian
-CFEEPS-FireWork wildfire air quality model of \citep{chen2019} is
-presented below, along with proportional consumption values of the
-forest floor by ecozone:
+site-level data where observed). While ultimately this scheme can be
+used on individual fires with estimated or measured fuel loading and
+specific Drought Code values, for the purposes of this first assessment,
+an ecozone-averaged fuel load and decadal composites of Drought Code is
+used to provide representative values. Specifically, a median Drought
+Code of detected fire hotspots in Canada from 2003-2021 using the same
+data as the Canadian CFEEPS-FireWork wildfire air quality model of
+\citep{chen2019} is presented below, along with proportional consumption
+values of the forest floor by ecozone:
+
+\begin{verbatim}
+## 
+## Formula: Frac_load_consump_logit ~ (DC^a) * (Load^b) + c
+## 
+## Parameters:
+##   Estimate Std. Error t value Pr(>|t|)    
+## a  0.33784    0.02604  12.973  < 2e-16 ***
+## b -0.17173    0.03531  -4.863 3.40e-06 ***
+## c -4.85302    0.65364  -7.425 1.53e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.609 on 125 degrees of freedom
+## 
+## Number of iterations to convergence: 9 
+## Achieved convergence tolerance: 2.507e-06
+\end{verbatim}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf}
 
 \begin{table}
 
@@ -388,46 +442,108 @@ forest floor by ecozone:
 \centering
 \begin{tabular}[t]{l|l|l|l|l}
 \hline
-Ecozone & Median.DC.of.burning & Median.Duff.Load.kg.m2 & Duff.consump.kg.m2 & Duff.consump.frac\\
+Ecozone & Median Drought Code of Burning & Median FFFL kg m-2 & FFFC kg m-2 & \% consumption\\
 \hline
-AM & 270 & 10.65 & 4.14 & 0.4\\
+BSW & 239 & 8.8 & 3.12 & 0.35\\
 \hline
-TP & 369 & 14.75 & 6.57 & 0.45\\
+TP & 369 & 15 & 6.11 & 0.41\\
 \hline
-TSW & 297 & 1.45 & 0.98 & 0.82\\
+TSW & 297 & 1.7 & 1.3 & 0.76\\
 \hline
-BSW & 239 & 8.55 & 3.23 & 0.39\\
+BP & 242 & 9.8 & 3.34 & 0.34\\
 \hline
-BP & 242 & 9.55 & 3.53 & 0.38\\
+BC & 250 & 8.31 & 3.15 & 0.38\\
 \hline
-P & 242 & 9.55 & 3.53 & 0.38\\
+BSE & 123 & 10.9 & 1.91 & 0.18\\
 \hline
-TC & 254 & 8.06 & 3.24 & 0.41\\
+TSE & 98 & 1.7 & 0.58 & 0.34\\
 \hline
-BC & 250 & 8.06 & 3.2 & 0.41\\
+MC & 452 & 6 & 4.06 & 0.68\\
 \hline
-PM & 268 & 14.95 & 5.24 & 0.36\\
+HP & 204 & 7.9 & 2.55 & 0.32\\
 \hline
-MC & 452 & 5.75 & 3.94 & 0.72\\
+TC & 254 & 8.31 & 3.19 & 0.38\\
 \hline
-HP & 204 & 7.65 & 2.63 & 0.36\\
+PM & 268 & 15.2 & 4.63 & 0.3\\
 \hline
-TSE & 98 & 1.45 & 0.31 & 0.26\\
+AM & 270 & 10.9 & 3.9 & 0.36\\
 \hline
-BSE & 123 & 10.65 & 2.26 & 0.22\\
+P & 242 & 9.8 & 3.34 & 0.34\\
 \hline
 \end{tabular}
 \end{table}
+
+Note that the maximum upland Forest Floor Fuel Load is approximately 30
+kg m-2 \citep{letang2012}; higher values are typically seen only in peat
+ecosystems, where the above Forest Floor Fuel Consumption scheme does
+not apply. For Canadian peatlands, the CaMP model \citep{bona2020} is
+instead used in CBM. Within CaMP, a separate peatland water model driven
+by Drought Code determines the thickness of the unsaturated peat layer,
+and an amount approximating 12\% of the thickness of the unsaturated
+peat is consumed as smouldering consumption. The peat-specific carbon
+pools and fire Disturbance Matrices are fully described in
+\citep{bona2020}; large peatland trees will still utilize the DM scheme
+described below.
 
 Little data is available on the fraction of woody debris consumption
 alongside fire severity measurements. Coarse woody debris of overstory
 stems that makes up 60-80\% of woody debris biomass in Canada's boreal
 and temperate forests \citep{hanes2021}, with its moisture and
 consumption patterns largely follows the moisture regime of the Drought
-Code \citep{mcalpine1995}. As a result, in this modelling framework, the
-proportion of woody debris consumption (!!give diameter range of Med
-DOM) is assumed proportional to that of the duff consumption given in
-the equation above.
+Code \citep{mcalpine1995}. In this modelling framework, the proportion
+of coarse (\textgreater7.5 cm diameter) and medium (\textgreater0.5 cm
+and \textless7.5 cm) woody debris consumption is estimated based on
+detailed measurements of consumption from experimental fires. Coarse
+Woody Debris is responsible for approximately 50-75\% of the total woody
+debris load in most ecozones, and approximately 60\% of the total woody
+debris consumption. Ecozone-level CWD consumption rates are summarized
+as:
+
+\begin{table}
+
+\caption{\label{tab:CWDByEcozone}Coarse Woody debris consumption rates from pre/post measurements in experimental fires}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Ecozone & Low & Mod & High\\
+\hline
+BSW & 0.024 & 0.163 & 0.140\\
+\hline
+TP & 0.000 & 0.218 & 0.238\\
+\hline
+TSW & 0.000 & 0.218 & 0.238\\
+\hline
+BP & 0.359 & 0.509 & 0.412\\
+\hline
+BC & 0.024 & 0.163 & 0.140\\
+\hline
+BSE & 0.080 & 0.131 & 0.182\\
+\hline
+TSE & 0.080 & 0.131 & 0.182\\
+\hline
+MC & 0.024 & 0.163 & 0.140\\
+\hline
+HP & 0.080 & 0.131 & 0.182\\
+\hline
+TC & 0.024 & 0.163 & 0.140\\
+\hline
+PM & 0.024 & 0.163 & 0.140\\
+\hline
+AM & 0.080 & 0.131 & 0.182\\
+\hline
+MP & 0.080 & 0.131 & 0.182\\
+\hline
+P & 0.359 & 0.509 & 0.412\\
+\hline
+\end{tabular}
+\end{table}
+
+Note that where historical burn severity data is not available, and
+instead the fire classification type of surface, intermittent crowning,
+and active crown fire are used as proxies for low, moderate, and high
+severity fire, respectively. Fine woody debris \textless0.5 cm in
+diameter is consumed at the exact same rate as the litter pool (see
+section above).
 
 \subsection{Drivers of C losses in the tree canopy}
 
@@ -451,33 +567,33 @@ satellite-observed fire severity using aggregated ground plot data:
 \hline
 Ecozone & Low & Mod & High\\
 \hline
-AM & 0.28 & 0.34 & 0.95\\
+BSW & 0.45 & 0.81 & 1.00\\
 \hline
-BC & 0.24 & 0.65 & 0.98\\
+TP & 0.45 & 0.81 & 1.00\\
+\hline
+TSW & 0.10 & 0.81 & 1.00\\
 \hline
 BP & 0.45 & 0.81 & 1.00\\
 \hline
+BC & 0.24 & 0.65 & 0.98\\
+\hline
 BSE & 0.45 & 0.81 & 1.00\\
 \hline
-BSW & 0.45 & 0.81 & 1.00\\
+TSE & 0.10 & 0.81 & 1.00\\
+\hline
+MC & 0.28 & 0.74 & 0.98\\
 \hline
 HP & 0.45 & 0.81 & 1.00\\
 \hline
-MC & 0.28 & 0.74 & 0.98\\
+TC & 0.24 & 0.65 & 0.98\\
+\hline
+PM & 0.13 & 0.38 & 0.97\\
+\hline
+AM & 0.28 & 0.34 & 0.95\\
 \hline
 MP & 0.28 & 0.34 & 0.95\\
 \hline
 P & 0.45 & 0.81 & 1.00\\
-\hline
-PM & 0.13 & 0.38 & 0.97\\
-\hline
-TC & 0.24 & 0.65 & 0.98\\
-\hline
-TP & 0.45 & 0.81 & 1.00\\
-\hline
-TSE & 0.10 & 0.81 & 1.00\\
-\hline
-TSW & 0.10 & 0.81 & 1.00\\
 \hline
 \end{tabular}
 \end{table}
@@ -489,9 +605,9 @@ the field data and disturbance modelling undertaken here only accounts
 for tree mortality within the calender year of the fire, and delayed
 mortality of over one year has been documented in boreal low and
 moderate severity fires \citep{angers2011}where less than half of total
-mortality occurs after the year of the fire. The modelling here does not
-account for delayed mortality, but rather than routine is a function of
-the larger mortality schemes in GCBM.
+mortality occurs after the year of the fire. Thus, the modelling here
+does not account for delayed mortality that may extend upwards of 5
+years after fire.
 
 Crown Fraction Burned (CFB) speaks to the fraction of the live canopy
 that is itself consumed in the flaming front. The alternate outcomes
@@ -501,8 +617,8 @@ floor. From the axioms stated earlier, the CFB must be lower than or
 equal to the mortality rate, using field studies that show any partial
 crown consumption is likely sufficient to result in high rates if not
 complete mortality \citep{hood2017}, which is the case in Canada's trees
-with primarily thin bark. From field studies (!Ellen to provide details
-here\ldots.) , the following ecozone-specific CFB values are found:
+with primarily thin bark. From field studies, the following
+ecozone-specific CFB values are found:
 
 \begin{table}
 
@@ -512,33 +628,33 @@ here\ldots.) , the following ecozone-specific CFB values are found:
 \hline
 Ecozone & Low & Mod & High\\
 \hline
-AM & 0.0 & 0.34 & 0.95\\
+BSW & 0.0 & 0.81 & 1.00\\
 \hline
-BC & 0.0 & 0.65 & 0.98\\
+TP & 0.0 & 0.81 & 1.00\\
+\hline
+TSW & 0.1 & 0.81 & 1.00\\
 \hline
 BP & 0.0 & 0.81 & 1.00\\
 \hline
+BC & 0.0 & 0.65 & 0.98\\
+\hline
 BSE & 0.0 & 0.81 & 1.00\\
 \hline
-BSW & 0.0 & 0.81 & 1.00\\
+TSE & 0.1 & 0.81 & 1.00\\
+\hline
+MC & 0.0 & 0.74 & 1.00\\
 \hline
 HP & 0.0 & 0.81 & 1.00\\
 \hline
-MC & 0.0 & 0.74 & 1.00\\
+TC & 0.0 & 0.65 & 1.00\\
+\hline
+PM & 0.0 & 0.38 & 0.97\\
+\hline
+AM & 0.0 & 0.34 & 0.95\\
 \hline
 MP & 0.0 & 0.34 & 0.95\\
 \hline
 P & 0.0 & 0.81 & 1.00\\
-\hline
-PM & 0.0 & 0.38 & 0.97\\
-\hline
-TC & 0.0 & 0.65 & 1.00\\
-\hline
-TP & 0.0 & 0.81 & 1.00\\
-\hline
-TSE & 0.1 & 0.81 & 1.00\\
-\hline
-TSW & 0.1 & 0.81 & 1.00\\
 \hline
 \end{tabular}
 \end{table}
@@ -548,23 +664,66 @@ consumption rates can be defined by severity class. At the moment,
 lacking robust field data on bark biomass consumption rates across
 ecozones and severity classes (which are a small portion of the overall
 biomass), the bark proportional consumption rate is set to 34\% of the
-overstory mortality rate, based only on a single well-observed high
-severity fire in Taiga Plains by Santin 2015.
+overstory mortality rate, based only on a single set well-observed high
+severity fires in the Taiga Plains by {[}santín2015{]}.
 
 A major distinction is made between softwood and hardwood trees, where
-in Canada's boreal forests, a large fraction of hardwood trees
-(specifically of the genii Populous and Betula) are able to resprout
-even when the main stem has been killed by an intense forest fire
-\citep{brown1987}. Accordingly, the root mortality rates differ greatly
-between softwoods and hardwoods, with softwood root mortality largely
-equal to stem mortality, while in resprouting hardwoods, little root
-mortality is observed even after intense fire
-\citep{pérez-izquierdo2019}. Concurrently, the fraction of fine roots
-contained within the combustible forest floor layers can be a close to
-or exceeding 50\% of the fine root biomass \citep{strong1985}, and burns
-alongside the organic soils \citep{benscoter2011}. As a result, the
-cgculation for softwood fine root consumption and mortality are as
-follows, using Softwood as an example:
+in Canada's boreal forests, a large fraction of hardwood trees (see
+Appendix E) are able to resprout even when the main stem has been killed
+by an intense forest fire \citep{brown1987}. Accordingly, the root
+mortality rates differ greatly between softwoods and hardwoods, with
+softwood root mortality equal precisely to stem mortality, while in
+resprouting hardwoods, little root mortality is observed even after
+intense fire \citep{pérez-izquierdo2019}. Though GCBM can resolve a
+species list down to the pixel level, currently an ecozone-level
+regional average composition of hardwood species with resprouting traits
+is used and is shown below:
+
+\begin{table}
+
+\caption{\label{tab:ReSproutByEcozone}Ecozone-level average fraction of hardwood overstory species that do not suffer extensive belowgroud biomass mortality after fire}
+\centering
+\begin{tabular}[t]{l|r}
+\hline
+Ecozone & Resprout Fraction\\
+\hline
+BSW & 0.75\\
+\hline
+TP & 0.75\\
+\hline
+TSW & 0.94\\
+\hline
+BP & 0.99\\
+\hline
+BC & 0.76\\
+\hline
+BSE & 0.67\\
+\hline
+TSE & 0.78\\
+\hline
+MC & 0.97\\
+\hline
+HP & 0.80\\
+\hline
+TC & 0.27\\
+\hline
+PM & 0.39\\
+\hline
+AM & 0.76\\
+\hline
+MP & 0.32\\
+\hline
+P & 0.99\\
+\hline
+\end{tabular}
+\end{table}
+
+Concurrently, the fraction of fine roots contained within the
+combustible forest floor layers can be a close to or exceeding 50\% of
+the fine root biomass \citep{strong1985}, and burns alongside the
+organic soils \citep{benscoter2011}. As a result, the calulation for
+softwood fine root consumption and mortality are as follows, using
+Softwood as an example:
 
 \begin{equation}
 SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
@@ -606,17 +765,55 @@ filled with data
 
 \section{Results and example applications}
 
+\begin{landscape}\begin{table}[!h]
+
+\caption{\label{tab:makeTables}High severity Disturbance Matrix in BP}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}}
+\hline
+  & Softwood Merchantable & Softwood Stem Snag & Medium DOM
+ & Softwood Foliage & Aboveground Very Fast DOM & CO2 & CH4 & CO & PM25\\
+\hline
+Softwood Merchantable & 0 & 1 &  &  &  &  &  &  & \\
+\hline
+Softwood Stem Snag &  & 0 & 0.90000 &  &  & 0.0868000 & 0.0005000 & 0.0070000 & 0.0019000\\
+\hline
+Medium DOM &  &  & 0.57624 &  &  & 0.2979033 & 0.0055089 & 0.0682254 & 0.0169504\\
+\hline
+Softwood Foliage &  &  &  & 0 & 0.00 & 0.8680000 & 0.0050000 & 0.0700000 & 0.0190000\\
+\hline
+Aboveground Very Fast DOM &  &  &  &  & 0.02 & 0.8506400 & 0.0049000 & 0.0686000 & 0.0186200\\
+\hline
+CO2 &  &  &  &  &  &  &  &  & \\
+\hline
+CH4 &  &  &  &  &  &  &  &  & \\
+\hline
+CO &  &  &  &  &  &  &  &  & \\
+\hline
+PM25 &  &  &  &  &  &  &  &  & \\
+\hline
+\end{tabular}}
+\end{table}
+\end{landscape}
+
 \subsection{Field case studies (for consideration)}
 
 \begin{verbatim}
-### table with rows are CBM pools, columns are obs and
-### modelled exp fires
+### table with rows are CBM pools, columns (paird) are obs
+### and modelled exp fires
+
+### fires that would work:
+
+### ICFME (SW TP High); Sharpsands 2007 (SW BSE High),
+### Lafoe (HW BSE Low), CWS C-7 burns (SW MC Mod), Carrot
+### lake (SW MC High)
 
 ### variables specifically measured during an experimental
 ### fire, in the verbiage of the fire DMs:
 exp.fire.table.defs <- c("SW.CFB", "HW.CFB", "SW.Mort", "HW.Mort",
     "SW.SubMerch.Mort", "HW.SubMerch.Mort", "SmTree.Mort", "SW.Snag.Comb.Frac",
-    "HW.Snag.Comb.Frac", "MedDOM.Comb.Frac")
+    "HW.Snag.Comb.Frac", "MedDOM.Comb.Frac", "Duff.consump.frac")
 
 ## then, take the list above, and look up the same row but
 ## the column 'Plain.Language.Name' in FireDMTableDefs.csv:
@@ -654,6 +851,10 @@ fire?
 
 Compare each pool's observed vs modelled relative consumption rates
 using (ideally) dNBR to drive severity class from the real data.
+
+Use exactly the FBP DataFrame, no need for anything duplicating that
+otherwise. Am going to compute proportional combustion from the FBP Data
+frame anyways.
 
 \subsection{1990-2020(1) GCBM BC annual C stocks estimates with new fire
 DM scheme}
@@ -931,6 +1132,108 @@ Black Carbon & CH4 & Black carbon combustion fraction\\
 \hline
 Black Carbon & CO & Black carbon combustion fraction\\
 \hline
+Softwood Foliage & PM25 & Crown Fraction Burned\\
+\hline
+Softwood Other & PM25 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & PM25 & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & PM25 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & PM25 & Crown Fraction Burned\\
+\hline
+Hardwood Other & PM25 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & PM25 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & PM25 & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & PM25 & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & PM25 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & PM25 & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & PM25 & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & PM25 & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & PM25 & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & PM25 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & PM25 & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & PM25 & Black carbon combustion fraction\\
+\hline
+Softwood Foliage & PM10 & Crown Fraction Burned\\
+\hline
+Softwood Other & PM10 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & PM10 & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & PM10 & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & PM10 & Crown Fraction Burned\\
+\hline
+Hardwood Other & PM10 & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & PM10 & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & PM10 & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & PM10 & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & PM10 & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & PM10 & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & PM10 & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & PM10 & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & PM10 & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & PM10 & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & PM10 & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & PM10 & Black carbon combustion fraction\\
+\hline
+Softwood Foliage & NMOG & Crown Fraction Burned\\
+\hline
+Softwood Other & NMOG & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Softwood Submerchantable & NMOG & Understory Conifer consumption rate\\
+\hline
+Softwood Fine Roots & NMOG & Fine roots combusted alongside duff\\
+\hline
+Hardwood Foliage & NMOG & Crown Fraction Burned\\
+\hline
+Hardwood Other & NMOG & Proportional Combustion sum of branches, stumps, small trees and bark\\
+\hline
+Hardwood Submerchantable & NMOG & Understory Broadleaf consumption rate\\
+\hline
+Hardwood Fine Roots & NMOG & Fine roots combusted alongside duff\\
+\hline
+Aboveground Very Fast DOM & NMOG & Combusted fraction of litter layer\\
+\hline
+Aboveground Fast DOM & NMOG & Combusted FWD+MWD fraction (dead course roots accounted for in AG Slow DOM)\\
+\hline
+Medium DOM & NMOG & Combusted fraction of CWD\\
+\hline
+Aboveground Slow DOM & NMOG & Combusted Fraction of duff and peat horizons\\
+\hline
+Softwood Stem Snag & NMOG & Combusted fraction of conifer snags\\
+\hline
+Softwood Branch Snag & NMOG & Portion of conifer branch snags that are combusted\\
+\hline
+Hardwood Stem Snag & NMOG & Combusted fraction of deciduous snags\\
+\hline
+Hardwood Branch Snag & NMOG & Combusted fraction of deciduous snag branches\\
+\hline
+Black Carbon & NMOG & Black carbon combustion fraction\\
+\hline
 \end{tabular}}
 \end{table}
 
@@ -999,21 +1302,21 @@ Burned.
 \caption{\label{tab:SinkSourceExample}Sample of disturbance matrix data file}
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}[t]{l|r|l|l|l|l|l|l|r|l}
+\begin{tabular}[t]{l|r|l|l|l|l|r|l|l|l|r|l}
 \hline
-Ecozone & FluxID & Source & Sink & ProcessSynonym & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
+Ecozone & FluxID & Source & Sink & ProcessSynonym & Phase & CORefFluxID & Pseudocode & Notes & SeverityClass & Value & InterimValue\\
 \hline
-AM & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+TP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 0.9 & TRUE\\
+TSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 0.9 & TRUE\\
 \hline
-BSW & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-BP & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BC & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
-P & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
+BSE & 1 & Softwood Merchantable & Softwood Merchantable & Survival rate of large conifers &  &  & 1-mortality rate & Ellen provides & Low & 1.0 & TRUE\\
 \hline
 \end{tabular}}
 \end{table}
@@ -1038,7 +1341,17 @@ consumption; (3) mortality but not consumption of understory trees with
 live overstory; (4) mortality but not consumption of overstory trees;
 (5) mixedwood severity example showing consumption of broadleaf foliage;
 (6) woody debris consumption; (7) snag preferential consumption relative
-to little to no bole consumpotion in live trees
+to little to no bole consumption in live trees
+
+Give lat/long, year, ecozone, severity class, and leading spp for each
+photo, maybe other relevant metrics? From some of the experimental fires
+mostly??
+
+\section{Appendix E: List of Resprouting Hardwoods of Canada}
+
+Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus
+ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre.
+Populus tri. Quercus spp. Salix spp.
 
 
 
@@ -1083,7 +1396,7 @@ figure. Further guidelines on figures and tables can be found below.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \authorcontribution{Thompson and Whitman contributed to the concept and
-code design with the assistance of Hanes.} %% optional section
+code design with the assistance of Hanes, Hudson} %% optional section
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \competinginterests{The authors declare no competing

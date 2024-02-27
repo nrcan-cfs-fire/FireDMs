@@ -2224,7 +2224,9 @@ The conclusion goes here.
 
 # Appendix A: list of fluxes and corresponding fire-related plain-language summary.
 
-```{r SinkSourceGenericAppendix,  echo=FALSE, message=FALSE, warning=FALSE }
+```{r SinkSourceGenericAppendix, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+###note 2024-02-27 not working at the moment, error "Error in sub(re, "", x, perl = TRUE) : input string 366 is invalid UTF-8" will fix later
 
 kbl(SourceSinkGeneric[SourceSinkGeneric$SeverityClass == 'Low',3:5],row.names = FALSE) %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%

@@ -38,21 +38,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Low,,TRUE
 ,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,Mod,,TRUE
 ,13,Softwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(softwood other)-(softwood other:other)-(softwood other:softwood other snag)*FlamingCO,,High,,TRUE
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,,,1-(global mortality of submerch conifers in severity class),,Low,,TRUE
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,,,1-(global mortality of submerch conifers in severity class),,Mod,,TRUE
-,14,Softwood Submerchantable,Softwood Submerchantable,Understory conifer survival rate,,,1-(global mortality of submerch conifers in severity class),,High,,TRUE
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,,,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Low,,TRUE
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,,,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,Mod,,TRUE
-,15,Softwood Submerchantable,Softwood Branch Snag,Understory conifer branches killed but not consumed,,,0,all gets combusted; submerch trees don't have sufficiently large branches to survive IF killed,High,,TRUE
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,,TRUE
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,,TRUE
-,16,Softwood Submerchantable,CO2,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,,TRUE
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,,TRUE
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,,TRUE
-,17,Softwood Submerchantable,CH4,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,,TRUE
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,,TRUE
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,,TRUE
-,18,Softwood Submerchantable,CO,Understory Conifer consumption rate,,,(softwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,,TRUE
 ,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,,,1-(conifer mortality rate),,Low,,TRUE
 ,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,,,1-(conifer mortality rate),,Mod,,TRUE
 ,19,Softwood Coarse Roots,Softwood Coarse Roots,Surviving coarse roots in conifers,,,1-(conifer mortality rate),,High,,TRUE
@@ -119,21 +104,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Low,,TRUE
 ,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,Mod,,TRUE
 ,40,Hardwood Other,CO,"Proportional Combustion sum of branches, stumps, small trees and bark",,,(hardwood other)-(hardwood other:other)-(hardwood other:hardwood other snag)*FlamingCO,,High,,TRUE
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,,,1-(global mortality of submerch conifers in severity class),,Low,,TRUE
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,,,1-(global mortality of submerch conifers in severity class),,Mod,,TRUE
-,41,Hardwood Submerchantable,Hardwood Submerchantable,Understory broadleaf survival rate,,,1-(global mortality of submerch conifers in severity class),,High,,TRUE
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,,,0,,Low,,TRUE
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,,,0,,Mod,,TRUE
-,42,Hardwood Submerchantable,Hardwood Branch Snag,Understory broadleaf mortality rate,,,0,,High,,TRUE
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Low,,TRUE
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,Mod,,TRUE
-,43,Hardwood Submerchantable,CO2,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO2,all but snag should be 100% consumption,High,,TRUE
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Low,,TRUE
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,Mod,,TRUE
-,44,Hardwood Submerchantable,CH4,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCH4,,High,,TRUE
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Low,,TRUE
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,Mod,,TRUE
-,45,Hardwood Submerchantable,CO,Understory Broadleaf consumption rate,,,(hardwood submerch branch fraction of total biomass) * (global mortality of submerch conifers in severity class)*FlamingCO,,High,,TRUE
 ,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,,,1-deciduous mortality rate,,Low,,TRUE
 ,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,,,1-deciduous mortality rate,,Mod,,TRUE
 ,46,Hardwood Coarse roots,Hardwood Coarse roots,Surviving deciduous coarse roots,,,1-deciduous mortality rate,,High,,TRUE
@@ -305,9 +275,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,102,Softwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Low,,FALSE
 ,102,Softwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Mod,,FALSE
 ,102,Softwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,High,,FALSE
-,103,Softwood Submerchantable,PM25,Understory Conifer consumption rate,Flaming,18,,,Low,,FALSE
-,103,Softwood Submerchantable,PM25,Understory Conifer consumption rate,Flaming,18,,,Mod,,FALSE
-,103,Softwood Submerchantable,PM25,Understory Conifer consumption rate,Flaming,18,,,High,,FALSE
 ,104,Softwood Fine Roots,PM25,Fine roots combusted alongside duff,Smouldering,27,,,Low,,FALSE
 ,104,Softwood Fine Roots,PM25,Fine roots combusted alongside duff,Smouldering,27,,,Mod,,FALSE
 ,104,Softwood Fine Roots,PM25,Fine roots combusted alongside duff,Smouldering,27,,,High,,FALSE
@@ -317,9 +284,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,106,Hardwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Low,,FALSE
 ,106,Hardwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Mod,,FALSE
 ,106,Hardwood Other,PM25,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,High,,FALSE
-,107,Hardwood Submerchantable,PM25,Understory Broadleaf consumption rate,Flaming,45,,,Low,,FALSE
-,107,Hardwood Submerchantable,PM25,Understory Broadleaf consumption rate,Flaming,45,,,Mod,,FALSE
-,107,Hardwood Submerchantable,PM25,Understory Broadleaf consumption rate,Flaming,45,,,High,,FALSE
 ,108,Hardwood Fine Roots,PM25,Fine roots combusted alongside duff,Flaming,54,,,Low,,FALSE
 ,108,Hardwood Fine Roots,PM25,Fine roots combusted alongside duff,Flaming,54,,,Mod,,FALSE
 ,108,Hardwood Fine Roots,PM25,Fine roots combusted alongside duff,Flaming,54,,,High,,FALSE
@@ -356,9 +320,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,119,Softwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Low,,FALSE
 ,119,Softwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Mod,,FALSE
 ,119,Softwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,High,,FALSE
-,120,Softwood Submerchantable,PM10,Understory Conifer consumption rate,Flaming,18,,,Low,,FALSE
-,120,Softwood Submerchantable,PM10,Understory Conifer consumption rate,Flaming,18,,,Mod,,FALSE
-,120,Softwood Submerchantable,PM10,Understory Conifer consumption rate,Flaming,18,,,High,,FALSE
 ,121,Softwood Fine Roots,PM10,Fine roots combusted alongside duff,Smouldering,27,,,Low,,FALSE
 ,121,Softwood Fine Roots,PM10,Fine roots combusted alongside duff,Smouldering,27,,,Mod,,FALSE
 ,121,Softwood Fine Roots,PM10,Fine roots combusted alongside duff,Smouldering,27,,,High,,FALSE
@@ -368,9 +329,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,123,Hardwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Low,,FALSE
 ,123,Hardwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Mod,,FALSE
 ,123,Hardwood Other,PM10,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,High,,FALSE
-,124,Hardwood Submerchantable,PM10,Understory Broadleaf consumption rate,Flaming,45,,,Low,,FALSE
-,124,Hardwood Submerchantable,PM10,Understory Broadleaf consumption rate,Flaming,45,,,Mod,,FALSE
-,124,Hardwood Submerchantable,PM10,Understory Broadleaf consumption rate,Flaming,45,,,High,,FALSE
 ,125,Hardwood Fine Roots,PM10,Fine roots combusted alongside duff,Flaming,54,,,Low,,FALSE
 ,125,Hardwood Fine Roots,PM10,Fine roots combusted alongside duff,Flaming,54,,,Mod,,FALSE
 ,125,Hardwood Fine Roots,PM10,Fine roots combusted alongside duff,Flaming,54,,,High,,FALSE
@@ -407,9 +365,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,136,Softwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Low,,FALSE
 ,136,Softwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,Mod,,FALSE
 ,136,Softwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,13,,,High,,FALSE
-,137,Softwood Submerchantable,NMOG,Understory Conifer consumption rate,Flaming,18,,,Low,,FALSE
-,137,Softwood Submerchantable,NMOG,Understory Conifer consumption rate,Flaming,18,,,Mod,,FALSE
-,137,Softwood Submerchantable,NMOG,Understory Conifer consumption rate,Flaming,18,,,High,,FALSE
 ,138,Softwood Fine Roots,NMOG,Fine roots combusted alongside duff,Smouldering,27,,,Low,,FALSE
 ,138,Softwood Fine Roots,NMOG,Fine roots combusted alongside duff,Smouldering,27,,,Mod,,FALSE
 ,138,Softwood Fine Roots,NMOG,Fine roots combusted alongside duff,Smouldering,27,,,High,,FALSE
@@ -419,9 +374,6 @@ Ecozone,FluxID,Source,Sink,ProcessSynonym,Phase,CORefFluxID,Pseudocode,Notes,Sev
 ,140,Hardwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Low,,FALSE
 ,140,Hardwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,Mod,,FALSE
 ,140,Hardwood Other,NMOG,"Proportional Combustion sum of branches, stumps, small trees and bark",Flaming,40,,,High,,FALSE
-,141,Hardwood Submerchantable,NMOG,Understory Broadleaf consumption rate,Flaming,45,,,Low,,FALSE
-,141,Hardwood Submerchantable,NMOG,Understory Broadleaf consumption rate,Flaming,45,,,Mod,,FALSE
-,141,Hardwood Submerchantable,NMOG,Understory Broadleaf consumption rate,Flaming,45,,,High,,FALSE
 ,142,Hardwood Fine Roots,NMOG,Fine roots combusted alongside duff,Flaming,54,,,Low,,FALSE
 ,142,Hardwood Fine Roots,NMOG,Fine roots combusted alongside duff,Flaming,54,,,Mod,,FALSE
 ,142,Hardwood Fine Roots,NMOG,Fine roots combusted alongside duff,Flaming,54,,,High,,FALSE

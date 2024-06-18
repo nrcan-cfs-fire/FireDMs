@@ -111,6 +111,7 @@ library(directlabels)
 library(ggrepel)
 library(gtools)
 library(rticles)
+library(mgcv)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 #original list
@@ -307,8 +308,14 @@ FFFC_Data <- cbind(FFFC_Data,nls.pred)
 
 ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point(aes(colour = factor(FuelType))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
 
+###try a quick GAM as an alternative to the nls above, similar structure
+FFFC.Frac.Consume.gam<-gam(Frac_load_consump_logit ~ s(BUI,k=4,bs="tp")+FuelType+FireType+s(Load,k=4,bs="tp"), data = FFFC_Data,method="REML",family=gaussian(link = "identity"), na.action=na.exclude)
+summary(FFFC.Frac.Consume.gam)
+plot.gam(FFFC.Frac.Consume.gam)
 
-
+##not an amazing model, but lower consumption in M2 and higher in C4 makes some sense, as does higher in wildfire by a fair margin
+##spline of BUI and fuel load makes sense, with fuel type and fire type in there too
+### will try again when we add the AB data and any others too (Pelican, a few others), ABOVE data?
 
 
 

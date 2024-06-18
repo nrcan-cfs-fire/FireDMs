@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.17)  17 JUN 2024 16:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.17)  18 JUN 2024 08:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -671,70 +671,90 @@ Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsum
 
 
 [6 <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf>]
+<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf, id=121, 469.755pt x 325.215pt>
+File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf Graphic file (type pdf)
+<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf>
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf  used on input line 472.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf, id=122, 469.755pt x 325.215pt>
+File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf Graphic file (type pdf)
+<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf>
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf  used on input line 473.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (447.79399pt too wide) in paragraph at lines 472--474
+[][] [] 
+ []
+
+
 
 [7]
 
-[8]
+[8 <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf> <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf>]
 
 [9]
-Overfull \hbox (309.00578pt too wide) detected at line 738
+
+[10]
+
+[11]
+Overfull \hbox (309.00578pt too wide) detected at line 774
 $\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
  []
 
 
 
-[10]
+[12]
 
-[11]
+[13]
 
-[12
+[14
 
 ]
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 842--842
+Overfull \hbox (12.38623pt too wide) in paragraph at lines 878--878
 []\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
  []
 
 
 
-[13
+[15
 
 ]
 
-[14]
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=210, 289.08pt x 216.81pt>
+[16]
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=230, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 934.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 970.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
 
 
-[15]
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=217, 289.08pt x 216.81pt>
+[17]
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=237, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 936.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 972.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=218, 289.08pt x 216.81pt>
+<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=238, 289.08pt x 216.81pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 938.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 974.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
 
 
-[16 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
+[18 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
 
-[17 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>]
+[19 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>]
 
-[18] (./GMD-Thompson-et-al.bbl
+[20] (./GMD-Thompson-et-al.bbl
 
-[19]
+[21]
 Underfull \hbox (badness 1142) in paragraph at lines 19--20
 []\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
  []
 
 
 
-[20]
+[22]
 Underfull \hbox (badness 1946) in paragraph at lines 61--62
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
@@ -751,25 +771,25 @@ Underfull \hbox (badness 1867) in paragraph at lines 76--77
 
 )
 
-[21] (./GMD-Thompson-et-al.aux)
+[23] (./GMD-Thompson-et-al.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 1
 L3 programming layer <2021/03/21>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17831 strings out of 475559
- 284559 string characters out of 5776091
+ 17847 strings out of 475559
+ 285585 string characters out of 5776091
  1950908 words of memory out of 5000000
- 40045 multiletter control sequences out of 15000+600000
+ 40059 multiletter control sequences out of 15000+600000
  597664 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,12n,93p,721b,634s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,93p,721b,632s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (21 pages, 204991 bytes).
+Output written on GMD-Thompson-et-al.pdf (23 pages, 219366 bytes).
 PDF statistics:
- 374 PDF objects out of 1000 (max. 8388607)
- 317 compressed objects within 4 object streams
- 105 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 394 PDF objects out of 1000 (max. 8388607)
+ 331 compressed objects within 4 object streams
+ 107 named destinations out of 1000 (max. 500000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

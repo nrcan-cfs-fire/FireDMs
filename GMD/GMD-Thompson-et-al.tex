@@ -436,6 +436,42 @@ values of the forest floor by ecozone:
 
 \includegraphics{GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf}
 
+\begin{verbatim}
+## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## Frac_load_consump_logit ~ s(BUI, k = 4, bs = "tp") + FuelType + 
+##     FireType + s(Load, k = 4, bs = "tp")
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  -0.58527    0.69648  -0.840   0.4024    
+## FuelTypeC2   -0.90840    0.92212  -0.985   0.3266    
+## FuelTypeC3    0.04958    0.73898   0.067   0.9466    
+## FuelTypeC4    1.36724    0.78750   1.736   0.0852 .  
+## FuelTypeD1    0.37170    0.97748   0.380   0.7044    
+## FuelTypeD2    0.75054    1.07543   0.698   0.4866    
+## FuelTypeM2   -1.60834    0.92772  -1.734   0.0856 .  
+## FireTypeWild  1.85930    0.43798   4.245 4.41e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Approximate significance of smooth terms:
+##           edf Ref.df     F p-value  
+## s(BUI)  2.344  2.716 3.251  0.0229 *
+## s(Load) 1.000  1.001 2.521  0.1151  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.248   Deviance explained = 30.9%
+## -REML = 232.54  Scale est. = 2.3115    n = 128
+\end{verbatim}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf}
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf}
+
 \begin{table}
 
 \caption{\label{tab:DuffConsumpTable}Fire Weather, fuel loading, and duff consumption values per ecozone}

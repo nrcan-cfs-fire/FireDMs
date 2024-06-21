@@ -547,6 +547,9 @@ VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == eco
   VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
+  
   VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   VarDefs$Value[VarDefs$Variable.Name == "HW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   
@@ -1820,20 +1823,6 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == a.high & S
 
 ### the foliage, other, and fine root pools have retention terms that are simple 1- all the other fluxes, so have to be computed at the end:
 
-  #FluxID: 4
-#Source: SW Foliage
-#sink: SW Foliage
-#PLS: Green fraction of canopy remaining intact after fire
-#Pseudocode: remainder of (consumed+litterfall)
-#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
-#note2: given definition of CFB, this includes all foliage in merch and submerch
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <- 1-sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == "Softwood Foliage" & SourceSink$SeverityClass == "Low"],na.rm=TRUE)
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Mod"] <- 1-sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == "Softwood Foliage" & SourceSink$SeverityClass == "Mod"],na.rm=TRUE)
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "High"] <- 1-sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == "Softwood Foliage" & SourceSink$SeverityClass == "High"],na.rm=TRUE)
-
 
 #SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <- 1 - ( SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 5 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 6 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 7 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 8 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 101 & SourceSink$SeverityClass == "Low"])
 
@@ -1958,6 +1947,24 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 49 & Sourc
 #SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 49 & SourceSink$SeverityClass == 'Mod'] <- 1 - (sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 50 & SourceSink$FluxID <= 54 & SourceSink$SeverityClass == 'Mod']) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 108 & SourceSink$SeverityClass == "Low"])
 
 #SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 49 & SourceSink$SeverityClass == 'High'] <- 1 - (sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >= 50 & SourceSink$FluxID <= 54 & SourceSink$SeverityClass == 'High']) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 108 & SourceSink$SeverityClass == "High"])
+
+
+  #FluxID: 4
+#Source: SW Foliage
+#sink: SW Foliage
+#PLS: Green fraction of canopy remaining intact after fire
+#Pseudocode: remainder of (consumed+litterfall)
+#Notes: have to use logical statement here, google sheets version said 1-Mortality, but can be <0 unless logic is enforced here
+#note2: given definition of CFB, this includes all foliage in merch and submerch
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Low"] <-1-( sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >=5 & SourceSink$FluxID <=8 & SourceSink$SeverityClass == "Low"]) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 101 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 118 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 135 & SourceSink$SeverityClass == "Low"])
+
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "Mod"] <- 1-( sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >=5 & SourceSink$FluxID <=8 & SourceSink$SeverityClass == "Mod"]) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 101 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 118 & SourceSink$SeverityClass == "Mod"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 135 & SourceSink$SeverityClass == "Mod"])
+
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 4 & SourceSink$SeverityClass == "High"] <- 0
+## 100% CFB by definition
+
 
 
 ## end loop

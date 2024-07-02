@@ -278,6 +278,8 @@ where DC is the Fire Weather Index Drought Code, and FFFL is the Forest Floor Fu
 
 FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
 
+ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_2016.csv")
+
 ##First, logit transform the data, then apply basically Kerry's model?
 
 ### for now, filter our values > 1
@@ -294,6 +296,8 @@ FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.
                  #data = FFFC_Data,
                  #start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
 #summary(FFFC.Frac.Consume.nls)
+
+
 
 FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)*(Load^b)+c,
                data = FFFC_Data,

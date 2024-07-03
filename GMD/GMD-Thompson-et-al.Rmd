@@ -112,6 +112,7 @@ library(ggrepel)
 library(gtools)
 library(rticles)
 library(mgcv)
+library(gslnls)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 #original list
@@ -278,8 +279,6 @@ where DC is the Fire Weather Index Drought Code, and FFFL is the Forest Floor Fu
 
 FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
 
-ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_2016.csv")
-
 ##First, logit transform the data, then apply basically Kerry's model?
 
 ### for now, filter our values > 1
@@ -311,6 +310,8 @@ nls.pred <- inv.logit(predict(FFFC.Frac.Consume.nls,newdata=FFFC_Data))
 FFFC_Data <- cbind(FFFC_Data,nls.pred)
 
 ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point(aes(colour = factor(FuelType))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
+
+cor(FFFC_Data$Frac_load_consump,nls.pred)
 
 ###try a quick GAM as an alternative to the nls above, similar structure
 FFFC.Frac.Consume.gam<-gam(Frac_load_consump_logit ~ s(BUI,k=4,bs="tp")+FuelType+FireType+s(Load,k=4,bs="tp"), data = FFFC_Data,method="REML",family=gaussian(link = "identity"), na.action=na.exclude)
@@ -352,7 +353,136 @@ FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
 
 ### and to query values:
 #FFFC$Duff.consump.frac[FFFC$Ecozone == "BP"]
+
+###################### end drGroot-only calcs ################
+
+
 ```
+
+```{r new-ABoVE-FFFC-data, message=FALSE, warning=FALSE, include=FALSE}
+
+######### ABoVE combustion compilation:
+
+ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_2016.csv")
+
+
+### from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
+## DOI: 10.3334/ORNLDAAC/1744
+
+### "prop_sol_c_combusted" is the relevant response variable here.  and is the equivalent to the FFFC fractional consumption metric used in the analysis of de Groot's data
+
+## step 1: convert a few values that are slightly higher than 1.0 to exactly 0.99
+ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted>1,0.99,ABoVE_Data$prop_sol_c_combusted)
+
+### convert the data frame NA values of -9999 to R NA
+ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted_logit<0,NA,ABoVE_Data$prop_sol_c_combusted_logit)
+
+#ABoVE_Data <- ifelse(ABoVE_Data<0,NA,ABoVE_Data)
+
+ABoVE_Data$prop_sol_c_combusted_logit <- logit(ABoVE_Data$prop_sol_c_combusted_logit, min = 0.00001, max = 1.01)
+
+##########################
+###load up De Groot data ####
+##########################
+FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
+
+FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump)
+FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.00001, max = 1.01)
+
+### convert FFFC_Data into the same column names as ABoVE:
+FFFC_Data <- rename(FFFC_Data, drought_code = DC)
+FFFC_Data <- rename(FFFC_Data, prop_sol_c_combusted_logit = Frac_load_consump_logit)
+FFFC_Data <- rename(FFFC_Data, bg_c_prefire = Load)
+
+
+
+## grab only the sites not in the ABoVE data (so GL is already there)
+
+## don't take "Dawson City", "Green Lk", or "WBNP" from the FFFC data frame, 94 obs left
+
+
+FFFC_Data_trimmed <- FFFC_Data %>% filter(Site != "Dawson City") %>% filter(Site != "Green Lk") %>% filter(Site != "WBNP")
+
+## assign ecoregion to those sites we are adding
+
+ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) 
+
+#####################################################
+###filter out NA data and other filters of relevance ###
+####################################################
+
+
+### delete any NA rows here so nls doesn't have to handle them at all
+ABoVE_Data_w_FBP <- ABoVE_Data_w_FBP %>% drop_na(prop_sol_c_combusted_logit) %>% filter(drought_code > 0) %>% filter(bg_c_prefire>0) %>% filter(ecoregion_name_l2!="Alaska Boreal Interior")#  %>%  filter(ag_c_prefire>0) %>% filter(prop_black_spruce>0) %>% filter(longitude>-140)
+
+
+##can compute this if needed, but isn't exactly Crown Fraction Burned or anything exciting like that
+#ABoVE_Data_w_FBP <- ABoVE_Data_w_FBP %>% mutate(ag_frac_burn = ag_biomass_combusted/ag_biomass_prefire)
+
+
+##getting an r2 (via simple correlation) of 0.49 using just (DC^a)*(load^b)+c, not bad!
+ABoVE.FFFC.Frac.Consume.gsl.nls <- gsl_nls(
+  fn = prop_sol_c_combusted_logit ~ (drought_code^a)*(bg_c_prefire^b)+c,
+  data = ABoVE_Data_w_FBP,
+  start = list(a = 0.71, b = 0.671,c=0.1),
+  algorithm = "lm",
+  control = list(scale = "levenberg")
+)
+
+
+### other candidates: 
+
+ #fn = prop_sol_c_combusted_logit ~ (drought_code^a)*(bg_c_prefire^b)+c+(prop_black_spruce*d), ### only like a 4% improvement, but logical and sig increase in consumption with more black spruce, all else being equal
+  #data = ABoVE_Data,
+  #start = list(a = 0.71, b = 0.671,c=0,d=0.1),
+
+
+summary(ABoVE.FFFC.Frac.Consume.gsl.nls)
+
+gsl.nls.pred <- inv.logit(predict(ABoVE.FFFC.Frac.Consume.gsl.nls,newdata=ABoVE_Data_w_FBP))
+
+ABoVE_Data_w_FBP <- cbind(ABoVE_Data_w_FBP,gsl.nls.pred)
+
+ggplot(ABoVE_Data_w_FBP, aes(prop_sol_c_combusted,gsl.nls.pred)) + geom_point(aes(colour = factor(ecoregion_name_l2))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1)
+
+cor(ABoVE_Data_w_FBP$prop_sol_c_combusted,ABoVE_Data_w_FBP$gsl.nls.pred)
+
+MAE.nls <- mean(abs(ABoVE_Data_w_FBP$prop_sol_c_combusted-ABoVE_Data_w_FBP$gsl.nls.pred))
+
+MAE.nls/mean(ABoVE_Data_w_FBP$prop_sol_c_combusted)
+
+##~44% error with the simple nls term for Canada-only data
+
+
+
+# hist(ABoVE_Data$prop_sol_c_combusted_logit) #looks good and now normally distributed
+
+FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_c_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecoregion_name_l2+s(bg_c_prefire,k=4,bs="tp"), data = ABoVE_Data,method="REML",family=gaussian(link = "identity"), na.action=na.exclude)
+summary(FFFC.Frac.Consume.gam.ABoVE)
+plot.gam(FFFC.Frac.Consume.gam.ABoVE)
+
+
+#lastly, try a regression tree just for kicks on untransformed data
+library(rpart)
+library(rpart.plot)
+
+FFFC.tree <- rpart(prop_sol_c_combusted ~ drought_code + ecoregion_name_l2 + bg_c_prefire + prop_black_spruce + dob + ag_c_prefire,data=ABoVE_Data)
+printcp(FFFC.tree)
+rpart.plot(FFFC.tree)
+FFFC.predict <- predict(FFFC.tree,newdata=ABoVE_Data)
+
+cor(x=ABoVE_Data$prop_sol_c_combusted,y=FFFC.predict,method="pearson")
+
+MAE.rpart <- mean(abs(ABoVE_Data$prop_sol_c_combusted-FFFC.predict))
+
+### Mean percent error
+MAE.rpart/mean(ABoVE_Data$prop_sol_c_combusted)
+## regression tree gets you about 30% error rate
+
+
+```
+
+
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
 kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per ecozone",col.names = c("Ecozone", "Median Drought Code of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "% consumption")) %>%

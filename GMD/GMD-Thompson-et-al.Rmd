@@ -440,6 +440,8 @@ ABoVE_Data <- ABoVE_Data %>%
 
 ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) 
 
+hist(log(ABoVE_Data_w_FBP_excl_BC$bg_c_prefire))
+
 #####################################################
 ###filter out NA data and other filters of relevance ###
 ####################################################
@@ -455,10 +457,13 @@ ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed)
 ##getting an r2 (via simple correlation) of 0.49 using just (DC^a)*(load^b)+c, not bad!
 ABoVE.FFFC.Frac.Consume.gsl.nls <- gsl_nls(
   #fn = prop_sol_combusted_logit ~ (drought_code^a)*(bg_c_prefire^b)+c,
-  fn = prop_sol_combusted_logit ~ (1-exp(a*drought_code))*(bg_c_prefire*b)+c, ### this one works quite well
-  #fn = prop_sol_combusted_logit ~ (a*drought_code)+(exp(bg_c_prefire*b))+c, ### try an exponent on the load but not DC
+  #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(bg_c_prefire*b)+c, ### this one works quite well
+  #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(log(bg_c_prefire)*b)+c, ### works but with no drought effect
+  #fn = prop_sol_combusted_logit ~ c*(1-exp(a*(drought_code)))^(bg_c_prefire*b), ### sorta like FBP consumption, but doesn't 
+  fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(bg_c_prefire)*b), ### explore this one a bit more
+  #fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))^(log(bg_c_prefire)*b), ### doesn't converge, but is most true to the old FBP consumption equations with a dynamic second exponent
   data = ABoVE_Data_w_FBP,
-  start = list(a = -0.21, b = -0.0071,c=0.01),
+  start = list(a = -0.21, b = -0.71,c=0.01),
   algorithm = "lm",
   control = list(scale = "levenberg")
 )
@@ -468,7 +473,7 @@ ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP %>% filter(ecozone != "BC")
 ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 ABoVE.FFFC.Frac.Consume.gsl.nls.excl.BC <- gsl_nls(
-  fn = prop_sol_combusted_logit ~ (1-exp(a*drought_code))*(bg_c_prefire*b)+c,
+  fn = prop_sol_combusted_logit ~ (1-exp(a*drought_code))*((bg_c_prefire*b+c)),
   data = ABoVE_Data_w_FBP_excl_BC,
   start = list(a = -0.071, b = -0.00671,c=0.1),
   algorithm = "lm",

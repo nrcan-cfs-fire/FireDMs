@@ -114,6 +114,7 @@ library(rticles)
 library(mgcv)
 library(gslnls)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+library(minpack.lm)
 
 #original list
 #ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
@@ -263,101 +264,14 @@ kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severit
 
 ## Duff Consumption
 
-While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In this scheme, we utilize the Forest Floor Fuel Consumption (FFFC) model and data of [@degroot2009], modified to compute the relative amount of consumption (scalar from 0 to 1) rather than an absolute value in \unit{0.2\,kg\,m^{-2}}:
+While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data , with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than an absolute value in \unit{0.2\,kg\,m^{-2}} as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = DC^{0.33}(FFFL)^{-0.17}-4.85
+logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
 \end{equation}
 ```
-where DC is the Fire Weather Index Drought Code, and FFFL is the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code is used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
-
-```{r computeDuffConsump, echo=FALSE, message=FALSE, warning=FALSE}
-
-
-#load the raw de Groot forest floor data: 
-
-FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
-
-##First, logit transform the data, then apply basically Kerry's model?
-
-### for now, filter our values > 1
-
-#FFFC_Data <- FFFC_Data %>% filter(Frac_load_consump < 1)
-
-FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump)
-
-FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.00001, max = 1.01)
-
-##kerry's version of this data is 0.0168*DC^0.71*Load^0.671
-
-#FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)+(Load^b)+c,
-                 #data = FFFC_Data,
-                 #start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
-#summary(FFFC.Frac.Consume.nls)
-
-
-
-FFFC.Frac.Consume.nls <- nls(Frac_load_consump_logit ~ (DC^a)*(Load^b)+c,
-               data = FFFC_Data,
-               start = list(a = 0.71, b = 0.671,c=0),na.action=na.omit)
-summary(FFFC.Frac.Consume.nls)
-
-### do a predict.nls (not run)
-
-nls.pred <- inv.logit(predict(FFFC.Frac.Consume.nls,newdata=FFFC_Data))
-
-FFFC_Data <- cbind(FFFC_Data,nls.pred)
-
-ggplot(FFFC_Data, aes(Frac_load_consump,nls.pred)) + geom_point(aes(colour = factor(FuelType))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0, slope = 1.25) + geom_abline(intercept = 0, slope = 0.75)
-
-cor(FFFC_Data$Frac_load_consump,nls.pred)
-
-###try a quick GAM as an alternative to the nls above, similar structure
-FFFC.Frac.Consume.gam<-gam(Frac_load_consump_logit ~ s(BUI,k=4,bs="tp")+FuelType+FireType+s(Load,k=4,bs="tp"), data = FFFC_Data,method="REML",family=gaussian(link = "identity"), na.action=na.exclude)
-summary(FFFC.Frac.Consume.gam)
-plot.gam(FFFC.Frac.Consume.gam)
-
-##not an amazing model, but lower consumption in M2 and higher in C4 makes some sense, as does higher in wildfire by a fair margin
-##spline of BUI and fuel load makes sense, with fuel type and fire type in there too
-### will try again when we add the AB data and any others too (Pelican, a few others), ABOVE data?
-
-
-
-#load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
-Ecozones.fffc <- c("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
-Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
-Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across a range of boreal forest sites, doi: 10.1139/cjfr-2016-0475
-
-# then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
-Duff.Load <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
-
-#Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
-Duff.consump.frac.logit <- Median.DC^0.33*Duff.Load^(-0.171)-4.8
-
-Duff.consump.frac <- inv.logit(Duff.consump.frac.logit)
-
-Duff.consump.kg.m2 <- Duff.consump.frac * Duff.Load
-
-# start creating a single list object to encapsulate all the modelling:
-#where FFFC is "Forest Floor Fuel Consumption" a la de Groot's naming convention:
-
-FFFC <- as.data.frame(cbind(Ecozones.fffc,Median.DC,Duff.Load,round(Duff.consump.kg.m2,digits = 2),round(Duff.consump.frac,digits = 2)))
-names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Duff.Load.kg.m2","Duff.consump.kg.m2","Duff.consump.frac")
-
-##re-order data.frame by ecozones.list order
-FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
-
-## for example:
-#FFFC$Ecozone.name[1]
-
-### and to query values:
-#FFFC$Duff.consump.frac[FFFC$Ecozone == "BP"]
-
-###################### end drGroot-only calcs ################
-
-
-```
+where DC is the Fire Weather Index Drought Code, and MediumDOM in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code is used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
 
 ```{r new-ABoVE-FFFC-data, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -391,6 +305,7 @@ FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.
 
 ### convert FFFC_Data into the same column names as ABoVE:
 FFFC_Data <- rename(FFFC_Data, drought_code = DC)
+FFFC_Data <- rename(FFFC_Data, buildup_index = BUI)
 FFFC_Data <- rename(FFFC_Data, prop_sol_combusted = Frac_load_consump)
 FFFC_Data <- rename(FFFC_Data, prop_sol_combusted_logit = Frac_load_consump_logit)
 FFFC_Data <- mutate(FFFC_Data, bg_c_prefire = Load*500) # the ABoVE data is in g C/m2 and the FFFC Load is in kg biomass/m2 so multiply Load by 500 to get gC/m2
@@ -438,14 +353,32 @@ ABoVE_Data <- ABoVE_Data %>%
   )
 
 
-ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) 
+ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(MedDOM.Mg.C.ha = SFL.kg.m2*5)
 
-hist(log(ABoVE_Data_w_FBP_excl_BC$bg_c_prefire))
+
+
+
+#hist(log(ABoVE_Data_w_FBP_excl_BC$bg_c_prefire))
 
 #####################################################
 ###filter out NA data and other filters of relevance ###
 ####################################################
 
+
+#########################################
+### GAM to examine ecozones
+#######################################
+
+
+# hist(ABoVE_Data$prop_sol_combusted_logit) #looks good and now normally distributed
+
+FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(MedDOM.Mg.C.ha,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML", na.action=na.exclude)
+summary(FFFC.Frac.Consume.gam.ABoVE)
+plot.gam(FFFC.Frac.Consume.gam.ABoVE)
+
+######################
+### end GAM
+#####################
 
 
 
@@ -455,44 +388,51 @@ hist(log(ABoVE_Data_w_FBP_excl_BC$bg_c_prefire))
 
 
 ##getting an r2 (via simple correlation) of 0.49 using just (DC^a)*(load^b)+c, not bad!
-ABoVE.FFFC.Frac.Consume.gsl.nls <- gsl_nls(
+#ABoVE.FFFC.Frac.Consume.gsl.nls <- gsl_nls(
   #fn = prop_sol_combusted_logit ~ (drought_code^a)*(bg_c_prefire^b)+c,
   #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(bg_c_prefire*b)+c, ### this one works quite well
   #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(log(bg_c_prefire)*b)+c, ### works but with no drought effect
   #fn = prop_sol_combusted_logit ~ c*(1-exp(a*(drought_code)))^(bg_c_prefire*b), ### sorta like FBP consumption, but doesn't 
-  fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(bg_c_prefire)*b), ### explore this one a bit more
+ # fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(SFL.kg.m2)*b), ### explore this one a bit more
   #fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))^(log(bg_c_prefire)*b), ### doesn't converge, but is most true to the old FBP consumption equations with a dynamic second exponent
-  data = ABoVE_Data_w_FBP,
-  start = list(a = -0.21, b = -0.71,c=0.01),
-  algorithm = "lm",
-  control = list(scale = "levenberg")
-)
+  #data = ABoVE_Data_w_FBP,
+  #start = list(a = -0.21, b = -0.71,c=0.01),
+#  algorithm = "lm",
+ # control = list(scale = "levenberg")
+#)
+
+#########################
+### trying the same nls, but using the minpack-LM fitter, since it supports prescribed bounds on nls parameters
+
+#https://www.rdocumentation.org/packages/minpack.lm/versions/1.2-4
+#install.packages('minpack.lm')
+
 
 
 ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP %>% filter(ecozone != "BC")
 ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
-ABoVE.FFFC.Frac.Consume.gsl.nls.excl.BC <- gsl_nls(
-  fn = prop_sol_combusted_logit ~ (1-exp(a*drought_code))*((bg_c_prefire*b+c)),
+
+ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
+  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), 
   data = ABoVE_Data_w_FBP_excl_BC,
-  start = list(a = -0.071, b = -0.00671,c=0.1),
-  algorithm = "lm",
-  control = list(scale = "levenberg")
-)
+  start = list(a = -0.021, b = -0.71,c=1),
+  lower = c(a=-0.005,b=-Inf,c=-Inf)
+  )
+ ### r2~0.78, MPE~26% unbound #note that the hinge to zero relies on the ln of large numbers, and that using the log of kg m2 of Surface Fuel Load as per FBP leave the DC/BUI == 0 values of SFC consumption as non-zero, but using
 
+ ## constraint is ~ -0.005 for DC, ~-0.04 for BUI to get half of max possible consumption at BUI 50 (as per FBP)
 
-ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- gsl_nls(
-  fn = prop_sol_combusted_logit ~ (1-exp(a*drought_code))+(bg_c_prefire*b)+c,
+#### Boreal Cordillera just fitting a simple linear model for now
+ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- nlsLM(
+  formula = prop_sol_combusted_logit ~ (a*drought_code)+(b*log(MedDOM.Mg.C.ha))+c, 
   data = ABoVE_Data_w_FBP_only_BC,
-  start = list(a = -0.071, b = -0.00671,c=0.1),
-  algorithm = "lm",
-  control = list(scale = "levenberg")
+  start = list(a = -0.021, b = -0.71,c=1)
 )
 
 
-summary(ABoVE.FFFC.Frac.Consume.gsl.nls.excl.BC)
+summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)
 summary(ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only)
-
 
 
 
@@ -503,36 +443,34 @@ summary(ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only)
   #start = list(a = 0.71, b = 0.671,c=0,d=0.1),
 
 
-summary(ABoVE.FFFC.Frac.Consume.gsl.nls)
+nls.pred <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC,newdata=ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)))
 
-gsl.nls.pred <- inv.logit(predict(ABoVE.FFFC.Frac.Consume.gsl.nls,newdata=ABoVE_Data_w_FBP))
+colnames(nls.pred) <- c("nls.pred")
 
-ABoVE_Data_w_FBP <- cbind(ABoVE_Data_w_FBP,gsl.nls.pred)
+ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred)
 
-ggplot(ABoVE_Data_w_FBP, aes(prop_sol_combusted,gsl.nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1)
+ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
 
-cor(ABoVE_Data_w_FBP$prop_sol_combusted,ABoVE_Data_w_FBP$gsl.nls.pred)
+cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred)
 
-MAE.nls <- mean(abs(ABoVE_Data_w_FBP$prop_sol_combusted-ABoVE_Data_w_FBP$gsl.nls.pred))
+MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted-ABoVE_Data_w_FBP_excl_BC$nls.pred))
 
-MAE.nls/mean(ABoVE_Data_w_FBP$prop_sol_combusted)
+MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted,na.rm=TRUE)
 
 ##~40% error with the simple nls term for all wildfire data excluding Alaska Interior Boreal
 
 
+```
 
-# hist(ABoVE_Data$prop_sol_combusted_logit) #looks good and now normally distributed
+```{r FFFC-rpart-NOT-RUN, eval=FALSE, include=FALSE}
 
-FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(bg_c_prefire,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML",family=gaussian(link = "identity"), na.action=na.exclude)
-summary(FFFC.Frac.Consume.gam.ABoVE)
-plot.gam(FFFC.Frac.Consume.gam.ABoVE)
 
 
 #lastly, try a regression tree just for kicks on untransformed data
 library(rpart)
 library(rpart.plot)
 
-FFFC.tree <- rpart(prop_sol_combusted ~ drought_code + ecoregion_name_l2 + bg_c_prefire + prop_black_spruce + dob + ag_c_prefire,data=ABoVE_Data)
+FFFC.tree <- rpart(prop_sol_combusted ~ drought_code + ecoregion_name_l2 + bg_c_prefire + prop_black_spruce + dob + ag_c_prefire,data=ABoVE_Data_w_FBP_excl_BC)
 printcp(FFFC.tree)
 rpart.plot(FFFC.tree)
 FFFC.predict <- predict(FFFC.tree,newdata=ABoVE_Data)
@@ -548,7 +486,48 @@ MAE.rpart/mean(ABoVE_Data$prop_sol_combusted)
 
 ```
 
+```{r computeFixed-DM-DuffConsump, echo=FALSE, message=FALSE, warning=FALSE}
 
+#load an array of median DC values by ecozone (provided here hardcoded from Quinn Barber's dataframes of all Canadian hotspots from CWFIS 2002-2022), using the exact same order of ecozones above:
+Ecozones.fffc <- c("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
+#Litter.Load <- 0.25 #litter load as an average from Thompson et al 2017, across a range of boreal forest sites, doi: 10.1139/cjfr-2016-0475
+
+# then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
+Duff.Load.kg.m2 <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
+
+MedDOM.Mg.C.ha <- Duff.Load.kg.m2*5
+
+###building the model for now from coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] in the chunk above
+
+
+#Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
+Duff.consump.frac.logit <- coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3] * (1 - exp(coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] * Median.DC)) + 
+    (log(MedDOM.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
+
+Duff.consump.frac <- inv.logit(Duff.consump.frac.logit)
+
+Duff.consump.kg.m2 <- Duff.consump.frac * Duff.Load.kg.m2
+
+# start creating a single list object to encapsulate all the modelling:
+#where FFFC is "Forest Floor Fuel Consumption" a la de Groot's naming convention:
+
+FFFC <- as.data.frame(cbind(Ecozones.fffc,Median.DC,Duff.Load.kg.m2,round(Duff.consump.kg.m2,digits = 2),round(Duff.consump.frac,digits = 2)))
+names(FFFC) <- c("Ecozone","Median.DC.of.burning","Median.Duff.Load.kg.m2","Duff.consump.kg.m2","Duff.consump.frac")
+
+##re-order data.frame by ecozones.list order
+FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
+
+## for example:
+#FFFC$Ecozone.name[1]
+
+### and to query values:
+#FFFC$Duff.consump.frac[FFFC$Ecozone == "BP"]
+
+###################### end drGroot-only calcs ################
+
+
+```
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
 kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per ecozone",col.names = c("Ecozone", "Median Drought Code of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "% consumption")) %>%
@@ -2359,7 +2338,9 @@ kbl(SourceSinkGeneric[SourceSinkGeneric$SeverityClass == 'Low',3:5],row.names = 
 
 # Appendix B: annual variability in observed Drought Code during wildfire spread, and impact on ecozone-level DM calculations
 
-```{r AnnualDC, echo=FALSE,message=FALSE, warning=FALSE}
+### (Currently not running, needs model update)
+
+```{r AnnualDC, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 ###Load annual hotspot median DC by ecozone (via Quinn Barber and CFSDB)
 DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
@@ -2383,7 +2364,7 @@ DC.year$DC50 <- ifelse(DC.year$DC50<20,20,DC.year$DC50)
 
 ```
 
-```{r AnnualDC-Vis-DC50, echo=FALSE,message=FALSE, warning=FALSE, fig.width=4,fig.height=3}
+```{r AnnualDC-Vis-DC50, eval=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
  
    ### the graphs, all time series: (1) annual DC by year; (2) absolute consumption values by year; (3) fractional consumption values by year; (4) will add in burned area by ecozone by year eventually too
 
@@ -2393,7 +2374,7 @@ ggplot(DC.year, aes(year,DC50,colour=Ecozone)) + geom_dl(aes(label = Ecozone, co
 
 ```
 
-```{r AnnualDC-Vis-Consump, echo=FALSE,message=FALSE, warning=FALSE, fig.width=4,fig.height=3}
+```{r AnnualDC-Vis-Consump, eval=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
 
 
 ggplot(DC.year, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + geom_line() + ylab("Modelled Duff Consumption, kg/m2") +
@@ -2402,7 +2383,7 @@ ggplot(DC.year, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + geom_dl(aes(label
 
 ```
 
-```{r AnnualDC-Vis-frac, echo=FALSE,message=FALSE, warning=FALSE, fig.width=4,fig.height=3}
+```{r AnnualDC-Vis-frac, eval=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
  
 
 ggplot(DC.year, aes(year,Duff.consump.frac,colour=Ecozone))+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + geom_line() + ylab("Modelled duff consumption proportion") + theme(legend.position="none")
@@ -2451,17 +2432,4 @@ Give lat/long, year, ecozone, severity class, and leading spp for each photo, ma
 
 # Appendix E: List of Resprouting Hardwoods of Canada
 
-Alnus spp. 
-Arbutus men. 
-Betula all. 
-Betula pap. 
-Betula pop. 
-Fraxinus ame. 
-Fraxinus nig. 
-Fraxinus pen. 
-Populus bal. 
-Populus gra. 
-Populus tre. 
-Populus tri. 
-Quercus spp. 
-Salix spp.
+Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.

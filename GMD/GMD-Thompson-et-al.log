@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.17)  21 JUN 2024 16:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.27)  4 JUL 2024 12:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **GMD-Thompson-et-al.tex
 (./GMD-Thompson-et-al.tex
-LaTeX2e <2024-06-01> patch level 1
+LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-05-27>
 (./copernicus.cls
 Document Class: copernicus 2022/03/25 9.46 Copernicus papers
@@ -570,30 +570,30 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 )
-LaTeX Font Info:    Trying to load font information for T1+ptm on input line 89.
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 103.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 ) (./GMD-Thompson-et-al.aux)
 \openout1 = `GMD-Thompson-et-al.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 103.
+LaTeX Font Info:    ... okay on input line 103.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -612,28 +612,28 @@ Package caption Info: threeparttable package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count340
-Package hyperref Info: Link coloring OFF on input line 89.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 133.
+Package hyperref Info: Link coloring OFF on input line 103.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 147.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 133.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 147.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package xcolor Warning: Incompatible color definition on input line 133.
+Package xcolor Warning: Incompatible color definition on input line 147.
 
 
-Package xcolor Warning: Incompatible color definition on input line 135.
+Package xcolor Warning: Incompatible color definition on input line 149.
 
 
-Overfull \hbox (18.51033pt too wide) in paragraph at lines 135--155
+Overfull \hbox (18.51033pt too wide) in paragraph at lines 149--169
 [][]\T1/ptm/b/n/10 Abstract.[] \T1/ptm/m/n/10 Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes. Current representations
  []
 
 
-Overfull \hbox (7.13127pt too wide) in paragraph at lines 135--155
+Overfull \hbox (7.13127pt too wide) in paragraph at lines 149--169
 \T1/ptm/m/n/10 high severity-only representation, this mixed severity modelling framework changes modelled total Carbon flux to the atmosphere
  []
 
@@ -644,7 +644,7 @@ Overfull \hbox (7.13127pt too wide) in paragraph at lines 135--155
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}]
 
 [2]
-Overfull \hbox (1.48157pt too wide) in paragraph at lines 290--293
+Overfull \hbox (1.48157pt too wide) in paragraph at lines 304--307
 \T1/ptm/m/n/10 Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering.
  []
 
@@ -653,108 +653,65 @@ Overfull \hbox (1.48157pt too wide) in paragraph at lines 290--293
 [3]
 
 [4]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 419.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
 
 [5]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 435.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
-File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-)
-<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf, id=111, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf  used on input line 437.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-
-[6 <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-1.pdf>]
-<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf, id=121, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf  used on input line 472.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf, id=122, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf  used on input line 473.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (447.79399pt too wide) in paragraph at lines 472--474
-[][] [] 
- []
-
-
+[6]
 
 [7]
 
-[8 <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-2.pdf> <./GMD-Thompson-et-al_files/figure-latex/computeDuffConsump-3.pdf>]
-
-[9]
-
-[10]
-
-[11]
-Overfull \hbox (309.00578pt too wide) detected at line 774
+[8]
+Overfull \hbox (309.00578pt too wide) detected at line 735
 $\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
  []
 
 
 
-[12]
+[9]
 
-[13]
+[10]
 
-[14
+[11
 
 ]
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 878--878
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 802.
+(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 839.
+(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
+File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
+)
+Overfull \hbox (12.38623pt too wide) in paragraph at lines 839--839
 []\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
  []
 
 
 
-[15
+[12
 
 ]
 
-[16]
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=230, 289.08pt x 216.81pt>
-File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 970.
-(pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
+[13]
 
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[14]
+
+[15]
+
+[16] (./GMD-Thompson-et-al.bbl
 
 [17]
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=237, 289.08pt x 216.81pt>
-File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 972.
-(pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-<GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf, id=238, 289.08pt x 216.81pt>
-File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf  used on input line 974.
-(pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-
-
-[18 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf> <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
-
-[19 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-frac-1.pdf>]
-
-[20] (./GMD-Thompson-et-al.bbl
-
-[21]
 Underfull \hbox (badness 1142) in paragraph at lines 19--20
 []\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
  []
 
 
 
-[22]
+[18]
 Underfull \hbox (badness 1946) in paragraph at lines 61--62
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
@@ -771,25 +728,25 @@ Underfull \hbox (badness 1867) in paragraph at lines 76--77
 
 )
 
-[23] (./GMD-Thompson-et-al.aux)
+[19] (./GMD-Thompson-et-al.aux)
  ***********
-LaTeX2e <2024-06-01> patch level 1
+LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2021/03/21>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17847 strings out of 475559
- 285585 string characters out of 5776091
+ 17802 strings out of 475543
+ 282540 string characters out of 5775717
  1950908 words of memory out of 5000000
- 40059 multiletter control sequences out of 15000+600000
+ 40033 multiletter control sequences out of 15000+600000
  597664 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,12n,93p,721b,632s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,93p,721b,634s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (23 pages, 219354 bytes).
+Output written on GMD-Thompson-et-al.pdf (19 pages, 175696 bytes).
 PDF statistics:
- 394 PDF objects out of 1000 (max. 8388607)
- 331 compressed objects within 4 object streams
- 107 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 342 PDF objects out of 1000 (max. 8388607)
+ 296 compressed objects within 3 object streams
+ 104 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

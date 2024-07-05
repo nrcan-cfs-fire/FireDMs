@@ -945,7 +945,7 @@ is modelled as:
 
 \begin{equation}
 SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^1.0
-\end{equation}
+\end{equation}                                             
 
 This model form has the distinct advantage of SFC being 0.0 at a BUI of
 zero. The model parameters vary by fuel type (i.e.~deciduous broadleaf
@@ -1070,6 +1070,11 @@ FFFC (given as Medium DOM in Mg C/ha) was used as well:
 logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
 \end{equation}
 
+Note the coefficient on the parameter associated with the FFFL (Medium
+DOM) of -0.718, which results in larger organic layer fuel loads leading
+to smaller proportional consumption values, which follows the patterns
+shown by Walker 2018 for NWT fires of 2014.
+
 Along the parameter space of DC and Medium DOM (FFFL) in the dataset,
 the following fractional consumption values can be computed:
 
@@ -1112,9 +1117,26 @@ Error of \#\#\#\%
 
 \includegraphics{GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf}
 
+Across the entire parameter space of Drought Code and Medium DOM pool
+size, the following isolines of proportional consumption in the model
+can be plotted
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf}
+
 \subsubsection{Boreal Cordillera modelling}
 
-(talk about BC model as just linear, etc.)
+For the Boreal Cordillera, a simple linear model on the
+logit-transformed data was found to be the best performing model for
+estimating soil organic consumption proportion:
+
+\begin{equation}
+logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(MediumDOM)) + 2.17
+\end{equation}
+
+Despite the presence of a fixed intercept term, the strong inverse
+dependence on the natural logarithm of the medium Medium DOM pool size
+(FFFL) results in zero proportional consumption when Drought Code is
+equal to zero.
 
 \section{Appendix C: annual variability in observed Drought Code during
 wildfire spread, and impact on ecozone-level DM calculations}

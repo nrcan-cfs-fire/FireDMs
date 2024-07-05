@@ -415,6 +415,8 @@ ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
   formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), 
+  #formula = prop_sol_combusted_logit ~ c+(a*drought_code)+(log(MedDOM.Mg.C.ha)*b),
+  ### note that the simple linear formula above does fit slightly better, but has an aymptote near 1.0, without the possibility of a lower asymptote like in the first equation above
   data = ABoVE_Data_w_FBP_excl_BC,
   start = list(a = -0.021, b = -0.71,c=1),
   lower = c(a=-0.005,b=-Inf,c=-Inf)
@@ -2387,6 +2389,8 @@ logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718
 \end{equation}
 ```
 
+Note the coefficient on the parameter associated with the FFFL (Medium DOM) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
+
 Along the parameter space of DC and Medium DOM (FFFL) in the dataset, the following fractional consumption values can be computed:
 
 (show isolines of %consumed along DC 0-750 and MediumDOM 5-200 ish)
@@ -2407,16 +2411,98 @@ The a parameter term that forms the exponent of e alongside Drought Code is rela
 (show perhaps what a few different a values look like?)
 (also compute the DC value of about half the maximum FBP SFC values too, just for kicks)
 
+
+
+For example, using a moderately thick ~12 cm thick organic soil layer, the proportion of consumption as a function of Drought Code using the model above 
+
+```{r example-FFFC-vs-DC-plot-nls, echo=FALSE, message=FALSE, warning=FALSE}
+
+###just show a single (or multiple?) FFFL values here but DC on the x-axis, consumption on the y-axis:
+
+```
+
+
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r2 of ###, and a Mean Percent Error of ###%
 
 ```{r show-biplot-FFFC-new, echo=FALSE}
 ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
 ```
 
+
+
+Across the entire parameter space of Drought Code and Medium DOM pool size, the following isolines of proportional consumption in the model can be plotted
+
+```{r FFFC-surface-plot, echo=FALSE, message=FALSE, warning=FALSE}
+###goal is to produce a surface plot from DC from 0-750 and Medium DOM from 0-200 (or 0-500 maybe)
+### with isolines of FFFC/FFFL
+
+
+FFFC_expand <- tibble(
+drought_code = seq(from = 0.0, to = 750,by = 25),
+MedDOM.Mg.C.ha = seq(from = 0, to = 600,by = 20)) ## has to be same size, so 31 in this case
+
+
+FFFC_expand <- as.data.frame(expand(data=FFFC_expand,drought_code,MedDOM.Mg.C.ha))
+
+
+
+FFFC.grid <- array(NA,dim=c(length(FFFC_expand$drought_code)))
+#FFFC.grid <- as.data.frame(FFFC.grid)
+
+for(i in seq(1:length(FFFC_expand$drought_code))){
+
+  FFFC.grid[i] <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC,newdata=FFFC_expand[i,])))
+  }
+FFFC.grid <- as.data.frame(FFFC.grid)
+
+FFFC.grid <- t(FFFC.grid)
+
+FFFC_expand <- cbind(FFFC_expand,FFFC.grid)
+
+colnames(FFFC_expand)[3] <- c("prop_total_bg_c_combusted")
+
+
+##let's add in some example data:
+
+#fuelTypes <- c("C-1", "C-3", "C-7", "O-1")
+#SH <- c(4.1,9,9,0)
+#CC <- c(8,40,5,0)
+
+#FBP.Example <- as.data.frame(cbind(fuelTypes,SH,CC))
+#FBP.Example$SH <- as.numeric(FBP.Example$SH)
+#FBP.Example$CC <- as.numeric(FBP.Example$CC)
+
+##plot
+brks_FFFC <- c(0.7,0.6,0.5,0.4,0.3,0.2)
+
+### rename ABoVE_Data_w_FBP_excl_BC$prop_total_bg_c_combusted as "prop_total_bg_c_combusted"
+
+ggplot(FFFC_expand, aes(drought_code, MedDOM.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of Drought Code and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Drought Code") + ylab("Duff (Medium DOM) load Mg C/ha") + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,250))
+
+###would love for the geom_rug to work.....
+###+ geom_rug(data=ABoVE_Data_w_FBP_excl_BC)
+
+#TO DO: add in more text at quartiles of MediumDOM 
+
+# + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
+
+#+geom_tile() ###use fill=prop_total_bg_c_combusted
+
+```
+
+
 ### Boreal Cordillera modelling
 
-(talk about BC model as just linear, etc.)
+For the Boreal Cordillera, a simple linear model on the logit-transformed data was found to be the best performing model for estimating soil organic consumption proportion:
 
+
+```{=tex}
+\begin{equation}
+logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(MediumDOM)) + 2.17
+\end{equation}
+```
+
+Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the medium Medium DOM pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.  
 
 # Appendix C: annual variability in observed Drought Code during wildfire spread, and impact on ecozone-level DM calculations
 

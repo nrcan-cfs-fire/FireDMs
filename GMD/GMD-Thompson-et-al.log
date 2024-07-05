@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.4)  4 JUL 2024 20:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.4)  5 JUL 2024 15:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -716,26 +716,34 @@ Overfull \hbox (13.6912pt too wide) in paragraph at lines 990--1007
 <GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf, id=227, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1113.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1118.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [17]
+<GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf, id=234, 469.755pt x 325.215pt>
+File: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf Graphic file (type pdf)
+<use GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf>
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf  used on input line 1124.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
 
 [18 <./GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>]
 
-[19]
+[19 <./GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf>]
 
-[20] (./GMD-Thompson-et-al.bbl
+[20]
 
-[21]
+[21] (./GMD-Thompson-et-al.bbl
+
+[22]
 Underfull \hbox (badness 1142) in paragraph at lines 22--23
 []\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
  []
 
 
 
-[22]
+[23]
 Underfull \hbox (badness 1946) in paragraph at lines 64--65
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
@@ -752,7 +760,7 @@ Underfull \hbox (badness 1867) in paragraph at lines 79--80
 
 )
 
-[23]
+[24]
 
 Package natbib Warning: There were undefined citations.
 
@@ -763,18 +771,18 @@ L3 programming layer <2021/03/21>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17824 strings out of 475543
- 283230 string characters out of 5775718
+ 17833 strings out of 475543
+ 283748 string characters out of 5775718
  1950908 words of memory out of 5000000
- 40043 multiletter control sequences out of 15000+600000
+ 40050 multiletter control sequences out of 15000+600000
  597664 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,12n,93p,721b,632s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,93p,721b,634s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (23 pages, 226886 bytes).
+Output written on GMD-Thompson-et-al.pdf (24 pages, 237648 bytes).
 PDF statistics:
- 384 PDF objects out of 1000 (max. 8388607)
- 331 compressed objects within 4 object streams
- 116 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 395 PDF objects out of 1000 (max. 8388607)
+ 339 compressed objects within 4 object streams
+ 118 named destinations out of 1000 (max. 500000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

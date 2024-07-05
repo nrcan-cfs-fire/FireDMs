@@ -408,13 +408,18 @@ P & 0.14 & 0.06 & 0.02\\
 While consumption of fine fuels in the litter layer of the forest floor
 is nearly complete for any given fire intensity, consumption of deeper
 organic soil horizons (F+H layers in upland forests and upper peat
-layers in wetlands) is more drought dependent. In this scheme, we
-utilize a composite of wildfire data from \citep{degroot2009} alongside
-the ABoVE duff consumption data , with an alternative modelling approach
-to compute the relative amount of consumption (scalar from 0 to 1)
-rather than an absolute value in \unit{0.2\,kg\,m^{-2}} as otherwise
-done in the literature. A logit transform is used on the scalar data to
-make it suitable for the fitted non-linear least-squares modelling:
+layers in wetlands) is more drought dependent. In the fire literature in
+Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL)
+and is equivalent to the Medium DOM pool in CBM. Typically attention has
+been paid to the absolute value of Forest Floor Fuel Consumption (FFFC);
+however in the case of carbon modelling, it is the relative fraction of
+consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize
+a composite of wildfire data from \citep{degroot2009} alongside the
+ABoVE duff consumption data , with an alternative modelling approach to
+compute the relative amount of consumption (scalar from 0 to 1) rather
+than an absolute value in \unit{0.2\,kg\,m^{-2}} as otherwise done in
+the literature. A logit transform is used on the scalar data to make it
+suitable for the fitted non-linear least-squares modelling:
 
 \begin{equation}
 logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
@@ -427,11 +432,12 @@ the Forest Floor Fuel Load (with ecozone averages given in
 this scheme can be used on individual fires with estimated or measured
 fuel loading and specific Drought Code values, for the purposes of this
 first assessment, an ecozone-averaged fuel load and decadal composites
-of Drought Code is used to provide representative values. Specifically,
-a median Drought Code of detected fire hotspots in Canada from 2003-2021
-using the same data as the Canadian CFEEPS-FireWork wildfire air quality
-model of \citep{chen2019} is presented below, along with proportional
-consumption values of the forest floor by ecozone:
+of Drought Code can also be used to provide representative values.
+Specifically, a median Drought Code of detected fire hotspots in Canada
+from 2003-2021 \citep{barber} using the same data as the Canadian
+CFEEPS-FireWork wildfire air quality model of \citep{chen2019} is
+presented below, along with proportional consumption values of the
+forest floor by ecozone:
 
 \begin{table}
 \centering
@@ -925,12 +931,197 @@ The conclusion goes here.
 \section{Appendix A: list of fluxes and corresponding fire-related
 plain-language summary.}
 
-\section{Appendix B: annual variability in observed Drought Code during
+\section{Appendix B: non-linear least squares modelling of soil organic
+layer consumption}
+
+For national annual estimates of forest organic soil layer consumption
+during wildfire, implementations that only utilize Canadian experimental
+fire data from the Fire Behaviour Prediction System will be limited to a
+maximum consumption value of 5 kg/m2 of total surface fuel (woody
+debris, litter, and duff) of 5 kg/m2, or 25 Mg C/ha, given the
+observation dataset and fitted model parameters. For the common C-2
+Boreal Spruce fuel type for instance, Surface Fuel Consumption (kg m/2)
+is modelled as:
+
+\begin{equation}
+SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^1.0
+\end{equation}
+
+This model form has the distinct advantage of SFC being 0.0 at a BUI of
+zero. The model parameters vary by fuel type (i.e.~deciduous broadleaf
+fuels are limited to 1.5 kg/m2 of maximum SFC) but are fixed within a
+fuel type.
+
+More recent observations and modelling from \citet{degroot2009} extended
+the FBP data with an additional 128 observations from 7 additional
+wildfires, and the ABoVE project compiled over 1000 field observations
+of depth of burn and C stocks before and after wildfire in Canada and
+Alaska, over 600 of which are in North American Level II ecoregions also
+occurring in Canada (fix Walker 2020 ORNL DAAC ref in bibtex here).
+\citet{degroot2009} provides a concise and informative improvement on
+the FBP fuel consumption equations, where both a Fire Weather Index
+System component (in this case, Drought Code) is used similarly to
+Buildup Index in the FBP, but importantly, the site-level organic soil
+layer fuel load is also accounted for, which allows for the greater
+absolute combustion in deeper organic soils that is moderated by the
+natural logarithm transformation:
+
+\begin{equation}
+log_{e}(FFFC) = -4.252+0.710log_{e}(DC) + 0.671log_{e}(FFFL)
+\end{equation}
+
+where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody
+debris) in kg m/2 and FFFL is Forest Floor Fuel Load in kg/m2. This
+model fits well within the dataset and extends the observed maximum FFFC
+to nearly 10 kg/m2. The ABoVE synthesis of FFFL and FFFC (Walker et al
+2020 ORNL) expands upon a slightly smaller dataset used in a modelling
+summary also by Walker et al (2020 NCC), where structural equation
+modelling was used to explore drivers of FFFC but no concise and readily
+reproducible modelling is produced. The results of the SEM from Walker
+et al (2020 NCC) emphasized a greater role of FFFL over DC, though
+coarse reanalysis that lacked local fire agency weather stations was
+used. An analysis of just 2014 fires in the Northwest Territories by
+\citet{walker2018} showed that while the mean depth of burn across all
+black spruce stands was 6-10 cm, the driest (xeric) black spruce stands
+with the smallest FFFL showed upwards of 75\% soil organic consumption,
+while deeper organic soils in subhygric black spruce stands showed less
+than 25\% consumption.
+
+To provide the largest possible dataset for FFFC and FFFL, the ABoVE
+synthesis was combined with wildfire data from de Groot et al 2009 not
+otherwise found in the ABoVE synthesis. The ABoVE synthesis sites in the
+Alaska Boreal Interior ecoregion, which have equivalent Canadian ecozone
+were excluded, but Alaska Boreal Cordillera sites near the Yukon border
+were utilized. Experimental fire data from the FBP data was not used, as
+deeper combustion measurements resulting from hours and days of
+smouldering combustion captured in wildfire data are not available in
+experimental fires where extensive smouldering is not measured due to
+suppression. In order to best represent on-the-ground Fire Weather Index
+values, the Drought Code and other FWI values from Walker et al 2020
+reanalysis were substituted with interpolated weather station (both
+Environment and Climate Change Canada as well fire agency stations).
+This data also has the benefit of being properly overwintered for
+Drought Code (Hanes DC overwinter) and capturing small rain events not
+captured in reanalysis that meaningfully impact the Duff Moisture Code
+in particular.
+
+For the purposes of improving national estimates of the fractional soil
+organic layer loss during wildfire, this framework emphasizes the
+proportional C stock loss (as with all CBM disturbance matrices) rather
+than the absolute value of combustion. In contrast to the modelling of
+absolute combustion value, any analysis of proportions is best conducted
+as logit- transformed data, where the logit transformation is:
+
+\begin{equation}
+logit(p) = log\frac{p}{1-p}
+\end{equation}
+
+which effectively transforms a data of proportions of {[}0,1{]} to a
+Gaussian distribution with a range of approximately -5 to +5 (in this
+dataset), and a mode approximately at zero. Within the logit-transformed
+data, exploratory analysis of ecozones as a factor alongside other
+non-linear splines of FWI values and FFFL was conducted:
+
+\begin{verbatim}
+## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## prop_sol_combusted_logit ~ s(drought_code, k = 4, bs = "tp") + 
+##     ecozone + s(MedDOM.Mg.C.ha, k = 4, bs = "tp")
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)  0.12046    0.09546   1.262   0.2075  
+## ecozoneBP   -0.29685    0.15862  -1.871   0.0617 .
+## ecozoneBSW  -0.39191    0.16383  -2.392   0.0170 *
+## ecozoneTP   -0.23238    0.11757  -1.976   0.0485 *
+## ecozoneTSW  -0.30033    0.12455  -2.411   0.0162 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Approximate significance of smooth terms:
+##                     edf Ref.df      F p-value    
+## s(drought_code)   1.321  1.570   2.96  0.0602 .  
+## s(MedDOM.Mg.C.ha) 2.947  2.998 221.75  <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.612   Deviance explained = 61.7%
+## -REML = 884.79  Scale est. = 0.85295   n = 651
+\end{verbatim}
+
+(could also show boxplots?) which shows that the Boreal Cordillera
+ecozone has a meaningfully higher proportional soil organic layer
+consumption rate compared to BP, BSW, TP, and TSW, all of which are not
+significantly different in consumption rates once DC and FFFC (shown as
+MedDOM.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside
+for a distinct model.
+
+Similar to \citet{degroot2009}, Drought Code was a better predictor of
+FFFC (in this case the ratio of FFFC/FFFL) than Buildup Index as used in
+the FBP. In the logit transformed space, saturation-type non-linear
+curve using the relevant FWI component was fitted in a non-linear least
+squares model, but an additive term of the natural-logarithm transformed
+FFFC (given as Medium DOM in Mg C/ha) was used as well:
+
+\begin{equation}
+logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
+\end{equation}
+
+Along the parameter space of DC and Medium DOM (FFFL) in the dataset,
+the following fractional consumption values can be computed:
+
+(show isolines of \%consumed along DC 0-750 and MediumDOM 5-200 ish)
+
+The non-linear least squares model fit was conducted using the
+Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK
+(Elzhov et al 2023) R package, which supported bounded parameter
+constraints. In the abstract, the model follows the form:
+
+\begin{equation}
+logit \left( \frac{FFFC}{FFFL}\right) = [c*(1 - e^{(a * DC)})] + (c*log_{e}(MediumDOM))
+\end{equation}
+
+The a parameter term that forms the exponent of e alongside Drought Code
+is related to the DC value at which half of the maximum possible
+asymptotal consumption value is observed (for a given FFFL value). The
+NLS fitting was given a minimum value of -0.06 such that half of the
+asymptotal maximum consumption rate was modelled as occurring at or
+around a DC value of 300. The other parameters were fit to the best
+possible value with no constraint.
+
+(show perhaps what a few different a values look like?) (also compute
+the DC value of about half the maximum FBP SFC values too, just for
+kicks)
+
+With the parameter constrained NLS fitting, the proportional consumption
+model for the forest floor has a leave-one-out (conducted at the
+fire-level, not plot) cross validated r2 of \#\#\#, and a Mean Percent
+Error of \#\#\#\%
+
+\begin{verbatim}
+## Scale for y is already present.
+## Adding another scale for y, which will replace the existing scale.
+## Scale for y is already present.
+## Adding another scale for y, which will replace the existing scale.
+## Scale for x is already present.
+## Adding another scale for x, which will replace the existing scale.
+\end{verbatim}
+
+\includegraphics{GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf}
+
+\subsubsection{Boreal Cordillera modelling}
+
+(talk about BC model as just linear, etc.)
+
+\section{Appendix C: annual variability in observed Drought Code during
 wildfire spread, and impact on ecozone-level DM calculations}
 
 \subsubsection{(Currently not running, needs model update)}
 
-\section{Appendix C: DM template (can delete in final draft)}
+\section{Appendix \#\#\#: DM template (can delete in final draft)}
 
 First, a generic template for a fire DM is loaded, that can represent
 any ecozone. It comes in two parts: (1) a list of variables, some

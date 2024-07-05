@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.27)  4 JUL 2024 12:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.4)  4 JUL 2024 20:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -81,7 +81,7 @@ Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks18
 \inpenc@posthook=\toks19
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2024/06/02 v24.6 The Babel package
+Package: babel 2024/06/26 v24.7 The Babel package
 \babel@savecnt=\count270
 \U@D=\dimen146
 \l@unhyphenated=\language5
@@ -91,7 +91,7 @@ Package: babel 2024/06/02 v24.6 The Babel package
 Package babel Info: You haven't specified a language as a class or package
 (babel)             option. I'll load 'nil'. Reported on input line 4269.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/babel/nil.ldf
-Language: nil 2024/06/02 v24.6 Nil language
+Language: nil 2024/06/26 v24.7 Nil language
 \l@nil=\language6
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2024/06/14 v2.6d Tabular extension package (FMi)
@@ -661,28 +661,28 @@ Overfull \hbox (1.48157pt too wide) in paragraph at lines 304--307
 [7]
 
 [8]
-Overfull \hbox (309.00578pt too wide) detected at line 735
+
+[9]
+Overfull \hbox (309.00578pt too wide) detected at line 741
 $\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
  []
 
 
-
-[9]
 
 [10]
 
 [11
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 802.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 808.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 839.
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 845.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 839--839
+Overfull \hbox (12.38623pt too wide) in paragraph at lines 845--845
 []\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
  []
 
@@ -693,60 +693,88 @@ Overfull \hbox (12.38623pt too wide) in paragraph at lines 839--839
 ]
 
 [13]
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+Overfull \hbox (4.82135pt too wide) in paragraph at lines 955--968
+[]\T1/ptm/m/n/10 More recent observations and modelling from []de Groot et al.[] ([]2009[]) extended the FBP data with an additional 128 observations
+ []
 
 
 
 [14]
 
+Package natbib Warning: Citation `walker2018' on page 15 undefined on input line 984.
+
+
+Overfull \hbox (13.6912pt too wide) in paragraph at lines 990--1007
+\T1/ptm/m/n/10 overwintered for Drought Code (Hanes DC overwinter) and capturing small rain events not captured in reanalysis that meaningfully
+ []
+
+
+
 [15]
 
-[16] (./GMD-Thompson-et-al.bbl
+[16]
+<GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf, id=227, 469.755pt x 325.215pt>
+File: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf Graphic file (type pdf)
+<use GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1113.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
 
 [17]
-Underfull \hbox (badness 1142) in paragraph at lines 19--20
+
+[18 <./GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>]
+
+[19]
+
+[20] (./GMD-Thompson-et-al.bbl
+
+[21]
+Underfull \hbox (badness 1142) in paragraph at lines 22--23
 []\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
  []
 
 
 
-[18]
-Underfull \hbox (badness 1946) in paragraph at lines 61--62
+[22]
+Underfull \hbox (badness 1946) in paragraph at lines 64--65
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
 
 
-Underfull \hbox (badness 2809) in paragraph at lines 61--62
+Underfull \hbox (badness 2809) in paragraph at lines 64--65
 \T1/ptm/m/n/9 and Strum, M.: The development and uses of EPA's SPECIATE database, Atmospheric Pollution Research, 1, 196--206,
  []
 
 
-Underfull \hbox (badness 1867) in paragraph at lines 76--77
+Underfull \hbox (badness 1867) in paragraph at lines 79--80
 \T1/ptm/m/n/9 of forest disturbance and recovery for Canada using Landsat time series, Remote Sensing of Environment, 194, 303^^U321,
  []
 
 )
 
-[19] (./GMD-Thompson-et-al.aux)
+[23]
+
+Package natbib Warning: There were undefined citations.
+
+(./GMD-Thompson-et-al.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2021/03/21>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17802 strings out of 475543
- 282540 string characters out of 5775717
+ 17824 strings out of 475543
+ 283230 string characters out of 5775718
  1950908 words of memory out of 5000000
- 40033 multiletter control sequences out of 15000+600000
+ 40043 multiletter control sequences out of 15000+600000
  597664 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,12n,93p,721b,634s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,93p,721b,632s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (19 pages, 175696 bytes).
+Output written on GMD-Thompson-et-al.pdf (23 pages, 226886 bytes).
 PDF statistics:
- 342 PDF objects out of 1000 (max. 8388607)
- 296 compressed objects within 3 object streams
- 104 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 384 PDF objects out of 1000 (max. 8388607)
+ 331 compressed objects within 4 object streams
+ 116 named destinations out of 1000 (max. 500000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

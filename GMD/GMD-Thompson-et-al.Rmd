@@ -283,8 +283,10 @@ ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_201
 ### from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
 ## DOI: 10.3334/ORNLDAAC/1744
 
-### "prop_sol_combusted" is the relevant response variable here.  and is the equivalent to the FFFC fractional consumption metric used in the analysis of de Groot's data
+### "prop_sol_c_combusted" is the relevant response variable here.  and is the equivalent to the FFFC fractional consumption metric used in the analysis of de Groot's data
 
+
+### prop_sol_combusted is the % depth of combustion, so do that first
 ## step 1: convert a few values that are slightly higher than 1.0 to exactly 0.99
 ABoVE_Data$prop_sol_combusted_logit <- ifelse(ABoVE_Data$prop_sol_combusted>1,0.99,ABoVE_Data$prop_sol_combusted)
 
@@ -294,6 +296,19 @@ ABoVE_Data$prop_sol_combusted_logit <- ifelse(ABoVE_Data$prop_sol_combusted_logi
 #ABoVE_Data <- ifelse(ABoVE_Data<0,NA,ABoVE_Data)
 
 ABoVE_Data$prop_sol_combusted_logit <- logit(ABoVE_Data$prop_sol_combusted_logit, min = 0.00001, max = 1.01)
+
+
+### do the same for soil organic fraction
+## step 1: convert a few values that are slightly higher than 1.0 to exactly 0.99
+#ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted>1,0.99,ABoVE_Data$prop_sol_c_combusted)
+
+### convert the data frame NA values of -9999 to R NA
+#ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted_logit<0,NA,ABoVE_Data$prop_sol_c_combusted_logit)
+
+#ABoVE_Data <- ifelse(ABoVE_Data<0,NA,ABoVE_Data)
+
+#ABoVE_Data$prop_sol_c_combusted_logit <- logit(ABoVE_Data$prop_sol_c_combusted_logit, min = 0.00001, max = 1.01)
+
 
 ##########################
 ###load up De Groot data ####
@@ -414,7 +429,8 @@ ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 
 ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
-  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), 
+  #formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), 
+  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), ###the model of the depth of combustion works best and has the strong DC/FWI effect
   #formula = prop_sol_combusted_logit ~ c+(a*drought_code)+(log(MedDOM.Mg.C.ha)*b),
   ### note that the simple linear formula above does fit slightly better, but has an aymptote near 1.0, without the possibility of a lower asymptote like in the first equation above
   data = ABoVE_Data_w_FBP_excl_BC,
@@ -2418,6 +2434,31 @@ For example, using a moderately thick ~12 cm thick organic soil layer, the propo
 ```{r example-FFFC-vs-DC-plot-nls, echo=FALSE, message=FALSE, warning=FALSE}
 
 ###just show a single (or multiple?) FFFL values here but DC on the x-axis, consumption on the y-axis:
+
+#but also show the raw data pointed coloured by ecozone for that slice of MedDOM (say 70-90) since the median is 80
+
+drought_code = seq(from = 0.0, to = 750,by = 25)
+MedDOM.Mg.C.ha = rep(60,length(drought_code))
+
+FFFC.single.final.df <- cbind(drought_code,MedDOM.Mg.C.ha)
+
+FFFC.single<- array(NA,dim=c(length(drought_code)))
+#FFFC.grid <- as.data.frame(FFFC.grid)
+
+for(i in seq(1:length(drought_code))){
+
+  FFFC.single[i] <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC,newdata=FFFC.single.final.df[i,])))
+  }
+
+FFFC.single <- as.data.frame(FFFC.single)
+
+FFFC.single <- t(FFFC.single)
+
+FFFC.single.final.df <- cbind(drought_code,MedDOM.Mg.C.ha,FFFC.single)
+
+colnames(FFFC.single.final.df)[3] <- c("prop_sol_combusted")
+
+ggplot(FFFC.single.final.df, aes(drought_code,prop_sol_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,MedDOM.Mg.C.ha>50 & MedDOM.Mg.C.ha<70)) + ylim(0,1)
 
 ```
 

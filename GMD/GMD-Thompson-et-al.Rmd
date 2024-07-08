@@ -280,6 +280,8 @@ where DC is the Fire Weather Index Drought Code, and MediumDOM in the CBM (given
 ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_2016.csv")
 
 
+
+
 ### from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
 ## DOI: 10.3334/ORNLDAAC/1744
 
@@ -476,6 +478,48 @@ MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted-ABoVE_Data_w_FBP
 MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted,na.rm=TRUE)
 
 ##~40% error with the simple nls term for all wildfire data excluding Alaska Interior Boreal
+
+
+############################
+#### depth vs density correction factor
+###########################
+
+CF <- read.csv("~/nrcan-cfs-fire/FireDMs/RelDepthVsCorrFact.csv")
+CF.Spruce <- CF %>% filter(FuelType == "Spruce")
+CF.non.Spruce <- CF %>% filter(FuelType == "NonSpruce")
+
+### this is from de Groot et al 2009 Table 6 for C-2 fuels, the average bulk density by depth to 30 cm (n > 90 for depths < 15cm)
+
+### this goes down to 30 cm, and the median pre-fire depth for the ABoVE data is 26cm, so a good representative fit.
+
+### the C-2 fuel type is quite different, so fitting that by itself, then taking the C-3 data and calling it representative of all the others:
+
+###fit form is simple exponential: y=a+b*exp(cx)
+
+Depth.Correction.Factor.Spruce <- nlsLM( 
+  #formula = CorrectionFactor ~ a+b*exp(c*RelativeDepth),
+  formula = CorrectionFactor ~ b*RelativeDepth^c,
+  data = CF.Spruce,
+  #start = list(a = 1, b = 0.71,c=0.25)
+  start = list( b = 1,c=1)
+  )
+
+summary(Depth.Correction.Factor.Spruce)
+
+
+
+
+Depth.Correction.Factor.non.Spruce <- nlsLM( 
+  #formula = CorrectionFactor ~ a+b*exp(c*RelativeDepth),
+  formula = CorrectionFactor ~ b*RelativeDepth^c,
+  data = CF.non.Spruce,
+  #start = list(a = 1, b = 0.71,c=0.25)
+  start = list(c = 1, b = 1)
+  )
+
+summary(Depth.Correction.Factor.non.Spruce)
+
+##assuming constant carbon % (see table 5 for evidence), just computed the relative depth vs relative organic fuel load, and then computed the ratio of relative mass/relative depth at the depth intervals given in Table 6.  
 
 
 ```
@@ -2396,20 +2440,33 @@ summary(FFFC.Frac.Consume.gam.ABoVE)
 
 (could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as MedDOM.Mg.C.ha) are accounted for.  Boreal Cordillera data were set aside for a distinct model.
 
-Similar to @degroot2009, Drought Code was a better predictor of FFFC (in this case the ratio of FFFC/FFFL) than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as Medium DOM in Mg C/ha) was used as well:
+Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as Medium DOM in Mg C/ha) was used as well.  In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer:
 
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
 \end{equation}
 ```
 
 Note the coefficient on the parameter associated with the FFFL (Medium DOM) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
 
-Along the parameter space of DC and Medium DOM (FFFL) in the dataset, the following fractional consumption values can be computed:
+Importantly, since fire behaviour, emissions modelling, and carbon accounting all operate with the calculation of mass loss and depth of burn, a correction factor was applied that corrects for the trends in bulk density with depth for C-2 fuels as given by @degroot2009, so that a model of proportional depth of burn is then converted into a proportional mass loss term:
 
-(show isolines of %consumed along DC 0-750 and MediumDOM 5-200 ish)
+```{=tex}
+\begin{equation}
+\left( \frac{FFFC}{FFFL}\right) = 1.017 \left( \frac{depth of burn}{pre-fire organic depth}\right)^{0.250}
+\end{equation}
+```
+
+which for example means that the median proportional depth of burn in the AboVE/de Groot training data of 0.40 corresponds to 0.32 of the proportional mass loss (since shallow organic soil is less dense), or a correction factor of 0.80.  For non-spruce-dominated fuels, this correction is much smaller but still meaningful:
+
+
+```{=tex}
+\begin{equation}
+\left( \frac{FFFC}{FFFL}\right) = 1.02 \left( \frac{depth of burn}{pre-fire organic depth}\right)^{0.07}
+\end{equation}
+```
 
 
  The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. In the abstract, the model follows the form:
@@ -2471,7 +2528,7 @@ ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(
 
 
 
-Across the entire parameter space of Drought Code and Medium DOM pool size, the following isolines of proportional consumption in the model can be plotted
+Across the entire parameter space of Drought Code and Medium DOM pool size, the following isolines of proportional consumption in the model can be plotted:
 
 ```{r FFFC-surface-plot, echo=FALSE, message=FALSE, warning=FALSE}
 ###goal is to produce a surface plot from DC from 0-750 and Medium DOM from 0-200 (or 0-500 maybe)
@@ -2528,6 +2585,12 @@ ggplot(FFFC_expand, aes(drought_code, MedDOM.Mg.C.ha, z=prop_total_bg_c_combuste
 # + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
 
 #+geom_tile() ###use fill=prop_total_bg_c_combusted
+
+```
+
+```{r correction-factor, echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted)) +stat_ecdf(geom = "step")
 
 ```
 

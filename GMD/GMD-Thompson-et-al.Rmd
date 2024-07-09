@@ -281,7 +281,6 @@ ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_201
 
 
 
-
 ### from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
 ## DOI: 10.3334/ORNLDAAC/1744
 
@@ -317,7 +316,11 @@ ABoVE_Data$prop_sol_combusted_logit <- logit(ABoVE_Data$prop_sol_combusted_logit
 ##########################
 FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
 
-FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump)
+#### convert fractional FFFL consumption to fraction of depth consumed by the inverse of the Correction Factor equation
+FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump*((0.981)*FFFC_Data$Frac_load_consump^(-0.251)))
+
+
+#FFFC_Data$Frac_load_consump <- ifelse(FFFC_Data$Frac_load_consump>1,1,FFFC_Data$Frac_load_consump)
 FFFC_Data$Frac_load_consump_logit <- logit(FFFC_Data$Frac_load_consump, min = 0.00001, max = 1.01)
 
 ### convert FFFC_Data into the same column names as ABoVE:
@@ -369,7 +372,7 @@ ABoVE_Data <- ABoVE_Data %>%
     )
   )
 
-
+### add data, and convert the ABoVE data from gC/m2 and de Groot data in kg biomass/m2 to both in Mg C/ha (CBM units)
 ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(MedDOM.Mg.C.ha = SFL.kg.m2*5)
 
 
@@ -463,7 +466,7 @@ summary(ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only)
   #start = list(a = 0.71, b = 0.671,c=0,d=0.1),
 
 
-nls.pred <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC,newdata=ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)))
+nls.pred <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC,newdata=ABoVE_Data_w_FBP_excl_BC)))
 
 colnames(nls.pred) <- c("nls.pred")
 
@@ -483,6 +486,8 @@ MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_combusted,na.rm=TRUE)
 ############################
 #### depth vs density correction factor
 ###########################
+
+# data
 
 CF <- read.csv("~/nrcan-cfs-fire/FireDMs/RelDepthVsCorrFact.csv")
 CF.Spruce <- CF %>% filter(FuelType == "Spruce")
@@ -521,6 +526,9 @@ summary(Depth.Correction.Factor.non.Spruce)
 
 ##assuming constant carbon % (see table 5 for evidence), just computed the relative depth vs relative organic fuel load, and then computed the ratio of relative mass/relative depth at the depth intervals given in Table 6.  
 
+
+
+##### end conversion factor#################
 
 ```
 
@@ -567,7 +575,15 @@ MedDOM.Mg.C.ha <- Duff.Load.kg.m2*5
 Duff.consump.frac.logit <- coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3] * (1 - exp(coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] * Median.DC)) + 
     (log(MedDOM.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
-Duff.consump.frac <- inv.logit(Duff.consump.frac.logit)
+
+### calculate the inverse of the logit to get the duff consumption fraction, and apply the Correction Factor to convert from %depth to %mass
+
+Duff.consump.frac <- inv.logit(Duff.consump.frac.logit)*((1.02)*inv.logit(Duff.consump.frac.logit)^(0.250))
+
+
+
+
+#### should really call the coefficients from the nls, but here it is for now above hard-coded in there
 
 Duff.consump.kg.m2 <- Duff.consump.frac * Duff.Load.kg.m2
 
@@ -645,7 +661,7 @@ kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as dervie
   #kable_styling(latex_options = "hold_position")
 ```
 
-And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirity of the live stemwood biomass pool that is killed is transferred to the snag pool. Note that the field data and disturbance modelling undertaken here only accounts for tree mortality within the calender year of the fire, and delayed mortality of over one year has been documented in boreal low and moderate severity fires [@angers2011]where less than half of total mortality occurs after the year of the fire. Thus, the modelling here does not account for delayed mortality that may extend upwards of 5 years after fire.
+And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirety of the live stemwood biomass pool that is killed is transferred to the snag pool. Note that the field data and disturbance modelling undertaken here only accounts for tree mortality within the calender year of the fire, and delayed mortality of over one year has been documented in boreal low and moderate severity fires [@angers2011]where less than half of total mortality occurs after the year of the fire. Thus, the modelling here does not account for delayed mortality that may extend upwards of 5 years after fire.
 
 Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using field studies that show any partial crown consumption is likely sufficient to result in high rates if not complete mortality [@hood2017], which is the case in Canada's trees with primarily thin bark. Due to the structure of the CBM, all High Severity fires have their mortality in the merchantable and smaller trees set to exactly 1.0, which is no more than a 5% variance from observed values. From field studies, the following ecozone-specific CFB values are found:
 

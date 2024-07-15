@@ -268,7 +268,7 @@ While consumption of fine fuels in the litter layer of the forest floor is nearl
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
 \end{equation}
 ```
 where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code can also be used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 [@barber] using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
@@ -298,17 +298,6 @@ ABoVE_Data$prop_sol_combusted_logit <- ifelse(ABoVE_Data$prop_sol_combusted_logi
 
 ABoVE_Data$prop_sol_combusted_logit <- logit(ABoVE_Data$prop_sol_combusted_logit, min = 0.00001, max = 1.01)
 
-
-### do the same for soil organic fraction
-## step 1: convert a few values that are slightly higher than 1.0 to exactly 0.99
-#ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted>1,0.99,ABoVE_Data$prop_sol_c_combusted)
-
-### convert the data frame NA values of -9999 to R NA
-#ABoVE_Data$prop_sol_c_combusted_logit <- ifelse(ABoVE_Data$prop_sol_c_combusted_logit<0,NA,ABoVE_Data$prop_sol_c_combusted_logit)
-
-#ABoVE_Data <- ifelse(ABoVE_Data<0,NA,ABoVE_Data)
-
-#ABoVE_Data$prop_sol_c_combusted_logit <- logit(ABoVE_Data$prop_sol_c_combusted_logit, min = 0.00001, max = 1.01)
 
 
 ##########################
@@ -373,7 +362,7 @@ ABoVE_Data <- ABoVE_Data %>%
   )
 
 ### add data, and convert the ABoVE data from gC/m2 and de Groot data in kg biomass/m2 to both in Mg C/ha (CBM units)
-ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(MedDOM.Mg.C.ha = SFL.kg.m2*5)
+ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(BGSlow.Mg.C.ha = SFL.kg.m2*5)
 
 
 
@@ -392,7 +381,7 @@ ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2
 
 # hist(ABoVE_Data$prop_sol_combusted_logit) #looks good and now normally distributed
 
-FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(MedDOM.Mg.C.ha,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML", na.action=na.exclude)
+FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(BGSlow.Mg.C.ha,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML", na.action=na.exclude)
 summary(FFFC.Frac.Consume.gam.ABoVE)
 plot.gam(FFFC.Frac.Consume.gam.ABoVE)
 
@@ -434,10 +423,7 @@ ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 
 ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
-  #formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), 
-  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(MedDOM.Mg.C.ha)*b), ###the model of the depth of combustion works best and has the strong DC/FWI effect
-  #formula = prop_sol_combusted_logit ~ c+(a*drought_code)+(log(MedDOM.Mg.C.ha)*b),
-  ### note that the simple linear formula above does fit slightly better, but has an aymptote near 1.0, without the possibility of a lower asymptote like in the first equation above
+  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(BGSlow.Mg.C.ha)*b),
   data = ABoVE_Data_w_FBP_excl_BC,
   start = list(a = -0.021, b = -0.71,c=1),
   lower = c(a=-0.005,b=-Inf,c=-Inf)
@@ -448,7 +434,7 @@ ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
 
 #### Boreal Cordillera just fitting a simple linear model for now
 ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- nlsLM(
-  formula = prop_sol_combusted_logit ~ (a*drought_code)+(b*log(MedDOM.Mg.C.ha))+c, 
+  formula = prop_sol_combusted_logit ~ (a*drought_code)+(b*log(BGSlow.Mg.C.ha))+c, 
   data = ABoVE_Data_w_FBP_only_BC,
   start = list(a = -0.021, b = -0.71,c=1)
 )
@@ -502,10 +488,8 @@ CF.non.Spruce <- CF %>% filter(FuelType == "NonSpruce")
 ###fit form is simple exponential: y=a+b*exp(cx)
 
 Depth.Correction.Factor.Spruce <- nlsLM( 
-  #formula = CorrectionFactor ~ a+b*exp(c*RelativeDepth),
   formula = CorrectionFactor ~ b*RelativeDepth^c,
   data = CF.Spruce,
-  #start = list(a = 1, b = 0.71,c=0.25)
   start = list( b = 1,c=1)
   )
 
@@ -515,10 +499,8 @@ summary(Depth.Correction.Factor.Spruce)
 
 
 Depth.Correction.Factor.non.Spruce <- nlsLM( 
-  #formula = CorrectionFactor ~ a+b*exp(c*RelativeDepth),
   formula = CorrectionFactor ~ b*RelativeDepth^c,
   data = CF.non.Spruce,
-  #start = list(a = 1, b = 0.71,c=0.25)
   start = list(c = 1, b = 1)
   )
 
@@ -566,14 +548,14 @@ Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 # then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
 Duff.Load.kg.m2 <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
 
-MedDOM.Mg.C.ha <- Duff.Load.kg.m2*5
+BGSlow.Mg.C.ha <- Duff.Load.kg.m2*5
 
 ###building the model for now from coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] in the chunk above
 
 
 #Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
 Duff.consump.frac.logit <- coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3] * (1 - exp(coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] * Median.DC)) + 
-    (log(MedDOM.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
+    (log(BGSlow.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
 
 ### calculate the inverse of the logit to get the duff consumption fraction, and apply the Correction Factor to convert from %depth to %mass
@@ -2421,7 +2403,7 @@ For national annual estimates of forest organic soil layer consumption during wi
 
 ```{=tex}
 \begin{equation}
-SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^1.0
+SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
 \end{equation}                                             
 ```
 
@@ -2436,7 +2418,7 @@ log_{e}(FFFC) = -4.252+0.710log_{e}(DC) + 0.671log_{e}(FFFL)
 \end{equation}
 ```
 
-where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in kg m/2 and FFFL is Forest Floor Fuel Load in kg/m2.  This model fits well within the dataset and extends the observed maximum FFFC to nearly 10 kg/m2.  The ABoVE synthesis of FFFL and FFFC (Walker et al 2020 ORNL) expands upon a slightly smaller dataset used in a modelling summary also by Walker et al (2020 NCC), where structural equation modelling was used to explore drivers of FFFC but no concise and readily reproducible modelling is produced.  The results of the SEM from Walker et al (2020 NCC) emphasized a greater role of FFFL over DC, though coarse reanalysis that lacked local fire agency weather stations was used.  An analysis of just 2014 fires in the Northwest Territories by @walker2018 showed that while the mean depth of burn across all black spruce stands was 6-10 cm, the driest (xeric) black spruce stands with the smallest FFFL showed upwards of 75% soil organic consumption, while deeper organic soils in subhygric black spruce stands showed less than 25% consumption.
+where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in kg m/2 and FFFL is Forest Floor Fuel Load in kg/m2.  This model fits well within the dataset and extends the observed maximum FFFC to nearly 10 kg/m2.  The ABoVE synthesis of FFFL and FFFC (Walker et al 2020 ORNL) expands upon a slightly smaller dataset used in a modelling summary also by Walker et al (2020 NCC), where structural equation modelling was used to explore drivers of FFFC but no concise and readily reproducible modelling is produced.  The results of the SEM from Walker et al (2020 NCC) emphasized a greater role of FFFL over DC, though coarse reanalysis that lacked local fire agency weather stations was used.  An analysis of just 2014 fires in the Northwest Territories by (walker2018) showed that while the mean depth of burn across all black spruce stands was 6-10 cm, the driest (xeric) black spruce stands with the smallest FFFL showed upwards of 75% soil organic consumption, while deeper organic soils in subhygric black spruce stands showed less than 25% consumption.
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE synthesis was combined with wildfire data from de Groot et al 2009 not otherwise found in the ABoVE synthesis.  The ABoVE synthesis sites in the Alaska Boreal Interior ecoregion, which have equivalent Canadian ecozone were excluded, but Alaska Boreal Cordillera sites near the Yukon border were utilized.  Experimental fire data from the FBP data was not used, as deeper combustion measurements resulting from hours and days of smouldering combustion captured in wildfire data are not available in experimental fires where extensive smouldering is not measured due to suppression.  In order to best represent on-the-ground Fire Weather Index values, the Drought Code and other FWI values from Walker et al 2020 reanalysis were substituted with interpolated weather station (both Environment and Climate Change Canada as well fire agency stations).  This data also has the benefit of being properly overwintered for Drought Code (Hanes DC overwinter) and capturing small rain events not captured in reanalysis that meaningfully impact the Duff Moisture Code in particular.
 
@@ -2454,9 +2436,9 @@ which effectively transforms a data of proportions of [0,1] to a Gaussian distri
 summary(FFFC.Frac.Consume.gam.ABoVE)
 ```
 
-(could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as MedDOM.Mg.C.ha) are accounted for.  Boreal Cordillera data were set aside for a distinct model.
+(could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as BGSlow.Mg.C.ha) are accounted for.  Boreal Cordillera data were set aside for a distinct model.
 
-Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well.  In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer:
+Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well.  In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. In the abstract, the model follows the form:
 
 
 ```{=tex}
@@ -2465,7 +2447,17 @@ logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^
 \end{equation}
 ```
 
-Note the coefficient on the parameter associated with the FFFL (BGSlow) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
+In the abstract, the model follows the form:
+
+
+```{=tex}
+\begin{equation}
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c*(1 - e^{(a * DC)})] + (b*log_{e}(BGSlow))
+\end{equation}
+```
+Note the "b" coefficient on the parameter associated with the FFFL (BGSlow) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
+
+The a parameter term that forms the exponent of e alongside Drought Code is related to the DC value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value).  The NLS fitting was given a minimum value of -0.06 such that half of the asymptotal maximum consumption rate was modelled as occurring at or around a DC value of 300.  The other parameters were fit to the best possible value with no constraint.
 
 Importantly, since fire behaviour, emissions modelling, and carbon accounting all operate with the calculation of mass loss and depth of burn, a correction factor was applied that corrects for the trends in bulk density with depth for C-2 fuels as given by @degroot2009, so that a model of proportional depth of burn is then converted into a proportional mass loss term:
 
@@ -2485,17 +2477,8 @@ which for example means that the median proportional depth of burn in the AboVE/
 ```
 
 
- The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. In the abstract, the model follows the form:
  
  
-```{=tex}
-\begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [c*(1 - e^{(a * DC)})] + (c*log_{e}(BGSlow))
-\end{equation}
-```
-
-
-The a parameter term that forms the exponent of e alongside Drought Code is related to the DC value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value).  The NLS fitting was given a minimum value of -0.06 such that half of the asymptotal maximum consumption rate was modelled as occurring at or around a DC value of 300.  The other parameters were fit to the best possible value with no constraint.
 
 (show perhaps what a few different a values look like?)
 (also compute the DC value of about half the maximum FBP SFC values too, just for kicks)
@@ -2511,9 +2494,9 @@ For example, using a moderately thick ~12 cm thick organic soil layer, the propo
 #but also show the raw data pointed coloured by ecozone for that slice of MedDOM (say 70-90) since the median is 80
 
 drought_code = seq(from = 0.0, to = 750,by = 25)
-MedDOM.Mg.C.ha = rep(60,length(drought_code))
+BGSlow.Mg.C.ha = rep(60,length(drought_code))
 
-FFFC.single.final.df <- cbind(drought_code,MedDOM.Mg.C.ha)
+FFFC.single.final.df <- cbind(drought_code,BGSlow.Mg.C.ha)
 
 FFFC.single<- array(NA,dim=c(length(drought_code)))
 #FFFC.grid <- as.data.frame(FFFC.grid)
@@ -2527,11 +2510,11 @@ FFFC.single <- as.data.frame(FFFC.single)
 
 FFFC.single <- t(FFFC.single)
 
-FFFC.single.final.df <- cbind(drought_code,MedDOM.Mg.C.ha,FFFC.single)
+FFFC.single.final.df <- cbind(drought_code,BGSlow.Mg.C.ha,FFFC.single)
 
 colnames(FFFC.single.final.df)[3] <- c("prop_sol_combusted")
 
-ggplot(FFFC.single.final.df, aes(drought_code,prop_sol_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,MedDOM.Mg.C.ha>50 & MedDOM.Mg.C.ha<70)) + ylim(0,1)
+ggplot(FFFC.single.final.df, aes(drought_code,prop_sol_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,BGSlow.Mg.C.ha>50 & BGSlow.Mg.C.ha<70)) + ylim(0,1)
 
 ```
 
@@ -2553,10 +2536,10 @@ Across the entire parameter space of Drought Code and BGSlow pool size, the foll
 
 FFFC_expand <- tibble(
 drought_code = seq(from = 0.0, to = 750,by = 25),
-MedDOM.Mg.C.ha = seq(from = 0, to = 600,by = 20)) ## has to be same size, so 31 in this case
+BGSlow.Mg.C.ha = seq(from = 0, to = 600,by = 20)) ## has to be same size, so 31 in this case
 
 
-FFFC_expand <- as.data.frame(expand(data=FFFC_expand,drought_code,MedDOM.Mg.C.ha))
+FFFC_expand <- as.data.frame(expand(data=FFFC_expand,drought_code,BGSlow.Mg.C.ha))
 
 
 
@@ -2591,14 +2574,14 @@ brks_FFFC <- c(0.7,0.6,0.5,0.4,0.3,0.2)
 
 ### rename ABoVE_Data_w_FBP_excl_BC$prop_total_bg_c_combusted as "prop_total_bg_c_combusted"
 
-ggplot(FFFC_expand, aes(drought_code, MedDOM.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of Drought Code and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Drought Code") + ylab("Duff (BGSlow) load Mg C/ha") + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,250))
+ggplot(FFFC_expand, aes(drought_code, BGSlow.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of Drought Code and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Drought Code") + ylab("Duff (BGSlow) load Mg C/ha") + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,250))
 
 ###would love for the geom_rug to work.....
 ###+ geom_rug(data=ABoVE_Data_w_FBP_excl_BC)
 
 #TO DO: add in more text at quartiles of BGSlow
 
-# + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$MedDOM.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
+# + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
 
 #+geom_tile() ###use fill=prop_total_bg_c_combusted
 

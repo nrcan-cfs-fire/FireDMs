@@ -423,7 +423,7 @@ transform is used on the scalar data to make it suitable for the fitted
 non-linear least-squares modelling:
 
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
 \end{equation}
 
 where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM
@@ -945,7 +945,7 @@ Boreal Spruce fuel type for instance, Surface Fuel Consumption (kg m/2)
 is modelled as:
 
 \begin{equation}
-SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^1.0
+SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
 \end{equation}                                             
 
 This model form has the distinct advantage of SFC being 0.0 at a BUI of
@@ -982,11 +982,11 @@ reproducible modelling is produced. The results of the SEM from Walker
 et al (2020 NCC) emphasized a greater role of FFFL over DC, though
 coarse reanalysis that lacked local fire agency weather stations was
 used. An analysis of just 2014 fires in the Northwest Territories by
-\citet{walker2018} showed that while the mean depth of burn across all
-black spruce stands was 6-10 cm, the driest (xeric) black spruce stands
-with the smallest FFFL showed upwards of 75\% soil organic consumption,
-while deeper organic soils in subhygric black spruce stands showed less
-than 25\% consumption.
+(walker2018) showed that while the mean depth of burn across all black
+spruce stands was 6-10 cm, the driest (xeric) black spruce stands with
+the smallest FFFL showed upwards of 75\% soil organic consumption, while
+deeper organic soils in subhygric black spruce stands showed less than
+25\% consumption.
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE
 synthesis was combined with wildfire data from de Groot et al 2009 not
@@ -1030,7 +1030,7 @@ non-linear splines of FWI values and FFFL was conducted:
 ## 
 ## Formula:
 ## prop_sol_combusted_logit ~ s(drought_code, k = 4, bs = "tp") + 
-##     ecozone + s(MedDOM.Mg.C.ha, k = 4, bs = "tp")
+##     ecozone + s(BGSlow.Mg.C.ha, k = 4, bs = "tp")
 ## 
 ## Parametric coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)  
@@ -1045,7 +1045,7 @@ non-linear splines of FWI values and FFFL was conducted:
 ## Approximate significance of smooth terms:
 ##                     edf Ref.df       F p-value    
 ## s(drought_code)   1.352  1.618   2.862  0.0631 .  
-## s(MedDOM.Mg.C.ha) 2.950  2.998 232.720  <2e-16 ***
+## s(BGSlow.Mg.C.ha) 2.950  2.998 232.720  <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -1057,7 +1057,7 @@ non-linear splines of FWI values and FFFL was conducted:
 ecozone has a meaningfully higher proportional soil organic layer
 consumption rate compared to BP, BSW, TP, and TSW, all of which are not
 significantly different in consumption rates once DC and FFFC (shown as
-MedDOM.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside
+BGSlow.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside
 for a distinct model.
 
 Similar to \citet{degroot2009}, Drought Code was a better predictor of
@@ -1067,16 +1067,34 @@ FWI component was fitted in a non-linear least squares model, but an
 additive term of the natural-logarithm transformed FFFC (given as BGSlow
 pool in Mg C/ha) was used as well. In the end, a superior model was
 found using the proportional depth of burn, rather than the proportional
-loss of the mass of the soil organic layer:
+loss of the mass of the soil organic layer. The non-linear least squares
+model fit was conducted using the Levenberg-Marquardt nonlinear
+least-squares algorithm found in MINPACK (Elzhov et al 2023) R package,
+which supported bounded parameter constraints. In the abstract, the
+model follows the form:
 
 \begin{equation}
 logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
 \end{equation}
 
-Note the coefficient on the parameter associated with the FFFL (BGSlow)
-of -0.718, which results in larger organic layer fuel loads leading to
-smaller proportional consumption values, which follows the patterns
-shown by Walker 2018 for NWT fires of 2014.
+In the abstract, the model follows the form:
+
+\begin{equation}
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c*(1 - e^{(a * DC)})] + (b*log_{e}(BGSlow))
+\end{equation}
+
+Note the ``b'' coefficient on the parameter associated with the FFFL
+(BGSlow) of -0.718, which results in larger organic layer fuel loads
+leading to smaller proportional consumption values, which follows the
+patterns shown by Walker 2018 for NWT fires of 2014.
+
+The a parameter term that forms the exponent of e alongside Drought Code
+is related to the DC value at which half of the maximum possible
+asymptotal consumption value is observed (for a given FFFL value). The
+NLS fitting was given a minimum value of -0.06 such that half of the
+asymptotal maximum consumption rate was modelled as occurring at or
+around a DC value of 300. The other parameters were fit to the best
+possible value with no constraint.
 
 Importantly, since fire behaviour, emissions modelling, and carbon
 accounting all operate with the calculation of mass loss and depth of
@@ -1098,23 +1116,6 @@ correction is much smaller but still meaningful:
 \begin{equation}
 \left( \frac{FFFC}{FFFL}\right) = 1.02 \left( \frac{depth of burn}{pre-fire organic depth}\right)^{0.07}
 \end{equation}
-
-The non-linear least squares model fit was conducted using the
-Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK
-(Elzhov et al 2023) R package, which supported bounded parameter
-constraints. In the abstract, the model follows the form:
-
-\begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [c*(1 - e^{(a * DC)})] + (c*log_{e}(BGSlow))
-\end{equation}
-
-The a parameter term that forms the exponent of e alongside Drought Code
-is related to the DC value at which half of the maximum possible
-asymptotal consumption value is observed (for a given FFFL value). The
-NLS fitting was given a minimum value of -0.06 such that half of the
-asymptotal maximum consumption rate was modelled as occurring at or
-around a DC value of 300. The other parameters were fit to the best
-possible value with no constraint.
 
 (show perhaps what a few different a values look like?) (also compute
 the DC value of about half the maximum FBP SFC values too, just for

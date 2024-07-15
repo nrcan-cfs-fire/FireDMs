@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.4)  15 JUL 2024 09:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.4)  15 JUL 2024 15:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -628,206 +628,21 @@ Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count348
 Package hyperref Info: Link coloring OFF on input line 103.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 117.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1phv.fd
-File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
-)
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.54997pt on input line 117.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 147.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 147.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-Package xcolor Warning: Incompatible color definition on input line 147.
-
-
-Package xcolor Warning: Incompatible color definition on input line 149.
-
-
-Overfull \hbox (18.51033pt too wide) in paragraph at lines 149--169
-[][]\T1/ptm/b/n/10 Abstract.[] \T1/ptm/m/n/10 Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes. Current representations
- []
-
-
-Overfull \hbox (7.13127pt too wide) in paragraph at lines 149--169
-\T1/ptm/m/n/10 high severity-only representation, this mixed severity modelling framework changes modelled total Carbon flux to the atmosphere
- []
-
-
-
-[1
-
-{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}]
-
-[2]
-Overfull \hbox (1.48157pt too wide) in paragraph at lines 304--307
-\T1/ptm/m/n/10 Certain variables, like the fractionation of CO2:CH4:CO, are constant throughout ecozones, but vary by flaming vs smouldering.
- []
-
-
-
-[3]
-
-[4]
-
-[5]
-
-[6]
-
-[7]
-
-[8]
-Overfull \hbox (309.00578pt too wide) detected at line 742
-$\OML/cmm/m/it/10 SWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 SWFineRootMort:BG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 SW:Mort \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 SW:Prop:Fine:Root:duff\OT1/cmr/m/n/10 )$  
- []
-
-
-
-[9]
-
-[10]
-
-[11
-
-]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 809.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 846.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
-File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-)
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 846--846
-[]\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
- []
-
-
-
-[12
-
-]
-
-[13]
-Overfull \hbox (4.82135pt too wide) in paragraph at lines 956--969
-[]\T1/ptm/m/n/10 More recent observations and modelling from []de Groot et al.[] ([]2009[]) extended the FBP data with an additional 128 observations
- []
-
-
-
-[14]
-
-Package natbib Warning: Citation `walker2018' on page 15 undefined on input line 985.
-
-
-Overfull \hbox (13.6912pt too wide) in paragraph at lines 991--1008
-\T1/ptm/m/n/10 overwintered for Drought Code (Hanes DC overwinter) and capturing small rain events not captured in reanalysis that meaningfully
- []
-
-
-
-[15]
-
-[16]
-Overfull \hbox (0.66254pt too wide) in paragraph at lines 1092--1097
-[]\T1/ptm/m/n/10 which for example means that the median proportional depth of burn in the AboVE/de Groot training data of 0.40 corresponds
- []
-
-
-
-[17]
-<GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf, id=241, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf  used on input line 1127.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf, id=242, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1143.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-
-[18 <./GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf>]
-Overfull \hbox (1.73161pt too wide) in paragraph at lines 1145--1148
-[]\T1/ptm/m/n/10 Across the entire parameter space of Drought Code and BGSlow pool size, the following isolines of proportional consumption
- []
-
-<GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf, id=252, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf  used on input line 1149.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-
-[19 <./GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>]
-<GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf, id=263, 469.755pt x 325.215pt>
-File: GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf Graphic file (type pdf)
-<use GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf  used on input line 1151.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-
-[20 <./GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf>]
-
-[21 <./GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf>]
-
-[22]
-
-[23] (./GMD-Thompson-et-al.bbl
-
-[24]
-Underfull \hbox (badness 1142) in paragraph at lines 22--23
-[]\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
- []
-
-
-
-[25]
-Underfull \hbox (badness 1946) in paragraph at lines 64--65
-[]\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
- []
-
-
-Underfull \hbox (badness 2809) in paragraph at lines 64--65
-\T1/ptm/m/n/9 and Strum, M.: The development and uses of EPA's SPECIATE database, Atmospheric Pollution Research, 1, 196--206,
- []
-
-
-Underfull \hbox (badness 1867) in paragraph at lines 79--80
-\T1/ptm/m/n/9 of forest disturbance and recovery for Canada using Landsat time series, Remote Sensing of Environment, 194, 303^^U321,
- []
-
-)
-
-[26]
-
-Package natbib Warning: There were undefined citations.
-
-(./GMD-Thompson-et-al.aux)
- ***********
-LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2021/03/21>
- ***********
- ) 
+! I can't write on file `GMD-Thompson-et-al.pdf'.
+(Press Enter to retry, or Control-Z to exit; default file extension is `.pdf')
+Please type another file name for output
+! Emergency stop.
+<to be read again> 
+                   \edef 
+l.103 \begin{document}
+                       
 Here is how much of TeX's memory you used:
- 18178 strings out of 475543
- 290296 string characters out of 5775718
- 1950908 words of memory out of 5000000
- 40382 multiletter control sequences out of 15000+600000
- 600554 words of font info for 98 fonts, out of 8000000 for 9000
+ 17714 strings out of 475543
+ 281159 string characters out of 5775718
+ 1926908 words of memory out of 5000000
+ 40100 multiletter control sequences out of 15000+600000
+ 561272 words of font info for 41 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,93p,721b,651s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (26 pages, 256794 bytes).
-PDF statistics:
- 429 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
- 122 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 84i,1n,93p,555b,265s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
+!  ==> Fatal error occurred, no output PDF file produced!

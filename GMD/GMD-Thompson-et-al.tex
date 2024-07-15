@@ -410,24 +410,25 @@ is nearly complete for any given fire intensity, consumption of deeper
 organic soil horizons (F+H layers in upland forests and upper peat
 layers in wetlands) is more drought dependent. In the fire literature in
 Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL)
-and is equivalent to the Medium DOM pool in CBM. Typically attention has
-been paid to the absolute value of Forest Floor Fuel Consumption (FFFC);
-however in the case of carbon modelling, it is the relative fraction of
-consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize
-a composite of wildfire data from \citep{degroot2009} alongside the
-ABoVE duff consumption data , with an alternative modelling approach to
-compute the relative amount of consumption (scalar from 0 to 1) rather
-than an absolute value in \unit{0.2\,kg\,m^{-2}} as otherwise done in
-the literature. A logit transform is used on the scalar data to make it
-suitable for the fitted non-linear least-squares modelling:
+and is dominated by the equivalent Belowground Slow pool (BGSlow) in
+CBM. Typically attention has been paid to the absolute value of Forest
+Floor Fuel Consumption (FFFC); however in the case of carbon modelling,
+it is the relative fraction of consumption (FFFC/FFFL) that is of
+interest. In this scheme, we utilize a composite of wildfire data from
+\citep{degroot2009} alongside the ABoVE duff consumption data , with an
+alternative modelling approach to compute the relative amount of
+consumption (scalar from 0 to 1) rather than an absolute value in
+\unit{0.2\,kg\,m^{-2}} as otherwise done in the literature. A logit
+transform is used on the scalar data to make it suitable for the fitted
+non-linear least-squares modelling:
 
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
+logit \left( \frac{FFFC}{FFFL}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
 \end{equation}
 
-where DC is the Fire Weather Index Drought Code, and MediumDOM in the
-CBM (given in Mg C/ha in this equation), and also synonymous with the
-the Forest Floor Fuel Load (with ecozone averages given in
+where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM
+(given in Mg C/ha in this equation), and also synonymous with the the
+Forest Floor Fuel Load (with ecozone averages given in
 \citep{letang2012} or site-level data where observed). While ultimately
 this scheme can be used on individual fires with estimated or measured
 fuel loading and specific Drought Code values, for the purposes of this
@@ -1063,18 +1064,18 @@ Similar to \citet{degroot2009}, Drought Code was a better predictor of
 consumption rates than Buildup Index as used in the FBP. In the logit
 transformed space, saturation-type non-linear curve using the relevant
 FWI component was fitted in a non-linear least squares model, but an
-additive term of the natural-logarithm transformed FFFC (given as Medium
-DOM in Mg C/ha) was used as well. In the end, a superior model was found
-using the proportional depth of burn, rather than the proportional loss
-of the mass of the soil organic layer:
+additive term of the natural-logarithm transformed FFFC (given as BGSlow
+pool in Mg C/ha) was used as well. In the end, a superior model was
+found using the proportional depth of burn, rather than the proportional
+loss of the mass of the soil organic layer:
 
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(MediumDOM))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
 \end{equation}
 
-Note the coefficient on the parameter associated with the FFFL (Medium
-DOM) of -0.718, which results in larger organic layer fuel loads leading
-to smaller proportional consumption values, which follows the patterns
+Note the coefficient on the parameter associated with the FFFL (BGSlow)
+of -0.718, which results in larger organic layer fuel loads leading to
+smaller proportional consumption values, which follows the patterns
 shown by Walker 2018 for NWT fires of 2014.
 
 Importantly, since fire behaviour, emissions modelling, and carbon
@@ -1104,7 +1105,7 @@ Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK
 constraints. In the abstract, the model follows the form:
 
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = [c*(1 - e^{(a * DC)})] + (c*log_{e}(MediumDOM))
+logit \left( \frac{FFFC}{FFFL}\right) = [c*(1 - e^{(a * DC)})] + (c*log_{e}(BGSlow))
 \end{equation}
 
 The a parameter term that forms the exponent of e alongside Drought Code
@@ -1141,9 +1142,9 @@ Error of \#\#\#\%
 
 \includegraphics{GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf}
 
-Across the entire parameter space of Drought Code and Medium DOM pool
-size, the following isolines of proportional consumption in the model
-can be plotted:
+Across the entire parameter space of Drought Code and BGSlow pool size,
+the following isolines of proportional consumption in the model can be
+plotted:
 
 \includegraphics{GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf}
 
@@ -1156,13 +1157,13 @@ logit-transformed data was found to be the best performing model for
 estimating soil organic consumption proportion:
 
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(MediumDOM)) + 2.17
+logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(BGSlow)) + 2.17
 \end{equation}
 
 Despite the presence of a fixed intercept term, the strong inverse
-dependence on the natural logarithm of the medium Medium DOM pool size
-(FFFL) results in zero proportional consumption when Drought Code is
-equal to zero.
+dependence on the natural logarithm of the BGSlow pool size (FFFL)
+results in zero proportional consumption when Drought Code is equal to
+zero.
 
 \section{Appendix C: annual variability in observed Drought Code during
 wildfire spread, and impact on ecozone-level DM calculations}

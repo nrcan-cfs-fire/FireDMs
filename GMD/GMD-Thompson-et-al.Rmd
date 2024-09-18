@@ -2246,6 +2246,18 @@ for (i in seq(1:length(source.list.checksum))) {
 
 ```
 
+
+
+```{r ComputeDailyFluxes, echo=FALSE, message=FALSE, warning=FALSE}
+### Goal: providing SCANFI and severity data, compute fluxes for a given set of FWI conditions
+
+###basically, provide the following: (1) aligned rasters of SCANFI (corresponding to pool names) and severity data (0,1,2,3?) as well as a global DC value for duff consumption estimates
+
+##outputs: tabular values of the sum of the gas fluxes and updated SCANFI rasters that reflect the fire DMs
+  
+```
+
+
 ```{r makeTables, echo=FALSE, message=FALSE, warning=FALSE}
  
 ## replace any NAs with blanks in kable tables

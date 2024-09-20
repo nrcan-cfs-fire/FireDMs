@@ -264,14 +264,40 @@ kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severit
 
 ## Duff Consumption
 
-While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL) and is dominated by the equivalent Belowground Slow pool (BGSlow) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (FFFC); however in the case of carbon modelling, it is the relative fraction of consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data , with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than an absolute value in \unit{0.2\,kg\,m^{-2}} as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
+While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL) and is dominated by the equivalent Belowground Slow pool (BGSlow) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (FFFC); however in the case of carbon modelling, it is the relative fraction of consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data , with an alternative modelling approach to compute the relative amount of depth of consumption (scalar from 0 to 1) rather than an absolute value in \unit{\,kg\,m^{-2}} or \unit{\,cm} as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{prefire depth}\right) = [3.83(1 - e^{(-0.005DC)})] + (-0.718log_{e}(BGSlow))
 \end{equation}
 ```
-where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code can also be used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 [@barber] using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
+where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed).  The modelling of relative depth of burn had a higher skill than modelling of the relative mass of consumption, given natural variability in soil density with depth.
+
+A conversion factor is then applied to the relative depth of burn data to convert it to a relative mass consumption value.  Since organic soil density always increases with depth, this conversion factor from depth to mass is less than one:
+```{=tex}
+\begin{equation}
+\left( \frac{mass consumed}{prefire mass}\right) = \left( \frac{depth of burn}{prefire depth}\right) * CF
+\end{equation}
+```
+
+where the Correction Factor is defined for boreal spruce fuel types as:
+
+```{=tex}
+\begin{equation}
+CF_{spruce} = 1.018*RelativeDepth^0.250
+\end{equation}
+```
+ 
+ and for all other fuels as
+ 
+```{=tex}
+\begin{equation}
+CF_{spruce} = 0.0717*RelativeDepth^1.02
+\end{equation}
+```
+with RelativeDepth as a value from 0-1. 
+
+While ultimately this scheme can be used on individual fires with estimated or measured fuel loading and specific Drought Code values, for the purposes of this first assessment, an ecozone-averaged fuel load and decadal composites of Drought Code can also be used to provide representative values. Specifically, a median Drought Code of detected fire hotspots in Canada from 2003-2021 [@barber] using the same data as the Canadian CFEEPS-FireWork wildfire air quality model of [@chen2019] is presented below, along with proportional consumption values of the forest floor by ecozone:
 
 ```{r new-ABoVE-FFFC-data, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -485,7 +511,7 @@ CF.non.Spruce <- CF %>% filter(FuelType == "NonSpruce")
 
 ### the C-2 fuel type is quite different, so fitting that by itself, then taking the C-3 data and calling it representative of all the others:
 
-###fit form is simple exponential: y=a+b*exp(cx)
+###fit form is simple exponential: y=b*exp(cx)
 
 Depth.Correction.Factor.Spruce <- nlsLM( 
   formula = CorrectionFactor ~ b*RelativeDepth^c,
@@ -514,29 +540,62 @@ summary(Depth.Correction.Factor.non.Spruce)
 
 ```
 
-```{r FFFC-rpart-NOT-RUN, eval=FALSE, include=FALSE}
+
+```{r DuffConsumpFunction, echo=FALSE, message=FALSE, warning=FALSE }
+
+###Compute FFFC given any DC and duff load input (CalcFFFC)
+# Written By: Dan Thompson
+# Written On: 2024-09-19
+# Parameters: Drought Code of interest (DC); Carbon pool amount of the Below Ground Slow pool (BGSlow) in Mega-grams of Carbon (12g/mol) per hectare of forest area.
+# Modified on: 
+# Modified by: 
+# Purpose: for ecozones in Canada (not including Boreal Cordillera) this function estimates the !!relative consumption!! fraction (0-1) of the forest floor (aka duff), which corresponds to the BGSlow pool in the Carbon Budget Model for the Canadian Forest Sector (CBM-CFS)
+# Description: model is derived analysis of ABoVE project which is a composite of ABoVE project data plus some de Groot data (https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744) also adding in a few eastern/central Canadian sites from (https://www.nrcresearchpress.com/doi/full/10.1139/x08-192).
+
+# output: a single floating point from 0-1 that is the portion of the duff layer that is consumed given a DC and BGSlow pool input
 
 
 
-#lastly, try a regression tree just for kicks on untransformed data
-library(rpart)
-library(rpart.plot)
 
-FFFC.tree <- rpart(prop_sol_combusted ~ drought_code + ecoregion_name_l2 + bg_c_prefire + prop_black_spruce + dob + ag_c_prefire,data=ABoVE_Data_w_FBP_excl_BC)
-printcp(FFFC.tree)
-rpart.plot(FFFC.tree)
-FFFC.predict <- predict(FFFC.tree,newdata=ABoVE_Data)
+### !! Note using the hard-coded parameters, unlike chunks above which derive the parameters, so this function can be used elsewhere
 
-cor(x=ABoVE_Data$prop_sol_combusted,y=FFFC.predict,method="pearson")
 
-MAE.rpart <- mean(abs(ABoVE_Data$prop_sol_combusted-FFFC.predict))
+## CalcFFFC <- function(DC,PoolType,PoolSize) #alternate function that either accepts BGSlow or DuffLoad
+DC <- 250
+BGSlow <- 60
+CalcFFFC <- function(DC=250,BGSlow=60,Spruce=TRUE)
+{
+CalcFFFC_param1 <- 3.83 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3]
+CalcFFFC_param2 <- -0.005 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1]
+CalcFFFC_param3 <- -0.718 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
-### Mean percent error
-MAE.rpart/mean(ABoVE_Data$prop_sol_combusted)
-## regression tree gets you about 30% error rate
+  ##apply the fitted nls logit model with parameters defined above:
+  temp.logit <- CalcFFFC_param1 * (1 - exp(CalcFFFC_param2 * DC)) + (log(BGSlow) * CalcFFFC_param3)
+  
+  ### and now compute the inverse logit of the model and apply a correction factor to convert fraction of mass (from line above) to fraction of depth, using standard duff density curves:
+  
+  CF_non_spruce <- 0.13*inv.logit(temp.logit)+0.87
+  CF_spruce <- (1.02)*inv.logit(temp.logit)^(0.250)
+  
+  ### need if/else for spruce or not
+  CalcFFFC_return <- ifelse(Spruce==TRUE, inv.logit(temp.logit)*CF_spruce,inv.logit(temp.logit)*CF_non_spruce)
+  return(CalcFFFC_return)
+}
+
+#test the function:
+#CalcFFFC(DC=250,BGSlow=25,Spruce=FALSE) ###this is the DMC standard 5kg/m2 of fuel loading at Petawawa as per Van Wagner 1987 FWI system description, gives you ~0.57
+
+#CalcFFFC(DC=550,BGSlow=15,Spruce=TRUE) # similar to the origin area of the 2024 Jasper fire 
+
+#CalcFFFC(DC=25,BGSlow=1200,Spruce=TRUE) ## very low values of DC above the highest value in the test dataset
+###gives you close to zero as it should
+
+#CalcFFFC(DC=290,BGSlow=(24*5),Spruce=TRUE) ##using just the acrotelm carbon stock and a well-known DC and fractional carbon loss in the acrotelm (Bona et al 2020 doi: 10.1016/j.ecolmodel.2020.109164, Table 4), you get ~0.30, which is too high compared to the observed ~0.12 fractional pool loss by fire
+
 
 
 ```
+
 
 ```{r computeFixed-DM-DuffConsump, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -548,12 +607,13 @@ Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 # then the median forest floor load, minus an average litter value (provided here hardcoded from 10.1139/x2012-093):
 Duff.Load.kg.m2 <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
 
+##conversion of Mg C/ha to kg biomass /m2
 BGSlow.Mg.C.ha <- Duff.Load.kg.m2*5
 
 ###building the model for now from coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] in the chunk above
 
 
-#Duff.consump.kg.m2 <- 0.016872*Median.DC^0.71*Duff.Load^0.671 - Litter.Load
+
 Duff.consump.frac.logit <- coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3] * (1 - exp(coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] * Median.DC)) + 
     (log(BGSlow.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
@@ -584,10 +644,14 @@ FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
 ### and to query values:
 #FFFC$Duff.consump.frac[FFFC$Ecozone == "BP"]
 
-###################### end drGroot-only calcs ################
+
 
 
 ```
+
+
+
+
 
 ```{r DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE }
 kbl(FFFC, caption = "Fire Weather, fuel loading, and duff consumption values per ecozone",col.names = c("Ecozone", "Median Drought Code of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "% consumption")) %>%
@@ -2308,7 +2372,32 @@ column_spec(1, width = "3cm") %>%
   
 ```
 
+
 ## Field case studies (for consideration)
+
+
+```{r SingleDMExtract, message=FALSE, warning=FALSE, include=FALSE}
+
+ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC=250)
+{
+  DM_temp <- SourceSink %>% filter(Ecozone==Ecozone_select & SeverityClass==Severity_select)
+  ###now, need to use the above-defind CalcFFFC function within this to get a new Duff.Consump.frac term:
+  ###slight danger since Duff.consump.frac is defined and used otherwise above, so careful
+  Duff.consump.frac <- CalcFFFC(DC = DC)
+  
+  ###now, need to redefine fluxes 11-12,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
+  
+  
+  ###then return the new DM
+  return(DM_temp)
+}
+  
+ExtractFireDM(Ecozone_select="BP",Severity_select = "Mod")
+
+```
+
+
+
 
 ```{r exp-fire-valid}
 

@@ -2383,16 +2383,147 @@ ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC=250)
   DM_temp <- SourceSink %>% filter(Ecozone==Ecozone_select & SeverityClass==Severity_select)
   ###now, need to use the above-defind CalcFFFC function within this to get a new Duff.Consump.frac term:
   ###slight danger since Duff.consump.frac is defined and used otherwise above, so careful
-  Duff.consump.frac <- CalcFFFC(DC = DC)
+  Duff.consump.frac.ExtractFireDM <- CalcFFFC(DC = DC)
   
   ###now, need to redefine fluxes 11-12,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
   
+  ###replace_all ecozone -> Ecozone_select and "High" -> Severity_select
+  ###since we still have to cite VarDefs in there
+  
+  #DM_temp$FluxID == 11
+  
+  ##here's one example of many of the fluxes
+  
+  ###need to locate "FFFC$Duff.consump.frac" and replace with "Duff.consump.frac.ExtractFireDM"
+  
+  SourceSink$Value[SourceSink$FluxID == 11] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
+
   
   ###then return the new DM
   return(DM_temp)
 }
   
 ExtractFireDM(Ecozone_select="BP",Severity_select = "Mod")
+
+```
+
+
+```{r ComputeEmissionsPerFire, message=FALSE, warning=FALSE, include=FALSE}
+
+##Goal: for a single fire, give the (0) some sort of ID (1) total area; (2) ecozone, (3) province, (4-6)% breakdown of low/mod/high, and (7) median DC of burning
+
+##output is as a data frame with (0-7 inputs) as well as total gas and PM emissions as well as emission ratio 
+
+### provide a random number for the ID if otherwise not provided
+
+
+EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250)
+{
+ 
+  ###insert function description here
+  ##note that Low+Mod+High should not == 1 since unburned area is also possible and likely in most cases
+  
+  
+  
+  
+   ### just for testing, will get loaded as defaults in the function
+  ID <- runif(1, 1000000000000, 9999999999999) %>% round %>% as.character
+  #Area_ha=1
+  #EcoBoundaryName_select="Boreal Plains"
+  #AdminBoundaryName_select="Alberta"
+  #Low_frac=0.15
+  #Mod_frac=0.15
+  #High_frac=0.70
+  #Median_DC=250
+  
+  ### build the first columns of the output dataframe, which is just the input
+  Emissions_DF <- cbind(ID,Area_ha,EcoBoundaryName_select,AdminBoundaryName_select,Low_frac,Mod_frac,High_frac,Median_DC)
+  
+  ###now load the mean pool size from CBM 2023:
+    NIR2023_AverageCPools <- read_csv("../NIR2023_AverageCPools.csv") ### it is one directory above this Rmd file
+  
+    
+  ##filter out to the pools of the admin and eco zones of interest
+  NIR_AverageCPools_filter <- NIR2023_AverageCPools %>% filter(EcoBoundaryName==EcoBoundaryName_select,AdminBoundaryName==AdminBoundaryName_select,TimeStep==0) 
+  
+  ###make into a long dataframae where the Average C Pool Value is a data frame with columns for the pool name and pool size value
+  NIR_AverageCPools_filter_long <- pivot_longer(NIR_AverageCPools_filter,cols=`Aboveground Very Fast DOM`:`Hardwood Fine Roots`) %>% rename(PoolName=name) %>% rename(PoolSize=value)
+  
+  
+  
+  
+  ##now load up the three appropriate DMs here (one for each severity class):
+  
+  DM_Low <- ExtractFireDM(unique(NIR_AverageCPools_filter$EcoBoundaryNameShort),Severity_select = "Low",DC=Median_DC)
+  
+  DM_Mod <- ExtractFireDM(unique(NIR_AverageCPools_filter$EcoBoundaryNameShort),Severity_select = "Mod",DC=Median_DC)
+  
+  DM_High <- ExtractFireDM(unique(NIR_AverageCPools_filter$EcoBoundaryNameShort),Severity_select = "High",DC=Median_DC)
+  
+  ### combine the three above into a DM with severity class as a column
+  DM_all <- rbind(DM_Low,DM_Mod,DM_High)
+  
+  Fluxes_Low_tmp <- DM_all %>% filter(SeverityClass=="Low") %>% full_join(NIR_AverageCPools_filter_long,by=join_by(Source == PoolName)) %>% mutate(FluxMgCha = Value*PoolSize*Low_frac)
+  
+  Fluxes_Mod_tmp <- DM_all %>% filter(SeverityClass=="Mod") %>% full_join(NIR_AverageCPools_filter_long,by=join_by(Source == PoolName)) %>% mutate(FluxMgCha = Value*PoolSize*Mod_frac)
+ 
+  Fluxes_High_tmp <- DM_all %>% filter(SeverityClass=="High") %>% full_join(NIR_AverageCPools_filter_long,by=join_by(Source == PoolName)) %>% mutate(FluxMgCha = Value*PoolSize*High_frac) 
+  
+  Fluxes_all <- rbind(Fluxes_Low_tmp,Fluxes_Mod_tmp,Fluxes_High_tmp)
+  
+  Fluxes_summary <- Fluxes_all %>% group_by(SeverityClass,Sink) %>% summarize(FluxTotalMgCha = sum(FluxMgCha,na.rm=TRUE))
+  
+  ################
+ 
+  
+  ### calculate the modified combustion efficiency and attach it to the output data frame
+  MCE <- (Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CO2"][1])/((Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CO2"][1])+(Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CO"][1]))
+  
+  
+  ### calculate total emissions for the fire of interest, mulitplying by Area_ha
+  CH4_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CH4"][1]*Area_ha
+  CO_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CO"][1]*Area_ha
+  CO2_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="CO2"][1]*Area_ha
+  NMOG_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="NMOG"][1]*Area_ha
+  PM10_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="PM10"][1]*Area_ha
+  PM25_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="PM25"][1]*Area_ha
+  
+  
+  
+  Emissions_DF <- as.data.frame(cbind(Emissions_DF,MCE,CH4_MgC,CO_MgC,CO2_MgC,NMOG_MgC,PM10_MgC,PM25_MgC))
+  
+  Emissions_DF$Area_ha <- as.numeric(Emissions_DF$Area_ha)
+  Emissions_DF$Low_frac <- as.numeric(Emissions_DF$Low_frac)
+  Emissions_DF$Mod_frac <- as.numeric(Emissions_DF$Mod_frac)
+  Emissions_DF$High_frac <- as.numeric(Emissions_DF$High_frac)
+  Emissions_DF$MCE <- as.numeric(Emissions_DF$MCE)
+  Emissions_DF$Median_DC <- as.numeric(Emissions_DF$Median_DC)
+  Emissions_DF$NMOG_MgC <- as.numeric(Emissions_DF$NMOG_MgC)
+  Emissions_DF$PM10_MgC <- as.numeric(Emissions_DF$PM10_MgC)
+  Emissions_DF$PM25_MgC <- as.numeric(Emissions_DF$PM25_MgC)
+  
+  #Emissions_DF <- as.data.frame(Emissions_DF) %>% mutate(across(9:12, as.numeric)) %>% mutate(across(9:12, round, 2))
+  
+  return(Emissions_DF)
+}
+  EmissionsPerFire()
+
+test_20_30_30_DC250 <- EmissionsPerFire(ID="test_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250)
+
+test_20_30_30DC500 <- EmissionsPerFire(ID="test_20_30_30DC500",Area_ha = 1000,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=500)
+
+### right now there's no dependence on DC, so these are the same for the moment:
+rbind(test_20_30_30_DC250,test_20_30_30DC500)
+
+##same ecoregion just different balance of severity classes. 
+rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_50_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.10,Mod_frac=0.20,High_frac=0.50,Median_DC=250))
+
+##same ecoregion just different balance of severity classes.  
+rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.8,Mod_frac=0.01,High_frac=0.01,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_50_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.10,Mod_frac=0.20,High_frac=0.50,Median_DC=250))
+
+
+##contrasting ecozones where the BGSlow (duff) consumption is about 2x greater in BP compared to BSE, and softwood foliage is also about 2x as large.  As a result, per ha the emissions are about 2.0-2.5 times bigger
+rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Plains",AdminBoundaryName="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250))
 
 ```
 

@@ -2378,12 +2378,21 @@ column_spec(1, width = "3cm") %>%
 
 ```{r SingleDMExtract, message=FALSE, warning=FALSE, include=FALSE}
 
-ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC=250)
+ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC_for_DM=250)
 {
+  #DC_for_DM=700
+  #Ecozone_select="BP"
+  #Severity_select="High"
+  
+  ##for now, find the relevant average duff load and ##conversion of Mg C/ha to kg biomass /m2
+  BGSlow_for_DM <- as.numeric(FFFC$Median.Duff.Load.kg.m2[FFFC$Ecozone == Ecozone_select])*5
+  
+  
   DM_temp <- SourceSink %>% filter(Ecozone==Ecozone_select & SeverityClass==Severity_select)
   ###now, need to use the above-defind CalcFFFC function within this to get a new Duff.Consump.frac term:
   ###slight danger since Duff.consump.frac is defined and used otherwise above, so careful
-  Duff.consump.frac.ExtractFireDM <- CalcFFFC(DC = DC)
+  Duff.consump.frac.ExtractFireDM <- CalcFFFC(BGSlow = BGSlow_for_DM,DC = DC_for_DM,Spruce=TRUE)
+  
   
   ###now, need to redefine fluxes 11-12,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
   
@@ -2396,60 +2405,89 @@ ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC=250)
   
   ###need to locate "FFFC$Duff.consump.frac" and replace with "Duff.consump.frac.ExtractFireDM"
   
-  SourceSink$Value[SourceSink$FluxID == 11] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
+  DM_temp$Value[DM_temp$FluxID == 11] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
 
-  SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
+  DM_temp$Value[DM_temp$FluxID == 12] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
   
-  SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 23 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
+  DM_temp$Value[DM_temp$FluxID == 23] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(1 - Duff.consump.frac.ExtractFireDM)
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
+DM_temp$Value[DM_temp$FluxID == 25] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO2
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
-
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
+DM_temp$Value[DM_temp$FluxID == 26] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCH4
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 38 & SourceSink$SeverityClass == 'Low'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
+DM_temp$Value[DM_temp$FluxID == 27] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 40 & SourceSink$SeverityClass == 'Low'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 50 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == 'Low'])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(1 - as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
+DM_temp$Value[DM_temp$FluxID == 38] <-
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 53 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
+DM_temp$Value[DM_temp$FluxID == 40] <-
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO)
+
+DM_temp$Value[DM_temp$FluxID == 50] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(1 - Duff.consump.frac.ExtractFireDM)
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 54 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
+DM_temp$Value[DM_temp$FluxID == 53] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCH4
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))))
+DM_temp$Value[DM_temp$FluxID == 54] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Low"] <- (1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))) 
-
-### the fluxes below are calculated at the end of the algorithm above since they feature residual calculations and need to balance the DMs precisely.  The ones implicated in variable depth of burn with DC are included here
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 9 & SourceSink$SeverityClass == "Low"] <- 1-( sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >=10 & SourceSink$FluxID <=13 & SourceSink$SeverityClass == "Low"]) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 102 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 119 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 136 & SourceSink$SeverityClass == "Low"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 22 & SourceSink$SeverityClass == "Low"] <- 1-sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == "Softwood Fine Roots" & SourceSink$SeverityClass == "Low"],na.rm=TRUE)
+DM_temp$Value[DM_temp$FluxID == 60] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select])*(Duff.consump.frac.ExtractFireDM)))
 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 36 & SourceSink$SeverityClass == "Low"] <-1-( sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID >=37 & SourceSink$FluxID <=40 & SourceSink$SeverityClass == "Low"]) + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 106 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 123 & SourceSink$SeverityClass == "Low"] + SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 140 & SourceSink$SeverityClass == "Low"])
+DM_temp$Value[DM_temp$FluxID == 70] <- (1 - (Duff.consump.frac.ExtractFireDM)) 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 49 & SourceSink$SeverityClass == "Low"] <- 1-sum(SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$Source == "Hardwood Fine Roots" & SourceSink$SeverityClass == "Low"],na.rm=TRUE)
+
+#####
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 39] <- 
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
+
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 52] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO2
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 61] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 60])*global.vars$SmoulderingCO2
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 62] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 60])*global.vars$SmoulderingCH4
+
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 63] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 60])*global.vars$SmoulderingCO
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 71] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 70])*global.vars$SmoulderingCO2
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 72] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 70])*global.vars$SmoulderingCH4
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 73] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 70])*global.vars$SmoulderingCO
+
+### the fluxes below are calculated at the end of the algorithm above since they feature residual calculations and need to balance the DMs precisely.  The ones implicated in variable depth of burn with DC
+
+DM_temp$Value[DM_temp$FluxID == 9] <- 1-( sum(DM_temp$Value[DM_temp$FluxID >=10 & DM_temp$FluxID <=13]) + DM_temp$Value[DM_temp$FluxID == 102] + DM_temp$Value[DM_temp$FluxID == 119] + DM_temp$Value[DM_temp$FluxID == 136])
+
+DM_temp$Value[DM_temp$FluxID == 22] <- 1-sum(DM_temp$Value[DM_temp$Source == "Softwood Fine Roots"],na.rm=TRUE)
+
+
+DM_temp$Value[DM_temp$FluxID == 36] <-1-( sum(DM_temp$Value[DM_temp$FluxID >=37 & DM_temp$FluxID <=40]) + DM_temp$Value[DM_temp$FluxID == 106] + DM_temp$Value[DM_temp$FluxID == 123] + DM_temp$Value[DM_temp$FluxID == 140])
+
+DM_temp$Value[DM_temp$FluxID == 49] <- 1-sum(DM_temp$Value[DM_temp$Source == "Hardwood Fine Roots"],na.rm=TRUE)
 
   
   
   ###then return the new DM
-  return(DM_temp)
+return(DM_temp)
+#return(Duff.consump.frac.ExtractFireDM) #turn this on to just test the duff consumption model
+
 }
   
-ExtractFireDM(Ecozone_select="BP",Severity_select = "Mod")
+###works, but need to check the sensitivity of the consumption term a bit more
+
+testDM1 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",DC_for_DM=150)
+testDM2 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",DC_for_DM=550)
+
+testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
+testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 
 ```
 
@@ -2534,7 +2572,11 @@ EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains"
   PM25_MgC <- Fluxes_summary$FluxTotalMgCha[Fluxes_summary$Sink=="PM25"][1]*Area_ha
   
   ### calculate the modified combustion efficiency and attach it to the output data frame
-  MCE <- CO2_MgC/(CO2_MgC+CO_MgC)
+  #### MCE is in mixing ratio, so mass/mass terms
+  
+  MCE <- CO2_MgC*44/(CO2_MgC*44+CO_MgC*28)
+  
+  
   ER_CO_CO2 <- CO_MgC/CO2_MgC
   ER_CH4_CO2 <- CH4_MgC/CO2_MgC
   
@@ -2560,13 +2602,17 @@ test_20_30_30_DC250 <- EmissionsPerFire(ID="test_20_30_30_DC250",Area_ha = 1000,
 
 test_20_30_30DC500 <- EmissionsPerFire(ID="test_20_30_30DC500",Area_ha = 1000,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=500)
 
-### right now there's no dependence on DC, so these are the same for the moment:
-rbind(test_20_30_30_DC250,test_20_30_30DC500)
 
-##same ecoregion just different balance of severity classes. 
+
+### same balance of severity classes, just different Drought Code and therefore duff consumption:
+rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Shield West",AdminBoundaryName="Saskatchewan",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=150),EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Shield West",AdminBoundaryName="Saskatchewan",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=350))
+
+
+
+##same ecoregion just small different balance of severity classes. 
 rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_50_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.10,Mod_frac=0.20,High_frac=0.50,Median_DC=250))
 
-##same ecoregion just different balance of severity classes.  
+##same ecoregion but large difference in balance of severity classes.  
 rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.8,Mod_frac=0.01,High_frac=0.01,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_50_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.10,Mod_frac=0.20,High_frac=0.50,Median_DC=250))
 
 
@@ -2580,6 +2626,13 @@ rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryNam
 ```{r GasEmissions-all-combos}
 ###run through all combinations of ecozone*province, severity class, and DC class from 50 -> 750 and run the model there to make a giant lookup table for the DM itself and also the gas emissions
 
+DC_levels <- seq(from=50,to=750, by=100)
+
+FireDM_grid <- expand(NIR2023_AverageCPools,nesting(EcoBoundaryName,AdminBoundaryName),DC_levels)
+
+emissions_temp <- EmissionsPerFire(Area_ha=1,EcoBoundaryName_select=FireDM_grid$EcoBoundaryName,AdminBoundaryName_select = FireDM_grid$AdminBoundaryName,Median_DC = FireDM_grid$DC_levels)
+
+emissions_temp <- EmissionsPerFire(ID=1,Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[1],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[1],FireDM_grid$DC_levels[1])
 ```
 
 

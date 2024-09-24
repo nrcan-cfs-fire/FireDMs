@@ -103,32 +103,29 @@
 \begin{document}
 
 
-\title{Incorporating fire severity for refined carbon emissions
-estimates of boreal and temperate forest fires in the Generic Carbon
-Budget Model (GCBM)}
+\title{Incorporating fire severity for refined data-drive carbon
+emissions estimates of boreal and temperate forest fires in the Generic
+Carbon Budget Model (GCBM)}
 
 
-\Author[1][daniel.thompson@nrcan-rncan.gc.ca]{Dan K.}{Thompson}
-\Author[2]{Ellen}{Whitman}
-\Author[3]{Ben}{Hudson}
-\Author[1]{Chelene}{Hanes}
-\Author[3]{Vinicius}{Manvailer Goncalves}
-\Author[3]{Werner}{Kurz}
+\Author[1][]{}{}
+\Author[2]{}{}
+\Author[3]{}{}
+\Author[1]{}{}
+\Author[3]{}{}
+\Author[3]{}{}
 
 
-\affil[1]{Natural Resources Canada, Canadian Forest Service, Great Lakes
-Forestry Centre, Sault Ste. Marie, Canada}
-\affil[2]{Natural Resources Canada, Canadian Forest Service, Northern
-Forestry Centre, Edmonton, Canada}
-\affil[3]{Natural Resources Canada, Canadian Forest Service, Pacific
-Forestry Centre, Victoria, Canada}
+\affil[1]{}
+\affil[2]{}
+\affil[3]{}
 
 \runningtitle{Fire Severity and Forest Carbon Budget Models}
 
 \runningauthor{Thompson et al.}
 
 
-\correspondence{Dan K.\ Thompson\ (daniel.thompson@nrcan-rncan.gc.ca)}
+\correspondence{\ \ ()}
 
 
 
@@ -157,14 +154,7 @@ Generic Carbon Budget Model for forest carbon accounting, field
 measurements of biomass consumption as related to satellite-derived burn
 severity maps are interpretted from a fire physics and ecology
 perspective to derive algorithms to describe forest carbon fluxes in the
-immediate aftermath of fires. Compared to the baseline high
-severity-only representation, this mixed severity modelling framework
-changes modelled total Carbon flux to the atmosphere by {[}\#\#\#{]}\%,
-with the largest changes in {[}pool{]}. Per fire energy release rates as
-detected by satellite yield a favourable rank correlation with this
-severity-only method, and regional estimates of atmospheric CO release
-by satellite compare favourably to outputs from this severity-driven
-model.
+immediate aftermath of fires.
 \end{abstract}
 
 
@@ -416,29 +406,56 @@ Floor Fuel Consumption (FFFC); however in the case of carbon modelling,
 it is the relative fraction of consumption (FFFC/FFFL) that is of
 interest. In this scheme, we utilize a composite of wildfire data from
 \citep{degroot2009} alongside the ABoVE duff consumption data , with an
-alternative modelling approach to compute the relative amount of
-consumption (scalar from 0 to 1) rather than an absolute value in
-\unit{0.2\,kg\,m^{-2}} as otherwise done in the literature. A logit
-transform is used on the scalar data to make it suitable for the fitted
-non-linear least-squares modelling:
+alternative modelling approach to compute the relative amount of depth
+of consumption (scalar from 0 to 1) rather than an absolute value in
+\unit{\,kg\,m^{-2}} or \unit{\,cm} as otherwise done in the literature.
+A logit transform is used on the scalar data to make it suitable for the
+fitted non-linear least-squares modelling:
 
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{prefire depth}\right) = [3.83(1 - e^{(-0.005DC)})] + (-0.718log_{e}(BGSlow))
 \end{equation}
 
 where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM
 (given in Mg C/ha in this equation), and also synonymous with the the
 Forest Floor Fuel Load (with ecozone averages given in
-\citep{letang2012} or site-level data where observed). While ultimately
-this scheme can be used on individual fires with estimated or measured
-fuel loading and specific Drought Code values, for the purposes of this
-first assessment, an ecozone-averaged fuel load and decadal composites
-of Drought Code can also be used to provide representative values.
-Specifically, a median Drought Code of detected fire hotspots in Canada
-from 2003-2021 \citep{barber} using the same data as the Canadian
-CFEEPS-FireWork wildfire air quality model of \citep{chen2019} is
-presented below, along with proportional consumption values of the
-forest floor by ecozone:
+\citep{letang2012} or site-level data where observed). The modelling of
+relative depth of burn had a higher skill than modelling of the relative
+mass of consumption, given natural variability in soil density with
+depth.
+
+A conversion factor is then applied to the relative depth of burn data
+to convert it to a relative mass consumption value. Since organic soil
+density always increases with depth, this conversion factor from depth
+to mass is less than one:
+
+\begin{equation}
+\left( \frac{mass consumed}{prefire mass}\right) = \left( \frac{depth of burn}{prefire depth}\right) * CF
+\end{equation}
+
+where the Correction Factor is defined for boreal spruce fuel types as:
+
+\begin{equation}
+CF_{spruce} = 1.018(RelativeDepth)^0.250
+\end{equation}
+
+and for all other fuels as
+
+\begin{equation}
+CF_{nonspruce} = 0.13(RelativeDepth)+0.87
+\end{equation}
+
+with RelativeDepth as a value from 0-1.
+
+While ultimately this scheme can be used on individual fires with
+estimated or measured fuel loading and specific Drought Code values, for
+the purposes of this first assessment, an ecozone-averaged fuel load and
+decadal composites of Drought Code can also be used to provide
+representative values. Specifically, a median Drought Code of detected
+fire hotspots in Canada from 2003-2021 \citep{barber} using the same
+data as the Canadian CFEEPS-FireWork wildfire air quality model of
+\citep{chen2019} is presented below, along with proportional consumption
+values of the forest floor by ecozone:
 
 \begin{table}
 \centering
@@ -845,66 +862,6 @@ exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast
 ### connected points?
 \end{verbatim}
 
-ICFME has detailed, for high severity.
-
-Another option would be Lafoe Creek mixedwood burns, which would need
-some sort of CFB and mortality estimate. Is the pre-fire fuel load
-documented somewhere?
-
-Pelican would work too, less on the bark consumption etc though.
-
-And last, maybe something from Carrot lake or similarly well-observed BC
-fire?
-
-Compare each pool's observed vs modelled relative consumption rates
-using (ideally) dNBR to drive severity class from the real data.
-
-Use exactly the FBP DataFrame, no need for anything duplicating that
-otherwise. Am going to compute proportional combustion from the FBP Data
-frame anyways.
-
-\subsection{1990-2020(1) GCBM BC annual C stocks estimates with new fire
-DM scheme}
-
-Give quick summary here, show overview map of all the fires, and also an
-example of the GCBM biomass pools and also severity classes on a fire or
-two from Ellen
-
-\begin{verbatim}
-## maybe just a figure of the fires labelled by year and
-## perhaps a pie(?) chart of their severity portions as
-## mapped?
-\end{verbatim}
-
-Then compare old vs new fire DM scheme for some (all?) individual fires
-as a biplot
-
-\begin{verbatim}
-### let's assume all the GCBM processing has been done.
-
-### biplot of CO2e total per fire, comparing old scheme vs
-### new.  Gets you an idea of how it scales vs size of
-### fire.  Colour for ecozone within BC?
-\end{verbatim}
-
-Then the annual GCBM runs with old and new scheme.
-
-\begin{verbatim}
-### let's assume all the GCBM processing has been done.
-
-### times series or biplot?  Time series seems the one they
-### default too. Maybe both?
-
-### Just the two lines (old vs new) as CO2e per year, or do
-### we get to also show anything else?  Maybe annual PM2.5
-### gets in an appendix, since there's no old vs new.
-
-### fun followup graph: with the new system only (?) total
-### area burned vs total CO2e, showing that there's not as
-### much of a constant slope as you think?  That the
-### CO2e/ha can really vary between years.
-\end{verbatim}
-
 \section{Discussion}
 
 -some discussion points (unordered) so far
@@ -1114,7 +1071,7 @@ correction factor of 0.80. For non-spruce-dominated fuels, this
 correction is much smaller but still meaningful:
 
 \begin{equation}
-\left( \frac{FFFC}{FFFL}\right) = 1.02 \left( \frac{depth of burn}{pre-fire organic depth}\right)^{0.07}
+\left( \frac{FFFC}{FFFL}\right) = 0.13 \left( \frac{depth of burn}{pre-fire organic depth}\right)+0.87
 \end{equation}
 
 (show perhaps what a few different a values look like?) (also compute

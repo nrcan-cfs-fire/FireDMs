@@ -1,44 +1,44 @@
 ---
-title: Incorporating fire severity for refined carbon emissions estimates of boreal and temperate forest fires in the Generic Carbon Budget Model (GCBM)
+title: Incorporating fire severity for refined data-drive carbon emissions estimates of boreal and temperate forest fires in the Generic Carbon Budget Model (GCBM)
 journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'gmd')`"
 author:
-  - given_name: Dan K.
-    surname: Thompson
+  - given_name: 
+    surname: 
     affiliation: 1
-    email: daniel.thompson@nrcan-rncan.gc.ca
+    email: 
     corresponding: true
-  - given_name: Ellen
-    surname: Whitman
+  - given_name: 
+    surname: 
     affiliation: 2
-    email: ellen.whitman@nrcan-rncan.gc.ca
-  - given_name: Ben
-    surname: Hudson
-    affiliation: 3
-    email: benjamin.hudson@nrcan-rncan.gc.ca
-  - given_name: Chelene
-    surname: Hanes
-    affiliation: 1
-    email: chelene.hanes@nrcan-rncan.gc.ca
-  - given_name: Vinicius
-    surname: Manvailer Goncalves
+    email: 
+  - given_name: 
+    surname: 
     affiliation: 3
     email: 
-  - given_name: Werner
-    surname: Kurz
+  - given_name: 
+    surname: 
+    affiliation: 1
+    email: 
+  - given_name: 
+    surname: 
     affiliation: 3
-    email: werner.kurz@nrcan-rncan.gc.ca
+    email: 
+  - given_name: 
+    surname: 
+    affiliation: 3
+    email: 
     
 
 affiliation:
   - code: 1
-    address: Natural Resources Canada, Canadian Forest Service, Great Lakes Forestry Centre, Sault Ste. Marie, Canada
+    address: 
   - code: 2
-    address: Natural Resources Canada, Canadian Forest Service, Northern Forestry Centre, Edmonton, Canada
+    address: 
   - code: 3
-    address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
+    address: 
 
 abstract: |
-  Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes.  Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fraction of biomass consumed) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire.  In this submodel of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements of biomass consumption as related to satellite-derived burn severity maps are interpretted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires.  Compared to the baseline high severity-only representation, this mixed severity modelling framework changes modelled total Carbon flux to the atmosphere by [###]%, with the largest changes in [pool].  Per fire energy release rates as detected by satellite yield a favourable rank correlation with this severity-only method, and regional estimates of atmospheric CO release by satellite compare favourably to outputs from this severity-driven model.
+  Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes.  Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fraction of biomass consumed) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire.  In this submodel of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements of biomass consumption as related to satellite-derived burn severity maps are interpretted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires.  
 bibliography: references.bib
 running:
   title: Fire Severity and Forest Carbon Budget Models
@@ -284,7 +284,7 @@ where the Correction Factor is defined for boreal spruce fuel types as:
 
 ```{=tex}
 \begin{equation}
-CF_{spruce} = 1.018*RelativeDepth^0.250
+CF_{spruce} = 1.018(RelativeDepth)^0.250
 \end{equation}
 ```
  
@@ -292,7 +292,7 @@ CF_{spruce} = 1.018*RelativeDepth^0.250
  
 ```{=tex}
 \begin{equation}
-CF_{spruce} = 0.0717*RelativeDepth^1.02
+CF_{nonspruce} = 0.13(RelativeDepth)+0.87
 \end{equation}
 ```
 with RelativeDepth as a value from 0-1. 
@@ -525,7 +525,7 @@ summary(Depth.Correction.Factor.Spruce)
 
 
 Depth.Correction.Factor.non.Spruce <- nlsLM( 
-  formula = CorrectionFactor ~ b*RelativeDepth^c,
+  formula = CorrectionFactor ~ b*RelativeDepth+c,
   data = CF.non.Spruce,
   start = list(c = 1, b = 1)
   )
@@ -2623,16 +2623,22 @@ rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryNam
 
 
 
-```{r GasEmissions-all-combos}
+```{r GasEmissions-all-combos, eval=FALSE, include=FALSE}
 ###run through all combinations of ecozone*province, severity class, and DC class from 50 -> 750 and run the model there to make a giant lookup table for the DM itself and also the gas emissions
 
 DC_levels <- seq(from=50,to=750, by=100)
+Severity_classes <- c("Low","Mod","High")
+FireDM_grid <- expand(NIR2023_AverageCPools,nesting(EcoBoundaryName,AdminBoundaryName),DC_levels,Severity_classes)
 
-FireDM_grid <- expand(NIR2023_AverageCPools,nesting(EcoBoundaryName,AdminBoundaryName),DC_levels)
 
+###will have to do a case_when here to map the severity classes to the function
 emissions_temp <- EmissionsPerFire(Area_ha=1,EcoBoundaryName_select=FireDM_grid$EcoBoundaryName,AdminBoundaryName_select = FireDM_grid$AdminBoundaryName,Median_DC = FireDM_grid$DC_levels)
 
 emissions_temp <- EmissionsPerFire(ID=1,Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[1],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[1],FireDM_grid$DC_levels[1])
+
+
+
+
 ```
 
 
@@ -2659,52 +2665,6 @@ exp.fire.pools <- c("Softwood Foliage","Softwood Other","Aboveground Very Fast D
 ##https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
 ## with the colour being the fuel type/leading spp and size being total emissions?
 ### can we draw lines in between pairs of mod vs obs in that package? TernaryApp function in the package should apparently let you draw connected points?
-```
-
-ICFME has detailed, for high severity.
-
-Another option would be Lafoe Creek mixedwood burns, which would need some sort of CFB and mortality estimate. Is the pre-fire fuel load documented somewhere?
-
-Pelican would work too, less on the bark consumption etc though.
-
-And last, maybe something from Carrot lake or similarly well-observed BC fire?
-
-Compare each pool's observed vs modelled relative consumption rates using (ideally) dNBR to drive severity class from the real data.
-
-Use exactly the FBP DataFrame, no need for anything duplicating that otherwise. Am going to compute proportional combustion from the FBP Data frame anyways.
-
-## 1990-2020(1) GCBM BC annual C stocks estimates with new fire DM scheme
-
-Give quick summary here, show overview map of all the fires, and also an example of the GCBM biomass pools and also severity classes on a fire or two from Ellen
-
-```{r BC-overview-map}
-
-##maybe just a figure of the fires labelled by year and perhaps a pie(?) chart of their severity portions as mapped?
-
-```
-
-Then compare old vs new fire DM scheme for some (all?) individual fires as a biplot
-
-```{r biplot}
-
-### let's assume all the GCBM processing has been done.
-
-### biplot of CO2e total per fire, comparing old scheme vs new.  Gets you an idea of how it scales vs size of fire.  Colour for ecozone within BC?
-
-```
-
-Then the annual GCBM runs with old and new scheme.
-
-```{r time-series-BC-wildfires}
-
-### let's assume all the GCBM processing has been done.
-
-### times series or biplot?  Time series seems the one they default too. Maybe both?
-
-### Just the two lines (old vs new) as CO2e per year, or do we get to also show anything else?  Maybe annual PM2.5 gets in an appendix, since there's no old vs new.
-
-### fun followup graph: with the new system only (?) total area burned vs total CO2e, showing that there's not as much of a constant slope as you think?  That the CO2e/ha can really vary between years.
-
 ```
 
 # Discussion
@@ -2810,7 +2770,7 @@ which for example means that the median proportional depth of burn in the AboVE/
 
 ```{=tex}
 \begin{equation}
-\left( \frac{FFFC}{FFFL}\right) = 1.02 \left( \frac{depth of burn}{pre-fire organic depth}\right)^{0.07}
+\left( \frac{FFFC}{FFFL}\right) = 0.13 \left( \frac{depth of burn}{pre-fire organic depth}\right)+0.87
 \end{equation}
 ```
 

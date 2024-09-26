@@ -38,7 +38,9 @@ affiliation:
     address: 
 
 abstract: |
-  Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes.  Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fraction of biomass consumed) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire.  In this submodel of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements of biomass consumption as related to satellite-derived burn severity maps are interpretted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires.  
+  Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes.  Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fraction of biomass consumed) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire.  In this submodel of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements of biomass consumption as related to satellite-derived burn severity maps are interpretted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires.  Model outputs indicate total carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 70 t C/ha in Taiga Cordillera and Pacific Maritime forests of Yukon under high severity fire.  Pacific Maritime forest showed the largest fraction of carbon release in the canopy biomass pools (67%), while Taiga Shield West and Boreal Plains of the Northwest Territories and Manitoba were estimated of having 82% of carbon emissions in the surface and belowground biomass pools of litter, duff, peat, roots, etc.
+  
+  
 bibliography: references.bib
 running:
   title: Fire Severity and Forest Carbon Budget Models
@@ -103,6 +105,7 @@ In this document, we outline the evidence-based fire Disturbance Matrices update
 
 ```{r loadLibsEtc, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(dplyr, warn.conflicts = FALSE)
 library(kableExtra)
 library(tinytex)
 library(formatR)
@@ -115,6 +118,8 @@ library(mgcv)
 library(gslnls)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 library(minpack.lm)
+
+options(dplyr.summarise.inform = FALSE)
 
 #original list
 #ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
@@ -819,7 +824,7 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 ```
 
-# Results and example applications
+# Results
 
 ```{r DefineDMvalues, echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -1691,11 +1696,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 69 & Sourc
 #Pseudocode: =1-(fraction of duff consumed)
 #note: see CaMP for slow DOM in peat layers
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Low"] <- (1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Low"] <- 1-(((as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))*(VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Mod"] <- (1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "Mod"] <- 1-(((as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))*(VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "High"] <- (1 - (as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 70 & SourceSink$SeverityClass == "High"] <- 1-(((as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])))*(VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]))
 
 
 #FluxID: 71
@@ -2373,7 +2378,7 @@ column_spec(1, width = "3cm") %>%
 ```
 
 
-## Field case studies (for consideration)
+
 
 
 ```{r SingleDMExtract, message=FALSE, warning=FALSE, include=FALSE}
@@ -2439,7 +2444,8 @@ DM_temp$Value[DM_temp$FluxID == 54] <- VarDefs$Value[VarDefs$Variable.Name == 'H
 DM_temp$Value[DM_temp$FluxID == 60] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select])*(Duff.consump.frac.ExtractFireDM)))
 
 
-DM_temp$Value[DM_temp$FluxID == 70] <- (1 - (Duff.consump.frac.ExtractFireDM)) 
+###importantly, the duff remaining calculation also considered unburned litter area, where litter has to burn in order for the duff beneath to burn.  This can be up to 20% unburned litter area in low severity
+DM_temp$Value[DM_temp$FluxID == 70] <- (1-(Duff.consump.frac.ExtractFireDM) *(1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select]))
 
 
 #####
@@ -2461,6 +2467,68 @@ DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 71] <- (1 - 
 DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 72] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 70])*global.vars$SmoulderingCH4
 
 DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 73] <- (1 - DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 70])*global.vars$SmoulderingCO
+
+
+
+for(FluxIDLoop in seq(from=101,to=117)){
+  
+  ### this a.low placeholder grabs the reference CO DM value, which we then multiply against the CO:PM25 ratio in order to get the PM
+a.low <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low" & DM_temp$Ecozone == Ecozone_select]
+
+a.mod <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod" & DM_temp$Ecozone == Ecozone_select]
+
+a.high <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High" & DM_temp$Ecozone == Ecozone_select]
+
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.low & DM_temp$SeverityClass == "Low"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.mod & DM_temp$SeverityClass == "Mod"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.high & DM_temp$SeverityClass == "High"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM25/global.vars$FlamingCO,global.vars$SmoulderingPM25/global.vars$SmoulderingCO)
+}
+
+#### now for PM10um
+
+for(FluxIDLoop in seq(from=118,to=134)){
+a.low <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low" & DM_temp$Ecozone == Ecozone_select]
+
+a.mod <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod" & DM_temp$Ecozone == Ecozone_select]
+
+a.high <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High" & DM_temp$Ecozone == Ecozone_select]
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.low & DM_temp$SeverityClass == "Low"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM10/global.vars$FlamingCO,global.vars$SmoulderingPM10/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.mod & DM_temp$SeverityClass == "Mod"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM10/global.vars$FlamingCO,global.vars$SmoulderingPM10/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.high & DM_temp$SeverityClass == "High"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingPM10/global.vars$FlamingCO,global.vars$SmoulderingPM10/global.vars$SmoulderingCO)
+}
+
+###lastly, for NMOG
+
+for(FluxIDLoop in seq(from=135,to=151)){
+a.low <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low" & DM_temp$Ecozone == Ecozone_select]
+
+a.mod <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod" & DM_temp$Ecozone == Ecozone_select]
+
+a.high <- DM_temp$CORefFluxID[DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High" & DM_temp$Ecozone == Ecozone_select]
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Low"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.low & DM_temp$SeverityClass == "Low"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingNMOG/global.vars$FlamingCO,global.vars$SmoulderingNMOG/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "Mod"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.mod & DM_temp$SeverityClass == "Mod"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingNMOG/global.vars$FlamingCO,global.vars$SmoulderingNMOG/global.vars$SmoulderingCO)
+
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == FluxIDLoop & DM_temp$SeverityClass == "High"] <-
+DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.high & DM_temp$SeverityClass == "High"]*ifelse(unique(DM_temp$Phase[DM_temp$FluxID == FluxIDLoop]) == "Flaming",global.vars$FlamingNMOG/global.vars$FlamingCO,global.vars$SmoulderingNMOG/global.vars$SmoulderingCO)
+}
+
+
 
 ### the fluxes below are calculated at the end of the algorithm above since they feature residual calculations and need to balance the DMs precisely.  The ones implicated in variable depth of burn with DC
 
@@ -2500,8 +2568,10 @@ testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 
 ### provide a random number for the ID if otherwise not provided
 
+  ###now load the mean pool size from CBM 2023:
+    NIR2023_AverageCPools <- read_csv("../NIR2023_AverageCPools.csv") ### it is one directory above this Rmd file
 
-EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250)
+EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250)
 {
  
   ###insert function description here
@@ -2521,10 +2591,8 @@ EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains"
   #Median_DC=250
   
   ### build the first columns of the output dataframe, which is just the input
-  Emissions_DF <- cbind(ID,Area_ha,EcoBoundaryName_select,AdminBoundaryName_select,Low_frac,Mod_frac,High_frac,Median_DC)
+  Emissions_DF_head <- as.data.frame(cbind(ID,Area_ha,EcoBoundaryName_select,AdminBoundaryName_select,Low_frac,Mod_frac,High_frac,Median_DC))
   
-  ###now load the mean pool size from CBM 2023:
-    NIR2023_AverageCPools <- read_csv("../NIR2023_AverageCPools.csv") ### it is one directory above this Rmd file
   
     
   ##filter out to the pools of the admin and eco zones of interest
@@ -2555,7 +2623,17 @@ EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains"
   
   Fluxes_all <- rbind(Fluxes_Low_tmp,Fluxes_Mod_tmp,Fluxes_High_tmp)
   
-  Fluxes_summary <- Fluxes_all %>% group_by(SeverityClass,Sink) %>% summarize(FluxTotalMgCha = sum(FluxMgCha,na.rm=TRUE))
+  ###useful temporary summary of emissions per severity class,but not otherwise used:
+  Fluxes_summary_by_sevClass <- Fluxes_all %>% group_by(SeverityClass,Sink) %>% summarize(FluxTotalMgCha = sum(FluxMgCha,na.rm=TRUE))
+  
+  Fluxes_summary_by_SurfaceCanopy <- Fluxes_all %>% group_by(SourceSurfaceCanopy) %>% summarize(FluxTotalMgCha = sum(FluxMgCha,na.rm=TRUE))
+  
+  
+  
+  Fluxes_summary <- Fluxes_all %>% group_by(Sink) %>% summarize(FluxTotalMgCha = sum(FluxMgCha,na.rm=TRUE))
+  
+  ### calculate the fraction of the total
+  Prop_surface <- Fluxes_summary_by_SurfaceCanopy$FluxTotalMgCha[Fluxes_summary_by_SurfaceCanopy$SourceSurfaceCanopy == "Surface"][1]/(Fluxes_summary_by_SurfaceCanopy$FluxTotalMgCha[Fluxes_summary_by_SurfaceCanopy$SourceSurfaceCanopy == "Surface"][1]+Fluxes_summary_by_SurfaceCanopy$FluxTotalMgCha[Fluxes_summary_by_SurfaceCanopy$SourceSurfaceCanopy == "Canopy"][1])
   
   ################
  
@@ -2574,14 +2652,15 @@ EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains"
   ### calculate the modified combustion efficiency and attach it to the output data frame
   #### MCE is in mixing ratio, so mass/mass terms
   
-  MCE <- CO2_MgC*44/(CO2_MgC*44+CO_MgC*28)
+  MCE <- (CO2_MgC*44/(CO2_MgC*44+CO_MgC*28))
   
   
   ER_CO_CO2 <- CO_MgC/CO2_MgC
   ER_CH4_CO2 <- CH4_MgC/CO2_MgC
   
+  SumC_direct_emissions <- sum(CH4_MgC,CO_MgC,CO2_MgC,NMOG_MgC,PM10_MgC,PM25_MgC)
   
-  Emissions_DF <- as.data.frame(cbind(Emissions_DF,MCE,CH4_MgC,CO_MgC,CO2_MgC,NMOG_MgC,PM10_MgC,PM25_MgC,ER_CO_CO2,ER_CH4_CO2))
+  Emissions_DF <- as.data.frame(cbind(Emissions_DF_head,MCE,CH4_MgC,CO_MgC,CO2_MgC,NMOG_MgC,PM10_MgC,PM25_MgC,SumC_direct_emissions,ER_CO_CO2,ER_CH4_CO2,Prop_surface))
   
   Emissions_DF$Area_ha <- as.numeric(Emissions_DF$Area_ha)
   Emissions_DF$Low_frac <- as.numeric(Emissions_DF$Low_frac)
@@ -2591,8 +2670,10 @@ EmissionsPerFire <- function(ID,Area_ha=1,EcoBoundaryName_select="Boreal Plains"
   Emissions_DF$NMOG_MgC <- as.numeric(Emissions_DF$NMOG_MgC)
   Emissions_DF$PM10_MgC <- as.numeric(Emissions_DF$PM10_MgC)
   Emissions_DF$PM25_MgC <- as.numeric(Emissions_DF$PM25_MgC)
+  Emissions_DF$SumC_direct_emissions <- as.numeric(SumC_direct_emissions)
   
-  Emissions_DF <- as.data.frame(Emissions_DF) %>% mutate(across(5:15, as.numeric)) %>% mutate(across(5:15, round, 2))
+  
+  Emissions_DF <- as.data.frame(Emissions_DF) %>% mutate(across(5:19, as.numeric)) %>% mutate(across(5:19, round, 3))
   
   return(Emissions_DF)
 }
@@ -2623,49 +2704,142 @@ rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryNam
 
 
 
-```{r GasEmissions-all-combos, eval=FALSE, include=FALSE}
+```{r GasEmissions-all-combos, message=FALSE, warning=FALSE, include=FALSE}
 ###run through all combinations of ecozone*province, severity class, and DC class from 50 -> 750 and run the model there to make a giant lookup table for the DM itself and also the gas emissions
 
 DC_levels <- seq(from=50,to=750, by=100)
 Severity_classes <- c("Low","Mod","High")
-FireDM_grid <- expand(NIR2023_AverageCPools,nesting(EcoBoundaryName,AdminBoundaryName),DC_levels,Severity_classes)
 
 
 ###will have to do a case_when here to map the severity classes to the function
-emissions_temp <- EmissionsPerFire(Area_ha=1,EcoBoundaryName_select=FireDM_grid$EcoBoundaryName,AdminBoundaryName_select = FireDM_grid$AdminBoundaryName,Median_DC = FireDM_grid$DC_levels)
 
-emissions_temp <- EmissionsPerFire(ID=1,Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[1],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[1],FireDM_grid$DC_levels[1])
+###or make a grid for each of low/mod/high, run the function then rbind them
 
+#emissions_temp <- EmissionsPerFire(Area_ha=1,EcoBoundaryName_select=FireDM_grid$EcoBoundaryName,AdminBoundaryName_select = FireDM_grid$AdminBoundaryName,Median_DC = FireDM_grid$DC_levels)
+EmissionsPerFire()
+
+###expand out all combinations of ecozone, admin, and DC levels just once:
+FireDM_grid <- expand(NIR2023_AverageCPools,nesting(EcoBoundaryName,AdminBoundaryName),DC_levels)
+
+
+
+###here's a simple 3 row test case across the severity levels
+emissions_grid_out_test <- EmissionsPerFire(ID="test_20_30_30_DC250",Area_ha = 1,EcoBoundaryName="Boreal Shield West",AdminBoundaryName="Saskatchewan",Low_frac=0.99999,Mod_frac=0.00001,High_frac=0.000001,Median_DC=250)
+
+emissions_grid_out_test <- rbind(emissions_grid_out_test,EmissionsPerFire(ID="test_20_30_30_DC250",Area_ha = 1,EcoBoundaryName="Boreal Shield West",AdminBoundaryName="Saskatchewan",Low_frac=0.001,Mod_frac=1.0,High_frac=0.001,Median_DC=250))
+
+emissions_grid_out_test <- rbind(emissions_grid_out_test,EmissionsPerFire(ID="test_20_30_30_DC250",Area_ha = 1,EcoBoundaryName="Boreal Shield West",AdminBoundaryName="Saskatchewan",Low_frac=0.001,Mod_frac=0.001,High_frac=1.001,Median_DC=250))
+
+
+
+##fill out the first dataframe to get the columns from this function call
+emissions_grid_out <- EmissionsPerFire(ID=1,Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[1],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[1],Low_frac = 1,Mod_frac=0,High_frac=0,Median_DC=FireDM_grid$DC_levels[1])
+
+emissions_grid_out$Severity_uniform[1] <- c("Low")
+
+###loop the rest by severity class since it didn't want to work to call the function across the array without some strange R syntax that isn't worth it (this only runs to build the RMarkdown and a csv out a graph, runtime not important)
+###low loop
+for (i in seq(from=2,to=nrow(FireDM_grid)))
+{
+emissions_temp <- EmissionsPerFire(ID=paste0("Low",i),Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[i],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[i],Low_frac = 1,Mod_frac=0,High_frac = 0,FireDM_grid$DC_levels[i])
+
+Severity_uniform <- c("Low")
+
+emissions_temp <- cbind(emissions_temp,Severity_uniform)
+
+  emissions_grid_out <- rbind(emissions_grid_out,emissions_temp)
+}
+
+
+###mod loop
+for (i in seq(from=1,to=nrow(FireDM_grid)))
+{
+emissions_temp <- EmissionsPerFire(ID=paste0("High",i),Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[i],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[i],Low_frac = 0,Mod_frac=1,High_frac = 0,FireDM_grid$DC_levels[i])
+  
+Severity_uniform <- c("Mod")
+emissions_temp <- cbind(emissions_temp,Severity_uniform)
+  emissions_grid_out <- rbind(emissions_grid_out,emissions_temp)
+}
+
+##high loop
+for (i in seq(from=1,to=nrow(FireDM_grid)))
+{
+emissions_temp <- EmissionsPerFire(ID=paste0("High",i),Area_ha=1,EcoBoundaryName_select = FireDM_grid$EcoBoundaryName[i],AdminBoundaryName_select = FireDM_grid$AdminBoundaryName[i],High_frac = 1,Mod_frac = 0,Low_frac=0,FireDM_grid$DC_levels[i])
+  
+Severity_uniform <- c("High")
+emissions_temp <- cbind(emissions_temp,Severity_uniform)
+
+  emissions_grid_out <- rbind(emissions_grid_out,emissions_temp)
+}
+
+emissions_grid_out$EcoAdmin <- paste(emissions_grid_out$EcoBoundaryName_select,emissions_grid_out$AdminBoundaryName_select)
+
+emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "Semiarid Prairies") %>% filter(EcoBoundaryName_select != "Subhumid Prairies")
+
+emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "Hardwood Plains")
+
+#emissions_grid_out$Severity_uniform <- case_when(Low_frac > 0.5 ~ "Low", Mod_frac > 0.5 ~ "Mod", High_frac > 0.5 ~ "High")
+### ggplot a line graph with DC on x-axis, CO2 on y axis, then facet by paste(Eco-Admin) combos
 
 
 
 ```
 
 
-```{r exp-fire-valid}
 
-###table with rows are CBM pools, columns (paird) are obs and modelled exp fires
 
-### fires that would work:
+## Direct fire carbon emissions as a function of fire severity and drought
 
-### ICFME (SW TP High); Sharpsands 2007 (SW BSE High), Lafoe (HW BSE Low), CWS C-7 burns (SW MC Mod), Carrot lake (SW MC High)
-
-### variables specifically measured during an experimental fire, in the verbiage of the fire DMs:
-exp.fire.table.defs <- c("SW.CFB","HW.CFB","SW.Mort","HW.Mort","SW.SubMerch.Mort","HW.SubMerch.Mort","SmTree.Mort","SW.Snag.Comb.Frac","HW.Snag.Comb.Frac","MedDOM.Comb.Frac", "Duff.consump.frac")
-
-##then, take the list above, and look up the same row but the column "Plain.Language.Name" in FireDMTableDefs.csv:
-## exp.fire.table.labels <-
-
-##note that Duff.consump.frac is an ecozone variable, not in FireDMTableDefs.csv
-
-##list of all possible CBM pools measured during an experimental fire:
-exp.fire.pools <- c("Softwood Foliage","Softwood Other","Aboveground Very Fast DOM","Aboveground Fast DOM","Medium DOM","Aboveground Slow DOM","Softwood Stem Snag","Hardwood Other","Hardwood Stem Snag") 
-
-###fun idea: ternary plots of live vs combusted vs dead for each of these fires, modelled vs observed?
-##https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
-## with the colour being the fuel type/leading spp and size being total emissions?
-### can we draw lines in between pairs of mod vs obs in that package? TernaryApp function in the package should apparently let you draw connected points?
+```{r non-GWP-total-C-plot, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + geom_point(aes(x=Median_DC,y=Prop_surface*100))
 ```
+
+
+```{r GWP-adjusted-total-C-plot-NOT-READY, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+###just need to adjust CH4 by 28x and CO is just ~1.  NMOG not sure
+ggplot(emissions_grid_out,aes(Median_DC,SumCO2e_direct_emissions_GWP,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg CO2e/ha)") + xlab("Drought Code of burning")
+```
+
+
+## Comparison against observed fire gas emissions
+
+### Forest fire observations of CO and CO2 emissions ratios
+
+Table of MCE comparison from aircraft and tower to our calculated values
+
+### 2023 Canadian wildfire season total emissions
+
+-Byrne et al 2024 using TROPOMI says 647 Mt C (570-727) but note their CO2:CO ratio is 7.7-10.0 and ours is more like 5.8 so we have more smouldering (https://www.nature.com/articles/s41586-024-07878-z).  So 5.8/7.7 is 0.76, and 0.76*570 (their lower range) is 435 Mt, so right in our range of 15 Mha x about 30 t C/ha
+
+-ECMWF-Copernicus says 490 Mt C (https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe)
+
+### Plot-level comparisons
+  - compare against excess ash measurements from Turetsky (March 1999 fire in BSW SK) Patuanak, Sask. (55°51′ N, 107°41′ W) - note: should use DM values for high severity (unless we have it in NBAC) and nearest station DC (probably Buffalo Narrows).  Check 2.2 kg C/m2 (22 t C/ha).  This is a peatland, mind you.
+  
+  - ICFME was  4.2 kg/m2 total, and Median_DC of 363
+  
+  EmissionsPerFire(ID="ICFME_avg",Area_ha = 1,EcoBoundaryName="Taiga Plains",AdminBoundaryName="Northwest Territories",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=363)
+  
+  which gives 23.0 t C/ha, this model predicts 4.6 kg/m2 (just using the mean pool values for NWT Taiga Plains)
+  
+  -across the nine ICFME fires, 62% of fuel consumption was at the surface (forest floor plus woody derbis).  The model schema estimates that 80% of the fuel consumption was at the surface, suggesting a bias towards higher surface fuel consumption. 
+  
+  
+  - FBP comparison (broken down by admin/ecozones), especially C-3 burns since they don't have deep duff, C-1 also valid but super thin
+  
+  
+  like a table but here's it broken down:
+  
+  EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3))
+  which is 22.1 tC/ha or 4.42 kg/m2
+
+SFC for Kenshoe Passive Crown fires was 0.88,1.54, and 1.07 respectively (1.16 avg), CFC was 0.95, 0.99,0.60 (using 1.71 which is the BW+foliage number from de Groot et al since it was likely some BW and some bark and all foliage) so TFC was 1.07+1.71
+
+EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3))
+
+surface fires to match closest CFB == mortality class
+
 
 # Discussion
 
@@ -3002,3 +3176,33 @@ Give lat/long, year, ecozone, severity class, and leading spp for each photo, ma
 # Appendix E: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
+
+
+
+#Parking Lot
+
+```{r exp-fire-valid}
+
+###table with rows are CBM pools, columns (paird) are obs and modelled exp fires
+
+### fires that would work:
+
+### ICFME (SW TP High); Sharpsands 2007 (SW BSE High), Lafoe (HW BSE Low), CWS C-7 burns (SW MC Mod), Carrot lake (SW MC High)
+
+### variables specifically measured during an experimental fire, in the verbiage of the fire DMs:
+exp.fire.table.defs <- c("SW.CFB","HW.CFB","SW.Mort","HW.Mort","SW.SubMerch.Mort","HW.SubMerch.Mort","SmTree.Mort","SW.Snag.Comb.Frac","HW.Snag.Comb.Frac","MedDOM.Comb.Frac", "Duff.consump.frac")
+
+##then, take the list above, and look up the same row but the column "Plain.Language.Name" in FireDMTableDefs.csv:
+## exp.fire.table.labels <-
+
+##note that Duff.consump.frac is an ecozone variable, not in FireDMTableDefs.csv
+
+##list of all possible CBM pools measured during an experimental fire:
+exp.fire.pools <- c("Softwood Foliage","Softwood Other","Aboveground Very Fast DOM","Aboveground Fast DOM","Medium DOM","Aboveground Slow DOM","Softwood Stem Snag","Hardwood Other","Hardwood Stem Snag") 
+
+###fun idea: ternary plots of live vs combusted vs dead for each of these fires, modelled vs observed?
+##https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
+## with the colour being the fuel type/leading spp and size being total emissions?
+### can we draw lines in between pairs of mod vs obs in that package? TernaryApp function in the package should apparently let you draw connected points?
+```
+

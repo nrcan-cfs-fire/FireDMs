@@ -178,18 +178,21 @@ disturbance process in Canada's forest, impacting \textasciitilde1-3 Mha
 of Canada's 355 Mha forested area in a typical year \citep{hanes2019}.
 In Canada's reliable 53-year burned area record, nine years have
 exceeded 4 Mha of burned area (or approximately 1\% of Canada's forest
-area) \citep{skakun2022}. Of this, managed forest accounts for xxx\% of
-the area burned between 1972 and 2024; publicly-owned managed forest
-under long-term licence to private timber companies forms 40\% of
-Canada's forest area \citep{stinson2019}. Privately-owned forest
-constituting only 6\% of the forest area, with the remainder of the
-forest area being a mix of formally protected areas, remote unmanaged
-forest, Indigenous reserve lands and other uses without large-scale
-harvesting. Managed forest areas adjacent to communities have
-historically shown some local fire suppression effects with a bias
-towards older forest nearby boreal forest communities in Canada
-\citep{parisien2020}, though the effect is limited to a 25 km radius
-between these widely dispersed communities.
+area) \citep{skakun2022}. The 2023 fire season in Canada burned a
+remarkable 15 Mha owing to extreme drought, severee fire weather
+conditions, and a prolonged fire season length \citep{jain2024}.
+
+Of this, managed forest accounts for xxx\% of the area burned between
+1972 and 2024; publicly-owned managed forest under long-term licence to
+private timber companies forms 40\% of Canada's forest area
+\citep{stinson2019}. Privately-owned forest constituting only 6\% of the
+forest area, with the remainder of the forest area being a mix of
+formally protected areas, remote unmanaged forest, Indigenous reserve
+lands and other uses without large-scale harvesting. Managed forest
+areas adjacent to communities have historically shown some local fire
+suppression effects with a bias towards older forest nearby boreal
+forest communities in Canada \citep{parisien2020}, though the effect is
+limited to a 25 km radius between these widely dispersed communities.
 
 Burned area is dominated by a relatively small number of very large
 fires, with 3\% of fires constituting 97\% of the burned area
@@ -269,11 +272,13 @@ logical axioms are proposed and maintained throughout:
   Disturbance matrices are to be in terms of mortality, not survival
 \item
   Crown Fraction Burned (CFB) is a mass-based estimate of the portion of
-  foliage consumed in flaming, and is inclusive of merchantable and
-  submerchantable trees, both broadleaf and needleleaf
+  foliage consumed in the flaming passage of a fire, and is inclusive of
+  merchantable and submerchantable trees, both broadleaf and needleleaf.
+  Needles that are heat-killed but otherwise not consumed in the fire
+  are not considered part of CFB.
 \item
-  Snags are inclusive of both those killed by prior fire as well as
-  those killed by all other causes
+  The heat-killed but unconsumed fraction of the canopy = (mortality -
+  CFB)
 \item
   In submerchantable trees, mortality = CFB
 \item
@@ -281,24 +286,19 @@ logical axioms are proposed and maintained throughout:
 \item
   In merchantable stands, CFB \textless{} mortality
 \item
-  Survival = 1 - mortality
-\item
-  CFB \textless{} survival
-\item
-  The girdled fraction of trees = mortality - CFB
-\item
-  Survival \textless= 1 and also \textgreater= 0
+  Snags are inclusive of both those killed by prior fire as well as
+  those killed by all other causes
 \end{enumerate}
 
-Of these, Crown Fraction Burned (CFB) is both highly critical and a
-concept used primarily in fire behaviour science but not carbon
-accounting nor fire ecology. CFB was introduced in the 1992 Fire
-Behaviour Prediction System documentation, and provides a simple
-continuous 0-100 variable for only the consumption of foliage (inclusive
-of both conifer and broadleaf), as opposed to ordinal and less precise
-systems like Crown Fire Severity Index that allows the user to specify
-moreso which pools of canopy biomass are consumed, but not the degree to
-which a given pool is consumed.
+Of these, Crown Fraction Burned (CFB) is an important concept used
+primarily in fire behaviour science but not carbon accounting nor fire
+ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System
+documentation \citep{forestrycanadafiredangerratinggroup1992}, and
+provides a simple continuous 0-100 variable for only the consumption of
+foliage (inclusive of both conifer and broadleaf), as opposed to ordinal
+and less precise systems like Crown Fire Severity Index that allows the
+user to specify which pools of canopy biomass are consumed, but not the
+degree to which a given pool is consumed.
 
 \subsection{Ground plot and remotely sensed fire severity data}
 
@@ -307,9 +307,10 @@ samples are from etc.
 
 \subsection{Combustion gas emission ratios}
 
-Certain variables, like the fractionation of CO2:CH4:CO, are constant
-throughout ecozones, but vary by flaming vs smouldering. They are
-defined in a global variables table:
+Certain variables, like the paritioning of
+CO\textsubscript{2}:CH\textsubscript{4}:CO gas emissons, are constant
+throughout ecozones, but vary by flaming vs smouldering combustion
+modes. They are defined in a global variables table:
 
 \begin{table}
 \centering
@@ -452,7 +453,7 @@ to mass is less than one:
 where the Correction Factor is defined for boreal spruce fuel types as:
 
 \begin{equation}
-CF_{spruce} = 1.018(RelativeDepth)^0.250
+CF_{spruce} = 1.018(RelativeDepth)^{0.250}
 \end{equation}
 
 and for all other fuels as
@@ -846,6 +847,24 @@ and drought}
 
 \subsubsection{Forest fire observations of CO and CO2 emissions ratios}
 
+\begin{table}
+\centering\centering
+\caption{\label{tab:MCE-from-airborne}Comparison of the Modified Combustion Efficiency (MCE) of airborne gas measurements of Canadian wildfires against modelled MCE}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{l|l|l|l|l|l|l}
+\hline
+Study & Date & Subset & Ecozone & Drought Code & Obs MCE & Modelled MCE\\
+\hline
+Hornbrook et al 2011 & 2008-07-01 & Afternoon (0.2Low 0.4Mod 0.4High) & Boreal Shield West & 250 & 0.92 & 0.909\\
+\hline
+Hornbrook et al 2011 & 2008-07-01 & Late Evening (100\% low severity) & Boreal Shield West & 250 & 0.82 & 0.903\\
+\hline
+Hornbrook et al 2011 & 2008-07-04 & After rain smouldering only low severity & Boreal Shield West & 275 & 0.83 & 0.903\\
+\hline
+\end{tabular}}
+\end{table}
+
 -discussion: MCE modelled here fits well against obs MCE during peak
 burn periods, but does not represent smouldering-only periods such as
 night-time and after small rain events
@@ -1076,17 +1095,18 @@ found using the proportional depth of burn, rather than the proportional
 loss of the mass of the soil organic layer. The non-linear least squares
 model fit was conducted using the Levenberg-Marquardt nonlinear
 least-squares algorithm found in MINPACK (Elzhov et al 2023) R package,
-which supported bounded parameter constraints. In the abstract, the
-model follows the form:
-
-\begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
-\end{equation}
+which supported bounded parameter constraints.
 
 In the abstract, the model follows the form:
 
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c*(1 - e^{(a * DC)})] + (b*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  DC)})] + (b log_{e}(BGSlow))
+\end{equation}
+
+with fitted parameters as:
+
+\begin{equation}
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83 (1 - e^{(-0.005 DC)})] + (-0.718 log_{e}(BGSlow))
 \end{equation}
 
 Note the ``b'' coefficient on the parameter associated with the FFFL

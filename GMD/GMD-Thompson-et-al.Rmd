@@ -287,7 +287,7 @@ where the Correction Factor is defined for boreal spruce fuel types as:
 
 ```{=tex}
 \begin{equation}
-CF_{spruce} = 1.018(RelativeDepth)^0.250
+CF_{spruce} = 1.018(RelativeDepth)^{0.250}
 \end{equation}
 ```
 and for all other fuels as
@@ -722,6 +722,26 @@ kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervie
   kable_minimal()#  %>%
           #kable_styling(latex_options = "scale_down") %>%
   #kable_styling(latex_options = "hold_position")
+```
+
+
+
+```{r CFBvsMortPlotNOTRUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+### this plot doesn't show too much other than the low severity areas where Mort > CFB
+
+# gather VarDefs so that you have ecozone and then columns for SW Mort and SW CFB
+
+VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",] 
+
+VarDefs.SW.CFB <- VarDefs.SW.CFB %>% rename(SW.CFB = Value)
+VarDefs.SW.Mort <- VarDefs.SW.Mort %>% rename(SW.Mort = Value)
+
+CFB.Mort.Plot <- cbind(VarDefs.SW.CFB,VarDefs.SW.Mort$SW.Mort) 
+colnames(CFB.Mort.Plot)[9] <- c("SW.Mort")
+
+ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone,shape=SeverityClass))
+
+ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone))+facet_wrap(vars(SeverityClass)) + geom_abline(slope=1,intercept=0)
 ```
 
 The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single set well-observed high severity fires in the Taiga Plains by [santín2015].
@@ -2768,8 +2788,11 @@ emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "H
 
 ## Direct fire carbon emissions as a function of fire severity and drought
 
-```{r non-GWP-total-C-plot, echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + geom_point(aes(x=Median_DC,y=Prop_surface*100))
+```{r non-GWP-total-C-plot, echo=FALSE, fig.height=8.5, fig.width=6, message=FALSE, warning=FALSE}
+#emissions_grid_out$Severity_uniform <- as.factor(emissions_grid_out$Severity_uniform)
+#emissions_grid_out$Severity_uniform <- factor(emissions_grid_out$Severity_uniform, levels = c("High","Mod","Low"))
+
+ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + theme(legend.position="none") + scale_colour_manual(values = c("red", "blue", "gold")) + labs(caption=("Direct emissions by severity class: red = high, yellow = moderate, blue = low severity"))# + geom_point(aes(x=Median_DC,y=Prop_surface*100))
 ```
 
 ```{r GWP-adjusted-total-C-plot-NOT-READY, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
@@ -2782,7 +2805,7 @@ ggplot(emissions_grid_out,aes(Median_DC,SumCO2e_direct_emissions_GWP,colour = Se
 
 ### Forest fire observations of CO and CO2 emissions ratios
 
-```{r MCE-from-airborne, echo=FALSE, message=FALSE, warning=FALSE}
+```{r MCE-from-airborne, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 AirborneMCE <- read.csv("~/nrcan-cfs-fire/FireDMs/AirborneMCE.csv")
 
@@ -2806,9 +2829,14 @@ MCE_Table3 <- cbind(AirborneMCE$Study[3],AirborneMCE$Date[3],AirborneMCE$Subset[
 MCE_Table <- rbind(MCE_Table,MCE_Table2,MCE_Table3)
 
 
+
 #The obs and modelled MCE needs to be a as.numeric
 
 ##then as kable, and add sum of FRP observed to get relative emissions (smouldering is far less)
+
+kbl(MCE_Table, caption = "Comparison of the Modified Combustion Efficiency (MCE) of airborne gas measurements of Canadian wildfires against modelled MCE") %>%
+  kable_minimal() %>% 
+  kable_styling(latex_options="scale_down")
 
 ```
 
@@ -2819,6 +2847,17 @@ MCE_Table <- rbind(MCE_Table,MCE_Table2,MCE_Table3)
 -Byrne et al 2024 using TROPOMI says 647 Mt C (570-727) but note their CO2:CO ratio is 7.7-10.0 and ours is more like 5.8 so we have more smouldering (<https://www.nature.com/articles/s41586-024-07878-z>). So 5.8/7.7 is 0.76, and 0.76\*570 (their lower range) is 435 Mt, so right in our range of 15 Mha x about 30 t C/ha
 
 -ECMWF-Copernicus says 490 Mt C (<https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe>)
+
+burn_severity_by_nfireid_ha.csv
+
+
+```{r TotalEmissions2023, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#burn_severity_by_nfireid_ha.csv is just by NFIREID, need to put RU onto that to get the mean biomass pools, then apply the DMs to compare with the above
+
+###will also need to compute the median DC per NFIREID, so that's a hotspot job and put that into the dataframe sometime soon
+
+```
+
 
 ### Plot-level comparisons
 
@@ -2908,18 +2947,22 @@ summary(FFFC.Frac.Consume.gam.ABoVE)
 
 (could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as BGSlow.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside for a distinct model.
 
-Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. In the abstract, the model follows the form:
+Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. 
 
-```{=tex}
-\begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83*(1 - e^{(-0.005 * DC)})] + (-0.718*log_{e}(BGSlow))
-\end{equation}
-```
 In the abstract, the model follows the form:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c*(1 - e^{(a * DC)})] + (b*log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  DC)})] + (b log_{e}(BGSlow))
+\end{equation}
+```
+
+with fitted parameters as:
+
+
+```{=tex}
+\begin{equation}
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83 (1 - e^{(-0.005 DC)})] + (-0.718 log_{e}(BGSlow))
 \end{equation}
 ```
 Note the "b" coefficient on the parameter associated with the FFFL (BGSlow) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.

@@ -2,6 +2,7 @@
 title: Incorporating fire severity for refined data-drive carbon emissions estimates of boreal and temperate forest fires in the Generic Carbon Budget Model (GCBM)
 journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'gmd')`"
 author:
+    
   - given_name: 
     surname: 
     affiliation: 1
@@ -27,8 +28,6 @@ author:
     surname: 
     affiliation: 3
     email: 
-    
-
 affiliation:
   - code: 1
     address: 
@@ -36,7 +35,6 @@ affiliation:
     address: 
   - code: 3
     address: 
-
 abstract: |
   Wildfire is the most impactful natural disturbance to Canada's boreal and temperate forest biomes.  Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fraction of biomass consumed) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire.  In this submodel of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements of biomass consumption as related to satellite-derived burn severity maps are interpretted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires.  Model outputs indicate total carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 70 t C/ha in Taiga Cordillera and Pacific Maritime forests of Yukon under high severity fire.  Pacific Maritime forest showed the largest fraction of carbon release in the canopy biomass pools (67%), while Taiga Shield West and Boreal Plains of the Northwest Territories and Manitoba were estimated of having 82% of carbon emissions in the surface and belowground biomass pools of litter, duff, peat, roots, etc.
   
@@ -45,44 +43,38 @@ bibliography: references.bib
 running:
   title: Fire Severity and Forest Carbon Budget Models
   author: Thompson et al.
-# This section is mandatory even if you declare that no competing interests are present.
 competinginterests: The authors declare no competing interests.
 # See https://publications.copernicus.org/for_authors/licence_and_copyright.html, normally used for transferring the copyright, if needed. 
 # Note: additional copyright statements for affiliated software or data need to be placed in the data availability section. 
 copyrightstatement: His Majesty the King in Right of Canada as represented by the Minister of Natural Resources Canada. This work is distributed under the Creative Commons Attribution 4.0 License.
-### The following commands are for the statements about the availability of data sets and/or software code corresponding to the manuscript.
-### It is strongly recommended to make use of these sections in case data sets and/or software code have been part of your research the article is based on.
 ### Note: unless stated otherwise, software and data affiliated with the manuscript are assumed to be published under the same licence as the article (currently Creative Commons 4.0)
 availability:
   codedata: This article was produced from an RMarkdown document with underlying data, available at https://github.com/nrcan-cfs-fire/FireDMs
-
-
 authorcontribution: Thompson and Whitman contributed to the concept and code design with the assistance of Hanes, Hudson
-
 disclaimer: The algorithm and results presented only apply to boreal and temperate forest ecosystems where sufficient ground plots of fire severity are available.  As a data-driven model, this framework is not suitable for other ecosystems nor agricultural or forestry biomass burning practices.
-
 acknowledgements: Thanks to (insert names here)
-
 appendix: |
   \section{List of fluxes and corresponding fire-related plain-language summary}
-  Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
   \subsection{Option 1}
   If you sorted all figures and tables into the sections of the text, please also sort the appendix figures and appendix tables into the respective appendix sections.
   They will be correctly named automatically.
   \subsection{Option 2}
   If you put all figures after the reference list, please insert appendix tables and figures after the normal tables and figures.
   
-  To rename them correctly to A1, A2, etc., please add the following commands in front of them:
   `\appendixfigures` needs to be added in front of appendix figures
   `\appendixtables` needs to be added in front of appendix tables
   
   Please add `\clearpage` between each table and/or figure. Further guidelines on figures and tables can be found below.
+  Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
+  To rename them correctly to A1, A2, etc., please add the following commands in front of them:
 output:
   rticles::copernicus_article: 
     highlight: NULL
     keep_tex: true
   bookdown::pdf_book:
     base_format: rticles::copernicus_article # for using bookdown features like \@ref()
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction
@@ -724,8 +716,6 @@ kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as dervie
   #kable_styling(latex_options = "hold_position")
 ```
 
-
-
 ```{r CFBvsMortPlotNOTRUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ### this plot doesn't show too much other than the low severity areas where Mort > CFB
 
@@ -834,6 +824,16 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 
 ```
+
+## Calculation of Annual Direct C Emissions from Fire
+
+To compute an estimate of the total direct C emissions from forest fires in Canada in 2023, the classified burn severity product from the National Burned Area Composite annual production was utilized (see Hall et al 2020 for an algorithm description). In NBAC, an internal tracking value "NFIREID" is utilized, which is the final satellite-derived burned area polygon (allowing for multi-part polygons) is split across any RU unit boundaries (if any). Since carbon pool sizes vary across RU boundaries, this allows for a single NFIREID to be present across multiple RUs.
+
+A total of 2199 fires as small as 0.09 ha (one 30x30 landsat pixel) were mapped by NBAC for burn severity for a total of 14.60 Mha, but only fires over 100 ha were utilized as a lower limit of where meaningful per-fire estimates of the fraction of low, moderate, and high severity burned area was available. Including only fires 100 ha and larger reduced the total number of fires to 966 but the total area remained largely the same at 14.58 Mha. A total of 189,704 ha of post-fire salvage logging was also mapped in 2023 and is assigned to the moderate severity class after consultation with provincial land managers. The direct C emissions from fire shown here are not altered by the act of post-fire salvage logging. Additionally, the NBAC mapping process accounts for unburned islands (and areas with a mapped fire severity no different than unburned) which count towards the total fire area but do not have a disturbance matrix and direct C estimate applied.
+
+A unique DM was then calculated for each fire using the median area-weighted Drought Code per fire. All thermal detection hotspots from VIIRS that intersect a fire were extracted from the historical hotspot archive that supports the Canadian smoke emissions model CFFEPS-FireWork (Chen et al., 2019). The median DC value across all intersecting hotspots was used to derive a single DM per fire, no matter the duration of burning (could show first and last hotspot as a figure?).
+
+To compute total direct fire emissions per fire, a single estimate of the carbon pool size based on the Reconcillation Unit of the centroid of the NFIREID polygon was applied. Since polygons are split across RU boundaries, the spatial weighting of the pool size per fire is performed automatically. While spatially explicit biomass maps are available for some aboveground components (SCANFI) and some belowground components (Hanes), the majority of the required pool sizes in CBM for the computation of the fire DMs are available only at the spatially referenced RU scale.
 
 # Results
 
@@ -2449,7 +2449,7 @@ DM_temp$Value[DM_temp$FluxID == 60] <- (VarDefs$Value[VarDefs$Variable.Name == "
 
 
 ###importantly, the duff remaining calculation also considered unburned litter area, where litter has to burn in order for the duff beneath to burn.  This can be up to 20% unburned litter area in low severity
-DM_temp$Value[DM_temp$FluxID == 70] <- (1-(Duff.consump.frac.ExtractFireDM) *(1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select]))
+DM_temp$Value[DM_temp$FluxID == 70] <- (1-(Duff.consump.frac.ExtractFireDM) *(1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$SeverityClass == Severity_select & VarDefs$Ecozone == Ecozone_select]))
 
 
 #####
@@ -2572,7 +2572,7 @@ testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 ### provide a random number for the ID if otherwise not provided
 
   ###now load the mean pool size from CBM 2023:
-    NIR2023_AverageCPools <- read_csv("../NIR2023_AverageCPools.csv") ### it is one directory above this Rmd file
+    NIR2023_AverageCPools <- read_csv("./NIR2023_AverageCPools.csv") ### it is in the same dir as the rmd file now
 
 EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250)
 {
@@ -2844,13 +2844,6 @@ kbl(MCE_Table, caption = "Comparison of the Modified Combustion Efficiency (MCE)
 
 ### 2023 Canadian wildfire season total emissions
 
--Byrne et al 2024 using TROPOMI says 647 Mt C (570-727) but note their CO2:CO ratio is 7.7-10.0 and ours is more like 5.8 so we have more smouldering (<https://www.nature.com/articles/s41586-024-07878-z>). So 5.8/7.7 is 0.76, and 0.76\*570 (their lower range) is 435 Mt, so right in our range of 15 Mha x about 30 t C/ha
-
--ECMWF-Copernicus says 490 Mt C (<https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe>)
-
-burn_severity_by_nfireid_ha.csv
-
-
 ```{r TotalEmissions2023, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #burn_severity_by_nfireid_ha.csv is just by NFIREID, need to put RU onto that to get the mean biomass pools, then apply the DMs to compare with the above
 
@@ -2859,15 +2852,19 @@ Severity2023 <- read.csv("~/nrcan-cfs-fire/FireDMs/burn_severity_by_nfireid_ha.c
 
 Severity2023$Low_frac <- Severity2023$Low/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
 
-Severity2023$Mod_frac <- Severity2023$Moderate/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
+Severity2023$Mod_frac <- (Severity2023$Moderate+Severity2023$Post.fire.havest)/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
 
 Severity2023$High_frac <- Severity2023$High/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
 
 
 
 #sum(NBAC2023$ADJ_HA) ## 14.6 Mha total over 2181 fires
-NBAC2023 <- NBAC2023 %>% filter(ADJ_HA>500) #this could be smaller, down to as little as 10 ha potentially
+NBAC2023 <- NBAC2023 %>% filter(ADJ_HA>100) #this could be smaller, down to as little as 10 ha potentially
 sum(NBAC2023$ADJ_HA) #now only 652 fires but still 14.50 Mha
+
+##specific to 2023, these two fires near Kitimat BC in the large-scale RU map appear on the water, so manually assign them to boreal cordillera RU:
+NBAC2023[NBAC2023$NFIREID==829,]$unit_id <- 40
+NBAC2023[NBAC2023$NFIREID==776,]$unit_id <- 40
 
 ###now, to feed the per-fire carbon function, will need to append the province and ecozone per fire, based on RU:
 ##in NIR2023_AverageCPools, RU is "SPUID", and in the NBAC, it is "unit_id"
@@ -2887,6 +2884,7 @@ NBAC2023$unit_id <- case_match(
   25 ~ 18,
   26 ~ 51,
   49 ~ 51,
+  56 ~ 51,
   57 ~ 51,
   59 ~ 18,
   .default = NBAC2023$unit_id
@@ -2924,50 +2922,30 @@ AnnualEmissionsSummary <- rbind(AnnualEmissionsSummary,tmp)
 #here's the sum of direct C emissions (Mg or tonnes C)
 sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE)
 
+sum(AnnualEmissionsSummary$SumC_direct_emissions,na.rm=TRUE)/sum(AnnualEmissionsSummary$Area_ha,na.rm=TRUE)
+
 ##compare to about 450 Mt
 
 ###weighted mean of DC:
-weighted.mean(AnnualEmissionsSummary$Median_DC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE)
+#round(weighted.mean(AnnualEmissionsSummary$Median_DC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)
+
+#round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)
+
+#round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.95,na.rm=TRUE),digits=0)
+
+
+#round(weighted.mean(AnnualEmissionsSummary$MCE, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=3)
+
+#round(weighted.mean(AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=2)
 
 ###what are the mean LMH values per RU? and breakdown of DC by RU as well.
 
 ```
 
 
-### Plot-level comparisons
-
--   compare against excess ash measurements from Turetsky (March 1999 fire in BSW SK) Patuanak, Sask. (55°51 N, 107°41 W) - note: should use DM values for high severity (unless we have it in NBAC) and nearest station DC (probably Buffalo Narrows). Check 2.2 kg C/m2 (22 t C/ha). This is a peatland, mind you.
-
--   ICFME was 4.2 kg/m2 total, and Median_DC of 363
-
-EmissionsPerFire(ID="ICFME_avg",Area_ha = 1,EcoBoundaryName="Taiga Plains",AdminBoundaryName="Northwest Territories",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=363)
-
-which gives 23.0 t C/ha, this model predicts 4.6 kg/m2 (just using the mean pool values for NWT Taiga Plains)
-
--across the nine ICFME fires, 62% of fuel consumption measured on-site was at the surface (forest floor plus woody derbis). The model schema estimates that 80% of the fuel consumption was at the surface, suggesting a bias towards higher surface fuel consumption.
-
--   FBP comparison (broken down by admin/ecozones), especially C-3 burns since they don't have deep duff, C-1 also valid but super thin
-
-like a table but here's it broken down:
-
-EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3)) which is 22.1 tC/ha or 4.42 kg/m2
-
-SFC for Kenshoe Passive Crown fires was 0.88,1.54, and 1.07 respectively (1.16 avg), CFC was 0.95, 0.99,0.60 (using 1.71 which is the BW+foliage number from de Groot et al since it was likely some BW and some bark and all foliage) so TFC was 1.07+1.71
-
-EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3))
-
-surface fires to match closest CFB == mortality class
-
-# Discussion
-
--some discussion points (unordered) so far
-
--   given the generic nature of these DMs and their simple relative simplicity, can be added to other frameworks like LANDIS (see Stenzel 2019 as well, they do some of that).
-
-<!-- -->
-
 -   paragraph on extended impacts like delayed stem mortality, rapid snag fall, and changes (or not) in duff decomposition rates. Not (as of yet) covered in this 1-timestep pulse disturbance described here.
 
+-future work on biomass maps in GCBM will improve this emissions estimates only marginally, since during large fire years with drought such as 2023 there is little fuel selection bias in burned area.
 # Conclusions
 
 The conclusion goes here.
@@ -3022,7 +3000,7 @@ summary(FFFC.Frac.Consume.gam.ABoVE)
 
 (could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as BGSlow.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside for a distinct model.
 
-Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints. 
+Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints.
 
 In the abstract, the model follows the form:
 
@@ -3031,9 +3009,7 @@ In the abstract, the model follows the form:
 logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  DC)})] + (b log_{e}(BGSlow))
 \end{equation}
 ```
-
 with fitted parameters as:
-
 
 ```{=tex}
 \begin{equation}

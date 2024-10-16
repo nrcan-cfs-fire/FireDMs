@@ -2854,7 +2854,82 @@ burn_severity_by_nfireid_ha.csv
 ```{r TotalEmissions2023, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #burn_severity_by_nfireid_ha.csv is just by NFIREID, need to put RU onto that to get the mean biomass pools, then apply the DMs to compare with the above
 
-###will also need to compute the median DC per NFIREID, so that's a hotspot job and put that into the dataframe sometime soon
+NBAC2023 <- read.csv("~/nrcan-cfs-fire/FireDMs/NBAC-2023-points-4326-v4.csv")  ##this needs median_DC already joined to it
+Severity2023 <- read.csv("~/nrcan-cfs-fire/FireDMs/burn_severity_by_nfireid_ha.csv")
+
+Severity2023$Low_frac <- Severity2023$Low/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
+
+Severity2023$Mod_frac <- Severity2023$Moderate/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
+
+Severity2023$High_frac <- Severity2023$High/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
+
+
+
+#sum(NBAC2023$ADJ_HA) ## 14.6 Mha total over 2181 fires
+NBAC2023 <- NBAC2023 %>% filter(ADJ_HA>500) #this could be smaller, down to as little as 10 ha potentially
+sum(NBAC2023$ADJ_HA) #now only 652 fires but still 14.50 Mha
+
+###now, to feed the per-fire carbon function, will need to append the province and ecozone per fire, based on RU:
+##in NIR2023_AverageCPools, RU is "SPUID", and in the NBAC, it is "unit_id"
+## trim the NIR data frame to just retain the Recon Unit ID (SPUID) and associated info
+NIR2023_AverageCPools_temp <- NIR2023_AverageCPools %>% select(SPUID:TimeStep) %>% filter(TimeStep==0)
+
+
+###need a few patches since the AverageCPools is missing a bit of data: SPUID 14 == 3 (QC becomes Labrdor TSE) and 13 == 18 (QC HP becomes ON HP)
+
+##as a big case_match:
+
+NBAC2023$unit_id <- case_match(
+  NBAC2023$unit_id,
+  14 ~ 3,
+  13 ~ 18,
+  21 ~ 32,
+  25 ~ 18,
+  26 ~ 51,
+  49 ~ 51,
+  57 ~ 51,
+  59 ~ 18,
+  .default = NBAC2023$unit_id
+)
+
+
+
+
+
+###now append that info to NBAC2023 data frame:
+NBAC2023 <- NBAC2023 %>% left_join(NIR2023_AverageCPools_temp, by = join_by(unit_id == SPUID))
+
+###now append with burn severity data
+NBAC2023 <- NBAC2023 %>% left_join(Severity2023,by=join_by(NFIREID))
+
+##make a running summary dataframe, so run the EmissionsPerFire function with i = 1 just to set it up
+
+AnnualEmissionsSummary <- EmissionsPerFire(ID=NBAC2023$NFIREID[1],Area_ha=NBAC2023$ADJ_HA[1],EcoBoundaryName_select = NBAC2023$EcoBoundaryName[1],AdminBoundaryName_select = NBAC2023$AdminBoundaryName[1],Low_frac=NBAC2023$Low_frac[1],Mod_frac=NBAC2023$Mod_frac[1],High_frac=NBAC2023$High_frac[1],Median_DC=NBAC2023$dc_median[1])
+
+#for(i in seq(from=2,to=50))##just for testing
+for(i in seq(from=2,to=nrow(NBAC2023))) #does all the fires
+{
+  
+  
+tmp <- EmissionsPerFire(ID=NBAC2023$NFIREID[i],Area_ha=NBAC2023$ADJ_HA[i],EcoBoundaryName_select = NBAC2023$EcoBoundaryName[i],AdminBoundaryName_select = NBAC2023$AdminBoundaryName[i],Low_frac=NBAC2023$Low_frac[i],Mod_frac=NBAC2023$Mod_frac[i],High_frac=NBAC2023$High_frac[i],Median_DC=NBAC2023$dc_median[i])
+
+AnnualEmissionsSummary <- rbind(AnnualEmissionsSummary,tmp)
+
+}
+
+
+#here's the sum of direct C emissions (Mg or tonnes C)
+#sum(AnnualEmissionsSummary$SumC_direct_emissions)
+
+#here's the sum of direct C emissions (Mg or tonnes C)
+sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE)
+
+##compare to about 450 Mt
+
+###weighted mean of DC:
+weighted.mean(AnnualEmissionsSummary$Median_DC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE)
+
+###what are the mean LMH values per RU? and breakdown of DC by RU as well.
 
 ```
 

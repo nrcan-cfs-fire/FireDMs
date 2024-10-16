@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.1)  4 OCT 2024 06:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.1)  16 OCT 2024 07:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -702,47 +702,47 @@ Overfull \vbox (50.16254pt too high) has occurred while \output is active []
 
 
 [14 <./GMD-Thompson-et-al_files/figure-latex/non-GWP-total-C-plot-1.pdf>]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 888.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 890.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 
 [15]
-Overfull \hbox (436.67831pt too wide) in paragraph at lines 917--921
+Overfull \hbox (436.67831pt too wide) in paragraph at lines 919--923
 []\T1/ptm/m/n/10 EmissionsPerFire(ID=``Kenshoe Lake passive crown fires 5 9 12'',Area_ha = 1,EcoBoundaryName=``Boreal Shield East'',AdminBoundaryName=``Ontario'',Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3))
  []
 
 
-Overfull \hbox (436.67831pt too wide) in paragraph at lines 927--930
+Overfull \hbox (436.67831pt too wide) in paragraph at lines 929--932
 []\T1/ptm/m/n/10 EmissionsPerFire(ID=``Kenshoe Lake passive crown fires 5 9 12'',Area_ha = 1,EcoBoundaryName=``Boreal Shield East'',AdminBoundaryName=``Ontario'',Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3)) 
  []
 
 
-Overfull \hbox (4.82135pt too wide) in paragraph at lines 981--994
+Overfull \hbox (4.82135pt too wide) in paragraph at lines 983--996
 []\T1/ptm/m/n/10 More recent observations and modelling from []de Groot et al.[] ([]2009[]) extended the FBP data with an additional 128 observations
  []
 
 
 
 [16]
-Overfull \hbox (13.6912pt too wide) in paragraph at lines 1016--1033
+Overfull \hbox (13.6912pt too wide) in paragraph at lines 1018--1035
 \T1/ptm/m/n/10 overwintered for Drought Code (Hanes DC overwinter) and capturing small rain events not captured in reanalysis that meaningfully
  []
 
 
 
 [17]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 1051.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 1053.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 1079.
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 1081.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
 
 [18]
-Overfull \hbox (0.66254pt too wide) in paragraph at lines 1136--1141
+Overfull \hbox (0.66254pt too wide) in paragraph at lines 1138--1143
 []\T1/ptm/m/n/10 which for example means that the median proportional depth of burn in the AboVE/de Groot training data of 0.40 corresponds
  []
 
@@ -752,24 +752,24 @@ Overfull \hbox (0.66254pt too wide) in paragraph at lines 1136--1141
 <GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf, id=283, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf  used on input line 1154.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf  used on input line 1156.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 <GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf, id=284, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1170.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/show-biplot-FFFC-new-1.pdf  used on input line 1172.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [20 <./GMD-Thompson-et-al_files/figure-latex/example-FFFC-vs-DC-plot-nls-1.pdf>]
-Overfull \hbox (1.73161pt too wide) in paragraph at lines 1172--1175
+Overfull \hbox (1.73161pt too wide) in paragraph at lines 1174--1177
 []\T1/ptm/m/n/10 Across the entire parameter space of Drought Code and BGSlow pool size, the following isolines of proportional consumption
  []
 
 <GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf, id=294, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf  used on input line 1176.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot-1.pdf  used on input line 1178.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
@@ -777,7 +777,7 @@ Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/FFFC-surface-plot
 <GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf, id=304, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf  used on input line 1178.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/correction-factor-1.pdf  used on input line 1180.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
@@ -785,7 +785,7 @@ Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/correction-factor
 <GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf, id=314, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 1199.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf  used on input line 1201.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
@@ -793,14 +793,14 @@ Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50
 <GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf, id=326, 469.755pt x 325.215pt>
 File: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf Graphic file (type pdf)
 <use GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>
-Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 1201.
+Package pdftex.def Info: GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf  used on input line 1203.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [24 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-DC50-1.pdf>]
 
 [25 <./GMD-Thompson-et-al_files/figure-latex/AnnualDC-Vis-Consump-1.pdf>]
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 1261--1261
+Overfull \hbox (12.38623pt too wide) in paragraph at lines 1263--1263
 []\T1/pcr/m/n/10 exp.fire.pools <- c("Softwood Foliage", "Softwood Other", "Aboveground Very Fast DOM",[] 
  []
 
@@ -849,7 +849,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  84i,12n,93p,721b,681s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on GMD-Thompson-et-al.pdf (30 pages, 309297 bytes).
+Output written on GMD-Thompson-et-al.pdf (30 pages, 309339 bytes).
 PDF statistics:
  495 PDF objects out of 1000 (max. 8388607)
  420 compressed objects within 5 object streams

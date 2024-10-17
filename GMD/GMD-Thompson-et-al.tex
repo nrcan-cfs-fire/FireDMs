@@ -513,17 +513,22 @@ P & 242 & 9.8 & 3.96 & 0.4\\
 
 Note that the maximum upland Forest Floor Fuel Load is approximately 30
 kg m-2 \citep{letang2012}; higher values are typically seen only in peat
-ecosystems, where the above Forest Floor Fuel Consumption scheme does
-not apply. For Canadian peatlands, the CaMP model \citep{bona2020} is
-instead used in CBM. Within CaMP, a separate peatland water model driven
-by Drought Code determines the thickness of the unsaturated peat layer,
-and an amount approximating 12\% of the thickness of the unsaturated
-peat is consumed as smouldering consumption. The peat-specific carbon
-pools and fire Disturbance Matrices are fully described in
-\citep{bona2020}; large peatland trees will still utilize the DM scheme
-described below.
+ecosystems, where the above scheme does not apply at a local scale since
+the fuel load (pool size) in peatlands is much larger, but absolute
+consumption values are similar between deep forest floor organic layers
+and peatlands (Walker). For Canadian peatlands, the CaMP model
+\citep{bona2020} is instead used in CBM. Within CaMP, a separate
+peatland water model driven by Drought Code determines the thickness of
+the unsaturated peat layer, and an amount approximating 12\% of the
+thickness of the unsaturated peat is consumed as smouldering
+consumption. The peat-specific carbon pools and fire Disturbance
+Matrices are fully described in \citep{bona2020}; large peatland trees
+will still utilize the DM scheme described below. Since deeper forest
+organic soil and peat layers show approximately similar absolute
+consumption rates, for the purpose of this general model description no
+peatland-specific components of the fire DMs are required.
 
-Little data is available on the fraction of woody debris consumption
+Limited data is available on the fraction of woody debris consumption
 alongside fire severity measurements. Coarse woody debris of overstory
 stems that makes up 60-80\% of woody debris biomass in Canada's boreal
 and temperate forests \citep{hanes2021}, with its moisture and
@@ -849,7 +854,7 @@ some aboveground components (SCANFI) and some belowground components
 computation of the fire DMs are available only at the spatially
 referenced RU scale.
 
-\section{Results}
+\section{Results and Discussion}
 
 \begin{landscape}\begin{table}[!h]
 \centering
@@ -888,7 +893,74 @@ and drought}
 
 \includegraphics{GMD-Thompson-et-al_files/figure-latex/non-GWP-total-C-plot-1.pdf}
 
-\subsection{Comparison against observed fire gas emissions}
+\subsection{Comparison against observed direct fire emissions}
+
+\subsubsection{Plot-level comparisons}
+
+{[}{[}{[}compare against excess ash measurements from Turetsky (March
+1999 fire in BSW SK) Patuanak, Sask. (55°51 N, 107°41 W) - note: should
+use DM values for high severity (unless we have it in NBAC) and nearest
+station DC (probably Buffalo Narrows). Check 2.2 kg C/m2 (22 t C/ha).
+This is a peatland, mind you{]}{]}{]}
+
+Experimental fires at the International Crown Fire Modelling Experiment
+(Stocks et al., YYYY) provide a good example of detailed pre- and
+post-fire biomass measurements in pools that largely mirror the pools
+impacted by direct fire emissions modelled here. The series of burns in
+the Taiga Plains ecozone of the Northwest Territories were conducted
+under a median Drought Code of 363. The average Total Fuel Consumption
+(TFC) across the high severity crown fire burns was 4.2 kg/m2 of biomass
+consumption, accounting for foliage, branchwood, woody derbis, and
+forest floor consumption. The corresponding estimate using the fire
+Disturbance Matrices constructed here predicts 4.7 kg/m2 of TFC, or 23.7
+t C/ha. Across the nine ICFME fires, 62\% of fuel consumption measured
+on-site was at the surface (forest floor plus woody derbis). The model
+schema estimates that 80\% of the fuel consumption was at the surface,
+suggesting a bias towards larger litter and duff pool size or higher
+surface fuel consumption in the model compared to this single site.
+
+EmissionsPerFire(ID=``ICFME\_avg'',Area\_ha = 1,EcoBoundaryName=``Taiga
+Plains'',AdminBoundaryName=``Northwest
+Territories'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=363)
+
+Experimental fires in the Boreal Shield East of Ontario showed mixed
+results when comparing well-observed biomass consumption in wildfires to
+model outputs. Three high severity crown fires in mature Jack pine
+stands at Kenshoe Lake at an average Drought Code of 129 (see de Groot
+et al 2022) were observed to have 2.87 kg/m2 average Total Fuel
+Consumption, as compared to model estimates of 4.56. In part this is due
+to lower surface fuel consumption: the model output estimated 75\% of
+TFC to be derived from surface fuel consumption, while measured surface
+fuel consumtion was only 40\% of TFC. Future iterations of this fire DM
+scheme that incorporate site-specific surface fuel loadings (Hanes et al
+duff map AB) will improve model representations of fuel consumption in
+locations with fuel loadings that substantially deviate from the average
+pool sizes used in this iteration of the model.
+
+EmissionsPerFire(ID=``Kenshoe Lake passive crown fires 5 9 12'',Area\_ha
+= 1,EcoBoundaryName=``Boreal Shield
+East'',AdminBoundaryName=``Ontario'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=((65+145+178)/3))
+which is 22.1 tC/ha or 4.42 kg/m2
+
+SFC for Kenshoe Passive Crown fires was 0.88,1.54, and 1.07 respectively
+(1.16 avg), CFC was 0.95, 0.99,0.60 (using 1.71 which is the BW+foliage
+number from de Groot et al since it was likely some BW and some bark and
+all foliage) so TFC was 1.16+1.71
+
+Also in the Boreal shield East of Ontario, six high severity crown fires
+in immature (\textasciitilde30 year old) Jack Pine under slightly higher
+Drought Code conditions (average DC 232) showed higher observed average
+surface fuel consumption (1.9 kg/m2) owing to more woody debris. Total
+fuel consumption observed at Sharpsands was 3.0 kg/m2, as compared to
+modelled consumption of 5.3 kg/m2 (26.8 t C/ha); the observed surface
+contribution to total fuel consumption of 64\% was broadly similar to
+the modelled value of 75\%. Again, given the regional fixed biomass pool
+sizes used, it would be expected that the model overestimates total fire
+emissions in younger stands.
+
+EmissionsPerFire(ID=``Sharpsands 11-17'',Area\_ha =
+1,EcoBoundaryName=``Boreal Shield
+East'',AdminBoundaryName=``Ontario'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=232)
 
 \subsubsection{Forest fire observations of CO and CO2 emissions ratios}
 
@@ -910,11 +982,74 @@ Hornbrook et al 2011 & 2008-07-04 & After rain smouldering only low severity & B
 \end{tabular}}
 \end{table}
 
--discussion: MCE modelled here fits well against obs MCE during peak
-burn periods, but does not represent smouldering-only periods such as
-night-time and after small rain events
+Hornbrook et al (2011) reported the mean observed Modified Combustion
+Efficiency for distinct periods during the ARCTAS campaign over northern
+Saskatchewan in 2008. MCE observed by aircraft during the peak burn
+period when the majority of fuel consumption and area burned occurs
+(0.92) largely corresponded with modelled values (0.91), suggesting the
+model provides a fair representation of the balance of flaming and
+smouldering during large active wildfires. Subsequent smoke plume
+observations during periods of greatly reduced spread and intensity
+(late evening and after rain) showed a substantially reduced MCE of
+0.82-0.83 that indicates a near lack of flaming combustion. Even when
+represented as 100\% low severity fire in the model, the modelled MCE
+only declines to 0.903. Since the fire DM model is based on area burned,
+fire activity such as smouldering but with minimal actual area burned
+increased is going to show an MCE far lower than areas of low severity
+fire spread, which are typically still a low subcanopy flaming front
+that features a mix of smouldering duff and woody debris alongside
+flaming consumption of litter (McRae et al., 1994; McRae et al., 2017).
 
-\subsubsection{2023 Canadian wildfire season total emissions}
+\subsection{2023 Canadian wildfire season total direct emissions}
+
+A total of 471 Mt C was estimated to be released directly by fires in
+Canada in 2023. The total mass of PM2.5 emissions was estimated as
+\ensuremath{3.1248862\times 10^{7}} Mt of total mass, assuming a 50\%
+carbon content. {[}{[}(need to break this down more as a table by P/T or
+RU? can also do median DC and median total C/ha by RU). As a map?{]}{]}.
+The area-weighted mean Drought Code for all fires in Canada in 2023 was
+444, representing moderate but not exceptional drought conditions in
+Canada's northern forests. The area-weighted mean total C emissions per
+unit area was 32.3, though 90\% of the emissions per unit area were
+between the 5th percentile of 13 t C/ha typical of the Taiga Plains
+ecozone under low Drought Code conditions and the 95th percentile of 13
+t C/ha typical of Pacific coastal forests.
+
+Byrne et al 2024 used observed total atmospheric column excess CO and a
+range of MCE values to estimate total fire C emissions in Canada in 2023
+of between 570-727 Mt C with a mean estimate of 647 Mt. The uncertainty
+in the estimate from Byrne et al 2024 lies primarily in the uncertain
+CO2:CO ratio (more commonly computed as the normalized ratio MCE). Our
+bottom-up estimates that partition flaming vs smouldering shows a lower
+CO2:CO estimate of 5.79. This lower CO2:CO ratio (i.e.~more smouldering)
+if applied to the data from Byrne et al 2024 would reduce their lower
+range of total C emissions to 486.78 Mt C, which is comparable to the
+471 Mt C computed from this bottom-up approach. Estimates of total
+carbon emissions based solely on the sum of observed Fire Radiative
+Power (FRP) from Copernicus-CAMS was approximately 490 Mt C
+(\url{https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe})
+
+-some other discussion points (unordered) so far
+
+\begin{itemize}
+\tightlist
+\item
+  given the generic nature of these DMs and their simple relative
+  simplicity, can be added to other frameworks like LANDIS (see Stenzel
+  2019 as well, they do some of that).
+\end{itemize}
+
+\begin{itemize}
+\tightlist
+\item
+  paragraph on extended impacts like delayed stem mortality, rapid snag
+  fall, and changes (or not) in duff decomposition rates. Not (as of
+  yet) covered in this 1-timestep pulse disturbance described here.
+\end{itemize}
+
+-future work on biomass maps in GCBM will improve this emissions
+estimates only marginally, since during large fire years with drought
+such as 2023 there is little fuel selection bias in burned area.
 
 \begin{itemize}
 \tightlist

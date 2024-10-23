@@ -99,7 +99,7 @@ In this document, we outline the evidence-based fire Disturbance Matrices update
 
 # Methods
 
-```{r loadLibsEtc, echo=FALSE, message=FALSE, warning=FALSE}
+```{r loadLibsEtc, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(dplyr, warn.conflicts = FALSE)
 library(kableExtra)
@@ -127,6 +127,16 @@ options(dplyr.summarise.inform = FALSE)
 ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM")
 ```
 
+## Carbon Modeling Spatial Units
+
+- show RU map twice, with softwood foliage and then BGSlow pool size as colour ramp on two maps?
+
+
+```{r RU-map, message=FALSE, warning=FALSE, include=FALSE}
+
+```
+
+
 ## Biomass pools of the Generic Carbon Budget Model
 
 Short section explaining the pool definitions most relevant to fire.
@@ -137,15 +147,15 @@ To simplify the process of the creation of the DMs as a distillation of the comp
 
 1.  Disturbance matrices are to be in terms of mortality, not survival
 
-2.  Crown Fraction Burned (CFB) is a mass-based estimate of the portion of foliage consumed in the flaming passage of a fire, and is inclusive of merchantable and submerchantable trees, both broadleaf and needleleaf. Needles that are heat-killed but otherwise not consumed in the fire are not considered part of CFB.
+2.  Crown Fraction Burned (CFB) is a mass-based estimate of the portion of foliage consumed in the flaming passage of a fire, and is inclusive of merchantable and submerchantable trees, both broadleaf and needleleaf. Needles that are heat-killed but otherwise not consumed in the fire are not considered part of CFB, and are instead considered part of the foliage to litter biomass transfer.
 
-3.  The heat-killed but unconsumed fraction of the canopy = (mortality - CFB)
+3.  The heat-killed but unconsumed fraction of the canopy is equal to (mortality - CFB)
 
 4.  In submerchantable trees, mortality = CFB
 
 5.  In submerchantable trees, mortality is \<= 1
 
-6.  In merchantable stands, CFB \< mortality
+6.  In merchantable trees, CFB \<= mortality
 
 7.  Snags are inclusive of both those killed by prior fire as well as those killed by all other causes
 
@@ -157,7 +167,7 @@ Of these, Crown Fraction Burned (CFB) is an important concept used primarily in 
 
 ## Combustion gas emission ratios
 
-Certain variables, like the paritioning of CO~2~:CH~4~:CO gas emissons, are constant throughout ecozones, but vary by flaming vs smouldering combustion modes. They are defined in a global variables table:
+Certain variables, like the partitioning of CO~2~:CH~4~:CO gas emissions, are constant throughout ecozones, but vary by flaming vs smouldering combustion modes. They are defined in a global variables table:
 
 ```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -2792,7 +2802,7 @@ emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "H
 #emissions_grid_out$Severity_uniform <- as.factor(emissions_grid_out$Severity_uniform)
 #emissions_grid_out$Severity_uniform <- factor(emissions_grid_out$Severity_uniform, levels = c("High","Mod","Low"))
 
-ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + theme(legend.position="none") + scale_colour_manual(values = c("red", "blue", "gold")) + labs(caption=("Direct emissions by severity class: red = high, yellow = moderate, blue = low severity"))# + geom_point(aes(x=Median_DC,y=Prop_surface*100))
+ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + theme(legend.position="none") + scale_colour_manual(values = c("red", "lightblue", "gold")) + labs(caption=("Direct emissions by severity class: red = high, yellow = moderate, blue = low severity"))# + geom_point(aes(x=Median_DC,y=Prop_surface*100))
 ```
 
 ```{r GWP-adjusted-total-C-plot-NOT-READY, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
@@ -2806,24 +2816,36 @@ ggplot(emissions_grid_out,aes(Median_DC,SumCO2e_direct_emissions_GWP,colour = Se
 
 ### Plot-level comparisons
 
-[[[compare against excess ash measurements from Turetsky (March 1999 fire in BSW SK) Patuanak, Sask. (55°51 N, 107°41 W) - note: should use DM values for high severity (unless we have it in NBAC) and nearest station DC (probably Buffalo Narrows). Check 2.2 kg C/m2 (22 t C/ha). This is a peatland, mind you]]]
+Experimental fires at the International Crown Fire Modelling Experiment (Stocks et al., YYYY) provides a good example of detailed pre- and post-fire biomass measurements in pools that largely mirror the pools impacted by direct fire emissions modelled here.  The series of burns in the Taiga Plains ecozone of the Northwest Territories were conducted under a median Drought Code of 363.  The average Total Fuel Consumption (TFC) across the high severity crown fire burns was 4.2 kg/m2 of biomass consumption, accounting for foliage, branchwood, woody debris, and forest floor consumption.  The corresponding estimate using the fire Disturbance Matrices constructed here predicts 4.7 kg/m2 of TFC, or 23.7 t C/ha. Across the nine ICFME fires, 62% of fuel consumption measured on-site was at the surface (forest floor plus woody debris). The model schema estimates that 80% of the fuel consumption was at the surface, suggesting a bias towards larger litter and duff pool size or higher surface fuel consumption in the model compared to this single site.
 
-Experimental fires at the International Crown Fire Modelling Experiment (Stocks et al., YYYY) provide a good example of detailed pre- and post-fire biomass measurements in pools that largely mirror the pools impacted by direct fire emissions modelled here.  The series of burns in the Taiga Plains ecozone of the Northwest Territories were conducted under a median Drought Code of 363.  The average Total Fuel Consumption (TFC) across the high severity crown fire burns was 4.2 kg/m2 of biomass consumption, accounting for foliage, branchwood, woody derbis, and forest floor consumption.  The corresponding estimate using the fire Disturbance Matrices constructed here predicts 4.7 kg/m2 of TFC, or 23.7 t C/ha. Across the nine ICFME fires, 62% of fuel consumption measured on-site was at the surface (forest floor plus woody derbis). The model schema estimates that 80% of the fuel consumption was at the surface, suggesting a bias towards larger litter and duff pool size or higher surface fuel consumption in the model compared to this single site.
-
-
+[function call to delete later]
 EmissionsPerFire(ID="ICFME_avg",Area_ha = 1,EcoBoundaryName="Taiga Plains",AdminBoundaryName="Northwest Territories",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=363)
+[]
 
-Experimental fires in the Boreal Shield East of Ontario showed mixed results when comparing well-observed biomass consumption in wildfires to model outputs.  Three high severity crown fires in mature Jack pine stands at Kenshoe Lake at an average Drought Code of 129 (see de Groot et al 2022) were observed to have 2.87 kg/m2 average Total Fuel Consumption, as compared to model estimates of 4.56.  In part this is due to lower surface fuel consumption: the model output estimated 75% of TFC to be derived from surface fuel consumption, while measured surface fuel consumtion was only 40% of TFC.  Future iterations of this fire DM scheme that incorporate site-specific surface fuel loadings (Hanes et al duff map AB) will improve model representations of fuel consumption in locations with fuel loadings that substantially deviate from the average pool sizes used in this iteration of the model.
+Experimental fires in the Boreal Shield East of Ontario showed mixed results when comparing well-observed biomass consumption in wildfires to model outputs.  Three high severity crown fires in mature Jack pine stands at Kenshoe Lake at an average Drought Code of 129 (see de Groot et al 2022) were observed to have 2.87 kg/m2 average Total Fuel Consumption, as compared to model estimates of 4.56.  In part this is due to lower surface fuel consumption: the model output estimated 75% of TFC to be derived from surface fuel consumption, while measured surface fuel consumption was only 40% of TFC.  Future iterations of this fire DM scheme that incorporate site-specific surface fuel loadings (Hanes et al duff map AB) will improve model representations of fuel consumption in locations with fuel loadings that substantially deviate from the average pool sizes used in this iteration of the model.
 
-
-EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3)) which is 22.1 tC/ha or 4.42 kg/m2
-
-SFC for Kenshoe Passive Crown fires was 0.88,1.54, and 1.07 respectively (1.16 avg), CFC was 0.95, 0.99,0.60 (using 1.71 which is the BW+foliage number from de Groot et al since it was likely some BW and some bark and all foliage) so TFC was 1.16+1.71
+[function call to delete later]
+EmissionsPerFire(ID="Kenshoe Lake passive crown fires 5 9 12",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=((65+145+178)/3)) 
+[]
 
 Also in the Boreal shield East of Ontario, six high severity crown fires in immature (~30 year old) Jack Pine under slightly higher Drought Code conditions (average DC 232) showed higher observed average surface fuel consumption (1.9 kg/m2) owing to more woody debris.  Total fuel consumption observed at Sharpsands was 3.0 kg/m2, as compared to modelled consumption of 5.3 kg/m2 (26.8 t C/ha); the observed surface contribution to total fuel consumption of 64% was broadly similar to the modelled value of 75%.  Again, given the regional fixed biomass pool sizes used, it would be expected that the model overestimates total fire emissions in younger stands.
 
+[function call to delete later]
 EmissionsPerFire(ID="Sharpsands 11-17",Area_ha = 1,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=232) 
+[]
 
+In the Taiga Plains of Alberta, continuous crown experimental fires in black spruce forest at Big Fish lake burned at an average Drought Code of 241 were observed to consume 1.65 kg/m2 in the surface and 0.86 kg/m2 of biomass in the canopy.  Similar to the Boreal Shield East examples, observed fuel consumption was lower than the model output of 7.4 kg/m2, owing to a high bias in modelled canopy fuel consumption (1.85 kg/m2) as well as surface fuel consumption (model value of 5.5 kg/m2), though the modelled contribution of surface fuel consumption to the total of 74% is comparable to the 66% surface fuel contribution in the observation data.
+
+[function call to delete later]
+EmissionsPerFire(ID="Big Fish Active Crown only",Area_ha = 1,EcoBoundaryName="Taiga Plains",AdminBoundaryName="Alberta",Low_frac=0.0,Mod_frac=0.0,High_frac=1.0,Median_DC=241) 
+[]
+
+Overall, the plot-level comparisons of this model to experimental fires showed a high model bias in the estimation of the surface fuel consumption in the Ontario and Alberta examples with lower Drought Codes.  Although site-specific calibration of absolute fuel consumption rates is possible, the current iteration of the fire DMs still relies on fixed biomass pools per RU, so an honest performance assessment of the model was made against these regional biomass values even when more detailed site-specific biomass pool data is available for each experimental fire.  
+
+A further comparison can be made in the contribution of surface fuels to total fuel consumption, which partially accounts for site-specific differences in absolute biomass pool size (e.g. foliage biomass otherwise known as Crown Fuel Load in experimental fires).  In all cases except Kenshoe Lake, the bias in the modelled contribution of surface fuels in the model was 10-20% higher than the observed contribution of surface fuels which was 62-66% outside of Kenshoe Lake where surface fuels were only 40% of total fuel consumption.
+
+
+!!! Then some discussion here (or at the start of this) on duff consumption patterns from the ecology literature?  https://cdnsciencepub.com/doi/full/10.1139/X06-245 
 
 ### Forest fire observations of CO and CO2 emissions ratios
 
@@ -2866,6 +2888,8 @@ Hornbrook et al (2011) reported the mean observed Modified Combustion Efficiency
 
 ## 2023 Canadian wildfire season total direct emissions
 
+
+
 ```{r TotalEmissions2023, message=FALSE, warning=FALSE, include=FALSE}
 #burn_severity_by_nfireid_ha.csv is just by NFIREID, need to put RU onto that to get the mean biomass pools, then apply the DMs to compare with the above
 
@@ -2878,6 +2902,7 @@ Severity2023$Mod_frac <- (Severity2023$Moderate+Severity2023$Post.fire.havest)/(
 
 Severity2023$High_frac <- Severity2023$High/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
 
+Severity2023$Unchanged_frac <- Severity2023$Unchanged.to.very.low/(Severity2023$Unchanged.to.very.low+Severity2023$Low+Severity2023$Moderate+Severity2023$High+Severity2023$Post.fire.havest+Severity2023$NoData)
 
 
 #sum(NBAC2023$ADJ_HA) ## 14.6 Mha total over 2181 fires
@@ -3259,30 +3284,3 @@ Give lat/long, year, ecozone, severity class, and leading spp for each photo, ma
 # Appendix E: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
-
-#Parking Lot
-
-```{r exp-fire-valid}
-
-###table with rows are CBM pools, columns (paird) are obs and modelled exp fires
-
-### fires that would work:
-
-### ICFME (SW TP High); Sharpsands 2007 (SW BSE High), Lafoe (HW BSE Low), CWS C-7 burns (SW MC Mod), Carrot lake (SW MC High)
-
-### variables specifically measured during an experimental fire, in the verbiage of the fire DMs:
-exp.fire.table.defs <- c("SW.CFB","HW.CFB","SW.Mort","HW.Mort","SW.SubMerch.Mort","HW.SubMerch.Mort","SmTree.Mort","SW.Snag.Comb.Frac","HW.Snag.Comb.Frac","MedDOM.Comb.Frac", "Duff.consump.frac")
-
-##then, take the list above, and look up the same row but the column "Plain.Language.Name" in FireDMTableDefs.csv:
-## exp.fire.table.labels <-
-
-##note that Duff.consump.frac is an ecozone variable, not in FireDMTableDefs.csv
-
-##list of all possible CBM pools measured during an experimental fire:
-exp.fire.pools <- c("Softwood Foliage","Softwood Other","Aboveground Very Fast DOM","Aboveground Fast DOM","Medium DOM","Aboveground Slow DOM","Softwood Stem Snag","Hardwood Other","Hardwood Stem Snag") 
-
-###fun idea: ternary plots of live vs combusted vs dead for each of these fires, modelled vs observed?
-##https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
-## with the colour being the fuel type/leading spp and size being total emissions?
-### can we draw lines in between pairs of mod vs obs in that package? TernaryApp function in the package should apparently let you draw connected points?
-```

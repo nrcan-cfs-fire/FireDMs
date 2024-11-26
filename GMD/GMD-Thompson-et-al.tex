@@ -182,22 +182,24 @@ area) \citep{skakun2022}. The 2023 fire season in Canada burned a
 remarkable 15 Mha owing to extreme drought, severee fire weather
 conditions, and a prolonged fire season length \citep{jain2024}.
 
-Of this, managed forest accounts for xxx\% of the area burned between
-1972 and 2024; publicly-owned managed forest under long-term licence to
-private timber companies forms 40\% of Canada's forest area
-\citep{stinson2019}. Privately-owned forest constituting only 6\% of the
-forest area, with the remainder of the forest area being a mix of
-formally protected areas, remote unmanaged forest, Indigenous reserve
+Of this, publically-owned managed forest under long or short-term tenure
+accounts for 23\% of the area burned between 1972 and 2024;
+publicly-owned managed forest under long-term licence to private timber
+companies forms 40\% of Canada's forest area \citep{stinson2019}.
+Privately-owned forest constitutes only 6\% of the forest area (and
+0.5\% of area burned), with the remainder of the forest area being a mix
+of formally protected areas, remote unmanaged forest, Indigenous reserve
 lands and other uses without large-scale harvesting. Managed forest
-areas adjacent to communities have historically shown some local fire
-suppression effects with a bias towards older forest nearby boreal
-forest communities in Canada \citep{parisien2020}, though the effect is
-limited to a 25 km radius between these widely dispersed communities.
+areas adjacent to communities have historically shown some meaningful
+local fire suppression effects with a bias towards older forest nearby
+boreal forest communities in Canada, though the effect is limited to a
+25 km radius between these widely dispersed communities
+\citep{parisien2020}.
 
 Burned area is dominated by a relatively small number of very large
 fires, with 3\% of fires constituting 97\% of the burned area
 \citep{stocks2002}. Lightning-caused fires account for approximately
-half of all ignitions and between xxx and xxxx\% of burned area, but no
+half of all ignitions and approximately 80\% of burned area, but no
 distinction is made between human and lightning ignition for carbon
 accounting purposes. Annual burned area mapping at 30 metre resolution
 is conducted using a composite of satellite and aerial mapping; the
@@ -206,17 +208,28 @@ regeneration \citep{white2017} allows for reliable mapping using
 multispectral imagery such as Landsat within one year of the fire
 \citep{whitman2018}.
 
-In CBM-CFS, spatially referenced stand lists representing large
-homogenous stands that fall within spatial units (ecozone-provincial
-intersections) are randomly (??) drawn \citep{kurz2002}, even when
-applying precisely mapped burned areas \citep{hall2020}. CBM-CFS
-currently assesses (simulates?, calculates?) fire impacts to carbon
+{[}2 sentences on CBM-CFS3 and simple stuff about it{]}\ldots.. In
+CBM-CFS, spatially referenced stand lists representing large homogenous
+stands that fall within spatial units (ecozone-provincial intersections)
+\citep{kurz2002}, even when applying precisely mapped burned areas
+\citep{hall2020}. CBM-CFS currently assesses fire impacts to carbon
 pools only as representing high-severity fire, which is the most common
 of three severity classes of burned forest in Canada \citep{hall2008}.
 Biomass consumption estimates are based on the and the assumption of
 complete crown mortality, with additional biomass consumption following
 a spatially-referenced aggregated estimate at the ecozone-province of
-annualized drought conditions.
+annualized drought conditions. Quantification of the change in carbon
+stock in CBM is made via a ``Disturbance Matrix'' (hereafter referred to
+as a DM) which is simply a matrix of the proportional mass flux of
+carbon between each pair of pools in the model for a site experiencing a
+given disturbance. This proportional mass flux is independent of the
+size of the C pool. Pools in the DM include all the above and
+below-ground pools tracked in CBM, as well as an atmospheric sink pool.
+Importantly, unlike an emissions-only fire models commonly used in air
+quality modelling in Canada \citep{chen2019}, DM definitions in CBM also
+track the transfer of live biomass to dead, but still uncombusted pools
+such as live stemwood (which are killed but not burned) to standing
+deadwood, also known as snags.
 
 In Canada's forests, a combination of disturbance history, soils, and
 less frequently topographic variables determine leading tree species; at
@@ -233,7 +246,8 @@ applied.
 To support recent advances in operational burn severity mapping for
 Canada \citep{whitman2020} alongside multi-decade reliable burned area
 records that provide certainty on fire start and end dates
-\citep{hall2020} , the CBM DMs also need to be upgraded.
+\citep{hall2020} , this paper describes a local scale (30-m) method for
+defining a per-pixel proportional carbon flux measurement.
 
 something about dynamic veg models like landis and how they represent
 fire disturbance -then how most MRV models and quickly how they do fire
@@ -420,7 +434,7 @@ P & 0.14 & 0.06 & 0.02\\
 \end{tabular}
 \end{table}
 
-\subsection{Duff Consumption}
+\subsection{Forest Floor Consumption}
 
 While consumption of fine fuels in the litter layer of the forest floor
 is nearly complete for any given fire intensity, consumption of deeper
@@ -453,8 +467,8 @@ depth.
 
 A conversion factor is then applied to the relative depth of burn data
 to convert it to a relative mass consumption value. Since organic soil
-density always increases with depth, this conversion factor from depth
-to mass is less than one:
+density always increases non-linearly with depth, this conversion factor
+from depth to mass is less than one:
 
 \begin{equation}
 \left( \frac{mass consumed}{prefire mass}\right) = \left( \frac{depth of burn}{prefire depth}\right) * CF
@@ -905,105 +919,6 @@ and drought}
 
 \subsection{Comparison against observed direct fire emissions}
 
-\subsubsection{Plot-level comparisons}
-
-Experimental fires at the International Crown Fire Modelling Experiment
-(Stocks et al., YYYY) provides a good example of detailed pre- and
-post-fire biomass measurements in pools that largely mirror the pools
-impacted by direct fire emissions modelled here. The series of burns in
-the Taiga Plains ecozone of the Northwest Territories were conducted
-under a median Drought Code of 363. The average Total Fuel Consumption
-(TFC) across the high severity crown fire burns was 4.2 kg/m2 of biomass
-consumption, accounting for foliage, branchwood, woody debris, and
-forest floor consumption. The corresponding estimate using the fire
-Disturbance Matrices constructed here predicts 4.7 kg/m2 of TFC, or 23.7
-t C/ha. Across the nine ICFME fires, 62\% of fuel consumption measured
-on-site was at the surface (forest floor plus woody debris). The model
-schema estimates that 80\% of the fuel consumption was at the surface,
-suggesting a bias towards larger litter and duff pool size or higher
-surface fuel consumption in the model compared to this single site.
-
-{[}function call to delete later{]}
-EmissionsPerFire(ID=``ICFME\_avg'',Area\_ha = 1,EcoBoundaryName=``Taiga
-Plains'',AdminBoundaryName=``Northwest
-Territories'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=363)
-{[}{]}
-
-Experimental fires in the Boreal Shield East of Ontario showed mixed
-results when comparing well-observed biomass consumption in wildfires to
-model outputs. Three high severity crown fires in mature Jack pine
-stands at Kenshoe Lake at an average Drought Code of 129 (see de Groot
-et al 2022) were observed to have 2.87 kg/m2 average Total Fuel
-Consumption, as compared to model estimates of 4.56. In part this is due
-to lower surface fuel consumption: the model output estimated 75\% of
-TFC to be derived from surface fuel consumption, while measured surface
-fuel consumption was only 40\% of TFC. Future iterations of this fire DM
-scheme that incorporate site-specific surface fuel loadings (Hanes et al
-duff map AB) will improve model representations of fuel consumption in
-locations with fuel loadings that substantially deviate from the average
-pool sizes used in this iteration of the model.
-
-{[}function call to delete later{]} EmissionsPerFire(ID=``Kenshoe Lake
-passive crown fires 5 9 12'',Area\_ha = 1,EcoBoundaryName=``Boreal
-Shield
-East'',AdminBoundaryName=``Ontario'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=((65+145+178)/3))
-{[}{]}
-
-Also in the Boreal shield East of Ontario, six high severity crown fires
-in immature (\textasciitilde30 year old) Jack Pine under slightly higher
-Drought Code conditions (average DC 232) showed higher observed average
-surface fuel consumption (1.9 kg/m2) owing to more woody debris. Total
-fuel consumption observed at Sharpsands was 3.0 kg/m2, as compared to
-modelled consumption of 5.3 kg/m2 (26.8 t C/ha); the observed surface
-contribution to total fuel consumption of 64\% was broadly similar to
-the modelled value of 75\%. Again, given the regional fixed biomass pool
-sizes used, it would be expected that the model overestimates total fire
-emissions in younger stands.
-
-{[}function call to delete later{]} EmissionsPerFire(ID=``Sharpsands
-11-17'',Area\_ha = 1,EcoBoundaryName=``Boreal Shield
-East'',AdminBoundaryName=``Ontario'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=232)
-{[}{]}
-
-In the Taiga Plains of Alberta, continuous crown experimental fires in
-black spruce forest at Big Fish lake burned at an average Drought Code
-of 241 were observed to consume 1.65 kg/m2 in the surface and 0.86 kg/m2
-of biomass in the canopy. Similar to the Boreal Shield East examples,
-observed fuel consumption was lower than the model output of 7.4 kg/m2,
-owing to a high bias in modelled canopy fuel consumption (1.85 kg/m2) as
-well as surface fuel consumption (model value of 5.5 kg/m2), though the
-modelled contribution of surface fuel consumption to the total of 74\%
-is comparable to the 66\% surface fuel contribution in the observation
-data.
-
-{[}function call to delete later{]} EmissionsPerFire(ID=``Big Fish
-Active Crown only'',Area\_ha = 1,EcoBoundaryName=``Taiga
-Plains'',AdminBoundaryName=``Alberta'',Low\_frac=0.0,Mod\_frac=0.0,High\_frac=1.0,Median\_DC=241)
-{[}{]}
-
-Overall, the plot-level comparisons of this model to experimental fires
-showed a high model bias in the estimation of the surface fuel
-consumption in the Ontario and Alberta examples with lower Drought
-Codes. Although site-specific calibration of absolute fuel consumption
-rates is possible, the current iteration of the fire DMs still relies on
-fixed biomass pools per RU, so an honest performance assessment of the
-model was made against these regional biomass values even when more
-detailed site-specific biomass pool data is available for each
-experimental fire.
-
-A further comparison can be made in the contribution of surface fuels to
-total fuel consumption, which partially accounts for site-specific
-differences in absolute biomass pool size (e.g.~foliage biomass
-otherwise known as Crown Fuel Load in experimental fires). In all cases
-except Kenshoe Lake, the bias in the modelled contribution of surface
-fuels in the model was 10-20\% higher than the observed contribution of
-surface fuels which was 62-66\% outside of Kenshoe Lake where surface
-fuels were only 40\% of total fuel consumption.
-
-!!! Then some discussion here (or at the start of this) on duff
-consumption patterns from the ecology literature?
-https://cdnsciencepub.com/doi/full/10.1139/X06-245
-
 \subsubsection{Forest fire observations of CO and CO2 emissions ratios}
 
 \begin{table}
@@ -1071,42 +986,132 @@ carbon emissions based solely on the sum of observed Fire Radiative
 Power (FRP) from Copernicus-CAMS was approximately 490 Mt C
 (\url{https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe})
 
--some other discussion points (unordered) so far
+\subsubsection{Relationship to other fire carbon models}
+
+The forest floor emissions modelling scheme used here builds upon the
+CanFIRE model {[}de Groot{]} which incorporates a similar estimate of
+absolute forest floor emissions based on fuel type and various Fire
+Weather Index inputs (including but not limited to Drought Code). While
+the CanFIRE model is also capable of estimating tree mortality, the
+premise of CanFIRE lies in the use of the Canadian fire Behaviour
+Prediction (FBP) System to model fire intensity and a
+physiological-thermodynamic model of tree damage and mortality. CanFIRE
+is able to run entirely in scenario or forecast mode, i.e.~no fire
+severity map is needed to run the model, unlike the focus here on a
+mechanism to estimate carbon fluxes and pools after fire severity is
+mapped. Ultimately, models like CanFIRE can be used for near-real time
+emissions estimates of direct and indirect fire carbon emissions (and
+also for prescribed fire planning and scenario testing), while this
+modelling framework is best used solely operational carbon accounting
+and reporting given its strong dependence severity maps. While fire
+severity can be estimated empirically based on geospatial inputs without
+observation using multispectral satellite data such as Landsat
+{[}Ellen's paper?{]}, estimation using coupled fire behaviour and
+ecology models such as CanFIRE is a more direct approach.
+
+While the fire DMs presented here are designed for use in the CFS-CBM
+carbon reporting framework, their simplicity and similarity to many
+other forest carbon schema allows them to be used elsewhere such as in
+other forest dynamics {[}LANDIS, others?{]} and earth system models
+{[}CLASSIC fire stuff from Melton{]} that require estimates of Canadian
+forest carbon emissions from wildfire.
 
 \begin{itemize}
 \tightlist
 \item
   given the generic nature of these DMs and their simple relative
-  simplicity, can be added to other frameworks like LANDIS (see Stenzel
-  2019 as well, they do some of that).
+  simplicity, can be added to other frameworks like LANDIS that also
+  take into account direct and indirect emissions (see Stenzel 2019 as
+\item
+  well, they do some of that).
 \end{itemize}
+
+Steznel 2019 show that severity-informed fire C estimates (with snags)
+in the US (with more mixed severity fire and less duff) are only 30-40\%
+are large as fixed or variable severity data using their LANDIS-type
+models, owing to large over-estimates of in-fire bole consumption that
+were not observed in the field. In the model presented here, our
+estimates of snag consumption are based on\ldots.. !!!{[}to be
+completed{]}!!!
+
+\subsubsection{Indirect fire emissions}
+
+While fire emissions within the year of the fire are majority of the GHG
+flux, enhanced post-fire decomposition of dead biomass persists for many
+years after a fire. The increase in post-fire tree mortality between the
+year of the fire and the year following the fire is as much as 30\% in
+low and moderate-severity stands \citep{angers2011}. This extended
+mortality is not captured in year-of fire severity mapping but is likely
+better assessed using fire severity data captured the year following
+fire, as is operation practice in Canada {[}cite NBAC or Ellen's paper,
+likely{]}. Similarly, the transition of fire-killed stems (snags) from
+upright to the forest floor woody debris takes between 5-8 years for
+50\% of stems to fall \citep{angers2011} with stemfall rate highest in
+low-severity fire.
+
+paragraph on extended impacts like delayed stem mortality (there's that
+Gauthier paper), rapid snag fall (get some refs), and changes (or not)
+in duff decomposition rates (look in the lit, but also cite like soil
+temperature papers post-fire). Not (as of yet) covered in this
+1-timestep pulse disturbance described here.
 
 \begin{itemize}
 \tightlist
 \item
-  paragraph on extended impacts like delayed stem mortality, rapid snag
-  fall, and changes (or not) in duff decomposition rates. Not (as of
-  yet) covered in this 1-timestep pulse disturbance described here.
+  CBM does cover decomposition but uses annual air temperature, would
+  need to have a soil temperature approximation that compensates for
+  variable canopy loss across severity classes
 \end{itemize}
 
--future work on biomass maps in GCBM will improve this emissions
-estimates only marginally, since during large fire years with drought
-such as 2023 there is little fuel selection bias in burned area.
+\subsubsection{Model gaps}
 
-\begin{itemize}
-\tightlist
-\item
-  paragraph on extended impacts like delayed stem mortality, rapid snag
-  fall, and changes (or not) in duff decomposition rates. Not (as of
-  yet) covered in this 1-timestep pulse disturbance described here.
-\end{itemize}
+Currently, the model framework only accounts of regionally-averaged soil
+carbon stocks, meaning that Reconcilliation Units with high peatland
+areas will show higher belowground slow pool size (see Table \#\#\#),
+but peatlands themselves are not spatially represented in the model.
+Currently, fire disturbance in peatlands is performed by the CaMP model,
+which uses the same Drought Code fire weather metric to estimate peat
+layer consumption \citep{bona2020} and uses the overstory carbon schema
+of CBM to estimate overstory tree carbon pools and fluxes. Direct
+satellite monitoring of upland forest organic soil and peatland carbon
+loss via burn severity monitoring is possible but remains a challenge to
+implement with accuracy for monitoring purposes
+\citep{bourgeau-chavez2020}. Despite the large carbon stock, the mean C
+emissions per area in peatland due to fire (\#\#\# t C/ha) as modelled
+by \citet{bona2024} are comparable to regional emissions from peat-rich
+ecozones such as the Boreal and Taiga Plains under moderate drought
+conditions.
 
--future work on biomass maps in GCBM will improve this emissions
-estimates only marginally, since during large fire years with drought
-such as 2023 there is little fuel selection bias in burned area. \#
-Conclusions
+\section{Conclusions}
 
-The conclusion goes here.
+Carbon emissions from wildfires in Canada represent a substantial pulse
+input of greenhouse gases to the atmosphere: the 2023 fire emissions in
+Canada were an input of between \#\#\# and \#\#\# Tg CO2e, between
+\#\#\# and \#\#\# times Canada's annual anthropogenic emissions. A
+modelling framework to extend the current fire and greenhouse gas
+reporting in Canada is presented. In contrast to the existing modelling
+system that utilizes a fixed fire severity (i.e.~tree mortality)
+assumption, a field-calibrated satellite fire severity mapping process
+that follows mature and well-established scientific methods is used.
+Above-ground carbon pool changes (from live to dead and in situ as well
+as to the gas phase) rely on a robust field observation dataset that
+relates back to satellite metrics. Evaluation of the modelling presented
+above against fully independent airborne observations of CO:CO2
+emissions ratios for boreal wildfires indicates the modelling of
+proportion of flaming vs smouldering emissions are well-replicated by
+the model. With confidence in this modelled CO:CO2 ratio, the total fire
+CO emissions for the 2023 wildfire season in Canada (with a record 15
+Mha burned) track closely with fire season estimates using satellite
+total column CO anomalies.
+
+While this prototype carbon flux framework utilizes regionally-averaged
+carbon stock estimates, future systems deployment within Canada's carbon
+accounting system is likely to incorporate spatially mapped carbon pools
+alongside the spatially mapped fire severity products used here. As both
+the spatial estimates of carbon stocks across Canada's forested
+ecosystems improves alongside additional field observations, it is
+anticipated that this modelling framework will incrase in accuracy and
+precision over time.
 
 \section{Appendix A: list of fluxes and corresponding fire-related
 plain-language summary.}
@@ -1117,11 +1122,12 @@ layer consumption}
 For national annual estimates of forest organic soil layer consumption
 during wildfire, implementations that only utilize Canadian experimental
 fire data from the Fire Behaviour Prediction System will be limited to a
-maximum consumption value of 5 kg/m2 of total surface fuel (woody
-debris, litter, and duff) of 5 kg/m2, or 25 Mg C/ha, given the
-observation dataset and fitted model parameters. For the common C-2
-Boreal Spruce fuel type for instance, Surface Fuel Consumption (kg m/2)
-is modelled as:
+maximum consumption value of 5 kg (biomass) m\textsuperscript{-2} of
+total surface fuel (woody debris, litter, and duff) of 5 kg
+m\textsuperscript{-2}, or 25 Mg C ha\textsuperscript{-1}, given the
+observation dataset and fitted model parameters. For the common ``C-2''
+boreal spruce fuel type for instance, Surface Fuel Consumption, SFC
+(biomass units in kg m\textsuperscript{-2} not kg C) is modelled as:
 
 \begin{equation}
 SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
@@ -1129,43 +1135,45 @@ SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
 
 This model form has the distinct advantage of SFC being 0.0 at a BUI of
 zero. The model parameters vary by fuel type (i.e.~deciduous broadleaf
-fuels are limited to 1.5 kg/m2 of maximum SFC) but are fixed within a
-fuel type.
+fuels are limited to 1.5 kg m\textsuperscript{-2} of maximum SFC) but
+are fixed within a fuel type.
 
 More recent observations and modelling from \citet{degroot2009} extended
 the FBP data with an additional 128 observations from 7 additional
-wildfires, and the ABoVE project compiled over 1000 field observations
+wildfires, and the ABoVE project compiled over 1,000 field observations
 of depth of burn and C stocks before and after wildfire in Canada and
 Alaska, over 600 of which are in North American Level II ecoregions also
-occurring in Canada (fix Walker 2020 ORNL DAAC ref in bibtex here).
-\citet{degroot2009} provides a concise and informative improvement on
-the FBP fuel consumption equations, where both a Fire Weather Index
-System component (in this case, Drought Code) is used similarly to
-Buildup Index in the FBP, but importantly, the site-level organic soil
-layer fuel load is also accounted for, which allows for the greater
-absolute combustion in deeper organic soils that is moderated by the
-natural logarithm transformation:
+occurring in Canada \citep{walker2020}. \citet{degroot2009} provides a
+concise and informative improvement on the FBP fuel consumption
+equations, where both a Fire Weather Index System component (in this
+case, Drought Code) is used similarly to Buildup Index in the FBP, but
+importantly, the site-level organic soil layer fuel load is also
+accounted for, which allows for the greater absolute combustion in
+deeper organic soils that is moderated by the natural logarithm
+transformation:
 
 \begin{equation}
 log_{e}(FFFC) = -4.252+0.710log_{e}(DC) + 0.671log_{e}(FFFL)
 \end{equation}
 
 where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody
-debris) in kg m/2 and FFFL is Forest Floor Fuel Load in kg/m2. This
-model fits well within the dataset and extends the observed maximum FFFC
-to nearly 10 kg/m2. The ABoVE synthesis of FFFL and FFFC (Walker et al
-2020 ORNL) expands upon a slightly smaller dataset used in a modelling
-summary also by Walker et al (2020 NCC), where structural equation
-modelling was used to explore drivers of FFFC but no concise and readily
-reproducible modelling is produced. The results of the SEM from Walker
-et al (2020 NCC) emphasized a greater role of FFFL over DC, though
-coarse reanalysis that lacked local fire agency weather stations was
-used. An analysis of just 2014 fires in the Northwest Territories by
-(walker2018) showed that while the mean depth of burn across all black
-spruce stands was 6-10 cm, the driest (xeric) black spruce stands with
-the smallest FFFL showed upwards of 75\% soil organic consumption, while
-deeper organic soils in subhygric black spruce stands showed less than
-25\% consumption.
+debris) in kg (biomass) m\textsuperscript{-2} and FFFL is Forest Floor
+Fuel Load in kg m\textsuperscript{-2}. The forest floor as defined here
+is inclusive of the litter and duff layers, live mosses and lichens.
+This model presented above fits well within the dataset and extends the
+observed maximum FFFC to nearly 10 kg m\textsuperscript{-2}. The ABoVE
+synthesis of FFFL and FFFC (Walker et al 2020 ORNL) expands upon a
+slightly smaller dataset used in a modelling summary also by Walker et
+al (2020 NCC), where structural equation modelling was used to explore
+drivers of FFFC but no concise and readily reproducible modelling is
+produced. The results of the SEM from Walker et al (2020 NCC) emphasized
+a greater role of FFFL over DC, though coarse reanalysis that lacked
+local fire agency weather stations was used. An analysis of just 2014
+fires in the Northwest Territories by (walker2018) showed that while the
+mean depth of burn across all black spruce stands was 6-10 cm, the
+driest (xeric) black spruce stands with the smallest FFFL showed upwards
+of 75\% soil organic consumption, while deeper organic soils in
+subhygric black spruce stands showed less than 25\% consumption.
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE
 synthesis was combined with wildfire data from de Groot et al 2009 not

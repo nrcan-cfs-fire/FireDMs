@@ -179,10 +179,10 @@ of Canada's 355 Mha forested area in a typical year \citep{hanes2019}.
 In Canada's reliable 53-year burned area record, nine years have
 exceeded 4 Mha of burned area (or approximately 1\% of Canada's forest
 area) \citep{skakun2022}. The 2023 fire season in Canada burned a
-remarkable 15 Mha owing to extreme drought, severee fire weather
+remarkable 15 Mha owing to extreme drought, severe fire weather
 conditions, and a prolonged fire season length \citep{jain2024}.
 
-Of this, publically-owned managed forest under long or short-term tenure
+Of this, publicly-owned managed forest under long or short-term tenure
 accounts for 23\% of the area burned between 1972 and 2024;
 publicly-owned managed forest under long-term licence to private timber
 companies forms 40\% of Canada's forest area \citep{stinson2019}.
@@ -196,17 +196,17 @@ boreal forest communities in Canada, though the effect is limited to a
 25 km radius between these widely dispersed communities
 \citep{parisien2020}.
 
-Burned area is dominated by a relatively small number of very large
-fires, with 3\% of fires constituting 97\% of the burned area
+Burned area in Canada is dominated by a relatively small number of very
+large fires, with 3\% of fires constituting 97\% of the burned area
 \citep{stocks2002}. Lightning-caused fires account for approximately
 half of all ignitions and approximately 80\% of burned area, but no
 distinction is made between human and lightning ignition for carbon
-accounting purposes. Annual burned area mapping at 30 metre resolution
-is conducted using a composite of satellite and aerial mapping; the
-relatively small number of large fires, and their slow vegetation
-regeneration \citep{white2017} allows for reliable mapping using
-multispectral imagery such as Landsat within one year of the fire
-\citep{whitman2018}.
+accounting purposes. Annual burned area mapping for carbon reporting in
+Canada is conducted using a composite of satellite and aerial mapping at
+30 metre resolution; the relatively small number of large fires, and
+their slow vegetation regeneration \citep{white2017} allows for reliable
+mapping using multi-spectral imagery such as Landsat within one year of
+the fire \citep{whitman2018}.
 
 {[}2 sentences on CBM-CFS3 and simple stuff about it{]}\ldots.. In
 CBM-CFS, spatially referenced stand lists representing large homogenous
@@ -215,21 +215,21 @@ stands that fall within spatial units (ecozone-provincial intersections)
 \citep{hall2020}. CBM-CFS currently assesses fire impacts to carbon
 pools only as representing high-severity fire, which is the most common
 of three severity classes of burned forest in Canada \citep{hall2008}.
-Biomass consumption estimates are based on the and the assumption of
-complete crown mortality, with additional biomass consumption following
-a spatially-referenced aggregated estimate at the ecozone-province of
-annualized drought conditions. Quantification of the change in carbon
-stock in CBM is made via a ``Disturbance Matrix'' (hereafter referred to
-as a DM) which is simply a matrix of the proportional mass flux of
-carbon between each pair of pools in the model for a site experiencing a
-given disturbance. This proportional mass flux is independent of the
-size of the C pool. Pools in the DM include all the above and
-below-ground pools tracked in CBM, as well as an atmospheric sink pool.
-Importantly, unlike an emissions-only fire models commonly used in air
-quality modelling in Canada \citep{chen2019}, DM definitions in CBM also
-track the transfer of live biomass to dead, but still uncombusted pools
-such as live stemwood (which are killed but not burned) to standing
-deadwood, also known as snags.
+Currently, biomass consumption estimates are based on the and the
+assumption of complete crown mortality, with additional biomass
+consumption following a spatially-referenced aggregated estimate at the
+ecozone-province of annualized drought conditions. Quantification of the
+change in carbon stock in CBM is made via a ``Disturbance Matrix''
+(hereafter referred to as a DM) which is simply a matrix of the
+proportional mass flux of carbon between each pair of pools in the model
+for a site experiencing a given disturbance. This proportional mass flux
+is independent of the size of the C pool. Pools in the DM include all
+the above and below-ground pools tracked in CBM, as well as an
+atmospheric sink pool. Importantly, unlike an emissions-only fire models
+commonly used in air quality modelling in Canada \citep{chen2019}, DM
+definitions in CBM also track the transfer of live biomass to dead, but
+still uncombusted pools such as live stemwood (which are killed but not
+burned) to standing deadwood, also known as snags.
 
 In Canada's forests, a combination of disturbance history, soils, and
 less frequently topographic variables determine leading tree species; at
@@ -238,35 +238,33 @@ ecosystem susceptibility to fire \citep{bernier2016} where older,
 conifer-dominated forests burn at very high rates relative to adjacent
 deciduous or mixed stands. Even when deciduous and mixed forests do
 burn, they do so at consistently lower severity compared to all but the
-most xeric conifer forests \citep{whitman2018}. Thus, important biases
-in fire activity towards older and moderate to poorly-drained forests
-are not resolved, and only a regionally-averaged fire severity is
-applied.
+most xeric conifer forests \citep{whitman2018}. Thus, important local
+biases in fire activity towards older and moderate to poorly-drained
+forests are not resolved in the spatially-referenced CBM-CFS3 when only
+a regionally-averaged fire severity is applied.
 
 To support recent advances in operational burn severity mapping for
 Canada \citep{whitman2020} alongside multi-decade reliable burned area
 records that provide certainty on fire start and end dates
-\citep{hall2020} , this paper describes a local scale (30-m) method for
-defining a per-pixel proportional carbon flux measurement.
+\citep{hall2020}, this paper describes a local scale (30-m) method for
+defining a per-pixel proportional carbon flux measurement via a locally
+calculated fire DM. In this document, we outline the evidence-based fire
+Disturbance Matrices updated and designed for a spatially-explicit
+update to the CBM, anchored in a three severity class paradigm. These
+fire carbon flux models are built from a blend of aggregated field data
+linked to remotely sensed severity, as well as insights from fire
+physics and experimental fires. Key knowledge gaps are also highlighted,
+with interim solutions presented until further quantification can be
+done in field studies, such as from further wildfire observations,
+experimental fires, or prescribed fires.
 
-something about dynamic veg models like landis and how they represent
-fire disturbance -then how most MRV models and quickly how they do fire
-disturbance -even a bit on the GFED/GFAS world too
-
-that ESSD frames it well, worth reading the intro part in detail)
-(recent Smyth and Campbell papers too) (other recent Canadian
-fire-carbon things, Walker - esp is supports consistent patterns in
-proportional carbon loss)
-
-In this document, we outline the evidence-based fire Disturbance
-Matrices updated and designed for a spatially-explicit update to the
-CBM, anchored in a three severity class paradigm. These fire carbon flux
-models are built from a blend of aggregated field data linked to
-remotely sensed severity, as well as insights from fire physics and
-experimental fires. Key knowledge gaps are also highlighted, with
-interim solutions presented until further quantification can be done in
-field studies, such as from further wildfire observations, experimental
-fires, or prescribed fires.
+Simplified fire DMs (i.e.~a scalar reduction on 100\% mortality
+assumption) have been used in scenario exercises using CBM for
+assessment of future fire and harvest scenarios \citep{smyth2022}; the
+algorithm development shown here provides an important data-driven and
+regionally-adjusted framework that better reflects the ecological
+nuances of moderate and low-severity fire across Canada's diverse
+ecozones.
 
 \section{Methods}
 
@@ -292,7 +290,10 @@ logical axioms are proposed and maintained throughout:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Disturbance matrices are to be in terms of mortality, not survival
+  Disturbance matrices are to be in terms of mortality, not survival.
+  Mortality here is defined as tree death by the end of the calendar
+  year of the fire's occurrence. Tree mortality in subsequent years is
+  not modelled here.
 \item
   Crown Fraction Burned (CFB) is a mass-based estimate of the portion of
   foliage consumed in the flaming passage of a fire, and is inclusive of
@@ -302,16 +303,14 @@ logical axioms are proposed and maintained throughout:
   foliage to litter biomass transfer.
 \item
   The heat-killed but unconsumed fraction of the canopy is equal to
-  (mortality - CFB)
+  (mortality - CFB).
 \item
-  In submerchantable trees, mortality = CFB
+  In submerchantable trees, mortality == CFB.
 \item
-  In submerchantable trees, mortality is \textless= 1
-\item
-  In merchantable trees, CFB \textless= mortality
+  In merchantable trees, CFB \textless= mortality.
 \item
   Snags are inclusive of both those killed by prior fire as well as
-  those killed by all other causes
+  those killed by all other causes.
 \end{enumerate}
 
 Of these, Crown Fraction Burned (CFB) is an important concept used
@@ -319,10 +318,11 @@ primarily in fire behaviour science but not carbon accounting nor fire
 ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System
 documentation \citep{forestrycanadafiredangerratinggroup1992}, and
 provides a simple continuous 0-100 variable for only the consumption of
-foliage (inclusive of both conifer and broadleaf), as opposed to ordinal
-and less precise systems like Crown Fire Severity Index that allows the
+foliage (inclusive of both conifer and broadleaf). For our purposes, CFB
+is the desirable metric as opposed to ordinal and less precise systems
+like Canopy Fire Severity Index \citep{kasischke2000} that allows the
 user to specify which pools of canopy biomass are consumed, but not the
-degree to which a given pool is consumed.
+precise fraction of each given pool that is consumed.
 
 \subsection{Ground plot and remotely sensed fire severity data}
 
@@ -334,7 +334,11 @@ samples are from etc.
 Certain variables, like the partitioning of
 CO\textsubscript{2}:CH\textsubscript{4}:CO gas emissions, are constant
 throughout ecozones, but vary by flaming vs smouldering combustion
-modes. They are defined in a global variables table:
+modes. The precise emissions ratios vary slightly between models and
+field studies, but for this initial algorithm assessment, we define
+these emissions ratios as being identical to those used in Canada's
+operational wildfire smoke forecasting system, FireWork
+\citep{chen2019}. They are defined in a global variables table:
 
 \begin{table}
 \centering
@@ -368,16 +372,11 @@ emissions. With a Global Warming Potential of CO equal to 1.9 and
 CH\textsubscript{4} of 25, the Global Warming Potential per unit of
 biomass consumption in the smouldering phase is 1.18 times higher in
 global warming potential compared to flaming, not including differential
-aerosol production and injection heights, however. Note that these
-proposed emissions factors for flaming vs smouldering are aligned with
-those currently used in Canada's operational wildfire smoke air quality
-model, FireWork \citep{chen2019}. With flaming and smouldering each
-contributing roughly equally to wildfire emissions, these distinct
-flaming and smouldering emissions rates correspond well with aircraft
-smoke chemistry observations by \citep{simpson2011} and
-\citep{hayden2022} and are themselves very similar to prior emissions
-factors used in CBM. Note that as current described, the sum of
-CO\textsubscript{2}, CH\textsubscript{4}, and CO emissions from
+aerosol production and injection heights, however. With flaming and
+smouldering each contributing roughly equally to wildfire emissions,
+these distinct flaming and smouldering emissions ratios correspond well
+prior emissions factors used in CBM. Note that as current described, the
+sum of CO\textsubscript{2}, CH\textsubscript{4}, and CO emissions from
 wildfires only represent approximately 95\% of the fire carbon mass
 emitted to the atmosphere, with 0.5-2.0\% of biomass emitted as
 particulate matter (e.g.~PM2.5, but also PM1 and PM10 classes of
@@ -391,9 +390,10 @@ potentials as compared to CH\textsubscript{4}.
 The litter layer forms the first biomass pool in which a spreading fire
 consumes fuel. In low-severity fires, the litter layer may be consumed
 little to no underlying duff material consumed, nor any tree mortality
-\citep{hessburg2019}. Logically, since litter consumption is required
-for the ignition of the underlying duff layer, this litter area-wise
-fractional consumption also informs and constrains duff consumption.
+\citep{hessburg2019}. Logically, since litter consumption is largely
+required for the ignition of the underlying duff layer, this litter
+area-wise fractional consumption also informs and constrains duff
+consumption.
 
 \begin{table}
 \centering
@@ -493,7 +493,7 @@ estimated or measured fuel loading and specific Drought Code values, for
 the purposes of this first assessment, an ecozone-averaged fuel load and
 decadal composites of Drought Code can also be used to provide
 representative values. Specifically, a median Drought Code of detected
-fire hotspots in Canada from 2003-2021 \citep{barber} using the same
+fire hotspots in Canada from 2003-2021 \citep{barber2024} using the same
 data as the Canadian CFEEPS-FireWork wildfire air quality model of
 \citep{chen2019} is presented below, along with proportional consumption
 values of the forest floor by ecozone:
@@ -939,23 +939,23 @@ Hornbrook et al 2011 & 2008-07-04 & After rain smouldering only low severity & B
 \end{tabular}}
 \end{table}
 
-Hornbrook et al (2011) reported the mean observed Modified Combustion
-Efficiency for distinct periods during the ARCTAS campaign over northern
-Saskatchewan in 2008. MCE observed by aircraft during the peak burn
-period when the majority of fuel consumption and area burned occurs
-(0.92) largely corresponded with modelled values (0.91), suggesting the
-model provides a fair representation of the balance of flaming and
-smouldering during large active wildfires. Subsequent smoke plume
-observations during periods of greatly reduced spread and intensity
-(late evening and after rain) showed a substantially reduced MCE of
-0.82-0.83 that indicates a near lack of flaming combustion. Even when
-represented as 100\% low severity fire in the model, the modelled MCE
-only declines to 0.903. Since the fire DM model is based on area burned,
-fire activity such as smouldering but with minimal actual area burned
-increased is going to show an MCE far lower than areas of low severity
-fire spread, which are typically still a low subcanopy flaming front
-that features a mix of smouldering duff and woody debris alongside
-flaming consumption of litter (McRae et al., 1994; McRae et al., 2017).
+Mean observed Modified Combustion Efficiency was observed by
+\citet{hornbrook2011} for distinct periods during the ARCTAS campaign
+over northern Saskatchewan in 2008. MCE observed by aircraft during the
+peak burn period when the majority of fuel consumption and area burned
+occurs (0.92) largely corresponded with modelled values (0.91),
+suggesting the model provides a fair representation of the balance of
+flaming and smouldering during large active wildfires. Subsequent smoke
+plume observations during periods of greatly reduced spread and
+intensity (late evening and after rain) showed a substantially reduced
+MCE of 0.82-0.83 that indicates a near lack of flaming combustion. Even
+when represented as 100\% low severity fire in the model, the modelled
+MCE only declines to 0.903. Since the fire DM model is based on area
+burned, fire activity such as smouldering but with minimal actual area
+burned increased is going to show an MCE far lower than areas of low
+severity fire spread, which are typically still a low subcanopy flaming
+front that features a mix of smouldering duff and woody debris alongside
+flaming consumption of litter \citep{mcrae1994, mcrae2017}.
 
 \subsection{2023 Canadian wildfire season total direct emissions}
 
@@ -989,8 +989,8 @@ Power (FRP) from Copernicus-CAMS was approximately 490 Mt C
 \subsubsection{Relationship to other fire carbon models}
 
 The forest floor emissions modelling scheme used here builds upon the
-CanFIRE model {[}de Groot{]} which incorporates a similar estimate of
-absolute forest floor emissions based on fuel type and various Fire
+CanFIRE model \citep{degroot2013} which incorporates a similar estimate
+of absolute forest floor emissions based on fuel type and various Fire
 Weather Index inputs (including but not limited to Drought Code). While
 the CanFIRE model is also capable of estimating tree mortality, the
 premise of CanFIRE lies in the use of the Canadian fire Behaviour
@@ -1043,25 +1043,25 @@ year of the fire and the year following the fire is as much as 30\% in
 low and moderate-severity stands \citep{angers2011}. This extended
 mortality is not captured in year-of fire severity mapping but is likely
 better assessed using fire severity data captured the year following
-fire, as is operation practice in Canada {[}cite NBAC or Ellen's paper,
-likely{]}. Similarly, the transition of fire-killed stems (snags) from
+fire, as is operation practice in Canada !!!!{[}cite Ellen's upcoming
+paper{]}!!!. Similarly, the transition of fire-killed stems (snags) from
 upright to the forest floor woody debris takes between 5-8 years for
 50\% of stems to fall \citep{angers2011} with stemfall rate highest in
-low-severity fire.
-
-paragraph on extended impacts like delayed stem mortality (there's that
-Gauthier paper), rapid snag fall (get some refs), and changes (or not)
-in duff decomposition rates (look in the lit, but also cite like soil
-temperature papers post-fire). Not (as of yet) covered in this
-1-timestep pulse disturbance described here.
-
-\begin{itemize}
-\tightlist
-\item
-  CBM does cover decomposition but uses annual air temperature, would
-  need to have a soil temperature approximation that compensates for
-  variable canopy loss across severity classes
-\end{itemize}
+low-severity fire. Field observations show that initial assessments of
+fire severity are the primary predictors of snag fall \citet{angers2011}
+and decomposition \citep{boulanger2011} rates, meaning the mapped
+severity method used here provides a useful input for multi-year fire
+carbon modelling of the snag pool in CBM. For belowground pools, fire
+has been shown to suppress decomposition rates in upland soil pools
+where drier post-fire conditions are present \citep{holden2015}, while
+in permafrost upland \citep{odonnell2011} and peatland
+\citep{gibson2018, gibson2019} systems, fire has profound impacts on
+soil carbon pools by rapidly increasing thaw depths and subsequent
+decomposition rates. Currently in CBM, decomposition rates are
+calibrated against field decomposition litterbag experiments
+\citep{trofymow2002} and annual climate metrics that do not take into
+account how disturbances such as fire (and fire of varying severity)
+modify decomposition rates in the absence of a change in climate.
 
 \subsubsection{Model gaps}
 
@@ -1077,10 +1077,43 @@ satellite monitoring of upland forest organic soil and peatland carbon
 loss via burn severity monitoring is possible but remains a challenge to
 implement with accuracy for monitoring purposes
 \citep{bourgeau-chavez2020}. Despite the large carbon stock, the mean C
-emissions per area in peatland due to fire (\#\#\# t C/ha) as modelled
-by \citet{bona2024} are comparable to regional emissions from peat-rich
-ecozones such as the Boreal and Taiga Plains under moderate drought
-conditions.
+emissions per area in peatland due to fire (65 t C/ha) as modelled by
+\citet{bona2024} are comparable to regional emissions from peat-rich
+ecozones such as the Boreal and Taiga Plains under moderate to severe
+drought conditions. Indeed, it is under these moderate to severe drought
+conditions under which peatlands burn more frequently
+\citep{turetsky2004, thompson2019} and severely \citep{kuntzemann2023}.
+
+This algorithm is currently built off of regionally averaged biomass
+pools by Reconciliation Unit (Figure 1; Appendix \#\#\#). While Canadian
+wildfires shown an overall selection bias towards preferentially burning
+older conifer stands \citep{bernier2016}, fuel selectivity against less
+flammable portions of the landscape decreases strongly under severe
+drought conditions \citep{parks2018} such as those experienced in Canada
+in 2023 \citep{jain2024} where we performed the algorithm validation
+against independent fire emissions observations. Algorithm evaluation
+against individual fires or years of less profound drought would be more
+likely to highlight the limitation of the regionally-averaged carbon
+pool (i.e.~fuel load) values used here. Ultimately, the mapped severity
+used here is best paired with mapped carbon pools at a similar scale,
+such as the 1-ha forest carbon modelling for analysis and scenario
+testing used by \citet{smyth2024}.
+
+Species-specific traits in trees with overlapping ranges, such as
+resprouting is aspen \citep{brown1987} but not other broadleaves such as
+oak or maple, are not explicitly handled in this model. Instead, the
+relative abundance of trees with contrasting traits that influence
+ecological outcomes such as fire survival are lumped at the ecozone
+scale from the aggregation of the plot data. While ecozone-level
+contrasts in key considerations such as overstory mortality do strongly
+vary by ecozone !!!!{[}Table \#\#\#{]}, the same DM (e.g.~hardwood root
+mortality) is applied in adjacent stands at the same severity class
+despite the potential for strongly contrasting traits that are readily
+tied back to mapping at the stand level by leading species. Alternately,
+models such as CanFIRE can account for species-level contrasts in fire
+ecology traits, but compiling the relevant ecophysiological properties
+and traits for all tree species in Canada remains incomplete at the
+current time.
 
 \section{Conclusions}
 

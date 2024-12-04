@@ -67,7 +67,9 @@ appendix: |
   Please add `\clearpage` between each table and/or figure. Further guidelines on figures and tables can be found below.
   Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
   To rename them correctly to A1, A2, etc., please add the following commands in front of them:
+always_allow_html: true
 output:
+  word_document:
   rticles::copernicus_article: 
     highlight: NULL
     keep_tex: true
@@ -110,6 +112,8 @@ library(mgcv)
 library(gslnls)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 library(minpack.lm)
+library(terra)
+library(sf)
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -123,12 +127,62 @@ options(dplyr.summarise.inform = FALSE)
 ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM")
 ```
 
-## Carbon Modeling Spatial Units
+## Carbon Modelling
 
--   show RU map twice, with softwood foliage and then BGSlow pool size as colour ramp on two maps?
+## Carbon Modelling Spatial Units
 
-```{r RU-map, message=FALSE, warning=FALSE, include=FALSE}
+```{r RU-map, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
+#### queue up data for figure 1:
+### map of ecozones and plot locations using ggplot
+### https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-2.html
+##gml link for ecozones is here:http://www.agr.gc.ca/atlas/data_donnees/bio/aafcEcostratification/gml/ECOZONE_V2_2_GML.zip
+###WFS for ecozones is here: http://ecozones.ca/english/services.html
+### using WFS in ggplot is here: https://inbo.github.io/tutorials/tutorials/spatial_wfs_services/
+
+##read ecozones map from local dir:
+
+
+ReportingUnits <- st_read("~/nrcan-cfs-fire/FireDMs/NationalReportingUnits.gpkg", quiet = TRUE)
+
+ecozones_used <- st_read("ecozones_used_3978.gml",quiet=TRUE)
+st_crs(ecozones_used) <- 3978
+
+###add in a column with short-name of ecozones?
+### or sub out number with TSW etc
+### example here:https://stackoverflow.com/questions/63563285/extract-coordinates-of-polygon-centroids-and-label-them-by-polygon-number
+#(st_centroid(ecozones_sf3978))
+
+Canada <- ne_countries(scale = "medium", returnclass = "sf", country = "Canada")
+##also load big lakes in Canada
+
+###download option, but annoying loading message that's hard to suppress:
+#lakes50 <- ne_download(scale = 50, type = 'lakes', category = 'physical', returnclass = "sf")
+###use local copy: 
+lakes50 <- st_read("~/nrcan-cfs-fire/FireDMs/ne_50m_lakes.gml", quiet = TRUE)
+st_crs(lakes50) <- 4326
+### convert this to gml and keep in github repo
+### permalink?: https://github.com/nvkelso/natural-earth-vector/blob/master/50m_physical/ne_50m_lakes.shp
+
+st_crs(Canada) <- 4326
+
+### this is buggy - why??? lakes50 is WGS84
+lakes50_crop <- st_intersection(lakes50, Canada)
+
+lakesCanada_3978 <- sf::st_transform(lakes50_crop, 3978)
+Canada_3978 <- sf::st_transform(Canada, 3978)
+
+
+
+```
+
+```{r Fig1-RU-ecozones, eval=FALSE, fig.cap=paste("Locations of NDVI time series data plots."), message=FALSE, warning=FALSE, include=FALSE}
+
+
+ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1")
+
+ggplot(data = Canada_3978) +
+    geom_sf(colour="black")+ theme_bw()+geom_sf(data=ReportingUnits,aes(fill=factor(eco_name))) + geom_sf(data = lakesCanada_3978,colour="black",fill="white") + theme(legend.position = "none") + geom_sf_label(data=ecozones_used,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(ECOZONE))) + geom_sf_label(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id))) + scale_fill_manual(values=ecozones_colours)+ylab("")+xlab("")# + ggrepel::geom_label_repel(data=ecozones_used, aes(label = ECOZONE, geometry = geometry), stat = "sf_coordinates", min.segment.length = 0,label.size = NA) 
 ```
 
 ## Biomass pools of the Generic Carbon Budget Model
@@ -157,30 +211,21 @@ Of these, Crown Fraction Burned (CFB) is an important concept used primarily in 
 
 !!!Ellen to insert methods here - including the figure of where the samples are from etc.
 
+```{r Fig2-CBI-ecozones-map, eval=FALSE, fig.cap=paste("Locations of NDVI time series data plots."), message=FALSE, warning=FALSE, include=FALSE}
+
+#align with map colour scheme with others
+
+ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1")
+
+
+```
+
 ## Combustion gas emission ratios
 
 Certain variables, like the partitioning of CO~2~:CH~4~:CO gas emissions, are constant throughout ecozones, but vary by flaming vs smouldering combustion modes. The precise emissions ratios vary slightly between models and field studies, but for this initial algorithm assessment, we define these emissions ratios as being identical to those used in Canada's operational wildfire smoke forecasting system, FireWork [@chen2019]. They are defined in a global variables table:
 
 ```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
 
-
-#populate the values first:
-
-
-####OPTION 1 (preferred)
-#values directly from CFFEPS-FireWork
-#Note that we are using the flaming CO2/CH4/CO from CBM originally, and smouldering from CFFEPS, the emissions module for ECCC's FireWork national smoke model (http://www.geosci-model-dev.net/12/3283/2019/). Specifically, we are using the arithmetic average of "smouldering" and "residual" phases.
-##global.vars <- list(0.89, 0.004, 0.07, 0.79, 0.013, 0.16) ##Note: this is the stoichiometrically correct ratio, which includes non-CH4 hydrocarbons AND total PM, so CO2+CO+CH4 is only ~0.96
-
-
-#### OPTION 1A (interim use March 2023)
-#global.vars <- list(0.926, 0.004, 0.07, 0.827, 0.013, 0.16) ##Note: this retains the emissions ratios for CO2:CO:CH4 for the major gases, but excludes PM and non-CH$ hydrocarbons.  Just for interim use to evaluate the smouldering component.
-
-#### OPTION 1B (interim use July 2023)
-
-### Hayden et al showed that x% of total carbon goes into total PM (assume 51% carbon content for the time being), and x% of total PM goes into PM2.5, so the CFFEPS values in Option 1A, but minus the PM phase (which is accounted for below in their own fluxes)
-
-##using Hayden et al as the example for smouldering BC emissions, and Permar 2021 from WE-CAN (https://doi.org/10.1029/2020JD033838) for flaming BC EF, otherwise, unchanged from Chen et al CFFEPS EFs as given, but using 51% carbon content of fuels
 
 
 CarbonEFs <- read.csv("~/nrcan-cfs-fire/FireDMs/GMD/CarbonCalculator.csv")
@@ -195,21 +240,6 @@ names(global.vars) <- array(as.character(CarbonEFs$VarName))
 
 ### convert to list for easier referencing later down
 global.vars <- as.list(global.vars)
-
-#DID NOT RUN:
-#global.vars$FlamingCO2 #returns desired value as double
-
-
-
-####OPTION 2 (simple)
-#The provided 0.9,0.01,0.09 represents an MCE of 0.90 and therefore a mixed plume very similar to that from ARCTAS data by Simpson et al 2011 (10.5194/acp-11-6445-2011)
-###global.vars <- list(0.9,0.01,0.09,0.9,0.01,0.09) ##using the same mixed plume from the current CBM, so flaming is the same as smouldering
-
-
-
-
-
-#can add/subtract ecozones here as needed.
 
 ##load Ellen's data (InterimValue==False)
 VarDefs <- read.csv("~/nrcan-cfs-fire/FireDMs/FireDMTableDefs.csv")
@@ -259,16 +289,16 @@ kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severit
   #kable_styling(latex_options = "hold_position")
 ```
 
-## Forest Floor Consumption
+## HForest Floor Consumption
 
-While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL) and is dominated by the equivalent Belowground Slow pool (BGSlow) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (FFFC); however in the case of carbon modelling, it is the relative fraction of consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data , with an alternative modelling approach to compute the relative amount of depth of consumption (scalar from 0 to 1) rather than an absolute value in \unit{\,kg\,m^{-2}} or \unit{\,cm} as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
+While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is termed Forest Floor Fuel Load (FFFL) and is dominated by the equivalent organic soil Slow pool (AGSlow) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (FFFC); however in the case of carbon modelling, it is the relative fraction of consumption (FFFC/FFFL) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data , with an alternative modelling approach to compute the relative amount of depth of consumption (scalar from 0 to 1) rather than an absolute value in \unit{\,kg\,m^{-2}} or \unit{\,cm} as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{prefire depth}\right) = [3.83(1 - e^{(-0.005DC)})] + (-0.718log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{prefire depth}\right) = [3.83(1 - e^{(-0.005DC)})] + (-0.718log_{e}(AGSlow))
 \end{equation}
 ```
-where DC is the Fire Weather Index Drought Code, and BGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). The modelling of relative depth of burn had a higher skill than modelling of the relative mass of consumption, given natural variability in soil density with depth.
+where DC is the Fire Weather Index Drought Code, and AGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). The modelling of relative depth of burn had a higher skill than modelling of the relative mass of consumption, given natural variability in soil density with depth.
 
 A conversion factor is then applied to the relative depth of burn data to convert it to a relative mass consumption value. Since organic soil density always increases non-linearly with depth, this conversion factor from depth to mass is less than one:
 
@@ -384,7 +414,7 @@ ABoVE_Data <- ABoVE_Data %>%
   )
 
 ### add data, and convert the ABoVE data from gC/m2 and de Groot data in kg biomass/m2 to both in Mg C/ha (CBM units)
-ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(BGSlow.Mg.C.ha = SFL.kg.m2*5)
+ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(AGSlow.Mg.C.ha = SFL.kg.m2*5)
 
 
 
@@ -403,7 +433,7 @@ ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2
 
 # hist(ABoVE_Data$prop_sol_combusted_logit) #looks good and now normally distributed
 
-FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(BGSlow.Mg.C.ha,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML", na.action=na.exclude)
+FFFC.Frac.Consume.gam.ABoVE<-gam(prop_sol_combusted_logit ~ s(drought_code,k=4,bs="tp")+ecozone+s(AGSlow.Mg.C.ha,k=4,bs="tp"), data = ABoVE_Data_w_FBP,method="REML", na.action=na.exclude)
 summary(FFFC.Frac.Consume.gam.ABoVE)
 plot.gam(FFFC.Frac.Consume.gam.ABoVE)
 
@@ -445,7 +475,7 @@ ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 
 ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
-  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(BGSlow.Mg.C.ha)*b),
+  formula = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(AGSlow.Mg.C.ha)*b),
   data = ABoVE_Data_w_FBP_excl_BC,
   start = list(a = -0.021, b = -0.71,c=1),
   lower = c(a=-0.005,b=-Inf,c=-Inf)
@@ -456,7 +486,7 @@ ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
 
 #### Boreal Cordillera just fitting a simple linear model for now
 ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- nlsLM(
-  formula = prop_sol_combusted_logit ~ (a*drought_code)+(b*log(BGSlow.Mg.C.ha))+c, 
+  formula = prop_sol_combusted_logit ~ (a*drought_code)+(b*log(AGSlow.Mg.C.ha))+c, 
   data = ABoVE_Data_w_FBP_only_BC,
   start = list(a = -0.021, b = -0.71,c=1)
 )
@@ -541,13 +571,13 @@ summary(Depth.Correction.Factor.non.Spruce)
 ###Compute FFFC given any DC and duff load input (CalcFFFC)
 # Written By: Dan Thompson
 # Written On: 2024-09-19
-# Parameters: Drought Code of interest (DC); Carbon pool amount of the Below Ground Slow pool (BGSlow) in Mega-grams of Carbon (12g/mol) per hectare of forest area.
+# Parameters: Drought Code of interest (DC); Carbon pool amount of the Below Ground Slow pool (AGSlow) in Mega-grams of Carbon (12g/mol) per hectare of forest area.
 # Modified on: 
 # Modified by: 
-# Purpose: for ecozones in Canada (not including Boreal Cordillera) this function estimates the !!relative consumption!! fraction (0-1) of the forest floor (aka duff), which corresponds to the BGSlow pool in the Carbon Budget Model for the Canadian Forest Sector (CBM-CFS)
+# Purpose: for ecozones in Canada (not including Boreal Cordillera) this function estimates the !!relative consumption!! fraction (0-1) of the forest floor (aka duff), which corresponds to the AGSlow pool in the Carbon Budget Model for the Canadian Forest Sector (CBM-CFS)
 # Description: model is derived analysis of ABoVE project which is a composite of ABoVE project data plus some de Groot data (https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744) also adding in a few eastern/central Canadian sites from (https://www.nrcresearchpress.com/doi/full/10.1139/x08-192).
 
-# output: a single floating point from 0-1 that is the portion of the duff layer that is consumed given a DC and BGSlow pool input
+# output: a single floating point from 0-1 that is the portion of the duff layer that is consumed given a DC and AGSlow pool input
 
 
 
@@ -555,17 +585,17 @@ summary(Depth.Correction.Factor.non.Spruce)
 ### !! Note using the hard-coded parameters, unlike chunks above which derive the parameters, so this function can be used elsewhere
 
 
-## CalcFFFC <- function(DC,PoolType,PoolSize) #alternate function that either accepts BGSlow or DuffLoad
+## CalcFFFC <- function(DC,PoolType,PoolSize) #alternate function that either accepts AGSlow or DuffLoad
 DC <- 250
-BGSlow <- 60
-CalcFFFC <- function(DC=250,BGSlow=60,Spruce=TRUE)
+AGSlow <- 60
+CalcFFFC <- function(DC=250,AGSlow=60,Spruce=TRUE)
 {
 CalcFFFC_param1 <- 3.83 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3]
 CalcFFFC_param2 <- -0.005 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1]
 CalcFFFC_param3 <- -0.718 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
   ##apply the fitted nls logit model with parameters defined above:
-  temp.logit <- CalcFFFC_param1 * (1 - exp(CalcFFFC_param2 * DC)) + (log(BGSlow) * CalcFFFC_param3)
+  temp.logit <- CalcFFFC_param1 * (1 - exp(CalcFFFC_param2 * DC)) + (log(AGSlow) * CalcFFFC_param3)
   
   ### and now compute the inverse logit of the model and apply a correction factor to convert fraction of mass (from line above) to fraction of depth, using standard duff density curves:
   
@@ -578,14 +608,14 @@ CalcFFFC_param3 <- -0.718 #coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 }
 
 #test the function:
-#CalcFFFC(DC=250,BGSlow=25,Spruce=FALSE) ###this is the DMC standard 5kg/m2 of fuel loading at Petawawa as per Van Wagner 1987 FWI system description, gives you ~0.57
+#CalcFFFC(DC=250,AGSlow=25,Spruce=FALSE) ###this is the DMC standard 5kg/m2 of fuel loading at Petawawa as per Van Wagner 1987 FWI system description, gives you ~0.57
 
-#CalcFFFC(DC=550,BGSlow=15,Spruce=TRUE) # similar to the origin area of the 2024 Jasper fire 
+#CalcFFFC(DC=550,AGSlow=15,Spruce=TRUE) # similar to the origin area of the 2024 Jasper fire 
 
-#CalcFFFC(DC=25,BGSlow=1200,Spruce=TRUE) ## very low values of DC above the highest value in the test dataset
+#CalcFFFC(DC=25,AGSlow=1200,Spruce=TRUE) ## very low values of DC above the highest value in the test dataset
 ###gives you close to zero as it should
 
-#CalcFFFC(DC=290,BGSlow=(24*5),Spruce=TRUE) ##using just the acrotelm carbon stock and a well-known DC and fractional carbon loss in the acrotelm (Bona et al 2020 doi: 10.1016/j.ecolmodel.2020.109164, Table 4), you get ~0.30, which is too high compared to the observed ~0.12 fractional pool loss by fire
+#CalcFFFC(DC=290,AGSlow=(24*5),Spruce=TRUE) ##using just the acrotelm carbon stock and a well-known DC and fractional carbon loss in the acrotelm (Bona et al 2020 doi: 10.1016/j.ecolmodel.2020.109164, Table 4), you get ~0.30, which is too high compared to the observed ~0.12 fractional pool loss by fire
 
 
 
@@ -602,14 +632,14 @@ Median.DC <- c(270,369,297,239,242,242,254,250,268,452,204,98,123)
 Duff.Load.kg.m2 <- c(10.9,15,1.7,8.8,9.8,9.8,8.31,8.31,15.2,6,7.9,1.7,10.9)
 
 ##conversion of Mg C/ha to kg biomass /m2
-BGSlow.Mg.C.ha <- Duff.Load.kg.m2*5
+AGSlow.Mg.C.ha <- Duff.Load.kg.m2*5
 
 ###building the model for now from coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] in the chunk above
 
 
 
 Duff.consump.frac.logit <- coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[3] * (1 - exp(coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[1] * Median.DC)) + 
-    (log(BGSlow.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
+    (log(AGSlow.Mg.C.ha) * coef(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)[2])
 
 
 ### calculate the inverse of the logit to get the duff consumption fraction, and apply the Correction Factor to convert from %depth to %mass
@@ -778,11 +808,21 @@ Understory (or small diameter overstory) tree mortality is defined seperately in
 
 ### Snag and stump consumption
 
-Compared to live stemwood of the same diameter, the low moisture content of standing dead stemwood (snags) allows for much greater consumption during the passage of an intense flaming front. The snag branch pool experiences almost complete combustion, while the largest biomass pool of the main standing dead stemwood <!-- !!(see doi:10.1002/ecs2.2744). There is also a more physics-bsaed argument around a reasonable diameter reduction amount, and mean dbh by ecozone!!. -->
+Dead standing trees and branches on average is a biomass pool much smaller than organic soils or coarse woody debris on the ground, but in areas of extensive insect killed trees, recent fires, and blowdown, is a substantial biomass pool. In this initial algorithm description, only typical boreal forest stands where snags are a small fraction of total stems are considered. Compared to live stemwood of the same diameter, the low moisture content of snags and snag branches allows for much greater consumption during the passage of an intense flaming front [@stocks2004]. The snag branch pool experiences almost complete combustion in high severity fires [@talucci2019], and is highly correlated with live foliage consumption (i.e Crown Fraction Burned) [@degroot2022]. The largest biomass pool of the main standing dead stemwood remains at most approximately 50-60% consumed. In the absence of extensive field data from CBI plots to quantify snag and snag branch consumption, snag (dead stemwood) consumption fraction is estimated as:
 
-## Construction fire disturbance matrices
+```{=tex}
+\begin{equation}
+Snag Consumption fraction = \left( 0.5 \times Crown Fraction Burned \right) + 0.05
+\end{equation}
+```
+And for snag branches:
 
-Give total number of global parameters, and parameters per ecozone, and then total parameters, and what % of total parameters we have so far filled with data
+```{=tex}
+\begin{equation}
+Snag Branch Consumption = \left( 0.9 \times Crown Fraction Burned \right)
+\end{equation}
+```
+Stumps are tracked as their own biomass pool in CBM. As they are typically in contact with the upper forest floor, are assumed to be consumed at the same rate as coarse woody debris.
 
 ```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -833,9 +873,9 @@ To compute an estimate of the total direct C emissions from forest fires in Cana
 
 A total of 2199 fires as small as 0.09 ha (one 30x30 landsat pixel) were mapped by NBAC for burn severity for a total of 14.60 Mha, but only fires over 100 ha were utilized as a lower limit of where meaningful per-fire estimates of the fraction of low, moderate, and high severity burned area was available. Including only fires 100 ha and larger reduced the total number of fires to 966 but the total area remained largely the same at 14.58 Mha. A total of 189,704 ha of post-fire salvage logging was also mapped in 2023 and is assigned to the moderate severity class after consultation with provincial land managers. The direct C emissions from fire shown here are not altered by the act of post-fire salvage logging. Additionally, the NBAC mapping process accounts for unburned islands (and areas with a mapped fire severity no different than unburned) which count towards the total fire area but do not have a disturbance matrix and direct C estimate applied.
 
-A unique DM was then calculated for each fire using the median area-weighted Drought Code per fire. All thermal detection hotspots from VIIRS that intersect a fire were extracted from the historical hotspot archive that supports the Canadian smoke emissions model CFFEPS-FireWork (Chen et al., 2019). The median DC value across all intersecting hotspots was used to derive a single DM per fire, no matter the duration of burning (could show first and last hotspot as a figure?).
+A unique DM was then calculated for each fire using the median area-weighted Drought Code per fire. All thermal detection hotspots from VIIRS that intersect a fire were extracted from the historical hotspot archive that supports the Canadian smoke emissions model CFFEPS-FireWork [@chen2019]. The median DC value across all intersecting hotspots was used to derive a single DM per fire, no matter the duration of burning.
 
-To compute total direct fire emissions per fire, a single estimate of the carbon pool size based on the Reconcillation Unit of the centroid of the NFIREID polygon was applied. Since polygons are split across RU boundaries, the spatial weighting of the pool size per fire is performed automatically. While spatially explicit biomass maps are available for some aboveground components (SCANFI) and some belowground components (Hanes), the majority of the required pool sizes in CBM for the computation of the fire DMs are available only at the spatially referenced RU scale.
+To compute total direct fire emissions per fire, a single estimate of the carbon pool size based on the Reporting Unit of the centroid of the NFIREID polygon was applied. Since polygons are split across RU boundaries, the spatial weighting of the pool size per fire is performed automatically. While spatially explicit biomass maps are available for some aboveground components [@guindon2024] and some organic soil components [@hanes2022], the majority of the required pool sizes in CBM for the computation of the fire DMs are available only at the spatially referenced RU scale.
 
 # Results and Discussion
 
@@ -874,6 +914,39 @@ VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == eco
   VarDefs$Value[VarDefs$Variable.Name == "SW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   VarDefs$Value[VarDefs$Variable.Name == "HW.SubMerch.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- 1
   
+  
+  
+  
+  ###(3) Since no field CBI data is available to detail snag consumption in fire, use some of the patterns found Talucci and Krawchuk 2019, where let's call it (0.5*CFB)+0.1 is consumed, and is equal between hardwood and softwood.  Note that this relationship is imperfect when the stand has very low Crown Bulk Density and continuous crown fire is not as easily achieved.
+  
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*0.5+0.05
+
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*0.5+0.05
+  
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*0.5+0.05
+  
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*0.5+0.05
+
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*0.5+0.05
+  
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*0.5+0.05
+  
+  ###and similarly for snag branches, just 90% of CFB:
+  
+  
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*0.9
+
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*0.9
+  
+  VarDefs$Value[VarDefs$Variable.Name == "SW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*0.9
+  
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*0.9
+
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*0.9
+  
+  VarDefs$Value[VarDefs$Variable.Name == "HW.Snag.BW.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "HW.CFB" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*0.9
+
+
   ###### end housekeeping
   
   
@@ -1555,8 +1628,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 58 & Sourc
 
 
 #FluxID: 59
-#Source: Belowground Very Fast DOM
-#sink: Belowground Very Fast DOM
+#Source: organic soil Very Fast DOM
+#sink: organic soil Very Fast DOM
 #PLS: Uncombusted Fraction of Dead fine roots in the mineral soil, approximately <5 mm diameter
 #Pseudocode:  == 1, since dead roots in the mineral soil are not combusted
 
@@ -1621,7 +1694,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 63 & Sourc
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 63 & SourceSink$SeverityClass == "High"] <- (1 -  SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "High"])*global.vars$SmoulderingCO
 
 #FluxID: 64
-#Source: Belowground Fast DOM
+#Source: organic soil Fast DOM
 #sink: Below Ground Fast DOM
 #PLS: Uncombusted fraction of Dead coarse roots in the mineral soil, approximately ≥5 diameter
 #Pseudocode: =~ 1, since no combustion within mineral soil
@@ -1756,7 +1829,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 73 & Sourc
 
 
 #FluxID: 74
-#Source: Belowground Slow DOM
+#Source: organic soil Slow DOM
 #sink: Below Ground Slow DOM
 #PLS: Uncombusted fraction of Humified organic matter in the mineral soil
 #Pseudocode: == 1
@@ -2396,13 +2469,13 @@ ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",DC_for_DM=2
   #Severity_select="High"
   
   ##for now, find the relevant average duff load and ##conversion of Mg C/ha to kg biomass /m2
-  BGSlow_for_DM <- as.numeric(FFFC$Median.Duff.Load.kg.m2[FFFC$Ecozone == Ecozone_select])*5
+  AGSlow_for_DM <- as.numeric(FFFC$Median.Duff.Load.kg.m2[FFFC$Ecozone == Ecozone_select])*5
   
   
   DM_temp <- SourceSink %>% filter(Ecozone==Ecozone_select & SeverityClass==Severity_select)
   ###now, need to use the above-defind CalcFFFC function within this to get a new Duff.Consump.frac term:
   ###slight danger since Duff.consump.frac is defined and used otherwise above, so careful
-  Duff.consump.frac.ExtractFireDM <- CalcFFFC(BGSlow = BGSlow_for_DM,DC = DC_for_DM,Spruce=TRUE)
+  Duff.consump.frac.ExtractFireDM <- CalcFFFC(AGSlow = AGSlow_for_DM,DC = DC_for_DM,Spruce=TRUE)
   
   
   ###now, need to redefine fluxes 11-12,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
@@ -2702,7 +2775,7 @@ rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryNa
 rbind(EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.8,Mod_frac=0.01,High_frac=0.01,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_50_DC250",Area_ha = 1000,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="British Columbia",Low_frac=0.10,Mod_frac=0.20,High_frac=0.50,Median_DC=250))
 
 
-##contrasting ecozones where the BGSlow (duff) consumption is about 2x greater in BP compared to BSE, and softwood foliage is also about 2x as large.  As a result, per ha the emissions are about 2.0-2.5 times bigger
+##contrasting ecozones where the AGSlow (duff) consumption is about 2x greater in BP compared to BSE, and softwood foliage is also about 2x as large.  As a result, per ha the emissions are about 2.0-2.5 times bigger
 rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Plains",AdminBoundaryName="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250),EmissionsPerFire(ID="test_BSE_20_30_30_DC250",Area_ha = 1000,EcoBoundaryName="Boreal Shield East",AdminBoundaryName="Ontario",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_DC=250))
 
 ```
@@ -2794,6 +2867,8 @@ emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "H
 #emissions_grid_out$Severity_uniform <- as.factor(emissions_grid_out$Severity_uniform)
 #emissions_grid_out$Severity_uniform <- factor(emissions_grid_out$Severity_uniform, levels = c("High","Mod","Low"))
 
+##!!!! Need to get the line wrap working on EcoAdmin
+
 ggplot(emissions_grid_out,aes(Median_DC,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Drought Code of burning") + theme(legend.position="none") + scale_colour_manual(values = c("red", "lightblue", "gold")) + labs(caption=("Direct emissions by severity class: red = high, yellow = moderate, blue = low severity"))# + geom_point(aes(x=Median_DC,y=Prop_surface*100))
 ```
 
@@ -2842,9 +2917,11 @@ kbl(MCE_Table, caption = "Comparison of the Modified Combustion Efficiency (MCE)
 
 ```
 
-Mean observed Modified Combustion Efficiency was observed by @hornbrook2011 for distinct periods during the ARCTAS campaign over northern Saskatchewan in 2008. MCE observed by aircraft during the peak burn period when the majority of fuel consumption and area burned occurs (0.92) largely corresponded with modelled values (0.91), suggesting the model provides a fair representation of the balance of flaming and smouldering during large active wildfires. Subsequent smoke plume observations during periods of greatly reduced spread and intensity (late evening and after rain) showed a substantially reduced MCE of 0.82-0.83 that indicates a near lack of flaming combustion. Even when represented as 100% low severity fire in the model, the modelled MCE only declines to 0.903. Since the fire DM model is based on area burned, fire activity such as smouldering but with minimal actual area burned increased is going to show an MCE far lower than areas of low severity fire spread, which are typically still a low subcanopy flaming front that features a mix of smouldering duff and woody debris alongside flaming consumption of litter [@mcrae1994; @mcrae2017].
+Mean observed Modified Combustion Efficiency was observed by @hornbrook2011 for distinct periods during the ARCTAS campaign over northern Saskatchewan in 2008. MCE observed by aircraft during the peak burn period when the majority of fuel consumption and area burned occurs (0.92) largely corresponded with modelled values (0.91), suggesting the model provides a fair representation of the balance of flaming and smouldering during large active wildfires. Subsequent smoke plume observations during periods of greatly reduced spread and intensity (late evening and after rain) showed a substantially reduced MCE of 0.82-0.83 that indicates a near lack of flaming combustion. Even when represented as 100% low severity fire in the model, the modelled MCE only declines to 0.903. Since the fire DM model is based on area burned, fire activity such as smouldering but with minimal actual area burned increased is going to show an MCE far lower than areas of low severity fire spread, which are typically still a low sub-canopy flaming front that features a mix of smouldering duff and woody debris alongside flaming consumption of litter [@mcrae1994; @mcrae2017].
 
 ## 2023 Canadian wildfire season total direct emissions
+
+!!! results table to be completed for the 2023 emissions !!!
 
 ```{r TotalEmissions2023, message=FALSE, warning=FALSE, include=FALSE}
 #burn_severity_by_nfireid_ha.csv is just by NFIREID, need to put RU onto that to get the mean biomass pools, then apply the DMs to compare with the above
@@ -2871,7 +2948,7 @@ NBAC2023[NBAC2023$NFIREID==776,]$unit_id <- 40
 
 ###now, to feed the per-fire carbon function, will need to append the province and ecozone per fire, based on RU:
 ##in NIR2023_AverageCPools, RU is "SPUID", and in the NBAC, it is "unit_id"
-## trim the NIR data frame to just retain the Recon Unit ID (SPUID) and associated info
+## trim the NIR data frame to just retain the Reporting Unit ID (SPUID) and associated info
 NIR2023_AverageCPools_temp <- NIR2023_AverageCPools %>% select(SPUID:TimeStep) %>% filter(TimeStep==0)
 
 
@@ -2932,46 +3009,56 @@ sum(AnnualEmissionsSummary$SumC_direct_emissions,na.rm=TRUE)/sum(AnnualEmissions
 
 ```
 
-A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The total mass of PM2.5 emissions was estimated as `r {2*round(sum(AnnualEmissionsSummary$PM25_MgC,na.rm=TRUE),digits=0)}` Mt of total mass, assuming a 50% carbon content. [[(need to break this down more as a table by P/T or RU? can also do median DC and median total C/ha by RU). As a map?]]. The area-weighted mean Drought Code for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_DC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing moderate but not exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}`, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low Drought Code conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
+A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The total mass of PM2.5 emissions was estimated as `r {2*round(sum(AnnualEmissionsSummary$PM25_MgC,na.rm=TRUE),digits=0)}` Mt of total mass, assuming a 50% carbon content.. The area-weighted mean Drought Code for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_DC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing severe but not uniformly exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}`, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low drought conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
 
-Byrne et al 2024 used observed total atmospheric column excess CO and a range of MCE values to estimate total fire C emissions in Canada in 2023 of between 570-727 Mt C with a mean estimate of 647 Mt. The uncertainty in the estimate from Byrne et al 2024 lies primarily in the uncertain CO2:CO ratio (more commonly computed as the normalized ratio MCE). Our bottom-up estimates that partition flaming vs smouldering shows a lower CO2:CO estimate of `r  {round(weighted.mean(AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=2)}`. This lower CO2:CO ratio (i.e. more smouldering) if applied to the data from Byrne et al 2024 would reduce their lower range of total C emissions to `r  {round(weighted.mean(((AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC)/7.7)*647, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=2)}` Mt C, which is comparable to the `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C computed from this bottom-up approach. Estimates of total carbon emissions based solely on the sum of observed Fire Radiative Power (FRP) from Copernicus-CAMS was approximately 490 Mt C (<https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe>)
+Byrne et al 2024 used observed total atmospheric column excess CO and a range of MCE values to estimate total fire C emissions in Canada in 2023 of between 570-727 Mt C with a mean estimate of 647 Mt. The uncertainty in the estimate from Byrne et al 2024 lies primarily in the uncertain CO~2~:CO ratio (more commonly computed as the normalized ratio MCE). Our bottom-up estimates that partition flaming vs smouldering shows a lower CO~2~:CO estimate of `r  {round(weighted.mean(AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=2)}`. This lower CO~2~:CO ratio (i.e. more smouldering) if applied to the data from Byrne et al 2024 would reduce their lower range of total C emissions to `r  {round(weighted.mean(((AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC)/7.7)*647, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=2)}` Mt C, which is comparable to the `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C computed from this bottom-up approach. Estimates of total carbon emissions based solely on the sum of observed Fire Radiative Power (FRP) from Copernicus-CAMS was approximately 490 Mt C (<https://atmosphere.copernicus.eu/smoke-canadian-wildfires-reaches-europe>)
 
 ### Relationship to other fire carbon models
 
-The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Drought Code). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the Canadian fire Behaviour Prediction (FBP) System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat [Ellen's paper?], estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach.
+The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Drought Code). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the Canadian fire Behaviour Prediction (FBP) System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat !!![Ellen's paper?]!!!, estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach. Under severe drought conditions and light winds, very large fires often create more wind and energy than is available in gradient winds as measured at nearby airports and fire weather observing stations !!!(cite Coen paper on fire-induced winds)!!! Thus, fire behaviour and fuel consumption models solely driven by wind inputs from distant meteorological stations can under-predict fire intensity and therefore likely fire severity. While fire-atmosphere models are available for research !![cite coen again] and some forecasting and planning purposes [@linn2020], modelling resources are typically not made available for the extensive and largely unsuppressed fires in northern Canada. Fire severity mapping after the fact is able to account for high fire severity [@whitman2018] even when fire spread occurs under light winds [@whitman2024].
 
-While the fire DMs presented here are designed for use in the CFS-CBM carbon reporting framework, their simplicity and similarity to many other forest carbon schema allows them to be used elsewhere such as in other forest dynamics [@brecka2020] and earth system models [@melton2020] that require estimates of Canadian forest carbon emissions from wildfire.
-
-@stenzel2019 showed that severity-informed fire C estimates (with snags) in the US (with more mixed severity fire and less duff) are only 30-40% are large as fixed or variable severity data using their LANDIS-type models, owing to large over-estimates of in-fire bole consumption that were not observed in the field. In the model presented here, our estimates of snag consumption are based on..... !!![to be completed]!!!
+While the fire DMs presented here are designed for use in the CFS-CBM carbon reporting framework, their simplicity and similarity to many other forest carbon schema allows them to be used elsewhere such as in other forest dynamics [@brecka2020] and earth system models [@melton2020] that require estimates of Canadian forest carbon emissions from wildfire. @stenzel2019 showed that severity-informed fire C estimates (with snags) in the US are only 30-40% as large as fixed or variable severity data using their LANDIS-type models. Large over-estimates of in-fire bole consumption in models were not observed to correspond to measurements in the field. In the model presented here, our estimates of snag consumption are based on simple but logical relationships with Crown Fraction Burned, but more comprehensive data collection and field observations would be required to extend the accuracy of the snag consumption scheme.
 
 ### Indirect fire emissions
 
-While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operation practice in Canada !!!![cite Ellen's upcoming paper]!!!. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall @angers2011 and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM. For belowground pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM, decomposition rates are calibrated against field decomposition litterbag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
+While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operation practice in Canada !!!![cite Ellen's upcoming paper]!!!. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall @angers2011 and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM. For organic soil pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM, decomposition rates are calibrated against field decomposition litterbag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
 
 ### Model gaps
 
-Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reconcilliation Units with high peatland areas will show higher belowground slow pool size (see Table \###), but peatlands themselves are not spatially represented in the model. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the same Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock, the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
+Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reporting Units with high peatland areas will show higher organic soil slow pool size (see Table \###), but peatlands themselves are not spatially represented in the model. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the same Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock, the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
 
-This algorithm is currently built off of regionally averaged biomass pools by Reconciliation Unit (Figure 1; Appendix \###). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.
+This algorithm is currently built off of regionally averaged biomass pools by Reporting Unit (Figure 1; Appendix \###). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.
 
 Species-specific traits in trees with overlapping ranges, such as resprouting is aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone !!!![Table \###], the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species in Canada remains incomplete at the current time.
 
 # Conclusions
 
-Carbon emissions from wildfires in Canada represent a substantial pulse input of greenhouse gases to the atmosphere: the 2023 fire emissions in Canada were an input of between \### and \### Tg CO2e, between \### and \### times Canada's annual anthropogenic emissions. A modelling framework to extend the current fire and greenhouse gas reporting in Canada is presented. In contrast to the existing modelling system that utilizes a fixed fire severity (i.e. tree mortality) assumption, a field-calibrated satellite fire severity mapping process that follows mature and well-established scientific methods is used. Above-ground carbon pool changes (from live to dead and in situ as well as to the gas phase) rely on a robust field observation dataset that relates back to satellite metrics. Evaluation of the modelling presented above against fully independent airborne observations of CO:CO2 emissions ratios for boreal wildfires indicates the modelling of proportion of flaming vs smouldering emissions are well-replicated by the model. With confidence in this modelled CO:CO2 ratio, the total fire CO emissions for the 2023 wildfire season in Canada (with a record 15 Mha burned) track closely with fire season estimates using satellite total column CO anomalies.
+Carbon emissions from wildfires in Canada represent a substantial pulse input of greenhouse gases to the atmosphere: the 2023 fire emissions in Canada were an input of approximately `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C. A modelling framework to extend the current fire and greenhouse gas reporting in Canada is presented. In contrast to the existing modelling system that utilizes a fixed fire severity (i.e. tree mortality) assumption, a field-calibrated satellite fire severity mapping process that follows mature and well-established scientific methods is used. Above-ground carbon pool changes (from live to dead and in situ as well as to the gas phase) rely on a robust field observation dataset that relates back to satellite metrics. Evaluation of the modelling presented above against fully independent airborne observations of CO:CO~2~ emissions ratios for boreal wildfires indicates the modelling of proportion of flaming vs smouldering emissions are well-replicated by the model. With confidence in this modelled CO:CO~2~ ratio, the total fire CO emissions for the 2023 wildfire season in Canada (with a record 15 Mha burned) is broadly consistent with fire season estimates using satellite total column CO anomalies.
 
-While this prototype carbon flux framework utilizes regionally-averaged carbon stock estimates, future systems deployment within Canada's carbon accounting system is likely to incorporate spatially mapped carbon pools alongside the spatially mapped fire severity products used here. As both the spatial estimates of carbon stocks across Canada's forested ecosystems improves alongside additional field observations, it is anticipated that this modelling framework will incrase in accuracy and precision over time.
+While this prototype carbon flux framework utilizes regionally-averaged carbon stock estimates, future systems deployment within Canada's carbon accounting system is likely to incorporate precisely mapped (1 ha) carbon pools alongside the finely mapped fire severity products (30 m) used here. As both the spatial estimates of carbon stocks across Canada's forested ecosystems improves alongside additional field observations, it is anticipated that this modelling framework will increase in both accuracy and precision over time.
 
-# Appendix A: list of fluxes and corresponding fire-related plain-language summary.
+# Appendix A: Mean pool size by Reporting Unit
 
-```{r SinkSourceGenericAppendix, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r PoolSizeByRU, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
-###note 2024-02-27 not working at the moment, error "Error in sub(re, "", x, perl = TRUE) : input string 366 is invalid UTF-8" will fix later
+### Two tables, one abovegroud, one organic soil, with RU as columns?
+###rows are RUs as EcoAdmin
+NIR_AverageCPools_filterSurface <- NIR2023_AverageCPools %>% filter(TimeStep==0) %>% select('EcoBoundaryNameShort','AdminBoundaryName','Aboveground Very Fast DOM':'organic soil Slow DOM','Softwood Stem Snag':'Softwood Other','Softwood Coarse Roots','Softwood Fine Roots','Hardwood Coarse Roots','Hardwood Fine Roots')  %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat)
 
-kbl(SourceSinkGeneric[SourceSinkGeneric$SeverityClass == 'Low',3:5],row.names = FALSE) %>%
+NIR_AverageCPools_filterCanopy <- NIR2023_AverageCPools %>% filter(TimeStep==0) %>% select('EcoBoundaryNameShort','AdminBoundaryName','Softwood Stem Snag':'Softwood Other','Hardwood Merchantable':'Hardwood Other') %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat)
+
+
+
+kbl(NIR_AverageCPools_filterSurface) %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
   kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")
+
+kbl(NIR_AverageCPools_filterCanopy) %>%
+    kable_styling(full_width = F, html_font = "Cambria") %>%
+  kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "hold_position")
+
   
 ```
 
@@ -3010,25 +3097,25 @@ which effectively transforms a data of proportions of [0,1] to a Gaussian distri
 summary(FFFC.Frac.Consume.gam.ABoVE)
 ```
 
-(could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as BGSlow.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside for a distinct model.
+(could also show boxplots?) which shows that the Boreal Cordillera ecozone has a meaningfully higher proportional soil organic layer consumption rate compared to BP, BSW, TP, and TSW, all of which are not significantly different in consumption rates once DC and FFFC (shown as AGSlow.Mg.C.ha) are accounted for. Boreal Cordillera data were set aside for a distinct model.
 
-Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as BGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints.
+Similar to @degroot2009, Drought Code was a better predictor of consumption rates than Buildup Index as used in the FBP. In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed FFFC (given as AGSlow pool in Mg C/ha) was used as well. In the end, a superior model was found using the proportional depth of burn, rather than the proportional loss of the mass of the soil organic layer. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints.
 
 In the abstract, the model follows the form:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  DC)})] + (b log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  DC)})] + (b log_{e}(AGSlow))
 \end{equation}
 ```
 with fitted parameters as:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83 (1 - e^{(-0.005 DC)})] + (-0.718 log_{e}(BGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.83 (1 - e^{(-0.005 DC)})] + (-0.718 log_{e}(AGSlow))
 \end{equation}
 ```
-Note the "b" coefficient on the parameter associated with the FFFL (BGSlow) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
+Note the "b" coefficient on the parameter associated with the FFFL (AGSlow) of -0.718, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
 
 The a parameter term that forms the exponent of e alongside Drought Code is related to the DC value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value). The NLS fitting was given a minimum value of -0.06 such that half of the asymptotal maximum consumption rate was modelled as occurring at or around a DC value of 300. The other parameters were fit to the best possible value with no constraint.
 
@@ -3057,9 +3144,9 @@ For example, using a moderately thick \~12 cm thick organic soil layer, the prop
 #but also show the raw data pointed coloured by ecozone for that slice of MedDOM (say 70-90) since the median is 80
 
 drought_code = seq(from = 0.0, to = 750,by = 25)
-BGSlow.Mg.C.ha = rep(60,length(drought_code))
+AGSlow.Mg.C.ha = rep(60,length(drought_code))
 
-FFFC.single.final.df <- cbind(drought_code,BGSlow.Mg.C.ha)
+FFFC.single.final.df <- cbind(drought_code,AGSlow.Mg.C.ha)
 
 FFFC.single<- array(NA,dim=c(length(drought_code)))
 #FFFC.grid <- as.data.frame(FFFC.grid)
@@ -3073,11 +3160,11 @@ FFFC.single <- as.data.frame(FFFC.single)
 
 FFFC.single <- t(FFFC.single)
 
-FFFC.single.final.df <- cbind(drought_code,BGSlow.Mg.C.ha,FFFC.single)
+FFFC.single.final.df <- cbind(drought_code,AGSlow.Mg.C.ha,FFFC.single)
 
 colnames(FFFC.single.final.df)[3] <- c("prop_sol_combusted")
 
-ggplot(FFFC.single.final.df, aes(drought_code,prop_sol_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,BGSlow.Mg.C.ha>50 & BGSlow.Mg.C.ha<70)) + ylim(0,1)
+ggplot(FFFC.single.final.df, aes(drought_code,prop_sol_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,AGSlow.Mg.C.ha>50 & AGSlow.Mg.C.ha<70)) + ylim(0,1)
 
 ```
 
@@ -3087,19 +3174,19 @@ With the parameter constrained NLS fitting, the proportional consumption model f
 ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
 ```
 
-Across the entire parameter space of Drought Code and BGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
+Across the entire parameter space of Drought Code and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
 
 ```{r FFFC-surface-plot, echo=FALSE, message=FALSE, warning=FALSE}
-###goal is to produce a surface plot from DC from 0-750 and BGSlow from 0-200 (or 0-500 maybe)
+###goal is to produce a surface plot from DC from 0-750 and AGSlow from 0-200 (or 0-500 maybe)
 ### with isolines of FFFC/FFFL
 
 
 FFFC_expand <- tibble(
 drought_code = seq(from = 0.0, to = 750,by = 25),
-BGSlow.Mg.C.ha = seq(from = 0, to = 600,by = 20)) ## has to be same size, so 31 in this case
+AGSlow.Mg.C.ha = seq(from = 0, to = 600,by = 20)) ## has to be same size, so 31 in this case
 
 
-FFFC_expand <- as.data.frame(expand(data=FFFC_expand,drought_code,BGSlow.Mg.C.ha))
+FFFC_expand <- as.data.frame(expand(data=FFFC_expand,drought_code,AGSlow.Mg.C.ha))
 
 
 
@@ -3134,14 +3221,14 @@ brks_FFFC <- c(0.7,0.6,0.5,0.4,0.3,0.2)
 
 ### rename ABoVE_Data_w_FBP_excl_BC$prop_total_bg_c_combusted as "prop_total_bg_c_combusted"
 
-ggplot(FFFC_expand, aes(drought_code, BGSlow.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of Drought Code and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Drought Code") + ylab("Duff (BGSlow) load Mg C/ha") + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,250))
+ggplot(FFFC_expand, aes(drought_code, AGSlow.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of Drought Code and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Drought Code") + ylab("Duff (AGSlow) load Mg C/ha") + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,250))
 
 ###would love for the geom_rug to work.....
 ###+ geom_rug(data=ABoVE_Data_w_FBP_excl_BC)
 
-#TO DO: add in more text at quartiles of BGSlow
+#TO DO: add in more text at quartiles of AGSlow
 
-# + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$BGSlow.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
+# + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$AGSlow.Mg.C.ha,na.rm=TRUE,c(0.25))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$AGSlow.Mg.C.ha,na.rm=TRUE,c(0.5))) + geom_hline(yintercept=quantile(ABoVE_Data_w_FBP_excl_BC$AGSlow.Mg.C.ha,na.rm=TRUE,c(0.75))) #+scale_y_continuous(limits = c(0,20)) +scale_x_continuous(limits = c(0,60))# + geom_text(data=FBP.Example,aes(CC,SH,label=fuelTypes), inherit.aes = FALSE)
 
 #+geom_tile() ###use fill=prop_total_bg_c_combusted
 
@@ -3159,10 +3246,10 @@ For the Boreal Cordillera, a simple linear model on the logit-transformed data w
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(BGSlow)) + 2.17
+logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(AGSlow)) + 2.17
 \end{equation}
 ```
-Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the BGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.
+Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the AGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.
 
 # Appendix C: annual variability in observed Drought Code during wildfire spread, and impact on ecozone-level average forest floor emissions
 
@@ -3177,11 +3264,11 @@ DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
 DC.year$DC50 <- ifelse(DC.year$DC50<20,250,DC.year$DC50)
 
 ## apply isn't working easily, silly matrix output
-#as.data.frame(t(apply(X = DC.year, MARGIN = 1, FUN = CalcFFFC, DC=DC.year$DC50,BGSlow=(DC.year$Median.Forest.Floor.Load.kg.m2*5))))
+#as.data.frame(t(apply(X = DC.year, MARGIN = 1, FUN = CalcFFFC, DC=DC.year$DC50,AGSlow=(DC.year$Median.Forest.Floor.Load.kg.m2*5))))
 
 for (i in seq(from=1,to=nrow(DC.year)))
 {
-  DC.year$Duff.consump.frac[i] <- CalcFFFC(DC=DC.year$DC50[i],BGSlow=DC.year$Median.Forest.Floor.Load.kg.m2[i]*5)
+  DC.year$Duff.consump.frac[i] <- CalcFFFC(DC=DC.year$DC50[i],AGSlow=DC.year$Median.Forest.Floor.Load.kg.m2[i]*5)
 
 DC.year$Duff.consump.kg.m2[i] <- DC.year$Duff.consump.frac[i]*DC.year$Median.Forest.Floor.Load.kg.m2[i]
  

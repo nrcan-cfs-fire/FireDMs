@@ -110,13 +110,18 @@ library(tidyterra)
 
 options(dplyr.summarise.inform = FALSE)
 
+library(tricolore) ## this one gives a nice rbg colour palette
+ ## this is a list of all the correct RBG values if we wanted to colour the dots by a nice ternary colour scheme
+
+library(ggtern)
+
 #original list
 #ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
 
 #complete list, ordered by decreasing CNFDB burned area:
 #ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","SuP","SeP","AM","MP")
 
-##working list as of 2023-04-13 that has all the data we need, no MP, no P
+##working list as of 2023-04-13 that has all the data we need, no P
 ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM","MP")
 ```
 
@@ -3185,14 +3190,11 @@ AnnualEmissionsSummary_table <- AnnualEmissionsSummary %>% group_by(EcoBoundaryN
 
 ```
 
-```{r ternary-severity-plots, echo=FALSE, fig.cap="2023, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+```{r ternary-severity-plots, echo=FALSE, fig.cap="Fire locations total emissions, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
 
 ## will need to give names to figures "fig.cap="\\label{fig:myfig}Rest of caption" see https://stackoverflow.com/questions/33324162/knitr-refer-to-a-figures-with-a-link
 
-library(tricolore) ## this one gives a nice rbg colour palette
- ## this is a list of all the correct RBG values if we wanted to colour the dots by a nice ternary colour scheme
 
-library(ggtern)
 AnnualEmissionsSummary_filterG10k <- AnnualEmissionsSummary %>% filter(Area_ha>10000)
 #NBAC2023_filterG10k <- NBAC2023 %>% filter(ADJ_HA>10000)
 tric <- Tricolore(AnnualEmissionsSummary_filterG10k, p1 = 'High_frac', p2 = 'Low_frac', p3 = 'Mod_frac')
@@ -3225,7 +3227,7 @@ Byrne et al 2024 used observed total atmospheric column excess CO and a range of
 
 ### Relationship to other fire carbon models
 
-The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Buildup Index). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the Canadian fire Behaviour Prediction (FBP) System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat !!![Ellen's paper?]!!!, estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach. Under severe drought conditions and light winds, very large fires often create more wind and energy than is available in gradient winds as measured at nearby airports and fire weather observing stations !!!(cite Coen paper on fire-induced winds)!!! Thus, fire behaviour and fuel consumption models solely driven by wind inputs from distant meteorological stations can under-predict fire intensity and therefore likely fire severity. While fire-atmosphere models are available for research !![cite coen again] and some forecasting and planning purposes [@linn2020], modelling resources are typically not made available for the extensive and largely unsuppressed fires in northern Canada. Fire severity mapping after the fact is able to account for high fire severity [@whitman2018] even when fire spread occurs under light winds [@whitman2024].
+The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Buildup Index). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the Canadian fire Behaviour Prediction (FBP) System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat !!![Ellen's paper?]!!!, estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach. Under severe drought conditions and light winds, very large fires often create more wind and energy than is available in gradient winds as measured at nearby airports and fire weather observing stations [@clarkAnalysisSmallScaleConvective1999]. Thus, fire behaviour and fuel consumption models solely driven by wind inputs from distant meteorological stations can under-predict fire intensity and therefore likely fire severity. While fire-atmosphere models are available for research [@coenGenerationForecastExtreme2018] and some forecasting and planning purposes [@linn2020], modelling resources are typically not made available for the extensive and largely unsuppressed fires in northern Canada. Fire severity mapping after the fact is able to account for high fire severity [@whitman2018] even when fire spread occurs under light winds [@whitman2024].
 
 While the fire DMs presented here are designed for use in the CFS-CBM carbon reporting framework, their simplicity and similarity to many other forest carbon schema allows them to be used elsewhere such as in other forest dynamics [@brecka2020] and earth system models [@melton2020] that require estimates of Canadian forest carbon emissions from wildfire. @stenzel2019 showed that severity-informed fire C estimates (with snags) in the US are only 30-40% as large as fixed or variable severity data using their LANDIS-type models. Large over-estimates of in-fire bole consumption in models were not observed to correspond to measurements in the field. In the model presented here, our estimates of snag consumption are based on simple but logical relationships with Crown Fraction Burned, but more comprehensive data collection and field observations would be required to extend the accuracy of the snag consumption scheme.
 
@@ -3235,11 +3237,11 @@ While fire emissions within the year of the fire are majority of the GHG flux, e
 
 ### Model gaps
 
-Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reporting Units with high peatland areas will show higher organic soil slow pool size (see Table \###), but peatlands themselves are not spatially represented in the model. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the closely related Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock, the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
+Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reporting Units with high peatland areas will show higher organic soil slow pool size, but peatlands themselves are not spatially represented in the model. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the closely related Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock, the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
 
-This algorithm is currently built off of regionally averaged biomass pools by Reporting Unit (Figure 1; Appendix \###). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.
+This algorithm is currently built off of regionally averaged biomass pools by Reporting Unit (Appendix A). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.
 
-Species-specific traits in trees with overlapping ranges, such as resprouting is aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone !!!![Table \###], the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species in Canada remains incomplete at the current time.
+Species-specific traits in trees with overlapping ranges, such as resprouting is aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone (Table \ref{tab:tab-ReSproutByEcozone}), the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species in Canada remains incomplete at the current time.
 
 # Conclusions
 
@@ -3308,7 +3310,7 @@ logit(p) = log\frac{p}{1-p}
 ```
 which effectively transforms a data of proportions of [0,1] to a Gaussian distribution with a range of approximately -5 to +5 (in this dataset), and a mode approximately at zero.
 
-In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed forest floor fuel load (FFFL) (given as AGSlow pool in Mg C/ha) was used as well. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK (Elzhov et al 2023) R package, which supported bounded parameter constraints.
+In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed forest floor fuel load (FFFL) (given as AGSlow pool in Mg C/ha) was used as well. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK [@elzhovMinpacklmInterfaceLevenbergMarquardt2023] R package, which supported bounded parameter constraints.
 
 In the abstract, the model follows the form:
 
@@ -3369,7 +3371,7 @@ ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_
 
 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
 
-```{r FFFC-surface-plot, echo=FALSE, message=FALSE, warning=FALSE}
+```{r FFFC-surface-plot, echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
 ###goal is to produce a surface plot from DC from 0-750 and AGSlow from 0-200 (or 0-500 maybe)
 ### with isolines of FFFC/FFFL
 
@@ -3502,22 +3504,31 @@ For the Boreal Cordillera, a simple linear model on the logit-transformed data w
 logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(AGSlow)) + 2.17
 \end{equation}
 ```
-In this case, the Drought code component of the Buildup Index is used, since a fit using Buildup Index alone does not produce a coefficient on the Buildup Index term in the model that is different from zoer. Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the AGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.
+In this case, the Drought code component of the Buildup Index is used, since a fit using Buildup Index alone does not produce a coefficient on the Buildup Index term in the model that is different from zero. Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the AGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.
 
 # Appendix C: annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
 
 ```{r AnnualDC, echo=FALSE, message=FALSE, warning=FALSE}
 
 ###can always update this via CFSDB: https://osf.io/f48ry/
-Firegrowth_groups_v1_01 <- read.csv("CFSDB_summary.csv")
 
+#Firegrowth_groups_v1_01 <- read.csv()
 
 ##weighted-mean BUI of spread by year and ecozone
-CFSDB_summary <- Firegrowth_groups_v1_01 %>% group_by(ecozone,year) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
 
-CFSDB_summary_ecozone <- Firegrowth_groups_v1_01 %>% group_by(ecozone) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
+##not run, loaded in below
+##CFSDB_summary <- Firegrowth_groups_v1_01 %>% group_by(ecozone,year) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
 
-Airborne_summary <- Firegrowth_groups_v1_01 %>% filter(year==2008) %>% filter(DOB==186) %>% filter(ecozone ==6) %>% summarise(mean_bui = mean(bui))
+CFSDB_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.csv")
+
+#CFSDB_summary_ecozone <- Firegrowth_groups_v1_01 %>% group_by(ecozone) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
+
+
+##not run, instead read in below:
+#Airborne_summary <- Firegrowth_groups_v1_01 %>% filter(year==2008) %>% filter(DOB==186) %>% filter(ecozone ==6) %>% summarise(mean_bui = mean(bui))
+
+Airborne_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/Airborne_summary.csv")
+### this is used above but hard-coded in
 
 ###Load annual hotspot median DC by ecozone (via Quinn Barber and CFSDB)
 DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
@@ -3533,7 +3544,7 @@ CFSDB_summary <- full_join(CFSDB_summary,ecozones.unique,by = join_by(ecozone ==
 
 ##if DC50 < 20, then set to DC=20
 ##not sure the source of DC50 == 0 in CFSDB....
-DC.year$DC50 <- ifelse(DC.year$DC50<20,250,DC.year$DC50)
+#DC.year$DC50 <- ifelse(DC.year$DC50<20,250,DC.year$DC50)
 
 ## apply isn't working easily, silly matrix output
 #as.data.frame(t(apply(X = DC.year, MARGIN = 1, FUN = CalcFFFC, DC=DC.year$DC50,AGSlow=(DC.year$Median.Forest.Floor.Load.kg.m2*5))))

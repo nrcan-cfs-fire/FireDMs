@@ -8,7 +8,7 @@ author:
 #    affiliation: 1
 #    email: daniel.thompson@nrcan-rncan.gc.ca
 #    corresponding: true
-  - given_name: Dan
+  - given_name: Dan K.
     surname: Thompson
     affiliation: 1
     email: daniel.thompson@nrcan-rncan.gc.ca
@@ -3035,6 +3035,92 @@ ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Sev
 ggplot(emissions_grid_out,aes(Median_BUI,SumCO2e_direct_emissions_GWP,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin)) + ylab("Direct emissions from wildfire (Mg CO2e/ha)") + xlab("Buildup Index of burning")
 ```
 
+## Comparison against existing fuel consumption models
+
+The fire disturbance matrix approach is compared to the FBP System in Figure \ref{DMs-vs-FBP}. The FBP used widely in fire growth modelling as well as in Canada's national air quality model [@chenFireWorkV20Air2019].  The FBP fuel consumption values are based solely on experimental (i.e. controlled ignition) fires with fuel consumption measured within less than an hour of the passage of the flaming front, and therefore does not include the consumption from long-smouldering fuel beds such as organic soils and large-diameter woody debris.  The FBP system emphasizes the prediction of fire intensity (i.e. flame length) and fire frontal spread rate, with no measurements of the complete fuel consumption.  Fuel consumption values provided by the FBP system are dependent only on fuel type (related to leading tree species) and Buildup Index, with no allowance for site-specific variations in fuel load (both canopy and surface fuel loads are fixed in the FBP).  Given the need for safe experimental fire operations and the demand for firefighting resources, experimental fires in the FBP with fuel consumption data have a BUI of no more than 80 for the most common C-2 and C-3 fuels. A BUI of 80 exceeds the area-weighted BUI for most years except in the Montane Cordillera ecozone (See Appendix C), though the record-breaking 2023 fire season saw an area-weighted mean BUI for burning days of 109.  
+
+The extrapolation of fuel consumption in the FBP beyond 80, coupled with the lack of long-duration smouldering pools, likely accounts for the systematic lower estimates of fuel consumption in the FBP compared to this disturbance matrix approach shown above (see Figure \ref{DMs-vs-FBP}).  For more southern forests such as the Montane Cordillera, Boreal Plains, or Boreal Shield East, larger canopy fuels and woody debris volumes likely contribute to the larger fuel consumption estimates in this approach compared to the FBP.  For the Taiga ecozones, smaller canopy fuel and woody debris fuel loads as well as thin duff layers (i.e. AGSlow in the CBM nomenclature) also contribute to lower total fuel consumption that falls closer to observed FBP Values.
+
+```{r DMs-vs-FBP, fig.cap="\\label{fig:DMs-vs-FBP}Fire direct emissions by severity class using the Disturbance Matrix approach (lines) as compared to Canadian Fire Behaviour Prediction (FBP) System outputs for Total Fuel Consumption, based on experimental fires of differing fuel types C-2 (boreal spruce), C-3 (Jack and lodgepole pine) as well as M-1 (leafless mixedwood 50% conifer).  An Initial Spread Index value of 14 is used in all FBP calculations.  Points are colourized by Crown Fraction Burned (CFB).", echo=FALSE, message=FALSE, warning=FALSE}
+library(cffdrs)
+###easy comparison is for a mixedwood, since the NIR biomass data is an average across all ground plots
+
+##should probably show: C-1 (TSE/W only), C-2, C-3, M-1, C-5 & C-7 (BC MC only)
+
+###figure out a good mixedwood % for QC BS and AB BP:
+
+NIR2023_AverageCPools_FBP_comp <- NIR2023_AverageCPools %>% mutate(EcoAdmin = paste0(NIR2023_AverageCPools$EcoBoundaryName," ",NIR2023_AverageCPools$AdminBoundaryName)) %>% filter(EcoAdmin == "Boreal Shield West Saskatchewan" | EcoAdmin == "Taiga Plains Northwest Territories" | EcoAdmin == "Taiga Shield West Northwest Territories" | EcoAdmin == "Boreal Plains Alberta"| EcoAdmin == "Montane Cordillera British Columbia" | EcoAdmin == "Boreal Shield East Quebec" ) %>% filter(TimeStep==0)
+                                                                                                                              
+PC <- NIR2023_AverageCPools_FBP_comp$"Softwood Foliage" /(NIR2023_AverageCPools_FBP_comp$"Hardwood Foliage" + NIR2023_AverageCPools_FBP_comp$"Softwood Foliage")*100                                                                                        
+
+NIR2023_AverageCPools_FBP_comp <- cbind(NIR2023_AverageCPools_FBP_comp,PC)
+
+NIR2023_AverageCPools_FBP_comp <- NIR2023_AverageCPools_FBP_comp %>% select(EcoAdmin,PC)
+                                                                                                                                          
+BUI <- seq(from=40,to=200, by=20)
+##then, expand the biomass pools out by BUI levels
+NIR_C_Pools_FBP_grid <- expand_grid(NIR2023_AverageCPools_FBP_comp,BUI)
+
+NIR_C_Pools_FBP_grid$FuelType <- c("C-3")
+NIR_C_Pools_FBP_grid$FFMC <- 92
+NIR_C_Pools_FBP_grid$WS <- 25
+
+FBP_out <- fbp(NIR_C_Pools_FBP_grid,output="all") %>% mutate(order = as.numeric(ID)) %>% arrange(order)
+
+NIR_C_Pools_FBP_grid <- cbind(NIR_C_Pools_FBP_grid,FBP_out$TFC*5)
+
+colnames(NIR_C_Pools_FBP_grid)[7] <- c("TFC")
+
+##just look at the filtered ecoAdmin areas of interest as from the above NIR pools:
+
+emissions_grid_out_FBP <- emissions_grid_out %>% filter(EcoAdmin == "Boreal Shield West Saskatchewan" | EcoAdmin == "Taiga Plains Northwest Territories" | EcoAdmin == "Taiga Shield West Northwest Territories" | EcoAdmin == "Boreal Plains Alberta"| EcoAdmin == "Montane Cordillera British Columbia" | EcoAdmin == "Boreal Shield East Quebec")# %>%  filter(Severity_uniform == "High")
+
+#emissions_grid_out_FBP_join <- emissions_grid_out_FBP %>% right_join(NIR_C_Pools_FBP_grid, by = join_by(EcoAdmin,Median_BUI==BUI))
+
+test_fbp1 <- expand_grid(FuelType=c("C-2","C-3","M-1"),BUI = seq(from=40,to=200, by=20))
+
+#BUI <- seq(from=40,to=200, by=20)
+#test_fbp1 <- as.data.frame(BUI)
+#test_fbp1$FuelType <- c("C-3")
+test_fbp1$FFMC <- 92
+test_fbp1$WS <- 18
+test_fbp1$GS <- 0
+
+test_fbp_out <- fbp(test_fbp1,output="all")
+
+test_fbp_out$ID <- as.numeric(test_fbp_out$ID) 
+
+test_fbp_out <- test_fbp_out %>% arrange(ID)
+
+test_fbp_out <- bind_cols(test_fbp_out,test_fbp1$FuelType,test_fbp1$BUI)
+colnames(test_fbp_out)[44] <- c("FuelType")
+colnames(test_fbp_out)[45] <- c("Median_BUI")
+
+library(ggnewscale)
+
+
+##label the ecozones by % of CNFDB area burned 1980-2024?
+
+ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + ylab("Direct emissions from wildfire (Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning")  + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) + ggnewscale::new_scale_color() +  geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=CFB,shape=FuelType)) + theme(legend.position="bottom") +scale_colour_viridis_c()
+
+
+### colourize the FBP data points by CFB.  Note in the legend the CFB approximations for severity classes
+
+
+
+#ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line(color="#fc6f03") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + facet_wrap(vars(EcoAdmin),nrow=2,labeller = labeller(EcoAdmin = label_wrap_gen(20))) + geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=FuelType))
+
+# + geom_point(aes(Median_BUI,TFC,colour="darkorange"))
+
+## and then some manual labelling at the centroid of each?
+
+##show rugplot etc of BUI from CFSDB?
+
+
+```
+
+
+
 ## Comparison against observed direct fire emissions
 
 ### Forest fire observations of CO and CO~2~ emissions ratios
@@ -3239,7 +3325,7 @@ While fire emissions within the year of the fire are majority of the GHG flux, e
 
 Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reporting Units with high peatland areas will show higher organic soil slow pool size, but peatlands themselves are not spatially represented in the model. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the closely related Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock, the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
 
-This algorithm is currently built off of regionally averaged biomass pools by Reporting Unit (Appendix A). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.
+This algorithm is currently built off of regionally averaged biomass pools by Reporting Unit (Appendix A). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018] such as those experienced in Canada in 2023 [@jain2024] where we performed the algorithm validation against independent fire emissions observations. Algorithm evaluation against individual fires or years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024.  Future work will extend this fire disturbance algorithm to finer-scale carbon reporting using gridded data as it becomes available for annual reporting purposes.
 
 Species-specific traits in trees with overlapping ranges, such as resprouting is aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone (Table \ref{tab:tab-ReSproutByEcozone}), the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species in Canada remains incomplete at the current time.
 
@@ -3253,23 +3339,58 @@ While this prototype carbon flux framework utilizes regionally-averaged carbon s
 
 ```{r PoolSizeByRU, echo=FALSE, message=FALSE, warning=FALSE}
 
-### Two tables, one abovegroud, one organic soil, with RU as columns?
+#######
+#Surface
+######
+
+
 ###rows are RUs as EcoAdmin
-NIR_AverageCPools_filterSurface <- NIR2023_AverageCPools %>% filter(TimeStep==0) %>% select('EcoBoundaryNameShort','AdminBoundaryName','Aboveground Very Fast DOM':'Aboveground Slow DOM','Softwood Stem Snag':'Softwood Other','Softwood Coarse Roots','Softwood Fine Roots','Hardwood Coarse Roots','Hardwood Fine Roots')  %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat) %>% mutate(across(where(is.numeric), round, 1)) %>% arrange(desc('Aboveground Slow DOM'))
+NIR_AverageCPools_filterSurface <- NIR2023_AverageCPools %>% filter(TimeStep==0) %>% select('EcoBoundaryNameShort','AdminBoundaryName','Aboveground Very Fast DOM':'Aboveground Slow DOM','Softwood Stem Snag':'Softwood Other','Softwood Coarse Roots','Softwood Fine Roots','Hardwood Coarse Roots','Hardwood Fine Roots')  %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat) %>% mutate(across(where(is.numeric), round, 1)) 
+
+###now sort columns from largest to smallest mean value by using select() to declare the new order.
+
+##first, reorder:
+
+col_sum <- NIR_AverageCPools_filterSurface %>% summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+col_sum <- t(col_sum)
+colnames(col_sum) <- c("value")
+col_sum <- as.data.frame(col_sum) %>% arrange(desc(value))
+row.names(col_sum)
+
+NIR_AverageCPools_filterSurface_sorted <- NIR_AverageCPools_filterSurface %>% select(EcoBoundaryNameShort,AdminBoundaryName,"Aboveground Slow DOM", "Medium DOM" , "Aboveground Fast DOM"  ,  "Aboveground Very Fast DOM", "Softwood Coarse Roots",  "Hardwood Coarse Roots" ,  "Belowground Fast DOM" , "Belowground Very Fast DOM", "Softwood Fine Roots", "Hardwood Fine Roots") 
+
+##then sort descending of the first (largest) column:
+NIR_AverageCPools_filterSurface_sorted <- NIR_AverageCPools_filterSurface_sorted %>% arrange(desc(`Aboveground Slow DOM`))
+
+######
+# Canopy
+######
 
 ## rounding mutate via https://stackoverflow.com/questions/43314328/how-to-use-dplyrmutate-all-for-rounding-selected-columns
 
 NIR_AverageCPools_filterCanopy <- NIR2023_AverageCPools %>% filter(TimeStep==0) %>% select('EcoBoundaryNameShort','AdminBoundaryName','Softwood Stem Snag':'Softwood Other','Hardwood Merchantable':'Hardwood Other') %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat)%>% mutate(across(where(is.numeric), round, 1)) 
 
+col_sum <- NIR_AverageCPools_filterCanopy %>% summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+col_sum <- t(col_sum)
+colnames(col_sum) <- c("value")
+col_sum <- as.data.frame(col_sum) %>% arrange(desc(value))
+row.names(col_sum)
+
+NIR_AverageCPools_filterCanopy_sorted <- NIR_AverageCPools_filterCanopy %>% select(EcoBoundaryNameShort,AdminBoundaryName,"Softwood Merchantable", "Softwood Other",        "Hardwood Merchantable", "Softwood Stem Snag",    "Hardwood Other",        "Softwood Foliage" ,     "Hardwood Stem Snag", "Softwood Branch Snag",  "Hardwood Branch Snag",  "Hardwood Foliage") 
+
+##then sort descending of the first (largest) column:
+NIR_AverageCPools_filterCanopy_sorted <- NIR_AverageCPools_filterCanopy_sorted %>% arrange(desc(`Softwood Merchantable`))
 
 
 
-kbl(NIR_AverageCPools_filterCanopy,caption="Carbon pool size (Mg/ha) for canopy fuels by Reporting Unit for 2023") %>%
+
+
+kbl(NIR_AverageCPools_filterCanopy_sorted,caption="Carbon pool size (Mg C/ha) for canopy fuels by Reporting Unit for 2023. RU are sorted in decreasing size of Softwood Merchantable, the largest average surface pool.  Columns are in decreasing mean pool size.") %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
   kable_styling(latex_options = "scale_down")  %>%
-  kable_styling(latex_options = "hold_position")
+  kable_styling(latex_options = "hold_position") 
 
-kbl(NIR_AverageCPools_filterSurface,caption="Carbon pool (Mg/ha) for sub-canopy fuels by Reporting Unit for 2023") %>%
+kbl(NIR_AverageCPools_filterSurface_sorted,caption="Carbon pool (Mg C/ha) for sub-canopy fuels by Reporting Unit for 2023.  RU are sorted in decreasing size of Aboveground Slow DOM, the largest average surface pool.  Columns are in decreasing mean pool size.") %>%
     kable_styling(full_width = F, html_font = "Cambria") %>%
   kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")
@@ -3332,7 +3453,7 @@ The a parameter term that forms the exponent of e alongside the Buildup Index is
 
 For example, using a moderately thick \~12 cm thick organic soil layer, the proportion of consumption as a function of Buildup Index using the model above:
 
-```{r example-FFFC-vs-DC-plot-nls,fig.cap="2", echo=FALSE, message=FALSE, warning=FALSE}
+```{r example-FFFC-vs-DC-plot-nls,fig.cap="Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C/ha (12 kg/m2)", echo=FALSE, message=FALSE, warning=FALSE}
 
 ###just show a single (or multiple?) FFFL values here but DC on the x-axis, consumption on the y-axis:
 
@@ -3359,7 +3480,7 @@ FFFC.single.final.df <- cbind(buildup_index,AGSlow.Mg.C.ha,FFFC.single)
 
 colnames(FFFC.single.final.df)[3] <- c("prop_sol_c_combusted")
 
-ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line()# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,AGSlow.Mg.C.ha>50 & AGSlow.Mg.C.ha<70)) + ylim(0,1)
+ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line() + ylim(0,1)# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,AGSlow.Mg.C.ha>50 & AGSlow.Mg.C.ha<70)) + ylim(0,1)
 
 ```
 
@@ -3473,9 +3594,21 @@ FFFC_expand.BUI$FFFC <- FFFC_expand.BUI$FFFL*FFFC_expand.BUI$prop_total_bg_c_com
 
 ###plot with FBP units for fuel load, and upper limit of FBP Red Book BUI
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300))
+#ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300))
 
-### try it with isolines of absolute consumption:
+
+```
+
+
+
+```{r FFFC-plot-next, echo=FALSE, message=FALSE, warning=FALSE}
+ ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +labs(caption="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300))
+
+```
+
+
+```{r FFFC-plot-next2, echo=FALSE, message=FALSE, warning=FALSE}
+ ### try it with isolines of absolute consumption:
 
 brks_FFFC_abs <- c(1,2.5,5,10,15,20)
 
@@ -3483,7 +3616,11 @@ FFFC_expand.BUI <- FFFC_expand.BUI %>% filter(FFFL < 25) %>% filter(buildup_inde
 
 ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=FFFC)) + geom_contour(breaks=brks_FFFC_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFC_abs)+labs(caption="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) 
 
-###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+```
+
+
+```{r FFFC-plot-next3, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
 
 FFFC_expand.BUI <- FFFC_expand.BUI %>% filter(FFFL > 0) %>% filter(buildup_index > 0) # %>% filter(buildup_index < 300)
 
@@ -3491,9 +3628,19 @@ brks_FFFL_abs <- c(4,8,12,20)
 
 ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC, z=FFFL)) + geom_contour(breaks=brks_FFFL_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFL_abs)+labs(caption="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba") +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2") + theme(plot.caption = element_text(hjust = 0)) 
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL))
 
 ```
+
+
+```{r FFFC-plot-next4, echo=FALSE, message=FALSE, warning=FALSE}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+FFFC_expand.BUI$FFFL <- as.factor(FFFC_expand.BUI$FFFL)
+
+ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL)) +scale_color_viridis_d() + ylab("Forest Floor Fuel Consumption (kg/m2)") + xlab("Buildup Index")
+
+```
+
+
 
 ### Boreal Cordillera modelling
 
@@ -3501,7 +3648,7 @@ For the Boreal Cordillera, a simple linear model on the logit-transformed data w
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = (0.00257 * DC) + (-0.54 * log_{e}(AGSlow)) + 2.17
+logit \left( \frac{FFFC}{FFFL}\right) = (0.00257  DC) + (-0.54  log_{e}(AGSlow)) + 2.17
 \end{equation}
 ```
 In this case, the Drought code component of the Buildup Index is used, since a fit using Buildup Index alone does not produce a coefficient on the Buildup Index term in the model that is different from zero. Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the AGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.

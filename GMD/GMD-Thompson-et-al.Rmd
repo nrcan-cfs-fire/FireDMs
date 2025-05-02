@@ -1,7 +1,6 @@
 ---
 title: "Incorporating fire severity for refined data-drive carbon emissions estimates of boreal and temperate forest fires in the Carbon Budget Model for Canadian forests"
 journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'gmd')`"
-
 author:
   - given_name: Dan K.
     surname: Thompson
@@ -39,13 +38,13 @@ affiliation:
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
 output:
-  rticles::copernicus_article:
-    highlight: null
-    keep_tex: true
+  word_document: null
   pdf_document: default
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
-  word_document: null
+  rticles::copernicus_article:
+    highlight: null
+    keep_tex: true
 abstract: "Wildfire is the most impactful natural disturbance to Canada's boreal and  temperate forest biomes.  Current representations of fire impact on forest carbon  stocks is limited to a single parameterization of fire severity (i.e. the fraction  of biomass consumed) that assumes only high severity fires, despite a large and  increasing evidence base of widespread mixed-severity wildfire.  In this submodel  of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements  of biomass consumption as related to satellite-derived burn severity maps are interpretted  from a fire physics and ecology perspective to derive algorithms to describe forest  carbon fluxes in the immediate aftermath of fires.  Model outputs indicate total  carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 70 t C/ha in Taiga Cordillera and Pacific Maritime  forests of Yukon under high severity fire. Shifting from a low drought condition, low-severity burn to a high drought condition, high severity burn typically doubles total carbon emissions.  Pacific Maritime forest showed the largest  fraction of carbon release in the canopy biomass pools (67%), while Taiga Shield  West and Boreal Plains of the Northwest Territories and Manitoba were estimated  of having 82% of carbon emissions in the surface and organic soil biomass pools of  litter, duff, and roots. Comparisons against direct fire plume emissions ratios as well as against annualized carbon emissions for 2023 from total atmospheric column excess CO concentrations showed good model agreement with observations."
 bibliography: references.bib
 running:
@@ -136,7 +135,6 @@ Carbon reporting in Canada's forests is broken down by Reporting Unit (RU), whic
 ### using WFS in ggplot is here: https://inbo.github.io/tutorials/tutorials/spatial_wfs_services/
 
 ##read ecozones map from local dir:
-
 
 ReportingUnits <- st_read("~/nrcan-cfs-fire/FireDMs/NationalReportingUnits.gpkg", quiet = TRUE)
 
@@ -246,9 +244,7 @@ VarDefs$SeverityClass <- factor(VarDefs$SeverityClass,levels = c("Low", "Mod", "
 
 ```{r tab-globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE, tab.cap="\\label{tab:tab-globalVarsEmissions}"}
 kbl(CarbonEFs_pivot_wider,caption="Emissions factors for flaming and smouldering used in this model.") %>%
-  kable_minimal()  #%>%
-          #kable_styling(latex_options = "scale_down") %>%
-  #kable_styling(latex_options = "hold_position")
+  kable_minimal()  
 ```
 
 where CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH~4~ emissions (Table \ref{tab:tab-globalVarsEmissions}). With a Global Warming Potential of CO equal to 1.9 and CH~4~ of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions ratios correspond well prior emissions factors used in CBM. Note that as current described, the sum of CO~2~, CH~4~, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 3% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH~4~.
@@ -259,19 +255,15 @@ The litter layer forms the first biomass pool in which a spreading fire consumes
 
 ```{r tab-UnBurnedForestFloorByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:unburned-ecozone}"}
 
-##load Ellen's data (InterimValue==False)
-
 
 #subset to just the variable of interest:
 
-
-
 VarDefs.Unburned.Litter <- VarDefs[VarDefs$Variable.Name == "Unburned.litter.area",]
 
-
-
+#convert to data.table:
 VarDefs.dt <- as.data.table(VarDefs.Unburned.Litter)
 
+##make it a wide data table for presentation purposes:
 Unburned.Litter.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
 
 ###then re-order the Ecozone factor (via https://stackoverflow.com/a/46130642)
@@ -279,21 +271,19 @@ Unburned.Litter.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Valu
 Unburned.Litter.wide <- Unburned.Litter.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
 
 kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severity class.  The majority of the data comes from studies in the Boreal Plains and Boreal Shield West, and so values are extrapolated from those two well-observed ecozones to all others.  Ecozones are sorted in order from highest to lowest average annual burned area.") %>%
-  kable_minimal()#  %>%
-          #kable_styling(latex_options = "scale_down") %>%
-  #kable_styling(latex_options = "hold_position")
+  kable_minimal()
 ```
 
 ## Forest Floor Consumption
 
-While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is sometimes termed the Forest Floor Fuel Load (*FFFL*) [@letang2012] and is dominated by the equivalent organic soil Slow pool (Aboveground Slow Dead Organic Matter, or AGSlowDOM) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (*FFFC*); however in the case of carbon modelling, it is the relative fraction of consumption (*FFFC/FFFL*) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data [@walker2020], with an alternative modelling approach to compute the relative amount of depth of consumption (scalar from 0 to 1) rather than an absolute value in kg m^-2^ or cm as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
+While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is sometimes termed the Forest Floor Fuel Load (*FFFL*) [@letang2012] and is dominated by the equivalent organic soil Slow pool (Aboveground Slow Dead Organic Matter, or AGSlowDOM) in CBM. Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (*FFFC*); however in the case of carbon modelling, it is the relative fraction of consumption (*FFFC/FFFL*) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data [@walker2020], with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than directly modelling an absolute value in kg m^-2^ or cm as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
 ```{=tex}
 \begin{equation}
 logit \left( \frac{FFFC}{FFFL}\right) = [3.91(1 - e^{(-0.008BUI)})] + (-0.53log_{e}(AGSlow))
 \end{equation}
 ```
-where BUI is the Fire Weather Index System's Buildup Index, and AGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed).
+where BUI is the Fire Weather Index System's Buildup Index, and AGSlow in the CBM (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed).  Assuming an average carbon content of 50%, CBM values in Mg C/ha are converted to fire behaviour units of kg of biomass per squared metre by dividing by 5.
 
 ```{r new-ABoVE-FFFC-data, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -301,12 +291,10 @@ where BUI is the Fire Weather Index System's Buildup Index, and AGSlow in the CB
 
 ABoVE_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/AK_CA_Burned_Plot_Data_1983_2016.csv")
 
-
-
-### from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
+### ABoVE data from https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744
 ## DOI: 10.3334/ORNLDAAC/1744
 
-
+##this is exactly as provided except that the deGroot sites now have a "burn_name" equal to the first two letters of the plot ID
 
 ### prop_sol_combusted is the % depth of combustion, so do that first
 ## step 1: convert a few values that are slightly higher than 1.0 to exactly 0.99
@@ -318,8 +306,6 @@ ABoVE_Data$prop_sol_combusted_logit <- ifelse(ABoVE_Data$prop_sol_combusted_logi
 #ABoVE_Data <- ifelse(ABoVE_Data<0,NA,ABoVE_Data)
 
 ABoVE_Data$prop_sol_combusted_logit <- logit(ABoVE_Data$prop_sol_combusted_logit, min = 0.00001, max = 1.01)
-
-
 
 ### "prop_sol_c_combusted" is the other relevant response variable here.  and is the equivalent to the FFFC fractional consumption metric used in the analysis of de Groot's data
 
@@ -336,11 +322,13 @@ ABoVE_Data$prop_sol_c_combusted_logit <- logit(ABoVE_Data$prop_sol_c_combusted_l
 ABoVE_Data$prop_sol_c_combusted_logit[is.infinite(ABoVE_Data$prop_sol_c_combusted_logit)] <- NA
 ABoVE_Data$prop_sol_c_combusted_logit[is.nan(ABoVE_Data$prop_sol_c_combusted_logit)] <- NA
 
-
+###the deGroot sites don't have proper "burn_names", so take the first two letters of the site names only from the deGroot sites and revise the 
 
 ##########################
 ###load up De Groot data ####
 ##########################
+# original data provided by B. de Groot, 2024 that went into 10.1139/X08-192
+
 FFFC_Data <- read.csv("~/nrcan-cfs-fire/FireDMs/FFFC_Data.csv")
 
 #### convert fractional FFFL consumption to fraction of depth consumed by the inverse of the Correction Factor equation
@@ -359,7 +347,7 @@ FFFC_Data <- mutate(FFFC_Data, bg_c_prefire = Load*500) # the ABoVE data is in g
 
 
 ## grab only the sites not in the ABoVE data (so GL is already there)
-## don't take "Dawson City", "Green Lk", or "WBNP" from the FFFC data frame, 94 obs left
+## don't take "Dawson City", "Green Lk", or "WBNP" from the FFFC data frame (already in Walker AboVE data), 94 obs left
 FFFC_Data_trimmed <- FFFC_Data %>% filter(Site != "Dawson City") %>% filter(Site != "Green Lk") %>% filter(Site != "WBNP") %>% filter(FireType == "Wild")
 
 ## assign ecoregion to those sites we are adding
@@ -378,14 +366,19 @@ FFFC_Data_trimmed <- FFFC_Data_trimmed %>%
       Site == "Thompson" ~ "BSW",
       .default = "other"
     )
-  )
+  ) %>% rename(burn_name = Site)
+
+
+###rename "Site" in FFFC_Data to "burn_name"
+
+
 
 ##then convert the provided ABoVE NA Level II Ecoregions into Canadian Ecozones
 
 ### delete any NA rows here so nls doesn't have to handle them at all
 ABoVE_Data <- ABoVE_Data %>% drop_na(prop_sol_c_combusted) %>% filter(drought_code > 0) %>% filter(bg_c_prefire>0) %>% filter(ecoregion_name_l2!="Alaska Boreal Interior")#  %>%  filter(ag_c_prefire>0) %>% filter(prop_black_spruce>0) %>% filter(longitude>-140)
 
-hist(ABoVE_Data$prefire_sol)
+#hist(ABoVE_Data$prefire_sol)
 
 ABoVE_Data <- ABoVE_Data %>%
   mutate(
@@ -400,16 +393,9 @@ ABoVE_Data <- ABoVE_Data %>%
   )
 
 ### add data, and convert the ABoVE data from gC/m2 and de Groot data in kg biomass/m2 to both in Mg C/ha (CBM units)
-ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(AGSlow.Mg.C.ha = SFL.kg.m2*5)
+ABoVE_Data_w_FBP <- bind_rows(ABoVE_Data,FFFC_Data_trimmed) %>% mutate(SFL.kg.m2 = bg_c_prefire/500) %>% mutate(AGSlow.Mg.C.ha = SFL.kg.m2*5) ## the "5" multiplier being the conversion from kg biomass/m2 units to the CBM units of Mg C/ha
 
-
-
-
-#hist(log(ABoVE_Data_w_FBP_excl_BC$bg_c_prefire))
-
-#####################################################
-###filter out NA data and other filters of relevance ###
-####################################################
+###manually fill in two more fire names from the other de Groot data:
 
 
 #########################################
@@ -434,33 +420,22 @@ plot.gam(FFFC.Frac.Consume.gam.ABoVE)
 #ABoVE_Data_w_FBP <- ABoVE_Data_w_FBP %>% mutate(ag_frac_burn = ag_biomass_combusted/ag_biomass_prefire)
 
 
-##getting an r2 (via simple correlation) of 0.49 using just (DC^a)*(load^b)+c, not bad!
-#ABoVE.FFFC.Frac.Consume.gsl.nls <- gsl_nls(
-  #fn = prop_sol_combusted_logit ~ (drought_code^a)*(bg_c_prefire^b)+c,
-  #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(bg_c_prefire*b)+c, ### this one works quite well
-  #fn = prop_sol_combusted_logit ~ (1-exp(a*(drought_code)))*(log(bg_c_prefire)*b)+c, ### works but with no drought effect
-  #fn = prop_sol_combusted_logit ~ c*(1-exp(a*(drought_code)))^(bg_c_prefire*b), ### sorta like FBP consumption, but doesn't 
- # fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))+(log(SFL.kg.m2)*b), ### explore this one a bit more
-  #fn = prop_sol_combusted_logit ~ c*(1-exp(a*drought_code))^(log(bg_c_prefire)*b), ### doesn't converge, but is most true to the old FBP consumption equations with a dynamic second exponent
-  #data = ABoVE_Data_w_FBP,
-  #start = list(a = -0.21, b = -0.71,c=0.01),
-#  algorithm = "lm",
- # control = list(scale = "levenberg")
-#)
 
-#########################
-### trying the same nls, but using the minpack-LM fitter, since it supports prescribed bounds on nls parameters
-
-#https://www.rdocumentation.org/packages/minpack.lm/versions/1.2-4
-#install.packages('minpack.lm')
 
 
 
 ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP %>% filter(ecozone != "BC")
+
+ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP_excl_BC %>% filter(buildup_index>0)
+
+ABoVE_Data_w_FBP_excl_BC$site[ABoVE_Data_w_FBP_excl_BC$burn_name=="HR16"] <- c("HR16")
+ABoVE_Data_w_FBP_excl_BC$site[ABoVE_Data_w_FBP_excl_BC$burn_name=="HR17"] <- c("HR17")
+
+
 ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
 
 
-### model no longer selected, using DC only
+### model no longer used, since it is using DC only, but still valid:
 #ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC <- nlsLM(
  #formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*drought_code))+(log(AGSlow.Mg.C.ha)*b),
   #data = ABoVE_Data_w_FBP_excl_BC,
@@ -474,7 +449,8 @@ ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI <- nlsLM(
   formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*buildup_index))+(log(AGSlow.Mg.C.ha)*b),
   data = ABoVE_Data_w_FBP_excl_BC,
   start = list(a = -0.0021, b = -0.71,c=3),
-  lower = c(a=-0.008,b=-Inf,c=-Inf)
+  lower = c(a=-0.008,b=-Inf,c=0),
+  upper = c(a=-0.001,b=0,c=10)
   )
 
 summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI)
@@ -494,8 +470,10 @@ ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- nlsLM(
 #summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)
 summary(ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only)
 
-ggplot(data=ABoVE_Data_w_FBP_excl_BC, aes(drought_code,buildup_index))+geom_point(aes(size=prop_sol_c_combusted,colour=prop_sol_c_combusted))
+ggplot(data=ABoVE_Data_w_FBP_excl_BC, aes(drought_code,buildup_index))+geom_point(aes(size=AGSlow.Mg.C.ha,colour=prop_sol_c_combusted))
 
+cor(ABoVE_Data_w_FBP_excl_BC$drought_code,ABoVE_Data_w_FBP_excl_BC$drought_moisture_code,use="complete.obs",method=c("spearman"))
+cor(ABoVE_Data_w_FBP_excl_BC$drought_code,ABoVE_Data_w_FBP_excl_BC$drought_moisture_code,use="complete.obs",method=c("pearson"))
 
 ### other candidates: 
 
@@ -508,8 +486,45 @@ ggplot(data=ABoVE_Data_w_FBP_excl_BC, aes(drought_code,buildup_index))+geom_poin
 #colnames(nls.pred) <- c("nls.pred")
 #ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred)
 
-nls.pred.BUI <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI,newdata=ABoVE_Data_w_FBP_excl_BC)))
+
+
+#### expanded Leave-One-Out cross-validation
+burn_list <- unique(ABoVE_Data_w_FBP_excl_BC$burn_name)
+
+
+nls.pred.BUI <- NA
+for (i in seq(1:length(burn_list)))
+#for (i in seq(1:5)) ##keep this for testing
+
+{
+  ### do a leave-out-one-fire cross validation by fire ($burn_name), there are 29 unique fires/sites
+  
+  ##grab the data that doesn't include this burn:
+  temp.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name != burn_list[i])
+  
+  temp.valid.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name == burn_list[i])
+  
+  ###fit the model:
+  temp.nls <-  nlsLM(
+  formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*buildup_index))+(log(AGSlow.Mg.C.ha)*b),
+  data = temp.data,
+  start = list(a = -0.0021, b = -0.71,c=3),
+  lower = c(a=-0.008,b=-Inf,c=0),
+  upper = c(a=-0.001,b=0,c=10)
+  )
+  
+  ##produce a data frame of values from the temporary nls fit and using the data from the burn_list[i]:
+  nls.pred.BUI.out.temp <- as.data.frame(inv.logit(predict(temp.nls,newdata=temp.valid.data)))
+  colnames(nls.pred.BUI.out.temp) <- c("nls.pred.BUI")
+  
+  nls.pred.BUI <- rbind(nls.pred.BUI,nls.pred.BUI.out.temp)
+}
+
+##crop out the first dummy value:
+nls.pred.BUI <- as.data.frame(nls.pred.BUI[2:nrow(nls.pred.BUI),])
 colnames(nls.pred.BUI) <- c("nls.pred.BUI")
+
+#nls.pred.BUI <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI,newdata=ABoVE_Data_w_FBP_excl_BC)))
 
 ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred.BUI)
 
@@ -3261,18 +3276,39 @@ sum(AnnualEmissionsSummary$SumC_direct_emissions,na.rm=TRUE)/sum(AnnualEmissions
 
 ```
 
-```{r Emissions-2023-table, eval=FALSE, include=FALSE}
+```{r Ecozone-Emissions-2023-table, eval=FALSE, include=FALSE}
 
-AnnualEmissionsSummary_table <- AnnualEmissionsSummary %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(SumArea = round(sum(Area_ha),0),Avg_Mod_Frac = round(mean(Mod_frac),2),Avg_High_Frac = round(mean(High_frac),2),Avg_C_Mg_ha = round(sum(SumC_direct_emissions)/(sum(Area_ha)),1)) %>% filter(SumArea>10000) %>% arrange(desc(SumArea))
+##too busy, but here's the breakdown by RU
+#AnnualEmissionsSummary_table <- AnnualEmissionsSummary %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(SumArea = round(sum(Area_ha),0),Avg_Mod_Frac = round(mean(Mod_frac),2),Avg_High_Frac = round(mean(High_frac),2),Avg_C_Mg_ha = round(sum(SumC_direct_emissions)/(sum(Area_ha)),1)) %>% filter(SumArea>10000) %>% arrange(desc(SumArea))
 
 ##just by ecozone
 AnnualEmissionsSummary_table <- AnnualEmissionsSummary %>% group_by(EcoBoundaryName_select) %>% summarize(SumArea = round(sum(Area_ha),0),Avg_Mod_Frac = round(mean(Mod_frac),2),Avg_High_Frac = round(mean(High_frac),2),Avg_C_Mg_ha = round(sum(SumC_direct_emissions)/(sum(Area_ha)),1)) %>% filter(SumArea>10000) %>% arrange(desc(SumArea))
 
 
-##works BUT, since I reassigned the NBAC Reporting Units to fit the existing Avg C pool data, you get funny table outputs like the QC fires are "Labrador", so for now should report by ecozone only until that's fixed
 
 
 ```
+
+
+```{r tab-Model-comp-Emissions-2023-table, echo=FALSE, tab.cap="\\label{tab:tab-Model-comp-Emissions-2023-table}Comparison of total carbon emissions estimates for the Canadian 2023 fire season.  Note that the Byrne et al 2024 estimate shown here uses the emissions ratio for CO inferred from this study, see main text for details."}
+
+#"\\label{fig:Fig-CBI-ecozones-map}
+
+### goal is to make a small data table to show off the 2023 emissions comparison.
+
+Source <- c("This study","Byrne 2024","CAMS-GFAS","FireWork")
+Approach <- c("Severity-Inventory", "Total column CO anomaly","Fire Radiative Power","Hotspot-FBP")
+TotalEmission <- c(round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0),"510*","478","168")
+
+Model_comp_Emissions_2023_table <- cbind(Source,Approach,TotalEmission)
+
+kbl(Model_comp_Emissions_2023_table)  %>%
+  kable_minimal()  
+
+
+```
+
+
 
 ```{r ternary-severity-plots, echo=FALSE, fig.cap="Fire locations total emissions, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
 
@@ -3448,7 +3484,7 @@ In the abstract, the model follows the form:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  BUI)})] + (b log_{e}(AGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  BUI)})] + (b \times log_{e}(AGSlow))
 \end{equation}
 ```
 with fitted parameters as:
@@ -3495,7 +3531,7 @@ ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_lin
 
 ```
 
-With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r2 of 0.54, and a Mean Percent Error of 45%
+With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r2 of `r {round(cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)),digits=2)}`, and a Mean Percent Error of `r {round(MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)),digits=0)*100}`%
 
 ```{r show-biplot-FFFC-new, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss")

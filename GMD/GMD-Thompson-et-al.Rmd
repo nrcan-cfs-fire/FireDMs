@@ -38,8 +38,8 @@ affiliation:
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
 output:
-  word_document: null
   pdf_document: default
+  word_document: null
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
   rticles::copernicus_article:
@@ -376,7 +376,7 @@ FFFC_Data_trimmed <- FFFC_Data_trimmed %>%
 ##then convert the provided ABoVE NA Level II Ecoregions into Canadian Ecozones
 
 ### delete any NA rows here so nls doesn't have to handle them at all
-ABoVE_Data <- ABoVE_Data %>% drop_na(prop_sol_c_combusted) %>% filter(drought_code > 0) %>% filter(bg_c_prefire>0) %>% filter(ecoregion_name_l2!="Alaska Boreal Interior")#  %>%  filter(ag_c_prefire>0) %>% filter(prop_black_spruce>0) %>% filter(longitude>-140)
+ABoVE_Data <- ABoVE_Data %>% drop_na(prop_sol_c_combusted) %>% filter(drought_code > 0) %>% filter(bg_c_prefire>0) %>% filter(buildup_index>0) %>% filter(burn_depth>0.5) %>% filter(ecoregion_name_l2!="Alaska Boreal Interior")#  %>%  filter(ag_c_prefire>0) %>% filter(prop_black_spruce>0) %>% filter(longitude>-140)
 
 #hist(ABoVE_Data$prefire_sol)
 
@@ -426,10 +426,9 @@ plot.gam(FFFC.Frac.Consume.gam.ABoVE)
 
 ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP %>% filter(ecozone != "BC")
 
-ABoVE_Data_w_FBP_excl_BC <- ABoVE_Data_w_FBP_excl_BC %>% filter(buildup_index>0)
 
-ABoVE_Data_w_FBP_excl_BC$site[ABoVE_Data_w_FBP_excl_BC$burn_name=="HR16"] <- c("HR16")
-ABoVE_Data_w_FBP_excl_BC$site[ABoVE_Data_w_FBP_excl_BC$burn_name=="HR17"] <- c("HR17")
+
+
 
 
 ABoVE_Data_w_FBP_only_BC <- ABoVE_Data_w_FBP %>% filter(ecozone == "BC")
@@ -470,7 +469,7 @@ ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only <- nlsLM(
 #summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC)
 summary(ABoVE.FFFC.Frac.Consume.gsl.nls.BC.only)
 
-ggplot(data=ABoVE_Data_w_FBP_excl_BC, aes(drought_code,buildup_index))+geom_point(aes(size=AGSlow.Mg.C.ha,colour=prop_sol_c_combusted))
+#ggplot(data=ABoVE_Data_w_FBP_excl_BC, aes(drought_code,buildup_index))+geom_point(aes(size=AGSlow.Mg.C.ha,colour=prop_sol_c_combusted))
 
 cor(ABoVE_Data_w_FBP_excl_BC$drought_code,ABoVE_Data_w_FBP_excl_BC$drought_moisture_code,use="complete.obs",method=c("spearman"))
 cor(ABoVE_Data_w_FBP_excl_BC$drought_code,ABoVE_Data_w_FBP_excl_BC$drought_moisture_code,use="complete.obs",method=c("pearson"))
@@ -488,77 +487,6 @@ cor(ABoVE_Data_w_FBP_excl_BC$drought_code,ABoVE_Data_w_FBP_excl_BC$drought_moist
 
 
 
-#### expanded Leave-One-Out cross-validation
-burn_list <- unique(ABoVE_Data_w_FBP_excl_BC$burn_name)
-
-
-nls.pred.BUI <- NA
-for (i in seq(1:length(burn_list)))
-#for (i in seq(1:5)) ##keep this for testing
-
-{
-  ### do a leave-out-one-fire cross validation by fire ($burn_name), there are 29 unique fires/sites
-  
-  ##grab the data that doesn't include this burn:
-  temp.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name != burn_list[i])
-  
-  temp.valid.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name == burn_list[i])
-  
-  ###fit the model:
-  temp.nls <-  nlsLM(
-  formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*buildup_index))+(log(AGSlow.Mg.C.ha)*b),
-  data = temp.data,
-  start = list(a = -0.0021, b = -0.71,c=3),
-  lower = c(a=-0.008,b=-Inf,c=0),
-  upper = c(a=-0.001,b=0,c=10)
-  )
-  
-  ##produce a data frame of values from the temporary nls fit and using the data from the burn_list[i]:
-  nls.pred.BUI.out.temp <- as.data.frame(inv.logit(predict(temp.nls,newdata=temp.valid.data)))
-  colnames(nls.pred.BUI.out.temp) <- c("nls.pred.BUI")
-  
-  nls.pred.BUI <- rbind(nls.pred.BUI,nls.pred.BUI.out.temp)
-}
-
-##crop out the first dummy value:
-nls.pred.BUI <- as.data.frame(nls.pred.BUI[2:nrow(nls.pred.BUI),])
-colnames(nls.pred.BUI) <- c("nls.pred.BUI")
-
-#nls.pred.BUI <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI,newdata=ABoVE_Data_w_FBP_excl_BC)))
-
-ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred.BUI)
-
-
-#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
-
-
-#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
-
-#### but for soil C
-#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
-
-##this is the one to show, biomass and BUI
-
-ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
-
-
-
-
-
-
-
-cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred)
-
-##model selected:
-cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)
-
-
-
-
-
-MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI),na.rm=TRUE)
-
-MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)
 
 
 #MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_FBP_excl_BC$nls.pred),na.rm=TRUE)
@@ -3531,9 +3459,88 @@ ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_lin
 
 ```
 
-With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r2 of `r {round(cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)),digits=2)}`, and a Mean Percent Error of `r {round(MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)),digits=0)*100}`%
+With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r2 of 0.52 and a Mean Percent Error of 45%
 
 ```{r show-biplot-FFFC-new, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+#### expanded Leave-One-Out cross-validation
+burn_list <- unique(ABoVE_Data_w_FBP_excl_BC$burn_name)
+
+
+nls.pred.BUI <- NA
+for (i in seq(1:length(burn_list)))
+#for (i in seq(1:5)) ##keep this for testing
+
+{
+  ### do a leave-out-one-fire cross validation by fire ($burn_name), there are 29 unique fires/sites
+  
+  ##grab the data that doesn't include this burn:
+temp.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name != burn_list[i])
+  
+temp.valid.data <- ABoVE_Data_w_FBP_excl_BC %>% filter(burn_name == burn_list[i])
+  
+  ###fit the model:
+temp.nls <-  nlsLM(
+formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*buildup_index))+(log(AGSlow.Mg.C.ha)*b),
+data = temp.data,
+start = list(a = -0.0021, b = -0.71,c=3),
+lower = c(a=-0.008,b=-Inf,c=0),
+upper = c(a=-0.001,b=0,c=10)
+)
+  
+  ##produce a data frame of values from the temporary nls fit and using the data from the burn_list[i]:
+nls.pred.BUI.out.temp <- as.data.frame(inv.logit(predict(temp.nls,newdata=temp.valid.data)))
+colnames(nls.pred.BUI.out.temp) <- c("nls.pred.BUI")
+  
+nls.pred.BUI <- rbind(nls.pred.BUI,nls.pred.BUI.out.temp)
+}
+
+##crop out the first dummy value:
+nls.pred.BUI <- as.data.frame(nls.pred.BUI[2:nrow(nls.pred.BUI),])
+
+
+#nls.pred.BUI <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI,newdata=ABoVE_Data_w_FBP_excl_BC)))
+colnames(nls.pred.BUI) <- c("nls.pred.BUI")
+
+ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred.BUI)
+
+
+#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
+
+
+#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
+
+#### but for soil C
+#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
+
+##this is the one to show, biomass and BUI
+
+#ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.5) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1)
+
+
+
+
+
+
+
+cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred)
+
+##model selected:
+cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)
+
+
+
+
+
+MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI),na.rm=TRUE)
+
+MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)
+
+
+
+
+
 ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss")
 ```
 

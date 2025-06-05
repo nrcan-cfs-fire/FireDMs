@@ -45,7 +45,7 @@ output:
   rticles::copernicus_article:
     highlight: null
     keep_tex: true
-abstract: "Wildfire is the most impactful natural disturbance to Canada's boreal and  temperate forest biomes.  Current representations of fire impact on forest carbon  stocks is limited to a single parameterization of fire severity (i.e. the fraction  of biomass consumed) that assumes only high severity fires, despite a large and  increasing evidence base of widespread mixed-severity wildfire.  In this submodel  of the larger Generic Carbon Budget Model for forest carbon accounting, field measurements  of biomass consumption as related to satellite-derived burn severity maps are interpretted  from a fire physics and ecology perspective to derive algorithms to describe forest  carbon fluxes in the immediate aftermath of fires.  Model outputs indicate total  carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 70 t C/ha in Taiga Cordillera and Pacific Maritime  forests of Yukon under high severity fire. Shifting from a low drought condition, low-severity burn to a high drought condition, high severity burn typically doubles total carbon emissions.  Pacific Maritime forest showed the largest  fraction of carbon release in the canopy biomass pools (67%), while Taiga Shield  West and Boreal Plains of the Northwest Territories and Manitoba were estimated  of having 82% of carbon emissions in the surface and organic soil biomass pools of  litter, duff, and roots. Comparisons against direct fire plume emissions ratios as well as against annualized carbon emissions for 2023 from total atmospheric column excess CO concentrations showed good model agreement with observations.  This new emissions methodology yields CO2e/ha emissions intensities that are 10-30% lower across most ecozones."
+abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire. In this sub-model of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS), field measurements of biomass consumption, as related to satellite-derived burn severity maps, are interpreted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires. Model outputs indicate total carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. Shifting from a low drought condition, low-severity burn to a high drought condition, high severity burn typically doubles total carbon emissions. The existing approach to emissions in NFC-MARS yields CO2e emissions that are 10-20% percent higher than this new method, owing to lower overall canopy consumption with mixed fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
   title: Fire Severity and Canadian Forest Carbon Budget Models
@@ -65,19 +65,21 @@ editor_options:
 
 # Introduction
 
-Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting \~1-3 Mha of Canada's 355 Mha forested area in a typical year [@hanes2019]. In Canada's reliable 53-year burned area record, nine years have exceeded 4 Mha of burned area (or approximately 1% of Canada's forest area) [@skakun2022]. The 2023 fire season in Canada burned a remarkable 15 Mha owing to extreme drought, severe fire weather conditions, and a prolonged fire season length [@jainDriversImpactsRecordBreaking2024].
+Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting \~1-3 Mha of Canada's 367 Mha forested area in a typical year [@hanes2019]. In Canada's reliable 53-year burned area record, nine years have exceeded 4 Mha of burned area (or approximately 1% of Canada's forest area) [@skakun2022]. The 2023 fire season in Canada burned a remarkable 15 Mha owing to extreme drought, severe fire weather conditions, and a prolonged fire season length [@jainDriversImpactsRecordBreaking2024].
 
-Of this, publicly-owned managed forest under long or short-term tenure accounts for 23% of the area burned between 1972 and 2024; publicly-owned managed forest under long-term licence to private timber companies forms 40% of Canada's forest area [@stinson2019]. Privately-owned forest constitutes only 6% of the forest area, but only 0.5% of area burned. The remainder of the forest area burned in Canada being a mix of formally protected areas, remote unmanaged forest, Indigenous reserve lands and other uses without large-scale harvesting. Managed northern forest areas adjacent to communities have historically shown some meaningful local fire suppression effects with a bias towards older forest nearby boreal forest communities in Canada, though the effect is largely limited to a 25 km radius between these widely dispersed communities [@parisien2020]. More southern boreal forest with extensive suppression activities has historically seen evidence of a reduction in observed vs potential area burned [@cummingEffectiveFireSuppression2005] though this effect has likely been erased given the increasing frequency of extreme burning conditions @wangCriticalFireWeather2023 and corresponding record area burned [@jainDriversImpactsRecordBreaking2024].
+Of this, publicly-owned managed forest under long or short-term tenure accounts for 23% of the area burned between 1972 and 2024; publicly-owned managed forest under long-term license to private timber companies forms 40% of Canada's forest area [@stinson2019]. Privately-owned forest constitutes only 6% of the forest area, but only 0.5% of area burned. The remainder of the forest area burned in Canada being a mix of formally protected areas, remote unmanaged forest, Indigenous reserve lands and other uses without large-scale harvesting. Managed northern forest areas adjacent to communities have historically shown some meaningful local fire suppression effects with a bias towards older forest nearby boreal forest communities in Canada, though the effect is largely limited to a 25 km radius between these widely dispersed communities [@parisien2020]. More southern boreal forest with extensive suppression activities has historically seen evidence of a reduction in observed vs potential area burned [@cummingEffectiveFireSuppression2005] though this effect has likely been erased given the increasing frequency of extreme burning conditions @wangCriticalFireWeather2023 and corresponding record area burned [@jainDriversImpactsRecordBreaking2024].
 
-Burned area in Canada is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area [@stocks2002]. Lightning-caused fires account for approximately half of all ignitions and approximately 80% of burned area, but no distinction is made between human and lightning ignition for carbon accounting purposes. Annual burned area mapping for carbon reporting in Canada is conducted using a composite of satellite and aerial mapping at 30 metre resolution; the relatively small number of large fires, and their slow vegetation regeneration [@white2017] allows for reliable mapping using multi-spectral imagery such as Landsat within one year of the fire [@whitman2018].
+Burned area in Canada is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area [@stocks2002]. Lightning-caused fires account for approximately half of all ignitions and approximately 80% of burned area, but no distinction is made between human and lightning ignition for forest sector GHG reporting purposes. Annual burned area mapping for GHG reporting in Canada is conducted using a composite of satellite and aerial mapping at 30 metre resolution; the relatively small number of large fires, and their slow vegetation regeneration [@white2017] allows for reliable mapping using multi-spectral imagery such as Landsat within one year of the fire [@whitman2018].
 
-[2 sentences on CBM-CFS3 and simple stuff about it]..[also about emissions reporting and accounting in managed vs unmanaged forest]... In CBM-CFS, spatially referenced stand lists representing large homogenous stands that fall within spatial units (ecozone-provincial intersections) [@kurz2002], even when applying precisely mapped burned areas [@hall2020]. CBM-CFS currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of three severity classes of burned forest in Canada [@hall2008]. Currently, biomass consumption estimates are based on the and the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the ecozone-province of annualized drought conditions. Quantification of the change in carbon stock in CBM is made via a "Disturbance Matrix" (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM, as well as an atmospheric sink pool. Importantly, unlike an emissions-only fire models commonly used in air quality modelling in Canada [@chen2019], DM definitions in CBM also track the transfer of live biomass to dead, but still uncombusted pools such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags.
+Canada reports on GHG emission and removals from the forest sector in Canada’s National GHG Inventory Report (NIR). Carbon stocks and stock changes are modelled using CBM-CFS3 (Kurz et al. 2009) parameterized and driven by spatial and non-spatial data describing forest inventory, annual yield and disturbance (Stinson et al, 2011). Following international good practice guidance to focus on human-caused emissions in NIRs, Canada focusses emission reporting on managed forest lands, which make up approximately 225 ha of Canada’s 367 ha total forest area. In CBM-CFS3, forest inventory is represented by spatially referenced stand lists representing large homogenous stands that fall within spatial units (e.g. forest management areas) and broad regions called Reconciliation Units (RU) that are the intersection of ecozones with provincial/territorial boundaries (Environment and Climate Change Canada, 2025) - (Kurz et al. 2002). Within CBM-CFS3 precisely mapped burned areas (Hall et al. 2020) are summarized at the level of spatial units and applied randomly to stands within that unit Years with larger burned areas will improve the representative nature of random stands being assigned fire disturbance within a year, as a wider variety of stand types will be selected.  Furthermore, large, drought-drive fire years such as 2023 have been observed to burn at more equal rates across the diversity of local ecosite flammability (parksFinescaleSpatialClimate2018; whitmanModestIncreaseFire2024) and thus provide an ideal test case for assessing changes in emissions estimates for a spatially referenced system.  Importantly, these years with very large area burned still show a large variety of burn severity observations (Whitman et al 2018).  
 
-In Canada's forests, a combination of disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1-100 ha), tree species plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests do burn, they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Thus, important local biases in fire activity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when only a regionally-averaged fire severity is applied.
+CBM-CFS3 currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of the widely adopted three severity class approach for assessing of burned forest in Canada (Hall et al. 2008) as well as in Alaska (holsingerImprovedFireSeverity2022) and the conterminous US (parksNewMetricQuantifying2014). Currently, biomass consumption estimates are based on the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the RU of annualized drought conditions. Quantification of the change in carbon stock in CBM-CFS3 is made via a “Disturbance Matrix” (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM-CFS3, as well as an atmospheric sink pool. Importantly, unlike emissions-only fire models commonly used in air quality modelling in Canada (Chen et al. 2019), DM definitions in CBM-CFS3 also track the transfer of live biomass to dead, but still uncombusted pools, such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags. 
 
-To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020], this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux measurement via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices updated and designed for a spatially-explicit update to the CBM, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
+In Canada’s forests, a combination of disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1--100 ha), tree species plays a major role in determining ecosystem susceptibility to fire (Bernier et al. 2016) where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests burn at rates more similar to older conifer stands during large drought-driven fire years (parksFinescaleSpatialClimate2018), they do so at consistently lower severity compared to all but the most xeric conifer forests (Whitman et al. 2018). Thus, important local biases in fire activity and severity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when a uniform fire severity is applied. 
 
-Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption) have been used in valuable scenario exercises using CBM for assessment of future fire and harvest scenarios [@smyth2022]; the algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada's diverse ecozones.
+To support recent advances in operational burn severity mapping for Canada (Whitman et al. 2020) alongside multi-decade reliable burned area records that provide certainty on fire start and end dates (Hall et al. 2020), this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux measurement via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices (DM) updated and designed for a planned, spatially-explicit update to the CBM-CFS3, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires. 
+
+Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption) have been used in valuable scenario exercises using a spatial explicit version of CBM-CFS3 for assessment of future fire and harvest scenarios (Smyth et al. 2022); the algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada’s diverse ecozones. 
 
 # Methods
 
@@ -2929,18 +2931,78 @@ emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "H
 
 ```
 
+
+
+```{r emissions_grid_ratios-DO-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+###ad-hoc code to support the results section on direct fire emissions.  Code works fine, but not directly linked to graphics, tables, or text, so not running it here.
+
+emissions_grid_out <- emissions_grid_out  %>% filter(EcoAdmin != "Pacific Maritime Yukon Territory") %>% filter(EcoAdmin != "Boreal Cordillera Northwest Territories") %>% filter(EcoAdmin != "Taiga Shield East Newfoundland") %>% filter(EcoAdmin != "Boreal Shield West Alberta") %>% filter(EcoAdmin != "Taiga Plains Yukon Territory") %>% filter(EcoAdmin != "Atlantic Maritime Prince Edward Island") %>% filter(EcoAdmin != "Mixedwood Plains Quebec") %>% filter(EcoAdmin != "Taiga Cordillera Yukon Territory") 
+
+##easy stats: top three and bottom three for t C/ha high severity/low severity
+
+emissions_grid_out %>% filter(Median_BUI == 200) %>% arrange(desc(SumC_direct_emissions)) %>% slice_head(n=3)
+
+
+emissions_grid_out %>% filter(Median_BUI == 200) %>% arrange(SumC_direct_emissions) %>% slice_head(n=3)
+
+
+### what % of the total pools is released?
+
+### join (emissions_grid_out and NIR_AverageCPools) and mutate sum of pools with sum of emissions to get grand DM value
+##what is the median value, highest and lowest?
+ 
+
+
+### largest low vs high contrast at BUI ~80
+
+###take the emissions ratio of the IQR of BUI - per ecozone?  Or a fixed global IQR from the CFSDB?
+
+##mutate a new Tot_C_emit_BUI40 value:
+
+
+emissions_grid_out_stats_40_High <- emissions_grid_out %>% filter(High_frac == 1) %>% filter(Median_BUI == 40) %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(Tot_C_emit_BUI40_High = median(SumC_direct_emissions))
+emissions_grid_out_stats_200_High <- emissions_grid_out %>% filter(High_frac == 1) %>% filter(Median_BUI == 200) %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(Tot_C_emit_BUI200_High = median(SumC_direct_emissions))
+emissions_grid_out_stats_High <- cbind(emissions_grid_out_stats_40_High,emissions_grid_out_stats_200_High[,3])
+emissions_grid_out_stats_High <- emissions_grid_out_stats_High %>% mutate(Ratio_BUI_40_200_High = Tot_C_emit_BUI200_High/Tot_C_emit_BUI40_High)
+
+#hist(emissions_grid_out_stats$Ratio_BUI_40_200_High)
+
+emissions_grid_out_stats_40_Low <- emissions_grid_out %>% filter(Low_frac == 1) %>% filter(Median_BUI == 40) %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(Tot_C_emit_BUI40_Low = median(SumC_direct_emissions))
+emissions_grid_out_stats_200_Low <- emissions_grid_out %>% filter(Low_frac == 1) %>% filter(Median_BUI == 200) %>% group_by(EcoBoundaryName_select,AdminBoundaryName_select) %>% summarize(Tot_C_emit_BUI200_Low = median(SumC_direct_emissions))
+emissions_grid_out_stats_Low <- cbind(emissions_grid_out_stats_40_Low,emissions_grid_out_stats_200_Low[,3])
+emissions_grid_out_stats_Low <- emissions_grid_out_stats_Low %>% mutate(Ratio_BUI_40_200_Low = Tot_C_emit_BUI200_Low/Tot_C_emit_BUI40_Low)
+
+#hist(emissions_grid_out_stats_Low$Ratio_BUI_40_200_Low)
+
+emissions_grid_out %>% filter(Median_BUI == 200) %>% arrange(desc(SumC_direct_emissions)) %>% slice_head(n=3)
+
+emissions_grid_out %>% filter(Median_BUI == 200) %>% arrange(SumC_direct_emissions) %>% slice_head(n=3)
+
+
+emissions_grid_out_stats_Low %>% arrange(desc(Ratio_BUI_40_200_Low))
+emissions_grid_out_stats_Low %>% arrange((Ratio_BUI_40_200_Low))
+
+emissions_grid_out_stats_High %>% arrange(desc(Ratio_BUI_40_200_High))
+emissions_grid_out_stats_High %>% arrange((Ratio_BUI_40_200_High))
+
+```
+
 ## Direct fire carbon emissions as a function of fire severity and drought
 
-Direct fire emissions per hectare by severity class and as a function of drought condition (Buildup Index) are shown in Figure \ref{fig:non-GWP-total-C-plot}.
+Direct fire emissions per hectare by severity class and as a function of drought condition (Buildup Index) are shown in Figure \ref{fig:non-GWP-total-C-plot}. Direct fire emissions per hectare were greatest (using a constant BUI of 200 as a practical maximum) in the Pacific Maritime ecozone of British Columbia, with 83 and 71 t C/ha released in high and moderate severity fires, respectively. This equates to 295 and 252 t CO2e/ha and an MCE of 0.90 to 0.89, respectively.  The Pacific Maritime ecozone features some of the highest relative contributions of canopy fuels to carbon release, with 32% of modelled emissions from the canopy, and 68% from the surface (i.e. woody debris, litter, duff, roots etc). Next highest emissions were 65 t C/ha from high severity fire in the Boreal Shield East of Labrador which features far lower merchantable volume (see Appendix A) but overall softwood foliage pools only 5% smaller than the Pacific Maritime.  Larger aboveground very fast DOM (i.e. litter) pools in the BSE of Labrador offset slightly smaller aboveground slow DOM (i.e. forest floor duff) pools as compared to the PM.  
 
-<!-- ideas for results here: (1) come up with an index of drought response, where you take like the % difference in high severity, BUI 70-200  (2) for a BUI 100 fire, what is the ratio of high:low?-->
+The lowest emissions per area were estimated to be in the Boreal Shield West of Saskatchewan, where total emissions of 16 and 22 t C/ha (56 and 76 t CO2e/ha) for low and moderate severity fire at a BUI of 200 were 77% in surface fuels.  Despite much lower overall emissions, these low emissions fires still feature 77-79% of the total emissions from surface fuels. The Taiga Shield West of the Northwest Territories also was modelled to have emissions of only 21.5 t C/ha under low severity fire.
 
-```{r non-GWP-total-C-plot, echo=FALSE, fig.cap="\\label{fig:non-GWP-total-C-plot}", fig.height=7, fig.width=6, message=FALSE, warning=FALSE}
+Across both low and high severity fires, the effect of drought (i.e. Buildup Index) was fairly consistent, the emissions from BUI 200 fires (i.e. very dry conditions) were higher than those of identical severity class but at a much lower BUI of 40.  This lower BUI of 40 represents the practical lower limit of large spreading fires in forests in Canada. Eastern regions such as the Mixedwood Plains of Ontario and Quebec as well as the Atlantic Maritime of Nova Scotia and Prince Edward Island see a modelled 60% enhancement of emissions across the range of simulated BUI here, while northwestern boreal regions such as the Taiga Shield West of the Northwest Territories, BSW of Alberta, and Taiga Cordillera of the NWT show a far smaller 10-13% enhancement of emissions per hectare.  This patterns is consistent across both high and low severity fire, with the BUI enhancement of emissions as high as 63% in low severity fires, while the effect is only somewhat smaller in high severity fires at 54%.  Regions with a high emissions drought sensitivity tend to be those with higher softwood (i.e. broadleaf) forest composition near 50% (by volume) or more (i.e. Atlantic Maritime, Mixedwood Plains and also Boreal Plains of Manitoba).  RUs with the highest aboveground slow DOM pools also showed similarly high drought sensitivity of ~42%.  RUs with the lowest drought sensitivity tend to also be the RUs with the lowest overall emissions.
+
+
+```{r non-GWP-total-C-plot, echo=FALSE, fig.cap="\\label{fig:non-GWP-total-C-plot}Direct emissions by severity class: orange = high, yellow = moderate, green = low severity.  Labelled acronyms \n are Reporting Units (see Figure 1) as Ecozone then Province, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reporting Units,\n so 'Lab' and 'NFLD' is used.  Some small Reporting Units without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure.", fig.height=7, fig.width=6, message=FALSE, warning=FALSE}
 #emissions_grid_out$Severity_uniform <- as.factor(emissions_grid_out$Severity_uniform)
 #emissions_grid_out$Severity_uniform <- factor(emissions_grid_out$Severity_uniform, levels = c("High","Mod","Low"))
 
-##filter out some that are a tiny sliver of an area
-emissions_grid_out_plot <- emissions_grid_out  %>% filter(EcoAdmin != "Pacific Maritime Yukon Territory") %>% filter(EcoAdmin != "Boreal Cordillera Northwest Territories") %>% filter(EcoAdmin != "Taiga Shield East Newfoundland") %>% filter(EcoAdmin != "Boreal Shield West Alberta") %>% filter(EcoAdmin != "Taiga Plains Yukon Territory") %>% filter(EcoAdmin != "Atlantic Maritime Prince Edward Island") %>% filter(EcoAdmin != "Mixedwood Plains Quebec") 
+##already filtered out some that are a tiny sliver of an area
+emissions_grid_out_plot <- emissions_grid_out 
 
 ###I think input data is missing for MP, but have the NIR pools...
 ###need to compute MW plains also those extra HP in MB and QC.  add the HP, will still be square once PM YT and BC NWT are gone
@@ -2999,7 +3061,7 @@ emissions_grid_out_plot$EcoAdmin <- case_match(emissions_grid_out_plot$EcoAdmin,
                                           "Taiga Shield West Northwest Territories" ~ "TSW NT")
 
 
-ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + ylab("Direct emissions from wildfire\n(Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + labs(caption=("Direct emissions by severity class: orange = high, yellow = moderate, green = low severity.  Labelled acronyms \n are Reporting Units (see Figure 1) as Ecozone then Province, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reporting Units,\n so 'Lab' and 'NFLD' is used.  Some small Reporting Units without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure."))+ theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5))# + geom_point(aes(x=Median_BUI,y=Prop_surface*100))
+ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + ylab("Direct emissions from wildfire\n(t C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5))# + geom_point(aes(x=Median_BUI,y=Prop_surface*100))
 ```
 
 ```{r GWP-adjusted-total-C-plot-NOT-READY, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
@@ -3257,7 +3319,7 @@ sum(AnnualEmissionsSummary$CO2e_Mg,na.rm=TRUE)/sum(AnnualEmissionsSummary$Area_h
 
 ```
 
-```{r Emissions-2023-by-RU, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Emissions-2023-by-RU,fig.cap="Comparison of CO2e emissions per hectare between this method at the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.", echo=FALSE, message=FALSE, warning=FALSE}
 
 #### emissions intensity per RU, compare this approach with NIR
 
@@ -3291,12 +3353,17 @@ ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha
 
 colnames(AnnualEmissionsSummary_table) <- c("Jurisdiction","Ecozone","Reporting Unit","Area Burned (ha)","Moderate Severity Fraction","High Severity Fraction","Emissions t C/ha","This Study Emissions t CO2e/ha","NIR 2025 Emissions tCO2e/ha")
 
-kbl(AnnualEmissionsSummary_table) %>% kable_minimal() %>% column_spec(1:9, width = "2cm") %>%
+
+
+```
+
+```{r tab-RU-CO2e-comp, echo=FALSE}
+kbl(AnnualEmissionsSummary_table,align="c",caption="Comparison of per hectare CO2e direct emissions from this study against the 2025 National Inventory Report for the 2023 wildfire season in Canada. Rows are sorted by decreasing 2023 area burned.  Note that for RUs with no managed forest area and no biomass pool data available.") %>% kable_minimal() %>% column_spec(1:9, width = "2cm") %>%
   kableExtra::landscape() %>%
           kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")
-
 ```
+
 
 ```{r Ecozone-Emissions-2023-table-admin-only, eval=FALSE, include=FALSE}
 
@@ -3315,7 +3382,7 @@ AnnualEmissionsSummary_table_admin_only$SumTotal_C_Mg[AnnualEmissionsSummary_tab
 
 ```
 
-```{r tab-Model-comp-Emissions-2023-table, echo=FALSE, tab.cap="\\label{tab:tab-Model-comp-Emissions-2023-table}Comparison of total carbon emissions estimates for the Canadian 2023 fire season.  Note that the Byrne et al 2024 estimate shown here uses the emissions ratio for CO inferred from this study, see main text for details."}
+```{r tab-Model-comp-Emissions-2023-table, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 ### goal is to make a small data table to show off the 2023 emissions comparison.
 
@@ -3325,16 +3392,15 @@ TotalEmission <- c(round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,n
 
 Model_comp_Emissions_2023_table <- cbind(Source,Approach,TotalEmission)
 
-kbl(Model_comp_Emissions_2023_table)  %>%
+kbl(Model_comp_Emissions_2023_table,align="c",caption="Comparison of total carbon emissions estimates for the Canadian 2023 fire season.  Note that the Byrne et al 2024 estimate shown here uses the emissions ratio for CO inferred from this study.  See main text for details.")  %>%
   kable_minimal()  
 
 
 ```
 
-````{=html}
 <!--
 
-```{r ternary-severity-plots, eval=FALSE, fig.cap="Fire locations total emissions, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7}
+{r ternary-severity-plots, eval=FALSE, fig.cap="Fire locations total emissions, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7}
 
 ## will need to give names to figures "fig.cap="\\label{fig:myfig}Rest of caption" see https://stackoverflow.com/questions/33324162/knitr-refer-to-a-figures-with-a-link
 
@@ -3363,18 +3429,16 @@ AnnualEmissionsSummary_filterG10k <- vect(AnnualEmissionsSummary_filterG10k, geo
 
 ggplot() +geom_spatvector(data=ReportingUnits,fill=NA) + geom_spatvector(data=AnnualEmissionsSummary_filterG10k,aes(alpha = 0.4,colour = as.character(rgb),size = log(SumC_direct_emissions)), show.legend = F) + scale_colour_identity() + annotation_custom(ggplotGrob(tric$key),xmin = -91826, xmax = 3080165, ymin = 1336920, ymax = 3978876) + theme(legend.title = element_blank())
 
-```
+
 
 -->
-````
 
 A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The area-weighted mean Buildup Index for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_BUI, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing severe but not uniformly exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}` t C/ha, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low drought conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.95,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
 
 Comparison of emissions totals against the NIR is only possible for spatial units (i.e. Reporting Units, provinces, or ecozones) where the entire RU is composed of managed forest. In British Columbia, across 2.2 Mha burned, this FireDMs approach estimates were consistently lower than NIR. This was driven by a lower average emissions in FireDMs for both the Taiga Plains with 1.3 Mha burned (124 t CO2e/ha) and Montane Cordillera with 0.68 Mha burned (127 t CO2e/ha) as compared to the NIR (161 and 189 t CO2e/ha, respectively). For Alberta the 1.5 Mha of Boreal Plains ecozone burned showed close agreement (155 vs 163) as well as in the Taiga Plains (130 vs 144). The Taiga Plains fires of both Alberta and British Columbia were largely adjacent, and the FireDMs output was very similar (123 vs 129) across nearly identical moderate and high severity fractions, but the NIR showed a larger contrast (144 vs 161) that may originate from the underlying assumptions of the previous methods of calculating fire emissions in the NIR.
 
-<!-- add in table references in the above and below paragraphs-->
 
-The RU with the largest burned area in 2023 was in the unmanaged forest of Quebec's Taiga Shield East, where NIR pool sizes from the adjacent jurisdiction of Labrador TSE were used in the FireDMs estimates, as no NIR pool sizes were available for Quebec's TSE ecozone area. Over this 2.5 Mha of burned area, the Quebec TSE FireDMs emissions estimates were substantially larger (149 t CO2e/ha) compared to NIR (99 t CO2e/ha). In the Quebec Boreal Shield East ecozone where NIR pools are available, the FireDMs were still larger than NIR, though the gap between the two was much smaller (106 vs 92). Only the Manitoba Boreal Plains and Yukon Taiga Plains showed a similarly larger estimate in the FireDMs compared to NIR, with all other RUs showing a typically 10-30% reduction in emissions in the FireDMs compared to the NIR. Overall, this new emissions estimate method will yield more representative fire emissions estimates that are senstive to annual differences in drought condition and fire-specific patterns of severity. The small overall impact is likely due to larger soil organic layer emissions in the FireDMs being offset by lower canopy consumption in the low and moderate severity areas.
+The RU with the largest burned area in 2023 was in the unmanaged forest of Quebec's Taiga Shield East, where NIR pool sizes from the adjacent jurisdiction of Labrador TSE were used in the FireDMs estimates, as no NIR pool sizes were available for Quebec's TSE ecozone area. Over this 2.5 Mha of burned area, the Quebec TSE FireDMs emissions estimates were substantially larger (149 t CO2e/ha) compared to NIR (99 t CO2e/ha). In the Quebec Boreal Shield East ecozone where NIR pools are available, the FireDMs were still larger than NIR, though the gap between the two was much smaller (106 vs 92). Only the Manitoba Boreal Plains and Yukon Taiga Plains showed a similarly larger estimate in the FireDMs compared to NIR, with all other RUs showing a typically 10-30% reduction in emissions in the FireDMs compared to the NIR. Overall, this new emissions estimate method will yield more representative fire emissions estimates that are sensitive to annual differences in drought condition and fire-specific patterns of severity. The small overall impact is likely due to larger soil organic layer emissions in the FireDMs being offset by lower canopy consumption in the low and moderate severity areas.
 
 @byrneCarbonEmissions20232024 used observed total atmospheric column excess CO and a range of MCE values to estimate total fire C emissions in Canada in 2023 of between 570-727 Mt C with a mean estimate of 647 Mt. The uncertainty in the estimate from @byrneCarbonEmissions20232024 lies primarily in the uncertain CO~2~:CO ratio (more commonly computed as the normalized ratio MCE) that was estimated to be between 7.8–10.8 g CO~2~ / g CO. Our bottom-up estimates that partition flaming vs smouldering shows a lower CO~2~:CO estimate of `r  {round(weighted.mean(AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=1)}`. This lower CO~2~:CO ratio (i.e. more smouldering) if applied to the data from @byrneCarbonEmissions20232024 would reduce their lower range of total C emissions to `r  {round(weighted.mean(((AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC)/7.7)*647, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=0)}` Mt C, which is comparable to the `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C computed from this bottom-up approach. Estimates of total carbon emissions based solely on the sum of observed Fire Radiative Power (FRP) from Copernicus-CAMS (GFASv1.2 [@kaiserBiomassBurningEmissions2012]) was 478 Mt C [@jonesStateWildfires202320242024]. The operational air quality model for Canada produces wildfire smoke emissions estimates using the CFFEPS-FireWork framework [@chen2019] which utilizes active fire satellite detections coupled to biomass burning rates from the Canadian Forest Fire Danger Rating System which are known to underestimate total emissions from forest floor combustion [@degroot2009]. As a result, the CFFEPS-FireWork total emissions in 2023 with their exceptional nation-wide moisture deficits [@jainDriversImpactsRecordBreaking2024] underestimate total emissions compared to other methods, with CFFEPS estimates of CO emissions only \~40% of satellite observed values [@griffinBiomassBurningCO2024; @voshtaniQuantifyingCOEmissions2025]. Even after assimilating satellite CO and tower-based total carbon measurements, CFFEPS still retains 20% understimating bias, likely attributable to an estimate of peak CO (i.e. smouldering) emissions that are lower than reality [@voshtaniQuantifyingCOEmissions2025].
 
@@ -3793,17 +3857,6 @@ ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL
 
 ```
 
-### Boreal Cordillera modelling
-
-For the Boreal Cordillera, a simple linear model on the logit-transformed data was found to be the best performing model for estimating soil organic consumption proportion:
-
-```{=tex}
-\begin{equation}
-logit \left( \frac{FFFC}{FFFL}\right) = (0.00257  DC) + (-0.54  log_{e}(AGSlow)) + 2.17
-\end{equation}
-```
-In this case, the Drought code component of the Buildup Index is used, since a fit using Buildup Index alone does not produce a coefficient on the Buildup Index term in the model that is different from zero. Despite the presence of a fixed intercept term, the strong inverse dependence on the natural logarithm of the AGSlow pool size (FFFL) results in zero proportional consumption when Drought Code is equal to zero.
-
 # Appendix C: annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
 
 ```{r AnnualBUI, echo=FALSE, message=FALSE, warning=FALSE}
@@ -3831,7 +3884,7 @@ CFSDB_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.csv")
 Airborne_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/Airborne_summary.csv")
 ### this is used above but hard-coded in
 
-###Load annual hotspot median DC by ecozone (via Quinn Barber and CFSDB)
+###Load annual hotspot median BUI by ecozone (via Quinn Barber and CFSDB)
 DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
 
 ecozones.unique <- DC.year %>% group_by(Ecozone) %>% summarize(EcoID = mean(ECOZONE),FFFL = mean(Median.Forest.Floor.Load.kg.m2)) 

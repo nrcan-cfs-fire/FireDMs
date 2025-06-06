@@ -125,7 +125,7 @@ ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM"
 
 ## Carbon Modelling Spatial Units
 
-Carbon reporting in Canada's forests is broken down by Reporting Unit (RU), which is the intersection of terrestrial ecozones and provincial/territorial boundaries, as shown in Figure \ref{fig:RU-map}.
+Carbon reporting in Canada's forests is broken down by Reporting Unit (RU), which is the intersection of terrestrial ecozones and provincial/territorial boundaries, as shown in Figure \ref{fig:RU-map}. Forest carbon stocks in Canada are influenced by species composition, age class distribution, natural disturbance history, human-influenced management regime and climatic variables, among other factors, which are well-represented by the RU framework supporting Canada’s NIR. Due to the current spatial imprecision of certain key model data (e.g. deforestation rates), analysis finer than the RU-level tends to misrepresent regional-variation in emission estimates.
 
 ```{r RU-map, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -190,13 +190,30 @@ ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),,show.legend
 
 ```
 
-## Biomass pools of the Generic Carbon Budget Model
+## Biomass pools of the CBM-CFS3 Model
 
-Short section explaining the pool definitions most relevant to fire.
+```{r CBM-pools-simple-table,tab.cap="\\label{tab:CBM-pools-simple-table}", echo=FALSE, message=FALSE, warning=FALSE}
+
+
+Component <- c("Stemwood","Foliage","Branches","Coarse woody debris","Forest Floor","Snags")
+FireBehaviour <- c("The main stem of the tree can either survive or be killed and converted to a snag, depending on severity.", "Susceptible to combustion at high severity and mortality at all severities. ","Smaller diameter classes susceptible to combustion at high severity and mortality at all severities. ","Susceptible to combustion at all severities. After fire, uncombusted snags fall down into this pool.","Combustion fraction dependent on drought condition; lower susceptibility in F, H, O soil horizons (i.e. Slow pool). After fire at any severity, uncombusted foliage and dead branches transfer to these pools. Uncombusted roots can be transferred into these pools for high severity fires when the main stem experiences mortality. ","Higher combustion susceptibility at higher severity ")
+CBM_Pool <- c("Merchantable","Foliage","Other","Medium DOM","Above Ground Very Fast (Litter); Above Ground Fast; Above Ground Slow DOM (F,H,O)","Stem, Branch Snag")
+
+CBM_pools_table <- cbind(Component,FireBehaviour,CBM_Pool)
+
+colnames(CBM_pools_table) <- c("Component","Fire Behaviour", "CBM-CFS3 Pool")
+
+kbl(CBM_pools_table,align="c",caption="Key components of the CBM-CFS3 model relevant to fire behaviour and fuel consumption.")  %>%  kable_minimal() %>%  column_spec(1, width = "3cm") %>%  column_spec(2, width = "6cm") %>% column_spec(3, width = "3cm")
+
+
+```
+
+
+The carbon pools represented in CBM-CFS3 can be broadly categorized as live biomass, dead organic matter (DOM) and soil carbon and are described in detail in Kurz et al. 2009.  Key components that interact most with wildfire are summarized in Table \ref{tab:tab:CBM-pools-simple-table}.  Though designed for forest GHG reporting, the pool structure of CBM-CFS3 does distinguish between softwood (conifer) and hardwood (broadleaf) that also have large contrasts in both foliage flammability (Alexander 2010) and ability to survive low to moderate intensity surface fires (). Representative pool values (in t C/ha) per Reporting Unit are produced and updated annually based on updated forest inventory and disturbance data.  Pool size information by RU is provided in Appendix A.  Upon the detection of a forest disturbance such as fire, pool C biomass (both dead and alive) can be transferred to other pools including an atmosphere pool (or remaining the same pool) at proportions prescribed by a Disturbance Matrix. Any live or dead biomass pools combusted immediately are tallied in the direct emissions sums reported here.  Live biomass that is killed but not combusted by the fire is tracked, but experiences delayed decomposition on the order of years to decades, and therefore is not tallied within the direct emissions modelling shown below.
 
 ## Axioms of forest carbon budget after fire
 
-To simplify the process of the creation of the DMs as a distillation of the complexities of fire severity and combustion patterns, the following logical axioms are proposed and maintained throughout:
+To simplify the process of creating DMs as a distillation of the complexities of fire severity and combustion patterns, the following logical axioms are proposed and maintained throughout:
 
 1.  Disturbance matrices are to be in terms of mortality, not survival. Mortality here is defined as tree death by the end of the calendar year of the fire's occurrence. Tree mortality in subsequent years is not modelled here.
 
@@ -226,6 +243,8 @@ Of these, Crown Fraction Burned (CFB) is an important concept used primarily in 
 !!!Ellen to insert methods here - including the figure of where the samples are from Figure
 
 <!-- \ref{fig:Fig-CBI-ecozones-map} -->
+
+The axioms listed above, combined with field survey data on biomass combustion and mortality rates as stratified by severity class, forms a novel, data-driven and ecologically-informed approach to fire direct C emissions estimations here termed FireDMs (Fire Disturbance Matrix-severity).
 
 ## Combustion gas emission ratios
 

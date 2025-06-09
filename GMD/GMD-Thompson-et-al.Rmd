@@ -95,7 +95,6 @@ library(ggrepel)
 library(gtools)
 library(rticles)
 library(mgcv)
-library(gslnls)
 knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 library(minpack.lm)
 library(terra)
@@ -103,14 +102,11 @@ library(sf)
 library(rnaturalearth)
 library(rnaturalearthdata)
 library(tidyterra)
+library(ggtern)
 
 options(dplyr.summarise.inform = FALSE)
 
 
-library(tricolore) ## this one gives a nice rbg colour palette
- ## this is a list of all the correct RBG values if we wanted to colour the dots by a nice ternary colour scheme
-
-library(ggtern)
 
 #original list
 #ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
@@ -838,7 +834,7 @@ kbl(HW.ReSprout.wide, caption = "Ecozone-level average fraction of hardwood over
 
 A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (see Appendix E) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality equal precisely to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Though spatially explicit versions of CBM-CFS3 can resolve a species list down to the pixel level, currently an ecozone-level regional average composition of hardwood species with resprouting traits is used and is shown in Table \ref{tab:tab-ReSproutByEcozone}.
 
-Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood as an example:
+Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood (SW) as an example:
 
 ```{=tex}
 \begin{equation}
@@ -846,9 +842,10 @@ SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fr
 \end{equation}
 ```
 ```{=tex}
-\begin{align*}
-SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{align*}
+\begin{equation}
+SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times + \\
+(1-Duff.Consump.Fract) \times (1-ReSproutFactor)
+\end{equation}
 ```
 ```{=tex}
 \begin{equation}
@@ -3352,7 +3349,7 @@ NIR2025_fire_CO2e_intensity <- read.csv("~/nrcan-cfs-fire/FireDMs/NIR2025_fire_C
 
 AnnualEmissionsSummary_table <- AnnualEmissionsSummary_table %>% left_join(NIR2025_fire_CO2e_intensity) %>% select(unit_id:Avg_CO2e_ha,NIR2025Emissions_tCO2e_PerHa)
 
-AnnualEmissionsSummary_table <- AnnualEmissionsSummary_table %>% left_join(ReportingUnits) %>% filter(SumArea>20000) %>% arrange(desc(SumArea)) %>% select(unit_id:NIR2025Emissions_tCO2e_PerHa,admin_name,eco_name) %>% relocate(admin_name,.before=unit_id) %>% relocate(eco_name,.after=admin_name)
+AnnualEmissionsSummary_table <- AnnualEmissionsSummary_table %>% left_join(ReportingUnits) %>% filter(SumArea>30000) %>% arrange(desc(SumArea)) %>% select(unit_id:NIR2025Emissions_tCO2e_PerHa,admin_name,eco_name) %>% relocate(admin_name,.before=unit_id) %>% relocate(eco_name,.after=admin_name)
 
 AnnualEmissionsSummary_table$SumArea <- round(AnnualEmissionsSummary_table$SumArea/10^6,digits=2)
 
@@ -3587,7 +3584,7 @@ More recent observations and modelling from @degroot2009 extended the FBP data w
 log_{e}(FFFC) = -4.252+0.710log_{e}(DC) + 0.671log_{e}(FFFL)
 \end{equation}
 ```
-where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in kg (biomass) m^-2^ and FFFL is Forest Floor Fuel Load in kg m^-2^. The forest floor as defined here is inclusive of the litter and duff layers, live mosses and lichens. This model presented above fits well within the dataset and extends the observed maximum FFFC to nearly 10 kg m^-2^. The ABoVE synthesis of FFFL and FFFC [@walkerSynthesisBurnedUnburned2020] expands upon a slightly smaller dataset used in a modelling summary also by Walker et al @walkerFuelAvailabilityNot2020, where structural equation modelling was used to explore drivers of FFFC but no concise and readily reproducible modelling is produced. The results of the SEM from Walker et al @walkerFuelAvailabilityNot2020 emphasized a greater role of FFFL over DC, though coarse reanalysis that lacked local fire agency weather stations was used. An analysis of just 2014 fires in the Northwest Territories by Walker et al @walkerSoilOrganicLayer2018 showed that while the mean depth of burn across all black spruce stands was 6-10 cm, the driest (xeric) black spruce stands with the smallest FFFL showed upwards of 75% soil organic consumption, while deeper organic soils in subhygric black spruce stands showed less than 25% consumption.
+where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in kg (biomass) m^-2^ and FFFL is Forest Floor Fuel Load in kg m^-2^. The forest floor as defined here is inclusive of the litter and duff layers, live mosses and lichens. This model presented above fits well within the dataset and extends the observed maximum FFFC to nearly 10 kg m^-2^. The ABoVE synthesis of FFFL and FFFC [@walker2020] expands upon a slightly smaller dataset used in a modelling summary also by Walker et al @walkerFuelAvailabilityNot2020, where structural equation modelling was used to explore drivers of FFFC but no concise and readily reproducible modelling is produced. The results of the SEM from Walker et al @walkerFuelAvailabilityNot2020 emphasized a greater role of FFFL over DC, though coarse reanalysis that lacked local fire agency weather stations was used. An analysis of just 2014 fires in the Northwest Territories by Walker et al @walkerSoilOrganicLayer2018 showed that while the mean depth of burn across all black spruce stands was 6-10 cm, the driest (xeric) black spruce stands with the smallest FFFL showed upwards of 75% soil organic consumption, while deeper organic soils in subhygric black spruce stands showed less than 25% consumption.
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE synthesis was combined with wildfire data from de Groot et al 2009 not otherwise found in the ABoVE synthesis. The ABoVE synthesis sites in the Alaska Boreal Interior ecoregion, which have equivalent Canadian ecozone were excluded due to the presence of continuous permafrost and deep organic soils, but Alaska Boreal Cordillera sites near the Yukon border were utilized. Experimental fire data from the FBP data was not used, as deeper combustion measurements resulting from hours and days of smouldering combustion captured in wildfire data are not available in experimental fires where extensive smouldering is not measured due to suppression.
 
@@ -3720,10 +3717,10 @@ ABoVE_Data_w_FBP_excl_BC <- cbind(ABoVE_Data_w_FBP_excl_BC,nls.pred.BUI)
 
 
 
-cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred)
+#cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred)
 
 ##model selected:
-cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)
+#cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI)
 
 
 
@@ -3731,7 +3728,7 @@ cor(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,ABoVE_Data_w_FBP_excl_BC$nls.p
 
 MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_FBP_excl_BC$nls.pred.BUI),na.rm=TRUE)
 
-MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)
+#MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)
 
 
 
@@ -4001,3 +3998,5 @@ DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSE", SeverityClass = "High")
 ```
+
+# References

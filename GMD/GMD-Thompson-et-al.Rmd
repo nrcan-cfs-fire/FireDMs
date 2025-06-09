@@ -700,7 +700,6 @@ While ultimately this scheme can used on individual fires with estimated or meas
 
 Note that the maximum upland Forest Floor Fuel Load is approximately 30 kg m^-2^ (150 Mg C ha^-1^) [@letang2012]; higher values are typically seen only in peat ecosystems, where the above scheme is still valid, as approximately 33% of the data used to fit this model is for organic soil pool values over 30 kg m^-2^ (\>150 Mg Mg C ha^-1^). Fully 10% of the data used in the FFFC model is for sites with over 60 kg m^-2^ of organic soil. Absolute consumption values are similar between deep forest floor organic layers and peatlands [@walker2020], though relative consumption rates decline rapidly in deeper organic soil layers, as demonstrated in the model selected here. For Canadian peatlands, the CaMP model [@bona2020] is instead used in CBM. Within CaMP, a separate peatland water model driven by Drought Code determines the thickness of the unsaturated peat layer, and an amount approximating 12% of the thickness of the unsaturated peat is consumed as smouldering consumption. The peat-specific carbon pools and fire Disturbance Matrices are fully described in [@bona2020]; large peatland trees will still utilize the DM scheme described below. Since deeper forest organic soil and peat layers show approximately similar absolute consumption rates, for the purpose of this general model description no peatland-specific components of the fire DMs are required.
 
-
 ```{r tab-CWDByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-CWDByEcozone}"}
 
 #subset to just the variables of interest:
@@ -718,7 +717,6 @@ kbl(CWD.wide, caption = "Coarse Woody debris consumption rates from pre/post mea
           #kable_styling(latex_options = "scale_down") %>%
   #kable_styling(latex_options = "hold_position")
 ```
-
 
 Limited data is available on the fraction of woody debris consumption alongside fire severity measurements. Coarse woody debris of overstory stems that makes up 60-80% of woody debris biomass in Canada's boreal and temperate forests [@hanes2021], with its moisture and consumption patterns largely follows the moisture regime of the Drought Code [@mcalpine1995]. In this modelling framework, the proportion of coarse (\>7.5 cm diameter) and medium (\>0.5 cm and \<7.5 cm) woody debris consumption is estimated based on detailed measurements of consumption from experimental fires. Coarse Woody Debris is responsible for approximately 50-75% of the total woody debris load in most ecozones, and approximately 60% of the total woody debris consumption. Ecozone-level CWD consumption rates are summarized in Table \ref{tab:tab-CWDByEcozone}.
 
@@ -3124,7 +3122,7 @@ kbl(MCE_Table, caption = "Comparison of the Modified Combustion Efficiency (MCE)
 
 Mean observed Modified Combustion Efficiency was observed by @hornbrook2011 for distinct periods during the ARCTAS campaign over northern Saskatchewan in 2008. MCE observed by aircraft during the peak burn period when the majority of fuel consumption and area burned occurs (0.92) largely corresponded with modelled values (0.91), suggesting the model provides a fair representation of the balance of flaming and smouldering during large active wildfires. Subsequent smoke plume observations during periods of greatly reduced spread and intensity (late evening and after rain) showed a substantially reduced MCE of 0.82--0.83 that indicates a near lack of flaming combustion. Even when represented as 100% low severity fire in the model, the modelled MCE only declines to 0.903. Since the fire DM model is based on area burned, fire activity such as smouldering but with minimal actual area burned increased is going to show an MCE far lower than areas of low severity fire spread, which are typically still a low sub-canopy flaming front that features a mix of smouldering duff and woody debris alongside flaming consumption of litter [@mcrae1994; @mcrae2017].
 
-The compilations of emissions factors from @binteshahidNEIVAv10NextgenerationEmissions2024 and @andreaeEmissionTraceGases2019 for boreal forest fuels in aggregate cite emissions factors of 0.205 and 0.24 g/kg, respectively.  The N2O observations from @andreaeEmissionTraceGases2019 are sourced from observations an aggregated MCE of 0.89, similar to our modelled MCE of ~0.91.  Widely cited emissions factors of N2O are given as 0.77% of vegetation N [Lobert 1990, WMO 1985, olivierEmissionDatabaseGlobal1994 ,davidsonInventoriesScenariosNitrous2014], which stems from a small number of observations over two Colorado wildfires by @crutzenBiomassBurningSource1979 with an average result of N2O:CO2 ~0.22% by volume, or approximately 0.2 g/kg. 
+The compilations of emissions factors from @binteshahidNEIVAv10NextgenerationEmissions2024 and @andreaeEmissionTraceGases2019 for boreal forest fuels in aggregate cite emissions factors of 0.205 and 0.24 g/kg, respectively. The N2O observations from @andreaeEmissionTraceGases2019 are sourced from observations an aggregated MCE of 0.89, similar to our modelled MCE of \~0.91. Widely cited emissions factors of N2O are given as 0.77% of vegetation N [Lobert 1990, WMO 1985, olivierEmissionDatabaseGlobal1994 ,davidsonInventoriesScenariosNitrous2014], which stems from a small number of observations over two Colorado wildfires by @crutzenBiomassBurningSource1979 with an average result of N2O:CO2 \~0.22% by volume, or approximately 0.2 g/kg.
 
 ## 2023 Canadian wildfire season total direct emissions
 
@@ -3278,38 +3276,34 @@ kbl(Model_comp_Emissions_2023_table)  %>%
   kable_minimal()  
 
 
+
 ```
 
-```{r ternary-severity-plots, echo=FALSE, fig.cap="Fire locations total emissions, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+<!--
 
-## will need to give names to figures "fig.cap="\\label{fig:myfig}Rest of caption" see https://stackoverflow.com/questions/33324162/knitr-refer-to-a-figures-with-a-link
+{r ternary-severity-plots, echo=FALSE, fig.cap="Fire locations total emissions, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
 
+## will need to give names to figures "fig.cap="\\label{fig:myfig}Rest of caption" see <https://stackoverflow.com/questions/33324162/knitr-refer-to-a-figures-with-a-link>
 
-AnnualEmissionsSummary_filterG10k <- AnnualEmissionsSummary %>% filter(Area_ha>10000)
-#NBAC2023_filterG10k <- NBAC2023 %>% filter(ADJ_HA>10000)
-tric <- Tricolore(AnnualEmissionsSummary_filterG10k, p1 = 'High_frac', p2 = 'Low_frac', p3 = 'Mod_frac')
+AnnualEmissionsSummary_filterG10k \<- AnnualEmissionsSummary %\>% filter(Area_ha\>10000) #NBAC2023_filterG10k \<- NBAC2023 %\>% filter(ADJ_HA\>10000) tric \<- Tricolore(AnnualEmissionsSummary_filterG10k, p1 = 'High_frac', p2 = 'Low_frac', p3 = 'Mod_frac')
 
-rgb <- tric$rgb
+rgb \<- tric\$rgb
 
-AnnualEmissionsSummary_filterG10k <- cbind(AnnualEmissionsSummary_filterG10k,rgb)
-
-
+AnnualEmissionsSummary_filterG10k \<- cbind(AnnualEmissionsSummary_filterG10k,rgb)
 
 #ggtern(data=AnnualEmissionsSummary_filterG10k,aes(Low_frac,High_frac,Mod_frac))+geom_mask()+geom_point(aes(colour=EcoBoundaryName,alpha=0.3,size=log(ADJ_HA)))+ theme_rgbw() + Tlab("High") + Llab("Low") + Rlab("Mod")
 
 ##no ecozones but tricolour plot
 
-## could also do a multi-plot by ecozone or size class: https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggtern/ggtern.multi/
+## could also do a multi-plot by ecozone or size class: <https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggtern/ggtern.multi/>
 
 #### but here's a point map of the xy coordinates using the ternary colour plot
 
-ReportingUnits <- vect("~/nrcan-cfs-fire/FireDMs/NationalReportingUnits.gpkg")
-AnnualEmissionsSummary_filterG10k <- vect(AnnualEmissionsSummary_filterG10k, geom=c("X", "Y"), crs="epsg:4326", keepgeom=FALSE)
+ReportingUnits \<- vect("\~/nrcan-cfs-fire/FireDMs/NationalReportingUnits.gpkg") AnnualEmissionsSummary_filterG10k \<- vect(AnnualEmissionsSummary_filterG10k, geom=c("X", "Y"), crs="epsg:4326", keepgeom=FALSE)
 
+ggplot() +geom_spatvector(data=ReportingUnits,fill=NA) + geom_spatvector(data=AnnualEmissionsSummary_filterG10k,aes(alpha = 0.4,colour = as.character(rgb),size = log(SumC_direct_emissions)), show.legend = F) + scale_colour_identity() + annotation_custom(ggplotGrob(tric\$key),xmin = -91826, xmax = 3080165, ymin = 1336920, ymax = 3978876) + theme(legend.title = element_blank())
 
-ggplot() +geom_spatvector(data=ReportingUnits,fill=NA) + geom_spatvector(data=AnnualEmissionsSummary_filterG10k,aes(alpha = 0.4,colour = as.character(rgb),size = log(SumC_direct_emissions)), show.legend = F) + scale_colour_identity() + annotation_custom(ggplotGrob(tric$key),xmin = -91826, xmax = 3080165, ymin = 1336920, ymax = 3978876) + theme(legend.title = element_blank())
-
-```
+-->
 
 A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The area-weighted mean Buildup Index for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_BUI, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing severe but not uniformly exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}` t C/ha, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low drought conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.95,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
 
@@ -3323,7 +3317,7 @@ While the fire DMs presented here are designed for use in the CFS-CBM carbon rep
 
 ### Indirect fire emissions
 
-While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operation practice in Canada !!!![cite Ellen's upcoming paper]!!!. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall @angers2011 and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM. For organic soil pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM, decomposition rates are calibrated against field decomposition litterbag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
+While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operation practice in Canada !!!![cite Ellen's upcoming paper]!!!. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall @angers2011 and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM. For organic soil pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM, decomposition rates are calibrated against field decomposition litter bag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
 
 ### Model gaps
 

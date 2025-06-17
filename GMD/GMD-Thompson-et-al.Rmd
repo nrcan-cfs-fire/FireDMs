@@ -1,5 +1,5 @@
 ---
-title: "Incorporating fire severity for refined data-drive carbon emissions estimates of boreal and temperate forest fires in the Carbon Budget Model for Canadian forests"
+title: "Incorporating observed fire severity in refined emissions estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3"
 journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'gmd')`"
 author:
   - given_name: Dan K.
@@ -38,13 +38,13 @@ affiliation:
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
 output:
-  pdf_document: default
-  word_document: null
-  bookdown::pdf_book:
-    base_format: rticles::copernicus_article
   rticles::copernicus_article:
     highlight: null
     keep_tex: true
+  word_document: null
+  bookdown::pdf_book:
+    base_format: rticles::copernicus_article
+  pdf_document: default
 abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire. In this sub-model of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS), field measurements of biomass consumption, as related to satellite-derived burn severity maps, are interpreted from a fire physics and ecology perspective to derive algorithms to describe forest carbon fluxes in the immediate aftermath of fires. Model outputs indicate total carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. Shifting from a low drought condition, low-severity burn to a high drought condition, high severity burn typically doubles total carbon emissions. The existing approach to emissions in NFC-MARS yields CO2e emissions that are 10-20% percent higher than this new method, owing to lower overall canopy consumption with mixed fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
@@ -73,7 +73,7 @@ Burned area in Canada is dominated by a relatively small number of very large fi
 
 Canada reports on GHG emission and removals from the forest sector in Canada’s National GHG Inventory Report (NIR). Carbon stocks and stock changes are modelled using CBM-CFS3 [@kurzCBMCFS3ModelCarbondynamics2009] parameterized and driven by spatial and non-spatial data describing forest inventory, annual yield and disturbance [@stinsonInventorybasedAnalysisCanadas2011]. Following international good practice guidance to focus on human-caused emissions in NIRs, Canada focuses emission reporting on managed forest lands, which make up approximately 225 ha of Canada’s 367 ha total forest area. In CBM-CFS3, forest inventory is represented by spatially referenced stand lists representing large homogeneous stands that fall within spatial units (e.g. forest management areas) and broad regions called Reconciliation Units (RU) that are the intersection of ecozones with provincial/territorial boundaries [@kurz2002]. Within CBM-CFS3 precisely mapped burned areas [@hall2020] are summarized at the level of spatial units and applied randomly to stands within that unit Years with larger burned areas will improve the representative nature of random stands being assigned fire disturbance within a year, as a wider variety of stand types will be selected. Furthermore, large, drought-driven fire years such as 2023 have been observed to burn at more equal rates across the diversity of local ecosite flammability [@parks2018; @whitman2024] and thus provides an ideal test case for assessing changes in emissions estimates for a spatially referenced system. Importantly, these years with very large area burned still show a similar natural range in variability of burn severity [@whitman2018].
 
-CBM-CFS3 currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of the widely adopted three severity class approach for assessing of burned forest in Canada [@hallRemoteSensingBurn2008] as well as in Alaska [@holsingerImprovedFireSeverity2022] and the conterminous US [@parksNewMetricQuantifying2014]. Currently, biomass consumption estimates are based on the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the RU of annualized drought conditions. Quantification of the change in carbon stock in CBM-CFS3 is made via a “Disturbance Matrix” (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM-CFS3, as well as an atmospheric sink pool. Importantly, unlike emissions-only fire models commonly used in air quality modelling in Canada [@chen2019], DM definitions in CBM-CFS3 also track the transfer of live biomass to dead, but still uncombusted pools, such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags.
+CBM-CFS3 currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of the widely adopted three severity class approach for assessing of burned forest in Canada [@hallRemoteSensingBurn2008] and the conterminous US [@parksNewMetricQuantifying2014]. Currently, biomass consumption estimates are based on the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the RU of annualized drought conditions. Quantification of the change in carbon stock in CBM-CFS3 is made via a “Disturbance Matrix” (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM-CFS3, as well as an atmospheric sink pool. Importantly, unlike emissions-only fire models commonly used in air quality modelling in Canada [@chen2019], DM definitions in CBM-CFS3 also track the transfer of live biomass to dead, but still uncombusted pools, such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags.
 
 In Canada’s forests, a combination of disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1--100 ha), tree species plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests burn at rates more similar to older conifer stands during large drought-driven fire years [@parksNewMetricQuantifying2014], they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Thus, important local biases in fire activity and severity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when a uniform fire severity is applied.
 
@@ -225,26 +225,9 @@ To simplify the process of creating DMs as a distillation of the complexities of
 
 Of these, Crown Fraction Burned (CFB) is an important concept used primarily in fire behaviour science but not carbon accounting nor fire ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System documentation [@forestrycanadafiredangerratinggroup1992], and provides a simple continuous 0-100 variable for only the consumption of foliage (inclusive of both conifer and broadleaf). For our purposes, CFB is the desirable metric as opposed to ordinal and less precise systems like Canopy Fire Severity Index [@kasischke2000] that allows the user to specify which pools of canopy biomass are consumed, but not the precise fraction of each given pool that is consumed.
 
-## Ground plot and remotely sensed fire severity data
-
-```{r Fig-CBI-ecozones-map, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based Composite Burn Index measurements.", message=FALSE, warning=FALSE}
-
-#align with map colour scheme with others
-
-### insert png from Ellen
-
-
-```
-
-!!!Ellen to insert methods here - including the figure of where the samples are from Figure
-
-<!-- \ref{fig:Fig-CBI-ecozones-map} -->
-
-The axioms listed above, combined with field survey data on biomass combustion and mortality rates as stratified by severity class, forms a novel, data-driven and ecologically-informed approach to fire direct C emissions estimations here termed FireDMs (Fire Disturbance Matrix-severity).
-
 ## Combustion gas emission ratios
 
-Certain variables, like the partitioning of CO~2~:CH~4~:CO gas emissions, are constant throughout ecozones, but vary by flaming vs smouldering combustion modes. The precise emissions ratios vary slightly between models and field studies, but for this initial algorithm assessment, we define these emissions ratios as being identical to those used in Canada's operational wildfire smoke forecasting system, FireWork [@chen2019]. They are defined in a global variable data frame as:
+Certain variables, like the partitioning of CO~2~:CH~4~:CO gas emissions, are constant throughout ecozones, but vary by flaming vs smouldering combustion modes. The precise emissions ratios vary slightly between models and field studies, but for this initial algorithm assessment, we define these emissions ratios as being identical to those used in Canada's operational wildfire smoke forecasting system, FireWork [@chen2019]. They are defined as:
 
 ```{r defineVars, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -284,7 +267,126 @@ kbl(CarbonEFs_pivot_wider,caption="Emissions factors for flaming and smouldering
 
 where CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH~4~ emissions (Table \ref{tab:tab-globalVarsEmissions}). With a Global Warming Potential of CO equal to 1.0 and CH~4~ of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.9))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions ratios correspond well prior emissions factors used in CBM-CFS3. Note that as currently described, the sum of CO~2~, CH~4~, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5-2.0% of biomass emitted as particulate matter (e.g. PM2.5, but also PM1 and PM10 classes of particulates at 1 and 10 um diameters, respectively), and an additional 3% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH~4~.
 
-## Litter layer area-wise consumption by severity class
+## Ground plot and remotely sensed fire severity data
+
+While remotely sensed fire severity metrics are capable of determining if a specific location falls within a low, moderate, or high severity fire area [@hall2008], remotely sensed fire severity metrics alone do not inform estimates of fuel consumption down to specific biomass pools. Instead, the change in biomass pools is empirically related to per-pixel satellite spectral reflectance indices (i.e. dNBR, RBR), using detailed and semi-standardized methods of burn severity ground plots with unburned controls [e.g. @cockeComparisonBurnSeverity2005; @hall2008]. Burn severity ground plot measurements are often aggregated into a single "Composite Burn Index" with a weighting scheme originating in southwestern U.S. forests [@keyLandscapeAssessment2006; @parksGivingEcologicalMeaning2019]; plot level measurements of individual forest biomass pools (e.g. conifer overstory mortality % and canopy consumption %) are recorded as part of the CBI methodology. In this methodology we do not use the CBI aggregated metric itself to infer biomass consumption, but rather compilations of burn severity ground plot measurements that include all the individual biomass pool measurements. Individual burn severity plots were assigned a severity class based on ground observations, and an ecozone-level median biomass pool consumption fraction was computed for each severity class for each biomass pool (see Figure \ref{fig:Fig-CBI-ecozones-map}). For ecozones without ground plot measurements, an adjacent and ecologically similar ecozone with observations was used.
+
+```{r Fig-CBI-ecozones-map, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", out.width="75%", message=FALSE, warning=FALSE}
+
+#align with map colour scheme with others
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CBIPlots_Canada_Ecozones.png")
+
+
+```
+
+The axioms listed above, combined with field survey data on biomass combustion and mortality rates as stratified by severity class, forms a improved data-driven and ecologically-informed approach to fire direct C emissions estimations here termed FireDMs (Fire Disturbance Matrix-severity).
+
+### Overstory tree mortality and consumption
+
+```{r tab-MortByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-MortByEcozone}"}
+
+#subset to just the variable of interest:
+VarDefs.SW.Mort <- VarDefs[VarDefs$Variable.Name == "SW.Mort",]
+
+VarDefs.dt <- as.data.table(VarDefs.SW.Mort)
+
+SW.Mort.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
+
+SW.Mort.wide <- SW.Mort.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+
+kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as derived from median values from field studies") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+Numerous process-driven [@michaletz2006] or empirical [@hood2017] tree mortality models are present and show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread). Since the driving data in this model is satellite-derived fire severity over the landscape scale, fire behaviour metrics such as flame length or scorching height of bark are not available as a continuous mapped product. Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity using aggregated ground plot data (Table \ref{tab:tab-MortByEcozone}).
+
+And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirety of the live stemwood biomass pool that is killed is transferred to the snag pool. Note that the field data and disturbance modelling undertaken here only accounts for tree mortality within the calendar year of the fire, and delayed mortality of over one year has been documented in boreal low and moderate severity fires [@angers2011]where less than half of total mortality occurs after the year of the fire. Thus, the modelling here does not account for delayed mortality that may extend upwards of 5 years after fire.
+
+Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using field studies that show any partial crown consumption is likely sufficient to result in high rates if not complete mortality [@hood2017], which is the case in Canada's trees with primarily thin bark. Due to the structure of CBM-CFS3, all High Severity fires have their mortality in the merchantable and smaller trees set to exactly 1.0, which is no more than a 5% variance from observed values. Ecozone-specific CFB values from field studies of burn severity are summarized in Table \ref{tab:tab-CFBByEcozone}.
+
+```{r tab-CFBByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-CFBByEcozone}"}
+
+#subset to just the variable of interest:
+VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",]
+
+VarDefs.dt.SW.CFB <- as.data.table(VarDefs.SW.CFB)
+
+SW.CFB.wide <- dcast(VarDefs.dt.SW.CFB,Ecozone~SeverityClass,value.var = "Value")
+
+SW.CFB.wide <- SW.CFB.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+
+kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as derived from median values from field studies in each ecozone.") %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+```{r CFBvsMortPlotNOTRUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+### this plot doesn't show too much other than the low severity areas where Mort > CFB
+
+# gather VarDefs so that you have ecozone and then columns for SW Mort and SW CFB
+
+VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",] 
+
+VarDefs.SW.CFB <- VarDefs.SW.CFB %>% rename(SW.CFB = Value)
+VarDefs.SW.Mort <- VarDefs.SW.Mort %>% rename(SW.Mort = Value)
+
+CFB.Mort.Plot <- cbind(VarDefs.SW.CFB,VarDefs.SW.Mort$SW.Mort) 
+colnames(CFB.Mort.Plot)[9] <- c("SW.Mort")
+
+ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone,shape=SeverityClass))
+
+ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone))+facet_wrap(vars(SeverityClass)) + geom_abline(slope=1,intercept=0)
+```
+
+The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single set well-observed high severity fires in the Taiga Plains by [@santín2015].
+
+```{r tab-ReSproutByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-ReSproutByEcozone}"}
+
+#subset to just the variable of interest:
+VarDefs.HW.ReSprout <- VarDefs[VarDefs$Variable.Name == "HW.ReSprout" & VarDefs$SeverityClass == "Mod",]
+
+VarDefs.dt.HW.ReSprout <- as.data.table(VarDefs.HW.ReSprout)
+
+HW.ReSprout.wide <- dcast(VarDefs.dt.HW.ReSprout,Ecozone~SeverityClass,value.var = "Value")
+
+HW.ReSprout.wide <- HW.ReSprout.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
+
+kbl(HW.ReSprout.wide, caption = "Ecozone-level average fraction of hardwood overstory species that do not suffer extensive belowground biomass mortality after fire.", col.names = c("Ecozone", "Resprout Fraction"),digits = c(2)) %>%
+  kable_minimal()#  %>%
+          #kable_styling(latex_options = "scale_down") %>%
+  #kable_styling(latex_options = "hold_position")
+```
+
+A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (see Appendix E) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality equal precisely to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Though spatially explicit versions of CBM-CFS3 can resolve a species list down to the pixel level, currently an ecozone-level regional average composition of hardwood species with resprouting traits is used and is shown in Table \ref{tab:tab-ReSproutByEcozone}.
+
+The fraction of fine roots contained within the combustible forest floor layers (SW.Prop.Fine.Root.duff) can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. Fine root allocation is between the organic soil (termed "Aboveground" or AG in CBM-CFS3 vs "belowground" or BG for mineral soils) is a parameter that can be RU level and is distinct for hardwoods (HW) vs softwoods (SW). As a result, the calculation for softwood fine root consumption and mortality rate (SW.Mort) are as follows, using softwood as an example:
+
+```{=tex}
+\begin{equation}
+SWFineRootConsump = SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
+\end{equation}
+```
+```{=tex}
+\begin{equation}
+SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
+\end{equation}
+```
+```{=tex}
+\begin{equation}
+SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
+\end{equation}
+```
+In contrast, the larger diameter of the coarse root biomass pool prevents its consumption during any smouldering of the duff layer, and the mortality rate of coarse roots is simply proportional to that of the stemwood overall.
+
+### Understory tree mortality and consumption
+
+Understory (or small diameter overstory) tree mortality is defined separately in the model, but given the lack of data on diameter classes in the severity data, robust field data on differing mortality rates of smaller diameter trees is not available, and so the understory tree mortality rate is set equal to the overstory rate as defined in the table above. Note that trees with a top height less than 1.4 m are not considered in this pool, and instead are lumped into the "other" pool.
+
+### Litter layer area-wise consumption by severity class
 
 ```{r tab-UnBurnedForestFloorByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-UnBurnedForestFloorByEcozone}"}
 
@@ -308,6 +410,24 @@ kbl(Unburned.Litter.wide, caption = "Unburned litter area by ecozone and severit
 ```
 
 The litter layer forms the first biomass pool in which a spreading fire consumes fuel. In low-severity fires, the litter layer may be consumed little to no underlying duff material consumed, nor any tree mortality [@hessburg2019]. Logically, since litter consumption is largely required for the ignition of the underlying duff layer, this litter area-wise fractional consumption also informs and constrains duff consumption. Unburned litter area from CBI plots summarized by severity class and ecozone is given in Table \ref{tab:tab-UnBurnedForestFloorByEcozone}.
+
+### Snag and stump consumption
+
+Dead standing trees and branches on average is a biomass pool much smaller than organic soils or coarse woody debris on the ground, but in areas of extensive insect killed trees, recent fires, and blowdown, is a substantial biomass pool. In this initial algorithm description, only typical boreal forest stands where snags are a small fraction of total stems are considered. Compared to live stemwood of the same diameter, the low moisture content of snags and snag branches allows for much greater consumption during the passage of an intense flaming front [@stocks2004]. The snag branch pool experiences almost complete combustion in high severity fires [@talucci2019], and is highly correlated with live foliage consumption (i.e Crown Fraction Burned) [@degroot2022]. The largest biomass pool of the main standing dead stemwood remains at most approximately 50-60% consumed. In the absence of extensive field data from CBI plots to quantify snag and snag branch consumption, snag (dead stemwood) consumption fraction is estimated as:
+
+```{=tex}
+\begin{equation}
+Snag Consumption fraction = \left( 0.5 \times Crown Fraction Burned \right) + 0.05
+\end{equation}
+```
+And for snag branches:
+
+```{=tex}
+\begin{equation}
+Snag Branch Consumption = \left( 0.9 \times Crown Fraction Burned \right)
+\end{equation}
+```
+Stumps are tracked as part of the Other pool in CBM-CFS3. As they are typically in contact with the upper forest floor, they are assumed to be consumed at the same rate as coarse woody debris.
 
 ## Forest Floor Consumption
 
@@ -751,131 +871,6 @@ Limited data is available on the fraction of woody debris consumption alongside 
 
 Note that where historical burn severity data is not available, the fire classification type of surface, intermittent crowning, and active crown fire are used instead as proxies for low, moderate, and high severity fire, respectively. Fine woody debris \<0.5 cm in diameter is consumed at the exact same rate as the litter pool (see section above).
 
-## Drivers of C losses in the tree canopy
-
-### Overstory tree mortality and consumption
-
-```{r tab-MortByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-MortByEcozone}"}
-
-#subset to just the variable of interest:
-VarDefs.SW.Mort <- VarDefs[VarDefs$Variable.Name == "SW.Mort",]
-
-VarDefs.dt <- as.data.table(VarDefs.SW.Mort)
-
-SW.Mort.wide <- dcast(VarDefs.dt,Ecozone~SeverityClass,value.var = "Value")
-
-SW.Mort.wide <- SW.Mort.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
-
-kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as derived from median values from field studies") %>%
-  kable_minimal()#  %>%
-          #kable_styling(latex_options = "scale_down") %>%
-  #kable_styling(latex_options = "hold_position")
-```
-
-Numerous process-driven [@michaletz2006] or empirical [@hood2017] tree mortality models are present and show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread). Since the driving data in this model is satellite-derived fire severity over the landscape scale, fire behaviour metrics such as flame length or scorching height of bark are not available as a continuous mapped product. Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity using aggregated ground plot data (Table \ref{tab:tab-MortByEcozone}).
-
-And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirety of the live stemwood biomass pool that is killed is transferred to the snag pool. Note that the field data and disturbance modelling undertaken here only accounts for tree mortality within the calendar year of the fire, and delayed mortality of over one year has been documented in boreal low and moderate severity fires [@angers2011]where less than half of total mortality occurs after the year of the fire. Thus, the modelling here does not account for delayed mortality that may extend upwards of 5 years after fire.
-
-Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the axioms stated earlier, the CFB must be lower than or equal to the mortality rate, using field studies that show any partial crown consumption is likely sufficient to result in high rates if not complete mortality [@hood2017], which is the case in Canada's trees with primarily thin bark. Due to the structure of CBM-CFS3, all High Severity fires have their mortality in the merchantable and smaller trees set to exactly 1.0, which is no more than a 5% variance from observed values. Ecozone-specific CFB values from field studies of burn severity are summarized in Table \ref{tab:tab-CFBByEcozone}.
-
-```{r tab-CFBByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-CFBByEcozone}"}
-
-#subset to just the variable of interest:
-VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",]
-
-VarDefs.dt.SW.CFB <- as.data.table(VarDefs.SW.CFB)
-
-SW.CFB.wide <- dcast(VarDefs.dt.SW.CFB,Ecozone~SeverityClass,value.var = "Value")
-
-SW.CFB.wide <- SW.CFB.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
-
-kbl(SW.CFB.wide, caption = "Softwood crown fraction burned by ecozone, as derived from median values from field studies in each ecozone.") %>%
-  kable_minimal()#  %>%
-          #kable_styling(latex_options = "scale_down") %>%
-  #kable_styling(latex_options = "hold_position")
-```
-
-```{r CFBvsMortPlotNOTRUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-### this plot doesn't show too much other than the low severity areas where Mort > CFB
-
-# gather VarDefs so that you have ecozone and then columns for SW Mort and SW CFB
-
-VarDefs.SW.CFB <- VarDefs[VarDefs$Variable.Name == "SW.CFB",] 
-
-VarDefs.SW.CFB <- VarDefs.SW.CFB %>% rename(SW.CFB = Value)
-VarDefs.SW.Mort <- VarDefs.SW.Mort %>% rename(SW.Mort = Value)
-
-CFB.Mort.Plot <- cbind(VarDefs.SW.CFB,VarDefs.SW.Mort$SW.Mort) 
-colnames(CFB.Mort.Plot)[9] <- c("SW.Mort")
-
-ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone,shape=SeverityClass))
-
-ggplot(CFB.Mort.Plot,aes(SW.Mort,SW.CFB))+geom_jitter(aes(color=Ecozone))+facet_wrap(vars(SeverityClass)) + geom_abline(slope=1,intercept=0)
-```
-
-The consumption of live bark biomass is a pool in the model, and consumption rates can be defined by severity class. At the moment, lacking robust field data on bark biomass consumption rates across ecozones and severity classes (which are a small portion of the overall biomass), the bark proportional consumption rate is set to 34% of the overstory mortality rate, based only on a single set well-observed high severity fires in the Taiga Plains by [@santín2015].
-
-```{r tab-ReSproutByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-ReSproutByEcozone}"}
-
-#subset to just the variable of interest:
-VarDefs.HW.ReSprout <- VarDefs[VarDefs$Variable.Name == "HW.ReSprout" & VarDefs$SeverityClass == "Mod",]
-
-VarDefs.dt.HW.ReSprout <- as.data.table(VarDefs.HW.ReSprout)
-
-HW.ReSprout.wide <- dcast(VarDefs.dt.HW.ReSprout,Ecozone~SeverityClass,value.var = "Value")
-
-HW.ReSprout.wide <- HW.ReSprout.wide[order(factor(Ecozone,levels = as.matrix(ecozones.list)))]
-
-kbl(HW.ReSprout.wide, caption = "Ecozone-level average fraction of hardwood overstory species that do not suffer extensive belowground biomass mortality after fire.", col.names = c("Ecozone", "Resprout Fraction"),digits = c(2)) %>%
-  kable_minimal()#  %>%
-          #kable_styling(latex_options = "scale_down") %>%
-  #kable_styling(latex_options = "hold_position")
-```
-
-A major distinction is made between softwood and hardwood trees, where in Canada's boreal forests, a large fraction of hardwood trees (see Appendix E) are able to resprout even when the main stem has been killed by an intense forest fire [@brown1987]. Accordingly, the root mortality rates differ greatly between softwoods and hardwoods, with softwood root mortality equal precisely to stem mortality, while in resprouting hardwoods, little root mortality is observed even after intense fire [@pérez-izquierdo2019]. Though spatially explicit versions of CBM-CFS3 can resolve a species list down to the pixel level, currently an ecozone-level regional average composition of hardwood species with resprouting traits is used and is shown in Table \ref{tab:tab-ReSproutByEcozone}.
-
-Concurrently, the fraction of fine roots contained within the combustible forest floor layers can be a close to or exceeding 50% of the fine root biomass [@strong1985], and burns alongside the organic soils [@benscoter2011]. As a result, the calculation for softwood fine root consumption and mortality are as follows, using Softwood (SW) as an example:
-
-```{=tex}
-\begin{equation}
-SWFineRootConsump = SW.Mort \times SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation}
-```
-```{=tex}
-\begin{equation}
-SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times + \\
-(1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{equation}
-```
-```{=tex}
-\begin{equation}
-SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
-\end{equation}
-```
-In contrast, the larger diameter of the coarse root biomass pool prevents its consumption during any smouldering of the duff layer, and the mortality rate of coarse roots is simply proportional to that of the stemwood overall.
-
-### Understory tree mortality and consumption
-
-Understory (or small diameter overstory) tree mortality is defined separately in the model, but given the lack of data on diameter classes in the severity data, robust field data on differing mortality rates of smaller diameter trees is not available, and so the understory tree mortality rate is set equal to the overstory rate as defined in the table above. Note that trees with a top height less than 1.4 m are not considered in this pool, and instead are lumped into the "other" pool.
-
-### Snag and stump consumption
-
-Dead standing trees and branches on average is a biomass pool much smaller than organic soils or coarse woody debris on the ground, but in areas of extensive insect killed trees, recent fires, and blowdown, is a substantial biomass pool. In this initial algorithm description, only typical boreal forest stands where snags are a small fraction of total stems are considered. Compared to live stemwood of the same diameter, the low moisture content of snags and snag branches allows for much greater consumption during the passage of an intense flaming front [@stocks2004]. The snag branch pool experiences almost complete combustion in high severity fires [@talucci2019], and is highly correlated with live foliage consumption (i.e Crown Fraction Burned) [@degroot2022]. The largest biomass pool of the main standing dead stemwood remains at most approximately 50-60% consumed. In the absence of extensive field data from CBI plots to quantify snag and snag branch consumption, snag (dead stemwood) consumption fraction is estimated as:
-
-```{=tex}
-\begin{equation}
-Snag Consumption fraction = \left( 0.5 \times Crown Fraction Burned \right) + 0.05
-\end{equation}
-```
-And for snag branches:
-
-```{=tex}
-\begin{equation}
-Snag Branch Consumption = \left( 0.9 \times Crown Fraction Burned \right)
-\end{equation}
-```
-Stumps are tracked as part of the Other pool in CBM-CFS3. As they are typically in contact with the upper forest floor, they are assumed to be consumed at the same rate as coarse woody debris.
-
 ```{r loadVarDefsSourceSink, echo=FALSE,message=FALSE, warning=FALSE}
 
 #list of ecozone-specific terms (with and without severity dependence)
@@ -1281,8 +1276,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 24 & Sourc
 #Source: SW fine roots
 #sink: CO2
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(fraction of duff consumed)
-#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
+#Pseudocode:  =(fine root fraction in organic soil)*(fraction of duff consumed)
+#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here. Note that here the initial DM uses a fixed ecozone FFFC$Duff.consump.frac, but later on this value is replace with a BUI-specific value via the CalcFFFC function.
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
 
@@ -1295,7 +1290,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 25 & Sourc
 #Source: SW fine roots
 #sink: CH4
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
@@ -1310,8 +1305,8 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 26 & Sourc
 #Source: SW fine roots
 #sink: CO
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
-#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to SW mortality (since you can burn off roots and not actually kill the tree, to a point)
+#Pseudocode:  =(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
 
@@ -1580,7 +1575,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 51 & Sourc
 #Source: HW fine roots
 #sink: CO2
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to HW mortality (since you can burn off roots and not actually kill the tree, to a point)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 52 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO2
@@ -1594,7 +1589,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 52 & Sourc
 #Source: HW fine roots
 #sink: CH4
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to HW mortality (since you can burn off roots and not actually kill the tree, to a point)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 53 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCH4
@@ -1609,7 +1604,7 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 53 & Sourc
 #Source: HW fine roots
 #sink: CO
 #PLS: Fine roots combusted in duff
-#Pseudocode:  =(conifer mortality rate)*(fine root fraction in organic soil)*(1-fraction of duff consumed)
+#Pseudocode:  =(fine root fraction in organic soil)*(1-fraction of duff consumed)
 #notes: since this is solely based on FFFC fraction, which isn't itself severity driven, there's no severity gradient in here.  Note also no relation to HW mortality (since you can burn off roots and not actually kill the tree, to a point)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 54 & SourceSink$SeverityClass == 'Low'] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == ecozone]*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone])) * global.vars$SmoulderingCO
@@ -2852,7 +2847,7 @@ Fire_2014_WB_028 <- EmissionsPerFire(ID="Fire_2014_WB_028",Area_ha = 60000,EcoBo
 
 ```
 
-```{r Ternary_plots, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r Ternary-plots, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #https://cran.r-project.org/web/packages/Ternary/vignettes/Ternary.html
 
 #will need to label each DM endpoint as one of "live", "DOM", "emissions"
@@ -2947,7 +2942,7 @@ emissions_grid_out <- emissions_grid_out %>% filter(EcoBoundaryName_select != "H
 
 ```
 
-```{r emissions_grid_ratios-DO-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r emissions-grid-ratios-DO-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 ###ad-hoc code to support the results section on direct fire emissions.  Code works fine, but not directly linked to graphics, tables, or text, so not running it here.
 

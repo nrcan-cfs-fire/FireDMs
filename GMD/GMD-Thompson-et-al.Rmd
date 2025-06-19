@@ -3420,42 +3420,6 @@ kbl(Model_comp_Emissions_2023_table,align="c",caption="Comparison of total carbo
 
 ```
 
-```{=html}
-<!--
-
-{r ternary-severity-plots, eval=FALSE, fig.cap="Fire locations total emissions, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, with point location colourized by a ternary colour scheme for the relative area fraction of low, moderate, and high severity fire", fig.height=7}
-
-## will need to give names to figures "fig.cap="\\label{fig:myfig}Rest of caption" see https://stackoverflow.com/questions/33324162/knitr-refer-to-a-figures-with-a-link
-
-
-AnnualEmissionsSummary_filterG10k <- AnnualEmissionsSummary %>% filter(Area_ha>10000)
-#NBAC2023_filterG10k <- NBAC2023 %>% filter(ADJ_HA>10000)
-tric <- Tricolore(AnnualEmissionsSummary_filterG10k, p1 = 'High_frac', p2 = 'Low_frac', p3 = 'Mod_frac')
-
-rgb <- tric$rgb
-
-AnnualEmissionsSummary_filterG10k <- cbind(AnnualEmissionsSummary_filterG10k,rgb)
-
-
-
-#ggtern(data=AnnualEmissionsSummary_filterG10k,aes(Low_frac,High_frac,Mod_frac))+geom_mask()+geom_point(aes(colour=EcoBoundaryName,alpha=0.3,size=log(ADJ_HA)))+ theme_rgbw() + Tlab("High") + Llab("Low") + Rlab("Mod")
-
-##no ecozones but tricolour plot
-
-## could also do a multi-plot by ecozone or size class: https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggtern/ggtern.multi/
-
-#### but here's a point map of the xy coordinates using the ternary colour plot
-
-ReportingUnits <- vect("~/nrcan-cfs-fire/FireDMs/NationalReportingUnits.gpkg")
-AnnualEmissionsSummary_filterG10k <- vect(AnnualEmissionsSummary_filterG10k, geom=c("X", "Y"), crs="epsg:4326", keepgeom=FALSE)
-
-
-ggplot() +geom_spatvector(data=ReportingUnits,fill=NA) + geom_spatvector(data=AnnualEmissionsSummary_filterG10k,aes(alpha = 0.4,colour = as.character(rgb),size = log(SumC_direct_emissions)), show.legend = F) + scale_colour_identity() + annotation_custom(ggplotGrob(tric$key),xmin = -91826, xmax = 3080165, ymin = 1336920, ymax = 3978876) + theme(legend.title = element_blank())
-
-
-
--->
-```
 A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The area-weighted mean Buildup Index for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_BUI, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing severe but not uniformly exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}` t C/ha, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low drought conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.95,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
 
 Comparison of emissions totals against the NIR is only possible for spatial units (i.e. Reconciliation Units, provinces, or ecozones) where the entire RU is composed of managed forest. In British Columbia, across 2.2 Mha burned, this FireDMs approach estimates were consistently lower than NIR. This was driven by a lower average emissions in FireDMs for both the Taiga Plains with 1.3 Mha burned (124 t CO2e/ha) and Montane Cordillera with 0.68 Mha burned (127 t CO2e/ha) as compared to the NIR (161 and 189 t CO2e/ha, respectively). For Alberta the 1.5 Mha of Boreal Plains ecozone burned showed close agreement (155 vs 163) as well as in the Taiga Plains (130 vs 144). The Taiga Plains fires of both Alberta and British Columbia were largely adjacent, and the FireDMs output was very similar (123 vs 129) across nearly identical moderate and high severity fractions, but the NIR showed a larger contrast (144 vs 161) that may originate from the underlying assumptions of the previous methods of calculating fire emissions in the NIR.
@@ -3583,13 +3547,11 @@ where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in 
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE synthesis was combined with wildfire data from de Groot et al 2009 not otherwise found in the ABoVE synthesis. The ABoVE synthesis sites in the Alaska Boreal Interior ecoregion, which have equivalent Canadian ecozone were excluded due to the presence of continuous permafrost and deep organic soils, but Alaska Boreal Cordillera sites near the Yukon border were utilized. Experimental fire data from the FBP data was not used, as deeper combustion measurements resulting from hours and days of smouldering combustion captured in wildfire data are not available in experimental fires where extensive smouldering is not measured due to suppression.
 
-<!-- In order to best represent on-the-ground Fire Weather Index values, the Drought Code and other FWI values from Walker et al 2020 reanalysis were substituted with interpolated weather station (both Environment and Climate Change Canada as well fire agency stations). This data also has the benefit of being properly overwintered for Drought Code (Hanes DC overwinter) and capturing small rain events not captured in reanalysis that meaningfully impact the Duff Moisture Code in particular. -->
-
 For the purposes of improving national estimates of the fractional soil organic layer loss during wildfire, this framework emphasizes the proportional C stock loss (as with all CBM-CFS3 disturbance matrices) rather than the absolute value of combustion. In contrast to the modelling of absolute combustion value, any analysis of proportions is best conducted as logit- transformed data, where the logit transformation is:
 
 ```{=tex}
 \begin{equation}
-logit(p) = log\frac{p}{1-p}
+logit(p) = log \frac{p}{1-p}
 \end{equation}
 ```
 which effectively transforms a data of proportions of [0,1] to a Gaussian distribution with a range of approximately -5 to +5 (in this dataset), and a mode approximately at zero.
@@ -3600,7 +3562,7 @@ In the abstract, the model follows the form:
 
 ```{=tex}
 \begin{equation}
-logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  BUI)})] + (b \times log_{e}(AGSlow))
+logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  BUI)})] + (b log_{e}(AGSlow))
 \end{equation}
 ```
 with fitted parameters as:
@@ -3616,7 +3578,7 @@ The a parameter term that forms the exponent of e alongside the Buildup Index is
 
 For example, using a moderately thick \~12 cm thick organic soil layer, the proportion of consumption as a function of Buildup Index using the model above:
 
-```{r example-FFFC-vs-DC-plot-nls, echo=FALSE, fig.cap="Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C/ha (12 kg/m2)", message=FALSE, warning=FALSE}
+```{r example-FFFC-vs-DC-plot-nls, echo=FALSE, fig.cap="Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C ha-1 (12 kg m-2)", message=FALSE, warning=FALSE}
 
 ###just show a single (or multiple?) FFFL values here but DC on the x-axis, consumption on the y-axis:
 

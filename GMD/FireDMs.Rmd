@@ -437,7 +437,9 @@ Note that where historical burn severity data from experimental fires is not ava
 
 ## Forest Floor Consumption
 
-While consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given fire intensity, consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more drought dependent. In the fire literature in Canada, the soil organic layer is sometimes termed the Forest Floor Fuel Load (*FFFL*) [@letang2012] and is dominated by the equivalent organic soil Slow pool (Aboveground Slow Dead Organic Matter, or AGSlowDOM) in CBM-CFS3 Typically attention has been paid to the absolute value of Forest Floor Fuel Consumption (*FFFC*); however in the case of carbon modelling, it is the relative fraction of consumption (*FFFC/FFFL*) that is of interest. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data [@walker2020], with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than directly modelling an absolute value in kg m^-2^ or cm as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
+Unlike canopy consumption metrics that are reliably estimated via burn severity remote sensing, the depth and magnitude of consumption in the forest floor is only weakly related to burn severity metrics, since increasing burn depth in organic soils typically yields little spectral response in remote sensing imagery [@frenchQuantifyingSurfaceSeverity2020]. Furthermore, there is at times a temporal disconnect between consumption in the canopy and the forest floor, with lower-intensity surface fires with a flaming residence time of a minute or less [@wottonFlameTemperatureResidence2011] without canopy involvement at times leading to deep smouldering occurring over hours to days afterwards [@hudaStudyFuelSmokeDynamics2020; @huangDownwardSpreadSmouldering2017]. Consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given surface fire intensity [@vanwagnerDuffConsumptionFire1972], consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more dependent on the interaction between moisture content of the soil organic layer and depth of the organic soil [@forestrycanadafiredangerratinggroup1992; @daviesVegetationStructureFire2016]. While the moisture content of the soil organic layer is not directly observable nor parameterized in Numerical Weather Model [@hanesEvaluationNewMethods2023], it is well-estimated by via simple water balance models within the Canadian Fire Weather Index System [@vanwagnerDevelopmentStructureCanadian1987] the Drought Code and Duff Moisture Code, as well as their composite, the Buildup Index. Given this lack of direct observability of forest floor consumption, this model uses fire weather and fuel loading as inputs to the forest floor consumption model, without consideration of the remotely sensed fire severity observations used in canopy consumption modelling.
+
+In the fire literature in Canada, the soil organic layer is sometimes termed the Forest Floor Fuel Load (*FFFL*) [@letang2012] and is dominated by the equivalent organic soil Slow pool (Aboveground Slow Dead Organic Matter, or AGSlowDOM) in CBM-CFS3. Historically, attention has been paid to the absolute value of Forest Floor Fuel Consumption (*FFFC*) [@forestrycanadafiredangerratinggroup1992; @degrootForestFloorFuel2009]; however in the case of carbon modelling, it is the relative fraction of consumption (*FFFC/FFFL*) that is of interest. Given the strong empirical evidence that the amount of organic soil present strongly influences the absolute and relative combustion rates [@walkerFuelAvailabilityNot2020], modelling of forest floor consumption was conducted on field measurements of the relative fraction of organic soil consumption. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data [@walker2020], with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than directly modelling an absolute value in kg m^-2^ or cm as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
 ```{=tex}
 \begin{equation}
@@ -3328,7 +3330,12 @@ AnnualEmissionsSummary_table$unit_id[AnnualEmissionsSummary_table$unit_id==18] <
 AnnualEmissionsSummary_table$admin_name[AnnualEmissionsSummary_table$unit_id==32] <- "AB+MB+SK"
 AnnualEmissionsSummary_table$unit_id[AnnualEmissionsSummary_table$unit_id==32] <- "32+21+26"
 
-ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name)) +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours)+xlim(0,225)+ylim(0,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average")
+##revise colour scheme to only smaller subset of ecozones, so no AM, no MP or SeP SuP or SA
+
+ecozones_colours_trunc <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#b15928","#7d8b8f", "#c1c1c1","brown")
+
+
+ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name)) +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(0,225)+ylim(0,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average")
 
 ## +geom_text_repel(data=AnnualEmissionsSummary_table[1:10,]) to only label the 10 largest RUs
 
@@ -3541,9 +3548,9 @@ with fitted parameters as:
 logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.50 (1 - e^{(-0.008 BUI)})] + (-0.53 log_{e}(AGSlow))
 \end{equation}
 ```
-Note the "b" coefficient on the parameter associated with the FFFL (AGSlow) of -0.53, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by Walker 2018 for NWT fires of 2014.
+Note the "b coefficient on the parameter associated with the forest floor fuel load (AGSlow) of -0.53, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by @walkerCrossscaleControlsCarbon2018 for NWT fires of 2014.
 
-The a parameter term that forms the exponent of e alongside the Buildup Index is related to the BUI value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value). The NLS fitting was given a minimum value of -0.008 such that a 50% consumption rate was modelled as occurring at or around a BUI value of 70 for typical upland spruce forest floor (FFFL of 8 kg/m2 or AGSlow of 40 t C/ha) following the wildfire data of de Groot et al 2008 as well as experimental fire observations in spruce forests from the FBP System. The other parameters were fit to the best possible value with no constraint.
+The a parameter term that forms the exponent of *e* alongside the Buildup Index is related to the BUI value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value). The NLS fitting was given a minimum value of -0.008 such that a 50% consumption rate was modelled as occurring at or around a BUI value of 70 for typical upland spruce forest floor (FFFL of 8 kg/m2 or AGSlow of 40 t C/ha) following the wildfire data of @degrootForestFloorFuel2009 as well as experimental fire observations in spruce forests from the FBP System. The other parameters were fit to the best possible value with no constraint.
 
 For example, using a moderately thick \~12 cm thick organic soil layer, the proportion of consumption as a function of Buildup Index using the model above:
 
@@ -3824,20 +3831,15 @@ ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL
 ##weighted-mean BUI of spread by year and ecozone
 
 ##not run, loaded in below
-##CFSDB_summary <- Firegrowth_groups_v1_01 %>% group_by(ecozone,year) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
+##CFSDB_summary <- Firegrowth_groups_v1_1_4June25 %>% group_by(ecozone,year) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
 
 CFSDB_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.csv")
 
 #CFSDB_summary_ecozone <- Firegrowth_groups_v1_01 %>% group_by(ecozone) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
 
 
-##not run, instead read in below:
-#Airborne_summary <- Firegrowth_groups_v1_01 %>% filter(year==2008) %>% filter(DOB==186) %>% filter(ecozone ==6) %>% summarise(mean_bui = mean(bui))
 
-Airborne_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/Airborne_summary.csv")
-### this is used above but hard-coded in
-
-###Load annual hotspot median BUI by ecozone (via Quinn Barber and CFSDB)
+###Load in legacy file with ecozone names cross-referenced with ecozone numbers from CFSDB
 DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
 
 ecozones.unique <- DC.year %>% group_by(Ecozone) %>% summarize(EcoID = mean(ECOZONE),FFFL = mean(Median.Forest.Floor.Load.kg.m2)) 
@@ -3870,6 +3872,8 @@ CFSDB_summary$Duff.consump.kg.m2[i] <- CFSDB_summary$Duff.consump.frac[i]*CFSDB_
 }
  
 
+CFSDB_summary <- CFSDB_summary %>% filter(!is.na(Ecozone)) %>% filter(Ecozone != "SA") %>% filter(Ecozone != "P")
+
 ###if we want, can also query the annual area burned by ecozone by year, then compute it all up from there to get some mass amount
   
 
@@ -3878,9 +3882,12 @@ CFSDB_summary$Duff.consump.kg.m2[i] <- CFSDB_summary$Duff.consump.frac[i]*CFSDB_
 
 ```{r AnnualDC-Vis-BUI50, fig.cap="Annual variability in area-weighted median BUI of active fire spread days by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
  
+ecozones_colours_trunc_w_PM <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#cab2d6","#b15928","#7d8b8f", "#c1c1c1","brown")
+
+
    ### the graphs, all time series: (1) annual DC by year; (2) absolute consumption values by year; (3) fractional consumption values by year; (4) will add in burned area by ecozone by year eventually too
 
-ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme(legend.position="none")
+ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM)+ylim(0,200)
   
   
   #
@@ -3889,20 +3896,21 @@ ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_
 
 ```
 
-```{r AnnualDC-Vis-Consump, fig.cap="Annual variability in forest floor median consumption values by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
+```{r AnnualBUI-Vis-Consump, fig.cap="Annual variability in forest floor median consumption values by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
 
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +
-  theme(legend.position="none") 
+ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8)
   
 #+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + 
 
 ```
 
-```{r AnnualDC-Vis-frac, fig.cap="Annual variability in forest floor median consumption values by ecozone, given as a fraction of the total pre-fire forest floor biomass pool.", eval=FALSE, fig.height=3, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
+```{r AnnualBUI-Vis-frac, fig.cap="Annual variability in forest floor proportional consumption by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
  
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone))+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + geom_line() + ylab("Modelled duff consumption proportion") + theme(legend.position="none")
+ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1)
+
+
 
 ```
 

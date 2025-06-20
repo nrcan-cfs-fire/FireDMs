@@ -45,10 +45,10 @@ output:
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
   pdf_document: default
-abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix-severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas fluxes in the immediate aftermath of fires. The sub-model also quantifies fire-killed by uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields CO2e emissions that are 10-20 percent higher than this new method, owing to lower overall canopy consumption with mixed fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
+abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large and increasing evidence base of widespread mixed-severity wildfire. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix-severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas fluxes in the immediate aftermath of fires. The sub-model also quantifies fire-killed by uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10-25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
-  title: Fire Severity and Canadian Forest Carbon Budget Models
+  title: Fire Severity and Canadian Forest GHG Reporting
   author: Thompson et al.
 competinginterests: The authors declare no competing interests.
 copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is distributed under the Creative Commons Attribution 4.0 License.
@@ -103,6 +103,7 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(tidyterra)
 library(ggtern)
+library(ggpubr)
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -3040,7 +3041,7 @@ emissions_grid_out_plot$EcoAdmin <- case_match(emissions_grid_out_plot$EcoAdmin,
                                           "Taiga Shield West Northwest Territories" ~ "TSW NT")
 
 
-ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + ylab("Direct emissions from wildfire\n(t C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5))# + geom_point(aes(x=Median_BUI,y=Prop_surface*100))
+ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_bw() + ylab("Direct emissions from wildfire\n(t C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) +  scale_x_continuous(guide = guide_axis(n.dodge = 2)) + ylim(0,100) + theme(panel.grid.minor = element_blank()) + theme(strip.background = element_rect(colour = "black", fill = "white"))
 ```
 
 ```{r GWP-adjusted-total-C-plot-NOT-READY, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
@@ -3111,7 +3112,7 @@ library(ggnewscale)
 
 ##label the ecozones by % of CNFDB area burned 1980-2024?
 
-ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + ylab("Direct emissions from wildfire\n(Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning")  + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold"),guide = "none") + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) + ggnewscale::new_scale_color() +  geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=CFB,shape=FuelType)) + theme(legend.position="bottom") + scale_colour_steps2()
+ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_classic2() + ylab("Direct emissions from wildfire\n(Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning")  + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold"),guide = "none") + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) + ggnewscale::new_scale_color() +  geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=CFB,shape=FuelType)) + theme(legend.position="bottom") + scale_colour_steps2() 
 
 
 ### colourize the FBP data points by CFB.  Note in the legend the CFB approximations for severity classes
@@ -3300,7 +3301,7 @@ sum(AnnualEmissionsSummary$CO2e_Mg,na.rm=TRUE)/sum(AnnualEmissionsSummary$Area_h
 
 ```
 
-```{r Emissions-2023-by-RU,fig.cap="Comparison of CO2e emissions per hectare between this method at the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.", echo=FALSE, message=FALSE, warning=FALSE}
+```{r Emissions-2023-by-RU,fig.cap="Comparison of CO2e emissions per hectare between this method at the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.  The solid line is the 1:1 reference line, and the dashed line represents 25% deviation from a 1:1 relationship.", echo=FALSE, message=FALSE, warning=FALSE}
 
 #### emissions intensity per RU, compare this approach with NIR
 
@@ -3335,11 +3336,13 @@ AnnualEmissionsSummary_table$unit_id[AnnualEmissionsSummary_table$unit_id==32] <
 ecozones_colours_trunc <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#b15928","#7d8b8f", "#c1c1c1","brown")
 
 
-ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name)) +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(0,225)+ylim(0,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average")
+ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name))+ theme_classic2() +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(50,225)+ylim(50,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average") + geom_abline(intercept = 0,linetype = "dashed", slope = 0.750) + geom_abline(intercept = 0,linetype = "dashed", slope = 1.25)
+
+#ggplot(AnnualEmissionsSummary_table,aes(Avg_CO2e_ha,NIR2025Emissions_tCO2e_PerHa,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name))+ theme_classic2() +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(50,225)+ylim(50,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",y="NIR 2025 tCO2e per hectare average",x="This Study tCO2e per hectare average") + geom_abline(intercept = 0,linetype = "dashed", slope = 0.750) + geom_abline(intercept = 0,linetype = "dashed", slope = 1.25)
 
 ## +geom_text_repel(data=AnnualEmissionsSummary_table[1:10,]) to only label the 10 largest RUs
 
-colnames(AnnualEmissionsSummary_table) <- c("Jurisdiction","Ecozone","Reconciliation Unit","Area Burned (Mha)","Moderate Severity Fraction","High Severity Fraction","Emissions t C/ha","This Study Emissions t CO2e/ha","NIR 2025 Emissions tCO2e/ha")
+colnames(AnnualEmissionsSummary_table) <- c("Jurisdiction","Ecozone","Reconciliation Unit","Area Burned (Mha)","Moderate Severity Fraction","High Severity Fraction","Emissions t C/ha","This Study Emissions t CO2e/ha","NIR 2025 Emissions tCO2e/ha") 
 
 
 
@@ -3581,8 +3584,7 @@ FFFC.single.final.df <- cbind(buildup_index,AGSlow.Mg.C.ha,FFFC.single)
 
 colnames(FFFC.single.final.df)[3] <- c("prop_sol_c_combusted")
 
-ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line() + ylim(0,1) + ylab("Forest floor mass fraction consumed") + xlab("Buildup Index (BUI)")# + geom_point(data=subset(ABoVE_Data_w_FBP_excl_BC,AGSlow.Mg.C.ha>50 & AGSlow.Mg.C.ha<70)) + ylim(0,1)
-
+ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line() + ylim(0,1) + ylab("Forest floor mass fraction consumed") + xlab("Buildup Index (BUI)") + theme_classic2()
 ```
 
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
@@ -3664,10 +3666,10 @@ MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_F
 #MAE.nls/mean(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted,na.rm=TRUE)
 
 
+ecozones_colours_4 <- c("#fb9a99","#b2df8a","#7d8b8f","brown")
 
 
-
-ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss")
+ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
 ```
 
 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
@@ -3842,7 +3844,7 @@ CFSDB_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.csv")
 ###Load in legacy file with ecozone names cross-referenced with ecozone numbers from CFSDB
 DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
 
-ecozones.unique <- DC.year %>% group_by(Ecozone) %>% summarize(EcoID = mean(ECOZONE),FFFL = mean(Median.Forest.Floor.Load.kg.m2)) 
+ecozones.unique <- DC.year %>% group_by(Ecozone) %>% summarize(EcoID = mean(ECOZONE),FFFL = mean(Median.Forest.Floor.Load.kg.m2))  %>% filter(Ecozone != "southern arctic") %>% filter(Ecozone != "prairies")
 
 ###gotta join Firegrowth_groups_v1_01 to DC.year to get the ecozone names ported over:
 
@@ -3872,7 +3874,7 @@ CFSDB_summary$Duff.consump.kg.m2[i] <- CFSDB_summary$Duff.consump.frac[i]*CFSDB_
 }
  
 
-CFSDB_summary <- CFSDB_summary %>% filter(!is.na(Ecozone)) %>% filter(Ecozone != "SA") %>% filter(Ecozone != "P")
+CFSDB_summary <- CFSDB_summary %>% filter(!is.na(Ecozone)) 
 
 ###if we want, can also query the annual area burned by ecozone by year, then compute it all up from there to get some mass amount
   
@@ -3887,7 +3889,7 @@ ecozones_colours_trunc_w_PM <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1
 
    ### the graphs, all time series: (1) annual DC by year; (2) absolute consumption values by year; (3) fractional consumption values by year; (4) will add in burned area by ecozone by year eventually too
 
-ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM)+ylim(0,200)
+ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM)+ylim(0,200) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
   
   
   #
@@ -3899,7 +3901,7 @@ ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_
 ```{r AnnualBUI-Vis-Consump, fig.cap="Annual variability in forest floor median consumption values by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
 
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8)
+ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
   
 #+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + 
 
@@ -3908,7 +3910,8 @@ ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(
 ```{r AnnualBUI-Vis-frac, fig.cap="Annual variability in forest floor proportional consumption by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
  
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1)
+ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1) +
+  scale_x_continuous(guide = guide_axis(n.dodge = 2))
 
 
 

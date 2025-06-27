@@ -107,6 +107,8 @@ library(ggpubr)
 
 options(dplyr.summarise.inform = FALSE)
 
+###note you will need to install Latex via tinytex::install_tinytex()
+
 ##getting ready for renv
 #https://rstudio.github.io/renv/articles/renv.html
 ###run renv::restore() if in doubt, should auto-load everything

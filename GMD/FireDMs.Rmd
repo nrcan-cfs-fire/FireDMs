@@ -42,9 +42,9 @@ output:
     highlight: null
     keep_tex: true
   word_document: null
+  pdf_document: default
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
-  pdf_document: default
 abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large evidence base of widespread mixed-severity boreal wildfire. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas fluxes in the immediate aftermath of fires. The sub-model also quantifies fire-killed by uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10-25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
@@ -71,15 +71,15 @@ Of this, publicly-owned managed forest under long or short-term tenure accounts 
 
 Burned area in Canada is dominated by a relatively small number of very large fires, with 3% of fires constituting 97% of the burned area [@stocks2002]. Lightning-caused fires account for approximately half of all ignitions and approximately 80% of burned area, but no distinction is made between human and lightning ignition for forest sector GHG reporting purposes. Annual burned area mapping for GHG reporting in Canada is conducted using a composite of satellite and aerial mapping at 30 metre resolution; the relatively small number of large fires, and their slow vegetation regeneration [@white2017] allows for reliable mapping using multi-spectral imagery such as Landsat within one year of the fire [@whitman2018].
 
-Canada reports on GHG emission and removals from the forest sector in Canada’s National GHG Inventory Report (NIR). Carbon stocks and stock changes are modelled using CBM-CFS3 [@kurzCBMCFS3ModelCarbondynamics2009] parameterized and driven by spatial and non-spatial data describing forest inventory, annual yield and disturbance [@stinsonInventorybasedAnalysisCanadas2011]. Following international good practice guidance to focus on human-caused emissions in NIRs, Canada focuses emission reporting on managed forest lands, which make up approximately 225 ha of Canada’s 367 ha total forest area. In CBM-CFS3, forest inventory is represented by spatially referenced stand lists representing large homogeneous stands that fall within spatial units (e.g. forest management areas) and broad regions called Reconciliation Units (RU) that are the intersection of ecozones with provincial/territorial boundaries [@kurz2002]. Within CBM-CFS3 precisely mapped burned areas [@hall2020] are summarized at the level of spatial units and applied randomly to stands within that unit. Years with larger burned areas will improve the representative nature of random stands being assigned fire disturbance within a year, as a wider variety of stand types will be selected. Furthermore, large, drought-driven fire years such as 2023 have been observed to burn at more equal rates across the diversity of local ecosite flammability [@parks2018; @whitman2024] and thus provides an ideal test case for assessing changes in emissions estimates for a spatially referenced system. Importantly, these years with very large area burned still show a similar natural range in variability of burn severity [@whitman2018].
+Canada reports on GHG emission and removals from the forest sector in Canada’s National GHG Inventory Report (NIR). Carbon stocks and stock changes are modelled using CBM-CFS3 [@kurzCBMCFS3ModelCarbondynamics2009] parameterized and driven by spatial and non-spatial data describing forest inventory, annual yield and disturbance [@stinsonInventorybasedAnalysisCanadas2011]. Following international good practice guidance to focus on human-caused emissions in NIRs, Canada focuses emission reporting on managed forest lands, which make up approximately 225 Mha of Canada’s 367 Mha total forest area. In CBM-CFS3, forest inventory is represented by spatially referenced stand lists representing large homogeneous stands that fall within spatial units (e.g. forest management areas) and broad regions called Reconciliation Units (RU) that are the intersection of ecozones with provincial/territorial boundaries [@kurz2002]. Within CBM-CFS3 precisely mapped burned areas [@hall2020] are summarized at the level of spatial units and applied randomly to stands within that unit. Years with larger burned areas will improve the representative nature of random stands being assigned fire disturbance within a year, as a wider variety of stand types will be selected. Furthermore, large, drought-driven fire years such as 2023 have been observed to burn at more equal rates across the diversity of local ecosite flammability [@parks2018; @whitman2024] and thus provides an ideal test case for assessing changes in emissions estimates for a spatially referenced system. Importantly, these years with very large area burned still show a similar natural range in variability of burn severity [@whitman2018].
 
-CBM-CFS3 currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of the three severity classes (low, moderate, and high) used for assessing of burned forest in Canada [@hallRemoteSensingBurn2008] and the conterminous US [@parksNewMetricQuantifying2014]. Currently, biomass consumption estimates are based on the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the RU of annualized drought conditions. Quantification of the change in carbon stock in CBM-CFS3 is made via a “Disturbance Matrix” (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon (12 g/mol elemental carbon, not biomass units) between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM-CFS3, as well as an atmospheric sink pool. Importantly, unlike emissions-only fire models commonly used in air quality modelling in Canada [@chen2019], DM definitions in CBM-CFS3 also track the transfer of live biomass to dead, but still uncombusted pools, such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags.
+CBM-CFS3 currently assesses fire impacts to carbon pools only as representing high-severity fire, which is the most common of the three severity classes (low, moderate, and high) used for assessing of burned forest in Canada [@hallRemoteSensingBurn2008] and the conterminous US [@eidenshink2007]. Currently, biomass consumption estimates are based on the assumption of complete crown mortality, with additional biomass consumption following a spatially-referenced aggregated estimate at the RU of annualized drought conditions. Quantification of the change in carbon stock in CBM-CFS3 is made via a “Disturbance Matrix” (hereafter referred to as a DM) which is simply a matrix of the proportional mass flux of carbon (12 g/mol elemental carbon, not biomass units) between each pair of pools in the model for a site experiencing a given disturbance. This proportional mass flux is independent of the size of the C pool. Pools in the DM include all the above and below-ground pools tracked in CBM-CFS3, as well as an atmospheric sink pool. Importantly, unlike emissions-only fire models commonly used in air quality modelling in Canada [@chen2019], DM definitions in CBM-CFS3 also track the transfer of live biomass to dead, but still uncombusted pools, such as the transfer from live stemwood pools (which are killed but not burned) to standing deadwood, also known as snags.
 
-In Canada’s forests, a combination of disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1--100 ha), tree species composition plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests burn at rates more similar to older conifer stands during large drought-driven fire years [@parksNewMetricQuantifying2014], they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Thus, important local biases in fire activity and severity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when a uniform fire severity is applied.
+In Canada’s forests, a combination of climate, disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1--100 ha), tree species composition plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests burn at rates more similar to older conifer stands during large drought-driven fire years [@parksNewMetricQuantifying2014], they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Thus, important local biases in fire activity and severity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when a uniform fire severity is applied.
 
-To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@hall2020], this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux estimate via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices (DM) updated and designed for a planned, spatially-explicit update to the CBM-CFS3, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
+To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@guindon2014; @hall2020], this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux estimate via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices (DM) updated and designed for a planned, spatially-explicit update to the CBM-CFS3, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
 
-Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption across all DM components) have been used in valuable scenario exercises using a spatial explicit version of CBM-CFS3 for assessment of future fire and harvest scenarios[@smyth2022]. The algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada’s diverse ecozones.
+Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption across all DM components) have been used in valuable scenario exercises using a spatial explicit version of CBM-CFS3 for assessment of future fire and harvest scenarios [@smyth2022]. The algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada’s diverse ecozones.
 
 # Methods
 
@@ -104,8 +104,10 @@ library(rnaturalearthdata)
 library(tidyterra)
 library(ggtern)
 library(ggpubr)
-
+library(pandoc)
 options(dplyr.summarise.inform = FALSE)
+
+
 
 ###note you will need to install Latex via tinytex::install_tinytex()
 
@@ -123,11 +125,21 @@ options(dplyr.summarise.inform = FALSE)
 ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM","MP")
 ```
 
+```{r pandoc-custom-version-compile, eval=FALSE, include=FALSE}
+
+## was getting a pandoc error using pandoc 3.4, so using an older pandoc release:
+#see
+##https://bookdown.org/yihui/rmarkdown-cookbook/install-pandoc.html
+### use this to 
+pandoc::with_pandoc_version(
+  version = '3.2',
+rmarkdown::render('~/nrcan-cfs-fire/FireDMs/GMD/FireDMs.Rmd'))
+
+```
+
 ## Carbon Modelling
 
 ## Carbon Modelling Spatial Units
-
-Carbon reporting in Canada's forests is broken down by Reconciliation Unit (RU), which is the intersection of terrestrial ecozones and provincial/territorial boundaries, as shown in Figure \ref{fig:RU-map}. Forest carbon stocks in Canada are influenced by species composition, age class distribution, natural disturbance history, human-influenced management regime and climatic variables, among other factors, which are well-represented by the RU framework supporting Canada’s NIR. Due to the current spatial imprecision of certain key model data (e.g. deforestation rates), analysis finer than the RU-level tends to misrepresent regional-variation in emission estimates.
 
 ```{r RU-map, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -169,7 +181,7 @@ Canada_3978 <- sf::st_transform(Canada, 3978)
 
 ```
 
-```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig:RU-map}Reconciliation Units used in the CBM-CFS3 framework.", fig.width=6, message=FALSE, warning=FALSE}
+```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig:Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.", message=FALSE, warning=FALSE}
 ReportingUnits <- ReportingUnits %>% filter(eco_name != "arctic cordillera") %>% filter(eco_name != "northern arctic") %>% filter(eco_name != "southern arctic")
 
 ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1","brown")
@@ -188,7 +200,7 @@ ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),,show.legend
 
 ```
 
-## Biomass pools of the CBM-CFS3 Model
+Carbon reporting in Canada's forests is broken down by Reconciliation Unit (RU), which is the intersection of terrestrial ecozones and provincial/territorial boundaries, as shown in Figure \ref{fig:Fig1-RU-ecozones}. Forest carbon stocks in Canada are influenced by species composition, age class distribution, natural disturbance history, human-influenced management regime and climatic variables, among other factors, which are well-represented by the RU framework supporting Canada’s NIR. Due to the current spatial imprecision of certain key model data (e.g. deforestation rates), analysis finer than the RU-level tends to misrepresent regional-variation in emission estimates. \## Biomass pools of the CBM-CFS3 Model
 
 ```{r CBM-pools-simple-table,tab.cap="\\label{tab:CBM-pools-simple-table}", echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -271,9 +283,7 @@ CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emission
 
 ## Ground plot and remotely sensed fire severity data
 
-While remotely sensed fire severity metrics are capable of determining if a specific location falls within a low, moderate, or high severity fire area [@hall2008], remotely sensed fire severity metrics alone do not inform estimates of fuel consumption down to specific biomass pools. Instead, this approach uses the change in biomass pools as empirically related to per-pixel satellite spectral reflectance indices (i.e. dNBR, RBR), using detailed and semi-standardized methods of burn severity ground plots with unburned controls [e.g. @cockeComparisonBurnSeverity2005; @hall2008]. Burn severity ground plot measurements are often aggregated into a single "Composite Burn Index" with a weighting scheme originating in southwestern U.S. forests [@keyLandscapeAssessment2006; @parksGivingEcologicalMeaning2019], which are classed into low, moderate, and high severity categories. Plot level measurements of individual forest biomass pools (e.g. conifer overstory mortality or canopy consumption) are recorded as part of the CBI methodology. In this methodology we do not use the CBI aggregated metric itself to infer biomass consumption, but rather compilations of burn severity ground plot measurements that include all the individual biomass pool measurements. Individual burn severity plots were assigned a severity class based on ground observations, and an ecozone-level median biomass pool consumption fraction was computed for each severity class for each biomass pool (see Figure \ref{fig:Fig-CBI-ecozones-map}). For ecozones without ground plot measurements, an adjacent and ecologically similar ecozone with observations was used.
-
-```{r Fig-CBI-ecozones-map-chunk, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", out.width="75%", message=FALSE, warning=FALSE}
+```{r Fig-CBI-ecozones-map-chunk, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", fig.width=6, message=FALSE, warning=FALSE}
 
 #align with map colour scheme with others
 
@@ -281,6 +291,8 @@ knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CBIPlots_Canada_Ecozones.png")
 
 
 ```
+
+While remotely sensed fire severity metrics are capable of determining if a specific location falls within a low, moderate, or high severity fire area [@hall2008], remotely sensed fire severity metrics alone do not inform estimates of fuel consumption down to specific biomass pools. Instead, this approach uses the change in biomass pools as empirically related to per-pixel satellite spectral reflectance indices (i.e. dNBR, RBR), using detailed and semi-standardized methods of burn severity ground plots with unburned controls [e.g. @cockeComparisonBurnSeverity2005; @hall2008]. Burn severity ground plot measurements are often aggregated into a single "Composite Burn Index" with a weighting scheme originating in southwestern U.S. forests [@keyLandscapeAssessment2006; @parksGivingEcologicalMeaning2019], which are classed into low, moderate, and high severity categories. Plot level measurements of individual forest biomass pools (e.g. conifer overstory mortality or canopy consumption) are recorded as part of the CBI methodology. In this methodology we do not use the CBI aggregated metric itself to infer biomass consumption, but rather compilations of burn severity ground plot measurements that include all the individual biomass pool measurements. Individual burn severity plots were assigned a severity class based on ground observations, and an ecozone-level median biomass pool consumption fraction was computed for each severity class for each biomass pool (see Figure \ref{fig:Fig-CBI-ecozones-map}). For ecozones without ground plot measurements, an adjacent and ecologically similar ecozone with observations was used.
 
 The field survey data on biomass combustion and mortality rates as stratified by severity class, forms a improved data-driven and ecologically-informed approach to fire direct C emissions estimations here termed FireDMs (Fire Disturbance Matrix-severity).
 
@@ -303,11 +315,11 @@ kbl(SW.Mort.wide, caption = "Softwood fractional mortality by ecozone, as derive
   #kable_styling(latex_options = "hold_position")
 ```
 
-Numerous process-driven [@michaletz2006] or empirical [@hood2017] tree mortality models are present and show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread). Since the driving data in this model is satellite-derived fire severity over the landscape scale, fire behaviour metrics such as flame length or scorching height of bark are not available as a continuous mapped product. Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity using aggregated ground plot data (Table \ref{tab:tab-MortByEcozone}).
+Numerous process-driven [@michaletz2006] or empirical [@hood2017] tree mortality models are available that show significant skill in predicting tree mortality based on fire behaviour (i.e. flame length, rate of spread). Since the driving data in this model is mapped fire severity over the landscape scale, fire behaviour metrics such as flame length or scorching height of bark are not available as a continuous mapped product. Instead, softwood and hardwood overstory mortality is calculated per ecozone as a function of satellite-observed fire severity using aggregated ground plot data (Table \ref{tab:tab-MortByEcozone}).
 
 And since large-diameter, live trees killed by fire do not experience significant live stemwood consumption, the entirety of the live stemwood biomass pool that is killed is transferred to the snag pool. Note that the field data and disturbance modelling undertaken here only accounts for tree mortality within the calendar year of the fire, and delayed mortality of over one year has been documented in boreal low and moderate severity fires [@angers2011]where less than half of total mortality occurs after the year of the fire. Thus, the modelling here does not account for delayed mortality that may extend upwards of 5 years after fire.
 
-Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the definitions stated earlier, the CFB must be lower than or equal to the mortality rate, using field studies that show any partial crown consumption is likely sufficient to result in high rates if not complete mortality [@hood2017], which is the case in Canada's trees with primarily thin bark. Due to the structure of CBM-CFS3, all high severity fires have their mortality in the merchantable and smaller trees set to exactly 1.0, which is no more than a 5% variance from observed values. Ecozone-specific CFB values from field studies of burn severity are summarized in Table \ref{tab:tab-CFBByEcozone}.
+Crown Fraction Burned (CFB) speaks to the fraction of the live canopy that is itself consumed in the flaming front. The alternate outcomes being survival of the foliage, or the mortality of the tree without canopy consumption, resulting in the dropping of foliage onto the forest floor. From the definitions stated earlier, the CFB must be lower than or equal to the mortality rate, using field studies that show any partial crown consumption is likely sufficient to result in high rates if not complete mortality [@hood2017], which is the case in Canadian trees, which are primarily species with thin bark. Due to the structure of CBM-CFS3, all high severity fires have their mortality in the merchantable and smaller trees set to exactly 1.0, which is no more than a 5% variance from observed values. Ecozone-specific CFB values from field studies of burn severity are summarized in Table \ref{tab:tab-CFBByEcozone}.
 
 ```{r tab-CFBByEcozone, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab:tab-CFBByEcozone}"}
 
@@ -368,21 +380,16 @@ A major distinction is made between softwood and hardwood trees, where in Canada
 
 The fraction of fine roots contained within the combustible forest floor layers (the variable "SW.Prop.Fine.Root.duff" in the model) can be a close to or exceeding 50% of the fine root biomass [@strong1985]; this fine root live biomass is assumed to burn alongside the organic soils [@benscoter2011]. Fine root allocation is between the organic soil (termed "Aboveground" or AG in CBM-CFS3 vs "belowground" or BG for mineral soils) is a parameter that can be RU level and is distinct for hardwoods (HW) vs softwoods (SW). As a result, the calculation for softwood fine root consumption and mortality rate (SW.Mort) are as follows, using softwood as an example:
 
-```{=tex}
 \begin{equation}
 SWFineRootConsump = SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
 \end{equation}
-```
-```{=tex}
 \begin{equation}
 SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
 \end{equation}
-```
-```{=tex}
 \begin{equation}
 SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
 \end{equation}
-```
+
 In contrast, the larger diameter of the coarse root biomass pool prevents its consumption during any smouldering of the duff layer, and the mortality rate of coarse roots is simply proportional to that of the stemwood overall.
 
 ### Understory tree mortality and consumption
@@ -418,18 +425,16 @@ The litter layer forms the first biomass pool in which a spreading fire consumes
 
 Dead standing trees and branches on average is a biomass pool much smaller than organic soils or coarse woody debris on the ground, but in locals areas of extensive insect killed trees, recent fires, and blowdown, is a substantial biomass pool. Compared to live stemwood of the same diameter, the low moisture content of snags and snag branches allows for much greater consumption during the passage of an intense flaming front [@stocks2004]. The snag branch pool experiences almost complete combustion in high severity fires [@talucci2019], and is highly correlated with live foliage consumption (i.e Crown Fraction Burned) [@degroot2022]. The largest dead wood pool is the standing dead stemwood pool, which remains at most approximately 50% consumed; the consumption of standing snags pool is not quantified precisely in the CBI plot methodology. In the absence of extensive field data from CBI plots to quantify snag consumption, it is estimated as:
 
-```{=tex}
 \begin{equation}
 Snag Consumption fraction = \left( 0.5 \times Crown Fraction Burned \right) + 0.05
 \end{equation}
-```
+
 And for snag branches, field observations [@talucci2019; @degroot2022] reliably point to a higher rate of consumption for this smaller diameter dead biomass pool:
 
-```{=tex}
 \begin{equation}
 Snag Branch Consumption = \left( 0.9 \times Crown Fraction Burned \right)
 \end{equation}
-```
+
 Stumps are tracked as part of the "Other" pool in CBM-CFS3. As they are typically in contact with the upper forest floor, they are assumed to be consumed at the same rate as coarse woody debris.
 
 ### Woody debris consumption
@@ -444,11 +449,10 @@ Unlike canopy consumption metrics that are reliably estimated via burn severity 
 
 In the fire literature in Canada, the soil organic layer is sometimes termed the Forest Floor Fuel Load (*FFFL*) [@letang2012] and is dominated by the equivalent organic soil Slow pool (Aboveground Slow Dead Organic Matter, or AGSlowDOM) in CBM-CFS3. Historically, attention has been paid to the absolute value of Forest Floor Fuel Consumption (*FFFC*) [@forestrycanadafiredangerratinggroup1992; @degrootForestFloorFuel2009]; however in the case of carbon modelling, it is the relative fraction of consumption (*FFFC/FFFL*) that is of interest. Given the strong empirical evidence that the amount of organic soil present strongly influences the absolute and relative combustion rates [@walkerFuelAvailabilityNot2020], modelling of forest floor consumption was conducted on field measurements of the relative fraction of organic soil consumption. In this scheme, we utilize a composite of wildfire data from [@degroot2009] alongside the ABoVE duff consumption data [@walker2020], with an alternative modelling approach to compute the relative amount of consumption (scalar from 0 to 1) rather than directly modelling an absolute value in kg m^-2^ or cm as otherwise done in the literature. A logit transform is used on the scalar data to make it suitable for the fitted non-linear least-squares modelling:
 
-```{=tex}
 \begin{equation}
 logit \left( \frac{FFFC}{FFFL}\right) = [3.91(1 - e^{(-0.008BUI)})] + (-0.53log_{e}(AGSlow))
 \end{equation}
-```
+
 where BUI is the Fire Weather Index System's Buildup Index, and AGSlow in the CBM-CFS3 (given in Mg C/ha in this equation), and also synonymous with the the Forest Floor Fuel Load (with ecozone averages given in [@letang2012] or site-level data where observed). Assuming an average carbon content of 50%, CBM-CFS3 values in Mg C/ha are converted to fire behaviour units of kg of biomass per squared metre by dividing by 5.
 
 ```{r new-ABoVE-FFFC-data, message=FALSE, warning=FALSE, include=FALSE}
@@ -853,7 +857,7 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 In an effort to compare model outputs against an independent, large-scale set of fire atmospheric emissions, fire direct atmospheric emissions from the record breaking Canadian 2023 fire season were computed using the above framework. The classified burn severity product from the National Burned Area Composite annual production was utilized (see @hall2020 for an algorithm description). In NBAC, an internal tracking value "NFIREID" is utilized, which is the final satellite-derived burned area polygon (allowing for multi-part polygons) is split across any RU unit boundaries (if any). Since carbon pool sizes vary across RU boundaries, this allows for a single NFIREID to be present across multiple RUs.
 
-A total of 2199 fires as small as 0.09 ha (one 30x30 Landsat pixel) were mapped by NBAC for burn severity for a total of 14.60 Mha, but only fires over 100 ha were utilized as a lower limit of where meaningful per-fire estimates of the fraction of low, moderate, and high severity burned area was available. Including only fires 100 ha and larger reduced the total number of fires to 966 but the total area remained largely the same at 14.58 Mha. A total of 189,704 ha of post-fire salvage logging was also mapped in 2023 and is assigned to the moderate severity class after consultation with provincial land managers. The direct C emissions from fire shown here are not altered by the act of post-fire salvage logging. Additionally, the NBAC mapping process accounts for unburned islands (and areas with a mapped fire severity no different than unburned) which count towards the total fire area but do not have a disturbance matrix and direct C estimate applied.
+A total of 2199 fires as small as 0.09 ha (one 30x30 Landsat pixel) were mapped in NBAC for burn severity for a total of 14.60 Mha, but only fires over 100 ha were utilized as a lower limit of where meaningful per-fire estimates of the fraction of low, moderate, and high severity burned area was available. Including only fires 100 ha and larger reduced the total number of fires to 966 but the total area remained largely the same at 14.58 Mha. A total of 189,704 ha of post-fire salvage logging was also mapped in 2023 and is assigned to the moderate severity class after consultation with provincial land managers. The direct C emissions from fire shown here are not altered by the act of post-fire salvage logging. Additionally, the NBAC mapping process accounts for unburned islands (and areas with a mapped fire severity no different than unburned) which count towards the total fire area but do not have a disturbance matrix and direct C estimate applied.
 
 A unique DM was then calculated for each fire using the median area-weighted Buildup Index per fire. All thermal detection hotspots from VIIRS that intersect a fire were extracted from the historical hotspot archive that supports the Canadian smoke emissions model CFFEPS-FireWork [@chen2019]. The median DC value across all intersecting hotspots was used to derive a single DM per fire, no matter the duration of burning.
 
@@ -3423,7 +3427,7 @@ While fire emissions within the year of the fire are majority of the GHG flux, e
 
 Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reconciliation Units with high peatland areas will show higher organic soil slow pool size, but peatlands themselves are not spatially represented in the model, and instead peatlands influence the mean reported Aboveground Slow pool size. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the closely related Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM-CFS3 to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock (c. 500 Mg C/ha from @beilmanPeatCarbonStocks2008), the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
 
-This algorithm is currently built off regionally averaged biomass pools by Reconciliation Unit (Appendix A). While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018]. The severe drought conditions experienced in Canada in 2023 [@jainDriversImpactsRecordBreaking2024] are an ideal setting to compare an emissions model using spatially referenced biomass data against observed emissions. Emissions model evaluation against individual fires or in years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024. Future work will extend this fire disturbance algorithm to finer-scale carbon reporting using gridded data as it becomes available for annual reporting purposes.
+While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018]. The severe drought conditions experienced in Canada in 2023 [@jainDriversImpactsRecordBreaking2024] are an ideal setting to compare an emissions model using spatially referenced biomass data against observed emissions. The 2023 fires were observed to largely burn boreal forest ecosystems at the same rate as their abundance on the landscape, owing to severe drought and fire weather conditions . Emissions model evaluation against individual fires or in years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024. Future work will extend this fire disturbance algorithm to finer-scale carbon reporting using gridded data as it becomes available for annual reporting purposes.
 
 Species-specific traits in trees with overlapping ranges, such as resprouting in aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone (Table \ref{tab:tab-ReSproutByEcozone}), the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species across the spectrum of fire intensity in Canada remains incomplete at this time.
 
@@ -3510,49 +3514,44 @@ kbl(NIR_AverageCPools_filterSurface_sorted,align="c",caption="Carbon pool (Mg C/
 
 For national annual estimates of forest organic soil layer consumption during wildfire, implementations that only utilize Canadian experimental fire data from the Fire Behaviour Prediction System will be limited to a maximum consumption value of 5 kg (biomass) m^-2^ of total surface fuel (woody debris, litter, and duff) of 5 kg m^-2^, or 25 Mg C ha^-1^, given the observation dataset and fitted model parameters. For the common "C-2" boreal spruce fuel type for instance, Surface Fuel Consumption, SFC (biomass units in kg m^-2^ not kg C) is modelled as:
 
-```{=tex}
 \begin{equation}
 SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
 \end{equation}                                             
-```
+
 This model form has the distinct advantage of SFC being 0.0 at a BUI of zero. The model parameters vary by fuel type (i.e. deciduous broadleaf fuels are limited to 1.5 kg m^-2^ of maximum SFC) but are fixed within a fuel type.
 
 More recent observations and modelling from @degroot2009 extended the FBP data with an additional 128 observations from 7 additional wildfires, and the ABoVE project compiled over 1,000 field observations of depth of burn and C stocks before and after wildfire in Canada and Alaska, over 600 of which are in North American Level II ecoregions also occurring in Canada [@walker2020]. @degroot2009 provides a concise and informative improvement on the FBP fuel consumption equations, where both a Fire Weather Index System component (in this case, Buildup Index) is used similarly to Buildup Index in the FBP, but importantly, the site-level organic soil layer fuel load is also accounted for, which allows for the greater absolute combustion in deeper organic soils that is moderated by the natural logarithm transformation:
 
-```{=tex}
 \begin{equation}
 log_{e}(FFFC) = -4.252+0.710log_{e}(DC) + 0.671log_{e}(FFFL)
 \end{equation}
-```
+
 where FFFC is Forest Floor Fuel Consumption (SFC minus surface woody debris) in kg (biomass) m^-2^ and FFFL is Forest Floor Fuel Load in kg m^-2^. The forest floor as defined here is inclusive of the litter and duff layers, live mosses and lichens. This model presented above fits well within the dataset and extends the observed maximum FFFC to nearly 10 kg m^-2^. The ABoVE synthesis of FFFL and FFFC [@walker2020] expands upon a slightly smaller dataset used in a modelling summary also by Walker et al @walkerFuelAvailabilityNot2020, where structural equation modelling was used to explore drivers of FFFC but no concise and readily reproducible modelling is produced. The results of the SEM from Walker et al @walkerFuelAvailabilityNot2020 emphasized a greater role of FFFL over DC, though coarse reanalysis that lacked local fire agency weather stations was used. An analysis of just 2014 fires in the Northwest Territories by Walker et al @walkerSoilOrganicLayer2018 showed that while the mean depth of burn across all black spruce stands was 6-10 cm, the driest (xeric) black spruce stands with the smallest FFFL showed upwards of 75% soil organic consumption, while deeper organic soils in subhygric black spruce stands showed less than 25% consumption.
 
 To provide the largest possible dataset for FFFC and FFFL, the ABoVE synthesis was combined with wildfire data from de Groot et al 2009 not otherwise found in the ABoVE synthesis. The ABoVE synthesis sites in the Alaska Boreal Interior ecoregion, which have equivalent Canadian ecozone were excluded due to the presence of continuous permafrost and deep organic soils, but Alaska Boreal Cordillera sites near the Yukon border were utilized. Experimental fire data from the FBP data was not used, as deeper combustion measurements resulting from hours and days of smouldering combustion captured in wildfire data are not available in experimental fires where extensive smouldering is not measured due to suppression.
 
 For the purposes of improving national estimates of the fractional soil organic layer loss during wildfire, this framework emphasizes the proportional C stock loss (as with all CBM-CFS3 disturbance matrices) rather than the absolute value of combustion. In contrast to the modelling of absolute combustion value, any analysis of proportions is best conducted as logit- transformed data, where the logit transformation is:
 
-```{=tex}
 \begin{equation}
 logit(p) = log \frac{p}{1-p}
 \end{equation}
-```
+
 which effectively transforms a data of proportions of [0,1] to a Gaussian distribution with a range of approximately -5 to +5 (in this dataset), and a mode approximately at zero.
 
 In the logit transformed space, saturation-type non-linear curve using the relevant FWI component was fitted in a non-linear least squares model, but an additive term of the natural-logarithm transformed forest floor fuel load (FFFL) (given as AGSlow pool in Mg C/ha) was used as well. The non-linear least squares model fit was conducted using the Levenberg-Marquardt nonlinear least-squares algorithm found in MINPACK [@elzhovMinpacklmInterfaceLevenbergMarquardt2023] R package, which supported bounded parameter constraints.
 
 In the abstract, the model follows the form:
 
-```{=tex}
 \begin{equation}
 logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [c (1 - e^{(a  BUI)})] + (b log_{e}(AGSlow))
 \end{equation}
-```
+
 with fitted parameters as:
 
-```{=tex}
 \begin{equation}
 logit \left( \frac{depth of burn}{pre-fire organic depth}\right) = [3.50 (1 - e^{(-0.008 BUI)})] + (-0.53 log_{e}(AGSlow))
 \end{equation}
-```
+
 Note the "b coefficient on the parameter associated with the forest floor fuel load (AGSlow) of -0.53, which results in larger organic layer fuel loads leading to smaller proportional consumption values, which follows the patterns shown by @walkerCrossscaleControlsCarbon2018 for NWT fires of 2014.
 
 The a parameter term that forms the exponent of *e* alongside the Buildup Index is related to the BUI value at which half of the maximum possible asymptotal consumption value is observed (for a given FFFL value). The NLS fitting was given a minimum value of -0.008 such that a 50% consumption rate was modelled as occurring at or around a BUI value of 70 for typical upland spruce forest floor (FFFL of 8 kg/m2 or AGSlow of 40 t C/ha) following the wildfire data of @degrootForestFloorFuel2009 as well as experimental fire observations in spruce forests from the FBP System. The other parameters were fit to the best possible value with no constraint.
@@ -3924,6 +3923,15 @@ ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(v
 Photos of: (1) partial litter consumption; (2) partial vs full duff consumption; (3) mortality but not consumption of understory trees with live overstory; (4) mortality but not consumption of overstory trees; (5) mixedwood severity example showing consumption of broadleaf foliage; (6) woody debris consumption; (7) snag preferential consumption relative to little to no bole consumption in live trees
 
 Give lat/long, year, ecozone, severity class, and leading spp for each photo, maybe other relevant metrics? From some of the experimental fires mostly??
+
+```{r Appendix-D-photos, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", message=FALSE, warning=FALSE}
+
+#align with map colour scheme with others
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CBIPlots_Canada_Ecozones.png")
+
+
+```
 
 # Appendix E: List of Resprouting Hardwoods of Canada
 

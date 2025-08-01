@@ -106,6 +106,9 @@ library(ggtern)
 library(ggpubr)
 library(pandoc)
 options(dplyr.summarise.inform = FALSE)
+library(ggimage)
+library(patchwork)
+library(exiftoolr)
 
 
 
@@ -283,7 +286,7 @@ CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emission
 
 ## Ground plot and remotely sensed fire severity data
 
-```{r Fig-CBI-ecozones-map-chunk, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", fig.width=6, message=FALSE, warning=FALSE}
+```{r Fig-CBI-ecozones-map-chunk, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", out.width="75%", message=FALSE, warning=FALSE}
 
 #align with map colour scheme with others
 
@@ -3920,16 +3923,68 @@ ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(v
 
 # Appendix D: Representative photos
 
-Photos of: (1) partial litter consumption; (2) partial vs full duff consumption; (3) mortality but not consumption of understory trees with live overstory; (4) mortality but not consumption of overstory trees; (5) mixedwood severity example showing consumption of broadleaf foliage; (6) woody debris consumption; (7) snag preferential consumption relative to little to no bole consumption in live trees
+```{r Appendix-D-photos, echo=FALSE, fig.cap="\\label{fig:Appendix-D-photos} Appendix D: Examples of fire ecology processes captured in FireDMs from field-based burn severity plots.", message=FALSE, warning=FALSE}
 
-Give lat/long, year, ecozone, severity class, and leading spp for each photo, maybe other relevant metrics? From some of the experimental fires mostly??
 
-```{r Appendix-D-photos, echo=FALSE, fig.cap="\\label{fig:Fig-CBI-ecozones-map} Locations of field-based burn severity plots.", message=FALSE, warning=FALSE}
+image_files <- dir("~/nrcan-cfs-fire/FireDMs/Photos/", full.names = TRUE)
+exifinfo <- exif_read(image_files)
+ exifinfo$panel <-  c("A", "B", "C", "D", "E", "F")
 
-#align with map colour scheme with others
+ exifinfo$Description <-  c("", "", "", "", "", "")
+ 
+ exifinfo$Description[1] <- c("Partial area-wise burning of thin litter and duff layer in a boreal pine-aspen mixedwood stand following surface fire, one year after fire.  Note low consumption of woody debris and snags.")
 
-knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CBIPlots_Canada_Ecozones.png")
+ exifinfo$Description[2] <- c("Continuous crown fire in a forested boreal peatland dominated by black spruce.  90% of the forest floor experienced approximately 10 cm of burning except small patches of Sphagnum moss that appear as unburned light coloured features.  Note low consumption of downed woody debris embedded in unburned peat in bottom right corner")
+ 
+  exifinfo$Description[3] <- c("Example of high rates of relative duff consumption in a low pre-fire duff (AGSlow) loading.  Note the low rates of woody debris and stump consumption in this jack pine-dominated stand.")
 
+  
+  exifinfo$Description[4] <- c("Preferrential mortality of understory trees in a low-severity surface fire, one year after the fire.  Larger diameter trees in the background remain alive with near-zero Crown Fraction Burned, while smaller diameter trees, many of which are <5 m in height visible in the foreground, were killed by the fire but with no canopy fuel consumption even of smaller trees.")
+  
+   exifinfo$Description[5] <- c("Patchy crown fuel consumption in a high severity fire, one year after the fire.  While the majority of canopy fuels were consumed in this photo, local landscape features such as this depression allowed for small patches of trees to be killed by a surface fire, but the canopy remained unconsumed.  These red needles remain on the tree for 1-2 years and afterwards are an input into the litter layer.")
+   
+   exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during high severity fire in mixedwood fuels, taken one week after the fire.  Note the lack of foliage in the aspen trees (white coloured stems in background) in a mixedwood with Engelmann spruce and subalpine fir.")
+ 
+##fields to potentially add: ecozone=c(),BUI=c(),dNBR=c(),Severity=c(),Lat=c(),Lon=c(),DateOfBurn=c(),DateOfPhoto=c(),FFFC_frac_mod=c(),Leading_spp=c())
+
+```
+
+```{r Appendix-D-photos-gg, echo=FALSE, out.width="100%", message=FALSE, warning=FALSE}
+
+
+p1 <- ggplot(exifinfo[1,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=0)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+p2 <- ggplot(exifinfo[2,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=90)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+p3 <- ggplot(exifinfo[3,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=0)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+
+p4 <- ggplot(exifinfo[4,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=0)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+
+p5 <- ggplot(exifinfo[5,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=0)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+
+p6 <- ggplot(exifinfo[6,], aes(y = 0, x = 0, image = SourceFile)) +
+  geom_image(size = 1, by="height",angle=0)+
+  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
+
+p1
+p2
+p3
+p4
+p5
+p6
 
 ```
 

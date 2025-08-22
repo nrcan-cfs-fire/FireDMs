@@ -38,11 +38,11 @@ affiliation:
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
 output:
+  pdf_document: default
+  word_document: null
   rticles::copernicus_article:
     highlight: null
     keep_tex: true
-  word_document: null
-  pdf_document: default
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
 abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Current representations of fire impact on forest carbon stocks is limited to a single parameterization of fire severity (i.e. the fate of biomass including consumption) that assumes only high severity fires, despite a large evidence base of widespread mixed-severity boreal wildfire. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFC-MARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas fluxes in the immediate aftermath of fires. The sub-model also quantifies fire-killed by uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10-25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
@@ -77,9 +77,9 @@ CBM-CFS3 currently assesses fire impacts to carbon pools only as representing hi
 
 In Canada’s forests, a combination of climate, disturbance history, soils, and less frequently topographic variables determine leading tree species; at local scales (1--100 ha), tree species composition plays a major role in determining ecosystem susceptibility to fire [@bernier2016] where older, conifer-dominated forests burn at very high rates relative to adjacent deciduous or mixed stands. Even when deciduous and mixed forests burn at rates more similar to older conifer stands during large drought-driven fire years [@parksNewMetricQuantifying2014], they do so at consistently lower severity compared to all but the most xeric conifer forests [@whitman2018]. Thus, important local biases in fire activity and severity towards older and moderate to poorly-drained forests are not resolved in the spatially-referenced CBM-CFS3 when a uniform fire severity is applied.
 
-To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@guindon2014; @hall2020], this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux estimate via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices (DM) updated and designed for a planned, spatially-explicit update to the CBM-CFS3, anchored in a three severity class paradigm. These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
+To support recent advances in operational burn severity mapping for Canada [@whitman2020] alongside multi-decade reliable burned area records that provide certainty on fire start and end dates [@guindon2014; @hall2020], this paper describes a local scale (30-m) method for defining a per-pixel proportional carbon flux estimate via a locally calculated fire DM. In this document, we outline the evidence-based fire Disturbance Matrices (DM) updated and designed for a planned, spatially-explicit update to the CBM-CFS3, anchored in a three severity class paradigm (low, moderate, and high severity). These fire carbon flux models are built from a blend of aggregated field data linked to remotely sensed severity, as well as insights from fire physics and experimental fires. Key knowledge gaps are also highlighted, with interim solutions presented until further quantification can be done in field studies, such as from further wildfire observations, experimental fires, or prescribed fires.
 
-Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption across all DM components) have been used in valuable scenario exercises using a spatial explicit version of CBM-CFS3 for assessment of future fire and harvest scenarios [@smyth2022]. The algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada’s diverse ecozones.
+Simplified fire DMs (i.e. a scalar reduction on 100% mortality assumption across all DM components, constant severity across all fires) have been used in valuable scenario exercises using a spatial explicit version of CBM-CFS3 for assessment of future fire and harvest scenarios [@smyth2022]. The algorithm development shown here provides an important data-driven and regionally-adjusted framework that better reflects the ecological nuances of moderate and low-severity fire across Canada’s diverse ecozones.
 
 # Methods
 
@@ -106,8 +106,6 @@ library(ggtern)
 library(ggpubr)
 library(pandoc)
 options(dplyr.summarise.inform = FALSE)
-library(ggimage)
-library(patchwork)
 library(exiftoolr)
 
 
@@ -239,7 +237,7 @@ To simplify the process of creating DMs as a distillation of the complexities of
 
 6.  Snags are inclusive of both those killed by prior fire as well as those killed by all other causes.
 
-Of these, Crown Fraction Burned (CFB) is an important concept used primarily in fire behaviour science but not carbon accounting nor fire ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System documentation [@forestrycanadafiredangerratinggroup1992], and provides a simple continuous 0-100 variable for only the consumption of foliage (inclusive of both conifer and broadleaf). For our purposes, CFB is the desirable metric as opposed to ordinal and less precise systems like Canopy Fire Severity Index [@kasischke2000] that allows the user to specify which pools of canopy biomass are consumed, but not the precise fraction of each given pool that is consumed.
+Of these, Crown Fraction Burned (CFB) is an important concept used primarily in fire behaviour science but not carbon accounting nor fire ecology. CFB was introduced in the 1992 Fire Behaviour Prediction System documentation [@forestrycanadafiredangerratinggroup1992], and provides a simple continuous 0-100 variable for only the consumption of foliage (which we assume here is inclusive of both conifer and broadleaf). For our purposes, CFB is the desirable metric as opposed to ordinal and less precise systems like Canopy Fire Severity Index [@kasischke2000] that allows the user to specify which pools of canopy biomass are consumed, but not the precise fraction of each given pool that is consumed.
 
 ## Combustion gas emission ratios
 
@@ -278,8 +276,7 @@ VarDefs$SeverityClass <- factor(VarDefs$SeverityClass,levels = c("Low", "Mod", "
 ```
 
 ```{r tab-globalVarsEmissions, echo=FALSE, message=FALSE, warning=FALSE, tab.cap="\\label{tab:tab-globalVarsEmissions}"}
-kbl(CarbonEFs_pivot_wider,caption="Emissions factors for flaming and smouldering used in this model.  Values are the molar fraction of carbon in the unburned biomass and the emitted species, e.g. 87 percent of C in biomass is converted to C as CO2 in flaming combustion.") %>%
-  kable_minimal()  
+kbl(CarbonEFs_pivot_wider,format = "pandoc",caption="Emissions factors for flaming and smouldering used in this model.  Values are the molar fraction of carbon in the unburned biomass and the emitted species, e.g. 87 percent of C in biomass is converted to C as CO2 in flaming combustion.") %>% kable_minimal()  
 ```
 
 CO~2~ is responsible for `r as.numeric(global.vars$FlamingCO2)*100`% of emissions in the flaming phase, but only `r as.numeric(global.vars$SmoulderingCO2)*100`% of emissions in the smouldering phase, with a doubling of CO emissions and tripling of CH~4~ emissions (Table \ref{tab:tab-globalVarsEmissions}). With a Global Warming Potential of CO equal to 1.0 and CH~4~ of 25, the Global Warming Potential per unit of biomass consumption in the smouldering phase is `r round(((as.numeric(global.vars$SmoulderingCO2*1+global.vars$SmoulderingCH4*25+global.vars$SmoulderingCO*1.0))/(as.numeric(global.vars$FlamingCO2*1+global.vars$FlamingCH4*25+global.vars$FlamingCO*1.9))),2)` times higher in global warming potential compared to flaming, not including differential aerosol production and injection heights, however. With flaming and smouldering each contributing roughly equally to wildfire emissions, these distinct flaming and smouldering emissions ratios correspond well prior emissions factors used in CBM-CFS3. Note that as currently described, the sum of CO~2~, CH~4~, and CO emissions from wildfires only represent approximately 95% of the fire carbon mass emitted to the atmosphere, with 0.5–2.0% of biomass emitted as particulate matter (e.g. PM~2.5~, but also PM~1~ and PM~10~ classes of particulates at 1 and 10 um diameters, respectively), and an additional 3% [@hayden2022] to as little as 1% [@simon2010] composed of non-methane organic gases that have a large range in global warming potentials as compared to CH~4~.
@@ -295,9 +292,13 @@ knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CBIPlots_Canada_Ecozones.png")
 
 ```
 
-While remotely sensed fire severity metrics are capable of determining if a specific location falls within a low, moderate, or high severity fire area [@hall2008], remotely sensed fire severity metrics alone do not inform estimates of fuel consumption down to specific biomass pools. Instead, this approach uses the change in biomass pools as empirically related to per-pixel satellite spectral reflectance indices (i.e. dNBR, RBR), using detailed and semi-standardized methods of burn severity ground plots with unburned controls [e.g. @cockeComparisonBurnSeverity2005; @hall2008]. Burn severity ground plot measurements are often aggregated into a single "Composite Burn Index" with a weighting scheme originating in southwestern U.S. forests [@keyLandscapeAssessment2006; @parksGivingEcologicalMeaning2019], which are classed into low, moderate, and high severity categories. Plot level measurements of individual forest biomass pools (e.g. conifer overstory mortality or canopy consumption) are recorded as part of the CBI methodology. In this methodology we do not use the CBI aggregated metric itself to infer biomass consumption, but rather compilations of burn severity ground plot measurements that include all the individual biomass pool measurements. Individual burn severity plots were assigned a severity class based on ground observations, and an ecozone-level median biomass pool consumption fraction was computed for each severity class for each biomass pool (see Figure \ref{fig:Fig-CBI-ecozones-map}). For ecozones without ground plot measurements, an adjacent and ecologically similar ecozone with observations was used.
+While remotely sensed fire severity metrics are capable of determining if a specific location falls within a low, moderate, or high severity fire area [@hall2008], remotely sensed fire severity metrics alone do not inform estimates of fuel consumption down to specific biomass pools. Instead, this approach uses the change in biomass pools as empirically related to per-pixel satellite spectral reflectance indices (i.e. dNBR, RBR), using detailed and semi-standardized methods of burn severity ground plots with unburned controls [e.g. @cockeComparisonBurnSeverity2005; @hall2008]. Burn severity ground plot measurements are often aggregated into a single "Composite Burn Index" with a weighting scheme originating in southwestern U.S. forests [@keyLandscapeAssessment2006; @parksGivingEcologicalMeaning2019], which are classed into low, moderate, and high severity categories. Plot level measurements of individual forest biomass pools (e.g. conifer overstory mortality or canopy consumption) are recorded as part of the CBI methodology.
+
+In this framework we do not use the CBI aggregated metric itself to infer biomass consumption, but rather compilations of burn severity ground plot measurements that include all the individual biomass pool measurements. Field studies with data describing biomass consumption fractions for individual biomass pools primarily from the northwestern boreal forest of Canada [@walkerSynthesisBurnedUnburned2020; @whitman2018]. Studies with eastern Canadian and Alaska were also used [@parks2019], as were data from the northwestern conterminous United States in ecozones that overlap with Canadian forests [@saberi2022]. Individual burn severity plots were assigned a severity class based on ground observations, and an ecozone-level median biomass pool consumption fraction was computed for each severity class for each biomass pool (see Figure \ref{fig:Fig-CBI-ecozones-map}). For ecozones without ground plot measurements, an adjacent and ecologically similar ecozone with observations was used.
 
 The field survey data on biomass combustion and mortality rates as stratified by severity class, forms a improved data-driven and ecologically-informed approach to fire direct C emissions estimations here termed FireDMs (Fire Disturbance Matrix-severity).
+
+## Biomass consumption specifics
 
 ### Overstory tree mortality and consumption
 
@@ -385,11 +386,9 @@ The fraction of fine roots contained within the combustible forest floor layers 
 
 \begin{equation}
 SWFineRootConsump = SW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation}
-\begin{equation}
+\end{equation} \begin{equation}
 SWFineRootMort.AG = SW.Mort \times SW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{equation}
-\begin{equation}
+\end{equation} \begin{equation}
 SWFineRootMort.BG = SW.Mort \times (1-SW.Prop.Fine.Root.duff)
 \end{equation}
 
@@ -3430,7 +3429,7 @@ While fire emissions within the year of the fire are majority of the GHG flux, e
 
 Currently, the model framework only accounts of regionally-averaged soil carbon stocks, meaning that Reconciliation Units with high peatland areas will show higher organic soil slow pool size, but peatlands themselves are not spatially represented in the model, and instead peatlands influence the mean reported Aboveground Slow pool size. Currently, fire disturbance in peatlands is performed by the CaMP model, which uses the closely related Drought Code fire weather metric to estimate peat layer consumption [@bona2020] and uses the overstory carbon schema of CBM-CFS3 to estimate overstory tree carbon pools and fluxes. Direct satellite monitoring of upland forest organic soil and peatland carbon loss via burn severity monitoring is possible but remains a challenge to implement with accuracy for monitoring purposes [@bourgeau-chavez2020]. Despite the large carbon stock (c. 500 Mg C/ha from @beilmanPeatCarbonStocks2008), the mean C emissions per area in peatland due to fire (65 t C/ha) as modelled by @bona2024 are comparable to regional emissions from peat-rich ecozones such as the Boreal and Taiga Plains under moderate to severe drought conditions. Indeed, it is under these moderate to severe drought conditions under which peatlands burn more frequently [@turetsky2004; @thompson2019] and severely [@kuntzemann2023].
 
-While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018]. The severe drought conditions experienced in Canada in 2023 [@jainDriversImpactsRecordBreaking2024] are an ideal setting to compare an emissions model using spatially referenced biomass data against observed emissions. The 2023 fires were observed to largely burn boreal forest ecosystems at the same rate as their abundance on the landscape, owing to severe drought and fire weather conditions . Emissions model evaluation against individual fires or in years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024. Future work will extend this fire disturbance algorithm to finer-scale carbon reporting using gridded data as it becomes available for annual reporting purposes.
+While Canadian wildfires shown an overall selection bias towards preferentially burning older conifer stands [@bernier2016], fuel selectivity against less flammable portions of the landscape decreases strongly under severe drought conditions [@parks2018]. The severe drought conditions experienced in Canada in 2023 [@jainDriversImpactsRecordBreaking2024] are an ideal setting to compare an emissions model using spatially referenced biomass data against observed emissions. The 2023 fires were observed to largely burn boreal forest ecosystems at the same rate as their abundance on the landscape, owing to severe drought and fire weather conditions [@boulanger2024]. Emissions model evaluation against individual fires or in years of less profound drought would be more likely to highlight the limitation of the regionally-averaged carbon pool (i.e. fuel load) values used here. Ultimately, the mapped severity used here is best paired with mapped carbon pools at a similar scale, such as the 1-ha forest carbon modelling for analysis and scenario testing used by @smyth2024. Future work will extend this fire disturbance algorithm to finer-scale carbon reporting using gridded data as it becomes available for annual reporting purposes.
 
 Species-specific traits in trees with overlapping ranges, such as resprouting in aspen [@brown1987] but not other broadleaves such as oak or maple, are not explicitly handled in this model. Instead, the relative abundance of trees with contrasting traits that influence ecological outcomes such as fire survival are lumped at the ecozone scale from the aggregation of the plot data. While ecozone-level contrasts in key considerations such as overstory mortality do strongly vary by ecozone (Table \ref{tab:tab-ReSproutByEcozone}), the same DM (e.g. hardwood root mortality) is applied in adjacent stands at the same severity class despite the potential for strongly contrasting traits that are readily tied back to mapping at the stand level by leading species. Alternately, models such as CanFIRE can account for species-level contrasts in fire ecology traits, but compiling the relevant ecophysiological properties and traits for all tree species across the spectrum of fire intensity in Canada remains incomplete at this time.
 
@@ -3439,6 +3438,9 @@ Species-specific traits in trees with overlapping ranges, such as resprouting in
 Carbon emissions from wildfires in Canada represent a substantial pulse input of greenhouse gases to the atmosphere: the 2023 fire emissions in Canada were an input of approximately `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C. A modelling framework to extend the current fire and greenhouse gas reporting in Canada is presented. In contrast to the existing modelling system that utilizes a fixed fire severity (i.e. tree mortality) assumption, a field-calibrated satellite fire severity mapping process that follows mature and well-established scientific methods is used. Above-ground carbon pool changes (from live to dead and in situ as well as to the gas phase) rely on a robust field observation dataset that relates back to satellite metrics. Evaluation of the modelling presented above against fully independent airborne observations of CO:CO~2~ emissions ratios for boreal wildfires indicates the modelling of proportion of flaming vs smouldering emissions are well-replicated by the model. With confidence in this modelled CO:CO~2~ ratio, the total fire CO emissions for the 2023 wildfire season in Canada (with a record 15 Mha burned) is broadly consistent with fire season estimates using satellite total column CO anomalies.
 
 While this prototype carbon flux framework utilizes regionally-averaged carbon stock estimates, future systems deployment within Canada's carbon accounting system is likely to incorporate precisely mapped (30 m) carbon pools alongside the finely mapped fire severity products (30 m) used here. As both the spatial estimates of carbon stocks across Canada's forested ecosystems improves alongside additional field observations, it is anticipated that this modelling framework will increase in both accuracy and precision over time.
+
+::: {#refs}
+:::
 
 # Appendix A: Mean pool size by Reconciliation Unit
 
@@ -3513,13 +3515,17 @@ kbl(NIR_AverageCPools_filterSurface_sorted,align="c",caption="Carbon pool (Mg C/
   
 ```
 
+```         
+\newpage
+```
+
 # Appendix B: Non-linear least squares modelling of soil organic layer consumption
 
 For national annual estimates of forest organic soil layer consumption during wildfire, implementations that only utilize Canadian experimental fire data from the Fire Behaviour Prediction System will be limited to a maximum consumption value of 5 kg (biomass) m^-2^ of total surface fuel (woody debris, litter, and duff) of 5 kg m^-2^, or 25 Mg C ha^-1^, given the observation dataset and fitted model parameters. For the common "C-2" boreal spruce fuel type for instance, Surface Fuel Consumption, SFC (biomass units in kg m^-2^ not kg C) is modelled as:
 
 \begin{equation}
 SFC = 5.0 \left(1-e^{-0.0115BUI} \right)^{1.0}
-\end{equation}                                             
+\end{equation}
 
 This model form has the distinct advantage of SFC being 0.0 at a BUI of zero. The model parameters vary by fuel type (i.e. deciduous broadleaf fuels are limited to 1.5 kg m^-2^ of maximum SFC) but are fixed within a fuel type.
 
@@ -3823,6 +3829,10 @@ ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL
 
 ```
 
+```         
+\newpage
+```
+
 # Appendix C: Annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
 
 ```{r AnnualBUI, echo=FALSE, message=FALSE, warning=FALSE}
@@ -3921,84 +3931,90 @@ ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(v
 
 ```
 
-# Appendix D: Representative photos
-
-```{r Appendix-D-photos, echo=FALSE, fig.cap="\\label{fig:Appendix-D-photos} Appendix D: Examples of fire ecology processes captured in FireDMs from field-based burn severity plots.", message=FALSE, warning=FALSE}
-
-
-image_files <- dir("~/nrcan-cfs-fire/FireDMs/Photos/", full.names = TRUE)
-exifinfo <- exif_read(image_files)
- exifinfo$panel <-  c("A", "B", "C", "D", "E", "F")
-
- exifinfo$Description <-  c("", "", "", "", "", "")
- 
- exifinfo$Description[1] <- c("Partial area-wise burning of thin litter and duff layer in a boreal pine-aspen mixedwood stand following surface fire, one year after fire.  Note low consumption of woody debris and snags.")
-
- exifinfo$Description[2] <- c("Continuous crown fire in a forested boreal peatland dominated by black spruce.  90% of the forest floor experienced approximately 10 cm of burning except small patches of Sphagnum moss that appear as unburned light coloured features.  Note low consumption of downed woody debris embedded in unburned peat in bottom right corner")
- 
-  exifinfo$Description[3] <- c("Example of high rates of relative duff consumption in a low pre-fire duff (AGSlow) loading.  Note the low rates of woody debris and stump consumption in this jack pine-dominated stand.")
-
-  
-  exifinfo$Description[4] <- c("Preferrential mortality of understory trees in a low-severity surface fire, one year after the fire.  Larger diameter trees in the background remain alive with near-zero Crown Fraction Burned, while smaller diameter trees, many of which are <5 m in height visible in the foreground, were killed by the fire but with no canopy fuel consumption even of smaller trees.")
-  
-   exifinfo$Description[5] <- c("Patchy crown fuel consumption in a high severity fire, one year after the fire.  While the majority of canopy fuels were consumed in this photo, local landscape features such as this depression allowed for small patches of trees to be killed by a surface fire, but the canopy remained unconsumed.  These red needles remain on the tree for 1-2 years and afterwards are an input into the litter layer.")
-   
-   exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during high severity fire in mixedwood fuels, taken one week after the fire.  Note the lack of foliage in the aspen trees (white coloured stems in background) in a mixedwood with Engelmann spruce and subalpine fir.")
- 
-##fields to potentially add: ecozone=c(),BUI=c(),dNBR=c(),Severity=c(),Lat=c(),Lon=c(),DateOfBurn=c(),DateOfPhoto=c(),FFFC_frac_mod=c(),Leading_spp=c())
-
+```         
+\newpage
 ```
 
-```{r Appendix-D-photos-gg, echo=FALSE, out.width="100%", message=FALSE, warning=FALSE}
-
-
-p1 <- ggplot(exifinfo[1,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=0)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-p2 <- ggplot(exifinfo[2,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=90)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-p3 <- ggplot(exifinfo[3,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=0)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-
-p4 <- ggplot(exifinfo[4,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=0)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-
-p5 <- ggplot(exifinfo[5,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=0)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-
-p6 <- ggplot(exifinfo[6,], aes(y = 0, x = 0, image = SourceFile)) +
-  geom_image(size = 1, by="height",angle=0)+
-  scale_size_identity() + labs(caption = str_wrap(exifinfo$Description,100)) + theme_void() +  theme(plot.caption = element_text(hjust = 0))
-
-p1
-p2
-p3
-p4
-p5
-p6
-
+```         
+\newpage
 ```
 
-# Appendix E: List of Resprouting Hardwoods of Canada
+# Appendix D: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
 
-# Appendix F: Disturbance Matrix Examples
+# Appendix E: Disturbance Matrix Examples
 
 ```{r example-DM-tables, echo=FALSE}
 DMTables(ecozone = "BP", SeverityClass = "Low")
 DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSE", SeverityClass = "High")
+```
+
+# Appendix F: Representative photos
+
+```{r Appendix-D-photos-load, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+image_files <- dir("~/nrcan-cfs-fire/FireDMs/Photos/", full.names = TRUE) 
+
+exifinfo <- exif_read(image_files)
+
+exifinfo$panel <-  c("A", "B", "C", "D", "E", "F") 
+
+exifinfo$Description <-  c("", "", "", "", "", "")  
+
+exifinfo$Description[1] <- c("Partial area-wise burning of thin litter and duff layer in a boreal pine-aspen mixedwood stand following surface fire, one year after fire.  Note low consumption of woody debris and snags.")   
+
+exifinfo$Description[2] <- c("Continuous crown fire in a forested boreal peatland dominated by black spruce.  90% of the forest floor experienced approximately 10 cm of burning except small patches of Sphagnum moss that appear as unburned light coloured features.  Note low consumption of downed woody debris embedded in unburned peat in bottom right corner")     
+
+exifinfo$Description[3] <- c("Example of high rates of relative duff consumption in a low pre-fire duff (AGSlow) loading.  Note the low rates of woody debris and stump consumption in this jack pine-dominated stand.")       
+
+exifinfo$Description[4] <- c("Preferrential mortality of understory trees in a low-severity surface fire, one year after the fire.  Larger diameter trees in the background remain alive with near-zero Crown Fraction Burned, while smaller diameter trees, many of which are <5 m in height visible in the foreground, were killed by the fire but with no canopy fuel consumption even of smaller trees.")       
+exifinfo$Description[5] <- c("Patchy crown fuel consumption in a high severity fire, one year after the fire.  While the majority of canopy fuels were consumed in this photo, local landscape features such as this depression allowed for small patches of trees to be killed by a surface fire, but the canopy remained unconsumed.  These red needles remain on the tree for 1-2 years and afterwards are an input into the litter layer.")        
+
+exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during high severity fire in mixedwood fuels, taken one week after the fire.  Note the lack of foliage in the aspen trees (white coloured stems in background) in a mixedwood with Engelmann spruce and subalpine fir.")   ##fields to potentially add: ecozone=c(),BUI=c(),dNBR=c(),Severity=c(),Lat=c(),Lon=c(),DateOfBurn=c(),DateOfPhoto=c(),FFFC_frac_mod=c(),Leading_spp=c()) 
+
+q<-1
+
+```
+
+```{r Appendix-D-knitr-png-1, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-2, echo=FALSE, fig.cap=exifinfo$Description[q],out.extra='angle=-90', out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-3, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-4, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-5, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-6, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+
 ```
 
 # References

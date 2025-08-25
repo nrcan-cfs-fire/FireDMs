@@ -1,0 +1,366 @@
+---
+title: "Supplementary Material: Incorporating observed fire severity in refined emissions
+  estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3"
+output: pdf_document
+date: "`r Sys.Date()`"
+---
+
+# Mean pool size by Reconciliation Unit
+
+
+```{r loadLibsEtc, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(dplyr, warn.conflicts = FALSE)
+library(kableExtra)
+library(tinytex)
+library(formatR)
+library(data.table)
+library(directlabels)
+library(ggrepel)
+library(gtools)
+library(rticles)
+library(mgcv)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+library(minpack.lm)
+library(terra)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(tidyterra)
+library(ggtern)
+library(ggpubr)
+library(pandoc)
+options(dplyr.summarise.inform = FALSE)
+library(exiftoolr)
+
+
+
+###note you will need to install Latex via tinytex::install_tinytex()
+
+##getting ready for renv
+#https://rstudio.github.io/renv/articles/renv.html
+###run renv::restore() if in doubt, should auto-load everything
+
+#original list
+#ecozones.list <- list("AM","TP","TSW","BSW","BP","P","TC","BC","PM","MC","HP","TSE","BSE")
+
+#complete list, ordered by decreasing CNFDB burned area:
+#ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","SuP","SeP","AM","MP")
+
+##working list as of 2023-04-13 that has all the data we need, no P
+ecozones.list <- list("BSW","TP","TSW","BP","BC","BSE","TSE","MC","HP","TC","PM","AM","MP")
+```
+
+<!-- via https://github.com/crsh/papaja/issues/259 -->
+
+\renewcommand{\appendixname}{Supplementary Material}
+\renewcommand{\thefigure}{S\arabic{figure}} \setcounter{figure}{0}
+\renewcommand{\thetable}{S\arabic{table}} \setcounter{table}{0}
+\renewcommand{\theequation}{S\arabic{table}} \setcounter{equation}{0}
+
+
+```{r PoolSizeByRU, echo=FALSE, message=FALSE, warning=FALSE}
+
+#######
+#Surface
+######
+NIR2023_AverageCPools <- read_csv("./NIR2023_AverageCPools.csv")
+
+###rows are RUs as EcoAdmin
+NIR_AverageCPools_filterSurface <- NIR2023_AverageCPools %>% filter(TimeStep==32) %>% select('EcoBoundaryNameShort','AdminBoundaryName',SPUID,'Aboveground Very Fast DOM':'Aboveground Slow DOM','Softwood Stem Snag':'Softwood Other','Softwood Coarse Roots','Softwood Fine Roots','Hardwood Coarse Roots','Hardwood Fine Roots')  %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat) %>% mutate(across(where(is.numeric), round, 1)) 
+
+###now sort columns from largest to smallest mean value by using select() to declare the new order.
+
+##first, reorder:
+
+col_sum <- NIR_AverageCPools_filterSurface %>% summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+col_sum <- t(col_sum)
+colnames(col_sum) <- c("value")
+col_sum <- as.data.frame(col_sum) %>% arrange(desc(value))
+#row.names(col_sum)
+
+NIR_AverageCPools_filterSurface_sorted <- NIR_AverageCPools_filterSurface %>% select(EcoBoundaryNameShort,AdminBoundaryName,SPUID,"Aboveground Slow DOM", "Medium DOM" , "Aboveground Fast DOM"  ,  "Aboveground Very Fast DOM", "Softwood Coarse Roots",  "Hardwood Coarse Roots" ,  "Belowground Fast DOM" , "Belowground Very Fast DOM", "Softwood Fine Roots", "Hardwood Fine Roots")  %>% rename(RU = SPUID) %>% rename(Jurisdiction = AdminBoundaryName)
+
+##then sort descending of the first (largest) column:
+NIR_AverageCPools_filterSurface_sorted <- NIR_AverageCPools_filterSurface_sorted %>% arrange(desc(`Aboveground Slow DOM`))
+
+######
+# Canopy
+######
+
+## rounding mutate via https://stackoverflow.com/questions/43314328/how-to-use-dplyrmutate-all-for-rounding-selected-columns
+
+NIR_AverageCPools_filterCanopy <- NIR2023_AverageCPools %>% filter(TimeStep==32) %>% select('EcoBoundaryNameShort','AdminBoundaryName',SPUID,'Softwood Stem Snag':'Softwood Other','Hardwood Merchantable':'Hardwood Other') %>% filter(EcoBoundaryNameShort != "ShP") %>% filter(EcoBoundaryNameShort != "SaP") %>% filter(EcoBoundaryNameShort != "MP") %>% select(!'Black Carbon') %>% select(!Peat)%>% mutate(across(where(is.numeric), round, 1)) 
+
+col_sum <- NIR_AverageCPools_filterCanopy %>% summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+col_sum <- t(col_sum)
+colnames(col_sum) <- c("value")
+col_sum <- as.data.frame(col_sum) %>% arrange(desc(value))
+#row.names(col_sum)
+
+NIR_AverageCPools_filterCanopy_sorted <- NIR_AverageCPools_filterCanopy %>% select(EcoBoundaryNameShort,AdminBoundaryName,SPUID,"Softwood Merchantable", "Softwood Other",        "Hardwood Merchantable", "Softwood Stem Snag",    "Hardwood Other",        "Softwood Foliage" ,     "Hardwood Stem Snag", "Softwood Branch Snag",  "Hardwood Branch Snag",  "Hardwood Foliage") %>% rename(RU = SPUID) %>% rename(Jurisdiction = AdminBoundaryName)
+
+##then sort descending of the first (largest) column:
+NIR_AverageCPools_filterCanopy_sorted <- NIR_AverageCPools_filterCanopy_sorted %>% arrange(desc(`Softwood Merchantable`))
+
+##shorten the first column name in each table:
+colnames(NIR_AverageCPools_filterCanopy_sorted)[1] <- c("Ecozone")
+colnames(NIR_AverageCPools_filterSurface_sorted)[1] <- c("Ecozone")
+
+
+
+kbl(NIR_AverageCPools_filterCanopy_sorted,align="c",caption="Carbon pool size (Mg C/ha) for canopy fuels by Reconciliation Unit for 2023. RU are sorted in decreasing size of Softwood Merchantable, the largest average surface pool.  Columns are in decreasing mean pool size.")  %>% kable_styling(full_width = F, html_font = "Cambria") %>%
+  kableExtra::landscape() %>%
+  kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "hold_position")%>% column_spec(4:13, width = "2cm")
+
+
+
+#%>%
+#    kable_styling(full_width = F, html_font = "Cambria") %>%
+#  kable_styling(latex_options = "scale_down")  %>%
+#  kable_styling(latex_options = "hold_position")%>%
+#  kableExtra::landscape()
+
+kbl(NIR_AverageCPools_filterSurface_sorted,align="c",caption="Carbon pool (Mg C/ha) for sub-canopy fuels by Reconciliation Unit for 2023.  RU are sorted in decreasing size of Aboveground Slow DOM, the largest average surface pool.  Columns are in decreasing mean pool size.") %>%
+  kableExtra::landscape() %>%
+  kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "hold_position") %>% column_spec(4:13, width = "2cm")
+
+  
+```
+
+# Annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
+
+```{r AnnualBUI-calcs, message=FALSE, warning=FALSE, include=FALSE}
+
+
+###Function: Compute FFFC given any BUI and duff load input (CalcFFFC)
+# Written By: Dan Thompson
+# Written On: 2024-09-19
+# Parameters: Buildup Index of interest (BUI); Carbon pool amount of the Below Ground Slow pool (AGSlow) in Mega-grams of Carbon (12g/mol) per hectare of forest area.
+# Modified on: 
+# Modified by: 
+# Purpose: for ecozones in Canada this function estimates the !!relative consumption!! fraction (0-1) of the forest floor (aka duff), which corresponds to the AGSlow pool in the Carbon Budget Model for the Canadian Forest Sector (CBM-CFS)
+# Description: model is derived analysis of ABoVE project which is a composite of ABoVE project data plus some de Groot data (https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1744) also adding in a few eastern/central Canadian sites from (https://www.nrcresearchpress.com/doi/full/10.1139/x08-192).
+
+# output: a single floating point from 0-1 that is the portion of the duff layer that is consumed given a BUI and AGSlow pool input
+
+
+### !! Note NOT using the hard-coded parameters, unlike chunks above which derive the parameters, so this function cannot as-written be used elsewhere
+
+
+## CalcFFFC <- function(DC,PoolType,PoolSize) #alternate function that either accepts AGSlow or DuffLoad
+BUI <- 70
+AGSlow <- 60
+CalcFFFC <- function(BUI=70,AGSlow=60,Spruce=TRUE)
+{ ### using hard-coded values fromt the final version of the manuscript:
+CalcFFFC_param1 <- 3.969975 
+CalcFFFC_param2 <- -0.008 
+CalcFFFC_param3 <- -0.5378478 
+
+  ##apply the fitted nls logit model with parameters defined above:
+  temp.logit <- CalcFFFC_param1 * (1 - exp(CalcFFFC_param2 * BUI)) + (log(AGSlow) * CalcFFFC_param3)
+  
+  ### and now compute the inverse logit of the model and apply a correction factor to convert fraction of mass (from line above) to fraction of depth, using standard duff density curves:
+  
+  #CF_non_spruce <- 0.13*inv.logit(temp.logit)+0.87
+  #CF_spruce <- (1.02)*inv.logit(temp.logit)^(0.250)
+  
+  ### need if/else for spruce or not
+  #CalcFFFC_return <- ifelse(Spruce==TRUE, inv.logit(temp.logit)*CF_spruce,inv.logit(temp.logit)*CF_non_spruce)
+  CalcFFFC_return <- inv.logit(temp.logit)
+  return(CalcFFFC_return)
+}
+
+
+
+###can always update this via CFSDB: https://osf.io/f48ry/
+###example extract for individual fires
+#WB028 <- Firegrowth_groups_v1_01 %>% filter(ID == "2014_295")
+#Horse <- Firegrowth_groups_v1_01 %>% filter(ID == "2016_255")
+#write.csv(WB028,"2014-WB-028-fire-history.csv")
+#Firegrowth_groups_v1_01 <- read.csv()
+
+##weighted-mean BUI of spread by year and ecozone
+
+##not run, loaded in below
+##CFSDB_summary <- Firegrowth_groups_v1_1_4June25 %>% group_by(ecozone,year) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
+
+CFSDB_summary <- read.csv("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.csv")
+
+#CFSDB_summary_ecozone <- Firegrowth_groups_v1_01 %>% group_by(ecozone) %>% summarise(AreaWeightedBUIofSpread = weighted.mean(bui,firearea,na.rm=TRUE), n = n())
+
+
+
+###Load in legacy file with ecozone names cross-referenced with ecozone numbers from CFSDB
+DC.year <- read.csv("~/nrcan-cfs-fire/FireDMs/DC_by_ecozone_year.csv")
+
+ecozones.unique <- DC.year %>% group_by(Ecozone) %>% summarize(EcoID = mean(ECOZONE),FFFL = mean(Median.Forest.Floor.Load.kg.m2))  %>% filter(Ecozone != "southern arctic") %>% filter(Ecozone != "prairies")
+
+###gotta join Firegrowth_groups_v1_01 to DC.year to get the ecozone names ported over:
+
+CFSDB_summary <- full_join(CFSDB_summary,ecozones.unique,by = join_by(ecozone == EcoID))
+
+
+##which has the forest floor loading data from the FFFC dataframe already loaded in:
+
+##if DC50 < 20, then set to DC=20
+##not sure the source of DC50 == 0 in CFSDB....
+#DC.year$DC50 <- ifelse(DC.year$DC50<20,250,DC.year$DC50)
+
+## apply isn't working easily, silly matrix output
+#as.data.frame(t(apply(X = DC.year, MARGIN = 1, FUN = CalcFFFC, DC=DC.year$DC50,AGSlow=(DC.year$Median.Forest.Floor.Load.kg.m2*5))))
+
+CFSDB_summary$Duff.consump.frac <- NA
+CFSDB_summary$Duff.consump.kg.m2 <- NA
+
+
+for (i in seq(from=1,to=nrow(CFSDB_summary)))
+{
+  CFSDB_summary$Duff.consump.frac[i] <- CalcFFFC(BUI=CFSDB_summary$AreaWeightedBUIofSpread[i],AGSlow=CFSDB_summary$FFFL[i]*5)
+
+CFSDB_summary$Duff.consump.kg.m2[i] <- CFSDB_summary$Duff.consump.frac[i]*CFSDB_summary$FFFL[i]
+ 
+  
+}
+ 
+
+CFSDB_summary <- CFSDB_summary %>% filter(!is.na(Ecozone)) 
+
+###if we want, can also query the annual area burned by ecozone by year, then compute it all up from there to get some mass amount
+  
+
+
+```
+
+
+```{r AnnualDC-Vis-BUI50-calcs, include=FALSE}
+ 
+ecozones_colours_trunc_w_PM <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#cab2d6","#b15928","#7d8b8f", "#c1c1c1","brown")
+
+
+   ### the graphs, all time series: (1) annual DC by year; (2) absolute consumption values by year; (3) fractional consumption values by year; (4) will add in burned area by ecozone by year eventually too
+
+ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM)+ylim(0,200) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
+  
+ggsave("CFSDB_summary.png")
+
+#+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30))
+
+```
+
+
+```{r AnnualDC-Vis-BUI50, echo=FALSE, fig.cap="Annual variability in area-weighted median BUI of active fire spread days by ecozone.", message=FALSE, warning=FALSE, out.width="75%"}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.png")
+
+```
+
+
+```{r AnnualBUI-Vis-Consump-calcs, message=FALSE, warning=FALSE, include=FALSE}
+
+
+AnnualBUI_Vis_Consump <- ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
+  
+#+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + 
+
+ggsave("AnnualBUI_Vis_Consump.png")
+
+```
+\newpage
+```{r AnnualBUI-Vis-frac-calcs, message=FALSE, warning=FALSE, include=FALSE}
+ 
+
+AnnualBUI_Vis_frac <- ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1) +
+  scale_x_continuous(guide = guide_axis(n.dodge = 2))
+
+ggsave("AnnualBUI_Vis_frac.png")
+
+
+```
+
+\newpage
+
+```{r AnnualBUI-Vis-Consump, echo=FALSE, fig.cap="Annual variability in forest floor median consumption values by ecozone.", message=FALSE, warning=FALSE, out.width="75%"}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/AnnualBUI_Vis_Consump.png")
+
+```
+
+\newpage
+```{r AnnualBUI-Vis-frac, echo=FALSE, fig.cap="Annual variability in forest floor proportional consumption by ecozone.", message=FALSE, warning=FALSE, out.width="75%"}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/AnnualBUI_Vis_frac.png")
+
+```
+
+\newpage
+# Representative photos
+
+```{r Appendix-D-photos-load, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+image_files <- dir("~/nrcan-cfs-fire/FireDMs/Photos/", full.names = TRUE) 
+
+exifinfo <- exif_read(image_files)
+
+exifinfo$panel <-  c("A", "B", "C", "D", "E", "F") 
+
+exifinfo$Description <-  c("", "", "", "", "", "")  
+
+exifinfo$Description[1] <- c("Partial area-wise burning of thin litter and duff layer in a boreal pine-aspen mixedwood stand following surface fire, one year after fire.  Note low consumption of woody debris and snags.")   
+
+exifinfo$Description[2] <- c("Continuous crown fire in a forested boreal peatland dominated by black spruce.  90% of the forest floor experienced approximately 10 cm of burning except small patches of Sphagnum moss that appear as unburned light coloured features.  Note low consumption of downed woody debris embedded in unburned peat in bottom right corner")     
+
+exifinfo$Description[3] <- c("Example of high rates of relative duff consumption in a low pre-fire duff (AGSlow) loading.  Note the low rates of woody debris and stump consumption in this jack pine-dominated stand.")       
+
+exifinfo$Description[4] <- c("Preferrential mortality of understory trees in a low-severity surface fire, one year after the fire.  Larger diameter trees in the background remain alive with near-zero Crown Fraction Burned, while smaller diameter trees, many of which are <5 m in height visible in the foreground, were killed by the fire but with no canopy fuel consumption even of smaller trees.")       
+
+exifinfo$Description[5] <- c("Patchy crown fuel consumption in a high severity fire, one year after the fire.  While the majority of canopy fuels were consumed in this photo, local landscape features such as this depression allowed for small patches of trees to be killed by a surface fire, but the canopy remained unconsumed.  These red needles remain on the tree for 1-2 years and afterwards are an input into the litter layer.")        
+
+exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during high severity fire in mixedwood fuels, taken one week after the fire.  Note the lack of foliage in the aspen trees (white coloured stems in background) in a mixedwood with Engelmann spruce and subalpine fir.")   ##fields to potentially add: ecozone=c(),BUI=c(),dNBR=c(),Severity=c(),Lat=c(),Lon=c(),DateOfBurn=c(),DateOfPhoto=c(),FFFC_frac_mod=c(),Leading_spp=c()) 
+
+q<-1
+
+```
+
+```{r Appendix-D-knitr-png-1, echo=FALSE, fig.cap=exifinfo$Description[1], message=FALSE, warning=FALSE, out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[1]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-2, echo=FALSE, fig.cap=exifinfo$Description[2], out.extra='angle=-90', out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[2]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-3, echo=FALSE, fig.cap=exifinfo$Description[3], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[3]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-4, echo=FALSE, fig.cap=exifinfo$Description[4], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[4]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-5, echo=FALSE, fig.cap=exifinfo$Description[5], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[5]) 
+q <- q+1
+```
+
+```{r Appendix-D-knitr-png-6, echo=FALSE, fig.cap=exifinfo$Description[6], out.width="75%"}
+
+knitr::include_graphics(exifinfo$SourceFile[6]) 
+q <- q+1
+
+```
+
+
+
+

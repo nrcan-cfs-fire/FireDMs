@@ -3056,7 +3056,7 @@ ggsave("emissions_plot.png")
 ```
 
 
-```{r non-GWP-total-C-plot, fig.cap="\\label{fig:non-GWP-total-C-plot}Direct emissions by severity class: orange = high, fig.width=6, message=FALSE, warning=FALSE, include=FALSE, yellow = moderate, green = low severity.  Labelled acronyms \n are Reconciliation Units (see Figure 1) as Ecozone then Province, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reconciliation Units,\n so 'Lab' and 'NFLD' is used.  Some small Reconciliation Units without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure.",out.width="75%", message=FALSE, warning=FALSE}
+```{r non-GWP-total-C-plot, fig.cap="\\label{fig:non-GWP-total-C-plot}Direct emissions by severity class: orange = high, yellow = moderate, green = low severity.  Labelled acronyms \n are Reconciliation Units (see Figure 1) as Ecozone then Province, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reconciliation Units,\n so 'Lab' and 'NFLD' is used.  Some small Reconciliation Units without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure.",out.width="75%", message=FALSE, warning=FALSE}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
 
@@ -3080,7 +3080,7 @@ Across both low and high severity fires, the effect of drought (i.e. Buildup Ind
 
 ## Comparison against existing fuel consumption models
 
-```{r fig-DMs-vs-FBP-CALCS, fig.cap="\\label{fig:fig-DMs-vs-FBP}Fire direct emissions by severity class using the FireDMs approach from this study (lines) as compared to Canadian Fire Behaviour Prediction (FBP) System outputs for Total Fuel Consumption, message=FALSE, warning=FALSE, based on experimental fires of differing fuel types C.2 (boreal spruce), C.3 (Jack and lodgepole pine) as well as M.1 (leafless mixedwood 50% conifer).  An Initial Spread Index value of 14 is used in all FBP calculations.  Points are colourized by Crown Fraction Burned (CFB).", echo=FALSE, include=FALSE}
+```{r fig-DMs-vs-FBP-CALCS, echo=FALSE, include=FALSE}
 library(cffdrs)
 ###easy comparison is for a mixedwood, since the NIR biomass data is an average across all ground plots
 
@@ -3161,7 +3161,7 @@ ggsave("DM_vs_FBP.png")
 
 
 
-```{r fig-DMs-vs-FBP, echo=FALSE, fig.cap="\\label{fig:fig-DMs-vs-FBP}Fire direct emissions by severity class using the FireDMs approach from this study (lines) as compared to Canadian Fire Behaviour Prediction (FBP) System outputs for Total Fuel Consumption, message=FALSE, warning=FALSE, based on experimental fires of differing fuel types C.2 (boreal spruce), C.3 (Jack and lodgepole pine) as well as M.1 (leafless mixedwood 50% conifer).  An Initial Spread Index value of 14 is used in all FBP calculations.  Points are colourized by Crown Fraction Burned (CFB).", echo=FALSE}
+```{r fig-DMs-vs-FBP, echo=FALSE, fig.cap="\\label{fig:fig-DMs-vs-FBP}Fire direct emissions by severity class using the FireDMs approach from this study (lines) as compared to Canadian Fire Behaviour Prediction (FBP) System outputs for Total Fuel Consumption, message=FALSE, warning=FALSE, based on experimental fires of differing fuel types C.2 (boreal spruce), C.3 (Jack and lodgepole pine) as well as M.1 (leafless mixedwood 50% conifer).  An Initial Spread Index value of 14 is used in all FBP calculations.  Points are colourized by Crown Fraction Burned (CFB).", out.width="75%",echo=FALSE}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
 
@@ -3341,7 +3341,7 @@ sum(AnnualEmissionsSummary$CO2e_Mg,na.rm=TRUE)/sum(AnnualEmissionsSummary$Area_h
 
 ```
 
-```{r Emissions-2023-by-RU,fig.cap="\\label{fig:Emissions-2023-by-RU}Comparison of CO2e emissions per hectare between this method at the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.  The solid line is the 1:1 reference line, and the dashed line represents 25% deviation from a 1:1 relationship.", echo=FALSE, message=FALSE, warning=FALSE}
+```{r Emissions-2023-by-RU-calc, echo=FALSE, message=FALSE, warning=FALSE}
 
 #### emissions intensity per RU, compare this approach with NIR
 
@@ -3376,7 +3376,7 @@ AnnualEmissionsSummary_table$unit_id[AnnualEmissionsSummary_table$unit_id==32] <
 ecozones_colours_trunc <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#b15928","#7d8b8f", "#c1c1c1","brown")
 
 
-ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name))+ theme_classic2() +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(50,225)+ylim(50,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average") + geom_abline(intercept = 0,linetype = "dashed", slope = 0.750) + geom_abline(intercept = 0,linetype = "dashed", slope = 1.25)
+emissions2023 <- ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name))+ theme_classic2() +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(50,225)+ylim(50,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",x="NIR 2025 tCO2e per hectare average",y="This Study tCO2e per hectare average") + geom_abline(intercept = 0,linetype = "dashed", slope = 0.750) + geom_abline(intercept = 0,linetype = "dashed", slope = 1.25)
 
 #ggplot(AnnualEmissionsSummary_table,aes(Avg_CO2e_ha,NIR2025Emissions_tCO2e_PerHa,label=unit_id))+geom_point(aes(size=log10(SumArea),colour=eco_name))+ theme_classic2() +guides(size = "none") + geom_abline()+ scale_colour_manual(values=ecozones_colours_trunc)+xlim(50,225)+ylim(50,225)+geom_text_repel()+labs(colour = "Ecozone",size="log10 Area Burned",y="NIR 2025 tCO2e per hectare average",x="This Study tCO2e per hectare average") + geom_abline(intercept = 0,linetype = "dashed", slope = 0.750) + geom_abline(intercept = 0,linetype = "dashed", slope = 1.25)
 
@@ -3385,9 +3385,20 @@ ggplot(AnnualEmissionsSummary_table,aes(NIR2025Emissions_tCO2e_PerHa,Avg_CO2e_ha
 colnames(AnnualEmissionsSummary_table) <- c("Jurisdiction","Ecozone","Reconciliation Unit","Area Burned (Mha)","Moderate Severity Fraction","High Severity Fraction","Emissions t C/ha","This Study Emissions t CO2e/ha","NIR 2025 Emissions tCO2e/ha") 
 
 
-
+ggsave("emissions2023.png")
 
 ```
+
+
+
+
+```{r Emissions-2023-by-RU,fig.cap="\\label{fig:Emissions-2023-by-RU}Comparison of CO2e emissions per hectare between this method at the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.  The solid line is the 1:1 reference line, and the dashed line represents 25% deviation from a 1:1 relationship.", out.width="75%", echo=FALSE, message=FALSE, warning=FALSE}
+
+### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/emissions2023.png")
+```
+
 
 ```{r tab-RU-CO2e-comp, echo=FALSE}
 kbl(AnnualEmissionsSummary_table,align="c", padding=0L,caption="Comparison of per hectare CO2e direct emissions from this study against the 2025 National Inventory Report for the 2023 wildfire season in Canada. Rows are sorted by decreasing 2023 area burned.  Note that for RUs with no managed forest area and no biomass pool data available.") %>% kable_minimal() %>% column_spec(1:9, width = "2cm") %>%
@@ -3551,7 +3562,7 @@ kbl(NIR_AverageCPools_filterSurface_sorted,align="c",caption="Carbon pool (Mg C/
 \newpage
 ```
 
-# Appendix B: Non-linear least squares modelling of soil organic layer consumption
+# Appendix B: Modelling of soil organic layer consumption
 
 For national annual estimates of forest organic soil layer consumption during wildfire, implementations that only utilize Canadian experimental fire data from the Fire Behaviour Prediction System will be limited to a maximum consumption value of 5 kg (biomass) m^-2^ of total surface fuel (woody debris, litter, and duff) of 5 kg m^-2^, or 25 Mg C ha^-1^, given the observation dataset and fitted model parameters. For the common "C-2" boreal spruce fuel type for instance, Surface Fuel Consumption, SFC (biomass units in kg m^-2^ not kg C) is modelled as:
 
@@ -3599,7 +3610,7 @@ The a parameter term that forms the exponent of *e* alongside the Buildup Index 
 
 For example, using a moderately thick \~12 cm thick organic soil layer, the proportion of consumption as a function of Buildup Index using the model above:
 
-```{r example-FFFC-vs-DC-plot-nls, echo=FALSE, fig.cap="Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C ha-1 (12 kg m-2)", message=FALSE, warning=FALSE}
+```{r example-FFFC-vs-BUI-plot-nls-calcs, warning=FALSE, include=FALSE}
 
 ###just show a single (or multiple?) FFFL values here but DC on the x-axis, consumption on the y-axis:
 
@@ -3626,12 +3637,24 @@ FFFC.single.final.df <- cbind(buildup_index,AGSlow.Mg.C.ha,FFFC.single)
 
 colnames(FFFC.single.final.df)[3] <- c("prop_sol_c_combusted")
 
-ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line() + ylim(0,1) + ylab("Forest floor mass fraction consumed") + xlab("Buildup Index (BUI)") + theme_classic2()
+FFFC_vs_BUI_plot <- ggplot(FFFC.single.final.df, aes(buildup_index,prop_sol_c_combusted)) + geom_line() + ylim(0,1) + ylab("Forest floor mass fraction consumed") + xlab("Buildup Index (BUI)") + theme_classic2()
+
+ggsave("FFFC_vs_BUI_plot.png")
 ```
+
+
+
+```{r example-FFFC-vs-BUI-plot-nls, echo=FALSE, fig.cap="Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C ha-1 (12 kg m-2)", out.width="75%", message=FALSE, warning=FALSE}
+
+### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/FFFC_vs_BUI_plot.png")
+```
+
 
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
 
-```{r show-biplot-FFFC-new, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training.", echo=FALSE, message=FALSE, warning=FALSE}
+```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, include=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
 
 
 #### expanded Leave-One-Out cross-validation
@@ -3711,12 +3734,26 @@ MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_F
 ecozones_colours_4 <- c("#fb9a99","#b2df8a","#7d8b8f","brown")
 
 
-ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
+FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
+
+ggsave("FFFC_biplot.png")
 ```
+
+
+
+
+```{r show-biplot-FFFC-new, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training.", out.width="75%", echo=FALSE, message=FALSE, warning=FALSE}
+
+### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/FFFC_biplot.png")
+```
+
+
 
 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
 
-```{r FFFC-surface-plot, echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Rug plots at the axis margins show the marginal density of the data."}
+```{r FFFC-surface-plot-calcs, message=FALSE, warning=FALSE, include=FALSE}
 
 ###goal is to produce a surface plot from DC from 0-750 and AGSlow from 0-200 (or 0-500 maybe)
 ### with isolines of FFFC/FFFL
@@ -3810,13 +3847,24 @@ brks_FFFC <- c(0.95,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2)
 
 ### rename ABoVE_Data_w_FBP_excl_BC$prop_total_bg_c_combusted as "prop_total_bg_c_combusted"
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, AGSlow.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,125)) + scale_x_continuous(limits = c(0,200))
+FFFC_surface_plot <- ggplot(FFFC_expand.BUI, aes(buildup_index, AGSlow.Mg.C.ha, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) + theme(plot.caption = element_text(hjust = 0)) + geom_rug(data=ABoVE_Data_w_FBP_excl_BC) +scale_y_continuous(limits = c(0,125)) + scale_x_continuous(limits = c(0,200))
 
-
+ggsave("FFFC_surface_plot.png")
 
 ```
 
-```{r FFFC-plot-next, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.", echo=FALSE, message=FALSE, warning=FALSE}
+
+```{r FFFC-surface-plot, echo=FALSE, out.width="75%", message=FALSE, warning=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Rug plots at the axis margins show the marginal density of the data."}
+
+### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/FFFC_surface_plot.png")
+```
+
+
+
+
+```{r FFFC-plot-next-calcs, message=FALSE, warning=FALSE, include=FALSE}
 
 FFFC_expand.BUI$FFFL <- FFFC_expand.BUI$AGSlow.Mg.C.ha/5
 
@@ -3826,48 +3874,74 @@ FFFC_expand.BUI$FFFC <- FFFC_expand.BUI$FFFL*FFFC_expand.BUI$prop_total_bg_c_com
 
 ###plot with FBP units for fuel load (kg/m2), and upper limit of FBP Red Book BUI 
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300))
+FFFC_expand_plot <- ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=prop_total_bg_c_combusted)) + geom_contour(breaks=brks_FFFC) + geom_dl(aes(label=..level..), method="top.pieces", stat="contour",breaks = brks_FFFC) +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300))
+
+ggsave("FFFC_expand_plot.png")
 
 ```
 
-```{r FFFC-plot-next2, echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Note that peatland ecosystems begin at approximately 50 kg/m2 of forest floor fuel load, or approximately 40 cm organic soil thickness."}
- ### try it with isolines of absolute consumption:
 
+```{r r FFFC-plot-next, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.", echo=FALSE, message=FALSE, out.width="75%", warning=FALSE}
+
+### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/FFFC_expand_plot.png")
+```
+
+
+
+```{r more-calcs, echo=FALSE}
 brks_FFFC_abs <- c(1,2.5,5,10,15,20)
 
 FFFC_expand.BUI <- FFFC_expand.BUI %>% filter(FFFL < 25) %>% filter(buildup_index < 300)
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=FFFC)) + geom_contour(breaks=brks_FFFC_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFC_abs)+xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) 
+plot_1 <- ggplot(FFFC_expand.BUI, aes(buildup_index, FFFL, z=FFFC)) + geom_contour(breaks=brks_FFFC_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFC_abs)+xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2)") + theme(plot.caption = element_text(hjust = 0)) 
 
-```
-
-```{r FFFC-plot-next3, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba"}
- ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+ggsave("plot_1.png")
 
 FFFC_expand.BUI <- FFFC_expand.BUI %>% filter(FFFL > 0) %>% filter(buildup_index > 0) # %>% filter(buildup_index < 300)
 
 brks_FFFL_abs <- c(4,8,12,20)
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC, z=FFFL)) + geom_contour(breaks=brks_FFFL_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFL_abs) +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2") + theme(plot.caption = element_text(hjust = 0)) 
+plot_2 <- ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC, z=FFFL)) + geom_contour(breaks=brks_FFFL_abs) + scale_y_continuous(limits = c(0,25)) + scale_x_continuous(limits = c(0,300)) + geom_dl(aes(label=..level..), method="maxvar.qp", stat="contour",breaks = brks_FFFL_abs) +xlab("Buildup Index") + ylab("Forest Floor Fuel Load (kg/m2") + theme(plot.caption = element_text(hjust = 0)) 
 
+ggsave("plot_2.png")
 
-```
-
-```{r FFFC-plot-next4, echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Forest floor consumption as a function of BUI across varying levels of forest floor fuel load (FFFL), as shown by coloured dots."}
- ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
 FFFC_expand.BUI$FFFL <- as.factor(FFFC_expand.BUI$FFFL)
 
-ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL)) +scale_color_viridis_d() + ylab("Forest Floor Fuel Consumption (kg/m2)") + xlab("Buildup Index")
+plot_3 <- ggplot(FFFC_expand.BUI, aes(buildup_index, FFFC)) + geom_point(aes(colour = FFFL)) +scale_color_viridis_d() + ylab("Forest Floor Fuel Consumption (kg/m2)") + xlab("Buildup Index")
+
+ggsave("plot_3.png")
 
 ```
 
-```         
-\newpage
+
+
+```{r FFFC-plot-next2, echo=FALSE, message=FALSE,out.width="75%", warning=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Note that peatland ecosystems begin at approximately 50 kg/m2 of forest floor fuel load, or approximately 40 cm organic soil thickness."}
+ ### try it with isolines of absolute consumption:
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/plot_1.png")
+
 ```
+
+```{r FFFC-plot-next3, eval=FALSE,out.width="75%", message=FALSE, warning=FALSE, include=FALSE,fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba"}
+ 
+
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/plot_2.png")
+
+
+```
+
+```{r FFFC-plot-next4, echo=FALSE, message=FALSE,out.width="75%", warning=FALSE,fig.cap="Forest floor consumption as a function of BUI across varying levels of forest floor fuel load (FFFL), as shown by coloured dots."}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/plot_3.png")
+
+```
+
 
 # Appendix C: Annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
 
-```{r AnnualBUI, echo=FALSE, message=FALSE, warning=FALSE}
+```{r AnnualBUI-calcs, echo=FALSE, message=FALSE, warning=FALSE}
 
 ###can always update this via CFSDB: https://osf.io/f48ry/
 ###example extract for individual fires
@@ -3928,7 +4002,8 @@ CFSDB_summary <- CFSDB_summary %>% filter(!is.na(Ecozone))
 
 ```
 
-```{r AnnualDC-Vis-BUI50, fig.cap="Annual variability in area-weighted median BUI of active fire spread days by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
+
+```{r AnnualDC-Vis-BUI50-calcs, include=FALSE}
  
 ecozones_colours_trunc_w_PM <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#ff7f00","#cab2d6","#b15928","#7d8b8f", "#c1c1c1","brown")
 
@@ -3937,43 +4012,66 @@ ecozones_colours_trunc_w_PM <- c("#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1
 
 ggplot(CFSDB_summary, aes(year,AreaWeightedBUIofSpread,colour=Ecozone))  + geom_point() + ylab("Median Buildup Index of fires in ecozone") + facet_wrap(vars(Ecozone)) +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM)+ylim(0,200) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
   
-  
-  #
+ggsave("CFSDB_summary.png")
 
 #+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30))
 
 ```
 
-```{r AnnualBUI-Vis-Consump, fig.cap="Annual variability in forest floor median consumption values by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
+
+```{r AnnualDC-Vis-BUI50,out.width="75%", fig.cap="Annual variability in area-weighted median BUI of active fire spread days by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/CFSDB_summary.png")
+
+```
 
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
+```{r AnnualBUI-Vis-Consump-calcs, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+AnnualBUI_Vis_Consump <- ggplot(CFSDB_summary, aes(year,Duff.consump.kg.m2,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled Duff Consumption, kg/m2") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,8) +  scale_x_continuous(guide = guide_axis(n.dodge = 2))
   
 #+ geom_dl(aes(label = Ecozone, color = Ecozone), method=list("last.points",rot=30)) + 
 
+ggsave("AnnualBUI_Vis_Consump.png")
+
 ```
 
-```{r AnnualBUI-Vis-frac, fig.cap="Annual variability in forest floor proportional consumption by ecozone.", echo=FALSE, message=FALSE, warning=FALSE}
+```{r AnnualBUI-Vis-frac-calcs, echo=FALSE, message=FALSE, warning=FALSE}
  
 
-ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1) +
+AnnualBUI_Vis_frac <- ggplot(CFSDB_summary, aes(year,Duff.consump.frac,colour=Ecozone)) + facet_wrap(vars(Ecozone)) +theme(legend.position="none")+ geom_point() + ylab("Modelled duff consumption proportion") +theme_classic2() + theme(legend.position="none") + scale_colour_manual(values=ecozones_colours_trunc_w_PM) + ylim(0,1) +
   scale_x_continuous(guide = guide_axis(n.dodge = 2))
 
+ggsave("AnnualBUI_Vis_frac.png")
 
 
 ```
 
-```         
+
+
+```{r AnnualBUI-Vis-Consump, fig.cap="Annual variability in forest floor median consumption values by ecozone.", out.width="75%", echo=FALSE, message=FALSE, warning=FALSE}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/AnnualBUI_Vis_Consump.png")
+
+```
+
+
+```{r AnnualBUI-Vis-frac, fig.cap="Annual variability in forest floor proportional consumption by ecozone.",  out.width="75%", echo=FALSE, message=FALSE, warning=FALSE}
+ ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
+knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/AnnualBUI_Vis_frac.png")
+
+```
+
+
+
 \newpage
-```
-
-```         
-\newpage
-```
 
 # Appendix D: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
+
+\newpage
 
 # Appendix E: Disturbance Matrix Examples
 
@@ -3983,6 +4081,8 @@ DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSE", SeverityClass = "High")
 ```
+
+\newpage
 
 # Appendix F: Representative photos
 
@@ -4003,6 +4103,7 @@ exifinfo$Description[2] <- c("Continuous crown fire in a forested boreal peatlan
 exifinfo$Description[3] <- c("Example of high rates of relative duff consumption in a low pre-fire duff (AGSlow) loading.  Note the low rates of woody debris and stump consumption in this jack pine-dominated stand.")       
 
 exifinfo$Description[4] <- c("Preferrential mortality of understory trees in a low-severity surface fire, one year after the fire.  Larger diameter trees in the background remain alive with near-zero Crown Fraction Burned, while smaller diameter trees, many of which are <5 m in height visible in the foreground, were killed by the fire but with no canopy fuel consumption even of smaller trees.")       
+
 exifinfo$Description[5] <- c("Patchy crown fuel consumption in a high severity fire, one year after the fire.  While the majority of canopy fuels were consumed in this photo, local landscape features such as this depression allowed for small patches of trees to be killed by a surface fire, but the canopy remained unconsumed.  These red needles remain on the tree for 1-2 years and afterwards are an input into the litter layer.")        
 
 exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during high severity fire in mixedwood fuels, taken one week after the fire.  Note the lack of foliage in the aspen trees (white coloured stems in background) in a mixedwood with Engelmann spruce and subalpine fir.")   ##fields to potentially add: ecozone=c(),BUI=c(),dNBR=c(),Severity=c(),Lat=c(),Lon=c(),DateOfBurn=c(),DateOfPhoto=c(),FFFC_frac_mod=c(),Leading_spp=c()) 
@@ -4010,43 +4111,43 @@ exifinfo$Description[6] <- c("Example of consumption of broadleaf foliage during
 q<-1
 
 ```
+\newpage
+```{r Appendix-D-knitr-png-1, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="50%"}
 
-```{r Appendix-D-knitr-png-1, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
-
-
-knitr::include_graphics(exifinfo$SourceFile[q]) 
-q <- q+1
-```
-
-```{r Appendix-D-knitr-png-2, echo=FALSE, fig.cap=exifinfo$Description[q],out.extra='angle=-90', out.width="75%"}
 
 knitr::include_graphics(exifinfo$SourceFile[q]) 
 q <- q+1
 ```
-
-```{r Appendix-D-knitr-png-3, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
-
-knitr::include_graphics(exifinfo$SourceFile[q]) 
-q <- q+1
-```
-
-```{r Appendix-D-knitr-png-4, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+\newpage
+```{r Appendix-D-knitr-png-2, echo=FALSE, fig.cap=exifinfo$Description[q],out.extra='angle=-90', out.width="50%"}
 
 knitr::include_graphics(exifinfo$SourceFile[q]) 
 q <- q+1
 ```
-
-```{r Appendix-D-knitr-png-5, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
+\newpage
+```{r Appendix-D-knitr-png-3, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="50%"}
 
 knitr::include_graphics(exifinfo$SourceFile[q]) 
 q <- q+1
 ```
+\newpage
+```{r Appendix-D-knitr-png-4, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="50%"}
 
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+\newpage
+```{r Appendix-D-knitr-png-5, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="50%"}
+
+knitr::include_graphics(exifinfo$SourceFile[q]) 
+q <- q+1
+```
+\newpage
 ```{r Appendix-D-knitr-png-6, echo=FALSE, fig.cap=exifinfo$Description[q], out.width="75%"}
 
 knitr::include_graphics(exifinfo$SourceFile[q]) 
 q <- q+1
 
 ```
-
+\newpage
 # References

@@ -144,9 +144,9 @@ rmarkdown::render('~/nrcan-cfs-fire/FireDMs/GMD/FireDMs.Rmd'))
 
 ```
 
-## Carbon Modelling
+## Carbon modelling
 
-### CBM-CFS3 Spatial Units
+### CBM-CFS3 spatial units
 
 ```{r RU-map, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -166,6 +166,10 @@ st_crs(ecozones_used) <- 3978
 
 
 Canada <- ne_countries(scale = "medium", returnclass = "sf", country = "Canada")
+
+##load provinces just for the labels
+PT <- st_read("~/nrcan-cfs-fire/FireDMs/Canada-provinces.gpkg", quiet = TRUE)
+
 ##also load big lakes in Canada
 
 ###download option, but annoying loading message that's hard to suppress:
@@ -183,12 +187,12 @@ lakes50_crop <- st_intersection(lakes50, Canada)
 
 lakesCanada_3978 <- sf::st_transform(lakes50_crop, 3978)
 Canada_3978 <- sf::st_transform(Canada, 3978)
-
+PT_3978 <- sf::st_transform(PT,3978)
 
 
 ```
 
-```{r Fig1-RU-ecozones-NOT-RUN, eval=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones-NOT-RUN}Reconciliation Units used in the CBM-CFS3 framework.  Numbers correspond to RU identifiers that are different combinations of ecozones and subnational administrative units (provinces and territories). Non-forest arctic ecozones are not included in this analysis and are not shown in this figure.", message=FALSE, warning=FALSE, include=FALSE, out.width="50%"}
+```{r Fig1-RU-ecozones-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE, out.width="50%"}
 ReportingUnits <- ReportingUnits %>% filter(eco_name != "arctic cordillera") %>% filter(eco_name != "northern arctic") %>% filter(eco_name != "southern arctic")
 
 ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1","brown")
@@ -197,13 +201,11 @@ ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c
 
 lakesCanada_3978_clip <- st_intersection(lakesCanada_3978,ReportingUnits)
 
-ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),,show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  + geom_sf_label(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id))) +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank())
-
-## optional: label provinces at centroids?
+ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates") +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_3978,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates") 
 
 
-### prior version without labels and incl arctic Canada:
-#ggplot(data = Canada_3978) +  geom_sf(colour="black")+ geom_sf(data=ReportingUnits, aes(fill=factor(eco_name)),show.legend = "point") + geom_sf(data = lakesCanada_3978,colour="black",fill="white") + theme(legend.position = "none") + geom_sf_label(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id))) + scale_fill_manual(values=ecozones_colours)+ylab("")+xlab("") # + geom_sf_label(data=ecozones_used,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(ECOZONE))) # + ggrepel::geom_label_repel(data=ecozones_used, aes(label = ECOZONE, geometry = geometry), stat = "sf_coordinates", min.segment.length = 0,label.size = NA) 
+
+ggsave("RU_plot.png",height=8,width=8,units=c("in"))
 
 ```
 
@@ -216,14 +218,14 @@ knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/RU_plot.png")
 
 Carbon reporting in Canada's forests is broken down by Reconciliation Unit (RU), which is the intersection of terrestrial ecozones and provincial/territorial boundaries, as shown in Figure \ref{fig:Fig1-RU-ecozones}. Forest carbon stocks in Canada are influenced by species composition, age class distribution, natural disturbance history, human-influenced management regime and climatic variables, among other factors, which are well-represented by the RU framework supporting Canada’s NIR. Due to the current spatial imprecision of certain key model data (e.g. deforestation rates), analysis finer than the RU-level tends to misrepresent regional-variation in emission estimates.
 
-### C Pool Description
+### Carbon pool description
 
 ```{r CBM-pools-simple-table,tab.cap="\\label{tab:CBM-pools-simple-table}", echo=FALSE, message=FALSE, warning=FALSE}
 
 
-Component <- c("Stemwood","Foliage","Branches","Coarse woody debris","Forest Floor (incl dead fallen branches and coarse roots)","Snags")
+Component <- c("Stemwood","Foliage","Branches","Coarse woody debris","Forest Floor","Snags")
 FireBehaviour <- c("The main stem of the tree can either survive or be killed and converted to a snag, depending on severity.", "Susceptible to combustion at high severity and mortality at all severities. ","Smaller diameter classes <0.5 cm susceptible to combustion at high severity and mortality at all severities. ","Susceptible to combustion at all severities. After fire, uncombusted snags fall down into this pool.","Combustion fraction dependent on drought condition; lower susceptibility in Fibric, Humic, and Organic soil horizons (i.e. Slow pool). After fire at any severity, uncombusted foliage and dead branches transfer to these pools. Uncombusted roots can be transferred into these pools for high severity fires when the main stem experiences mortality. ","Higher combustion susceptibility at higher severity ")
-CBM_Pool <- c("Merchantable","Foliage","Other","Medium DOM","Above Ground Very Fast (Litter); Above Ground Fast; Above Ground Slow DOM (F,H,O)","Stem, Branch Snag")
+CBM_Pool <- c("Merchantable","Foliage","Other","Medium DOM","Above Ground Very Fast (Litter); Above Ground Fast (dead fallen branches and coarse roots); Above Ground Slow DOM (F,H,O)","Stem, Branch Snag")
 
 CBM_pools_table <- cbind(Component,FireBehaviour,CBM_Pool)
 
@@ -469,7 +471,7 @@ Limited data is available on the fraction of woody debris consumption alongside 
 
 Note that where historical burn severity data from experimental fires is not available, the fire recorded fire classification type of surface, intermittent crowning, and active crown fire are used instead as proxies for low, moderate, and high severity fire, respectively. Fine woody debris \<0.5 cm in diameter is consumed at the exact same rate as the litter pool (see section above).
 
-### Forest Floor Consumption
+### Forest floor consumption
 
 Unlike canopy consumption metrics that are reliably estimated via burn severity remote sensing, the depth and magnitude of consumption in the forest floor is only weakly related to burn severity metrics, since increasing burn depth in organic soils typically yields little spectral response in remote sensing imagery [@frenchQuantifyingSurfaceSeverity2020]. Furthermore, there is at times a temporal disconnect between consumption in the canopy and the forest floor, with lower-intensity surface fires with a flaming residence time of a minute or less [@wottonFlameTemperatureResidence2011] without canopy involvement at times leading to deep smouldering occurring over hours to days afterwards [@hudaStudyFuelSmokeDynamics2020; @huangDownwardSpreadSmouldering2017]. Consumption of fine fuels in the litter layer of the forest floor is nearly complete for any given surface fire intensity [@vanwagnerDuffConsumptionFire1972], consumption of deeper organic soil horizons (F+H layers in upland forests and upper peat layers in wetlands) is more dependent on the interaction between moisture content of the soil organic layer and depth of the organic soil [@forestrycanadafiredangerratinggroup1992; @daviesVegetationStructureFire2016]. While the moisture content of the soil organic layer is not directly observable nor parameterized in Numerical Weather Model [@hanesEvaluationNewMethods2023], it is well-estimated simple water balance models within the Canadian Fire Weather Index System [@vanwagnerDevelopmentStructureCanadian1987] the Drought Code and Duff Moisture Code, as well as their composite, the Buildup Index. Given this lack of direct observability of forest floor consumption, this model uses fire weather and fuel loading as inputs to the forest floor consumption model, without consideration of the remotely sensed fire severity observations used in canopy consumption modelling.
 
@@ -809,8 +811,8 @@ FFFC <- arrange(FFFC,factor(Ecozone, levels = as.matrix(ecozones.list)))
 
 ```
 
-```{r tab-DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab::tab-DuffConsumpTable} Example fire weather, fuel loading, and duff consumption values per ecozone. Note that FFFL values are from the soil-specific Letang et al., (2012) compilation and not directly from the RU values provided in the National GHG Inventory Report.Median Buildup Index of burning is from Barber et al. (2024)"}
-kbl(FFFC, col.names = c("Ecozone", "Median Buildup Index of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "Proportion consumed")) %>%  
+```{r tab-DuffConsumpTable, echo=FALSE, message=FALSE, warning=FALSE,tab.cap="\\label{tab::tab-DuffConsumpTable}"}
+kbl(FFFC,caption="Example fire weather, fuel loading, and duff consumption values per ecozone. Note that FFFL values are from the soil-specific Letang et al., (2012) compilation and not directly from the RU values provided in the National GHG Inventory Report.Median Buildup Index of burning is from Barber et al. (2024)", col.names = c("Ecozone", "Median Buildup Index of Burning", "Median FFFL kg m-2", "FFFC kg m-2", "Proportion consumed")) %>%  
   kable_minimal()  #%>%
           #kable_styling(latex_options = "scale_down") %>%
   #kable_styling(latex_options = "hold_position")
@@ -863,7 +865,7 @@ SourceSink$Ecozone <- rep(as.matrix(ecozones.list),times = nrow(SourceSinkGeneri
 
 ```
 
-## Source Data for Emissions Comparisons
+## Source data for emissions comparisons
 
 Direct wildfire C emissions from the proposed FireDMs scheme in CBM-CFS3 are compared to the FBP System model, which is observed biomass consumption rates from numerous experimental wildfires across Canada. The FBP System uses fixed fuel loads per fuel type, while FireDMs uses regional fuel loads, as represented by biomass pools defined per RU from forest inventory data.
 
@@ -877,7 +879,7 @@ where an MCE over 0.90 indicates a dominance of smouldering, and an MCE below 0.
 
 While not strictly a carbon emission from wildfire, N~2~O is tracked as part of the NIR process and is an important component of CO~2~-equivalent calculations. CO~2~-equivalent calculations here will use the CBM-CFS3 emission factor of 0.17 g/kg CO~2~ (0.09 g/kg biomass) to simplify comparisons of C emissions between NIR and FireDMs, recognizing that this N~2~O emissions factor is lower than widely cited emissions factors compilations [@binteshahidNEIVAv10NextgenerationEmissions2024;@andreaeEmissionTraceGases2019] between 0.20 and 0.24 g/kg of biomass.
 
-## Calculation of Annual Direct C Emissions from Fire
+## Calculation of annual direct C emissions from fire
 
 In an effort to compare model outputs against an independent, large-scale set of fire atmospheric emissions, fire direct atmospheric emissions from the record breaking Canadian 2023 fire season were computed using the above framework. The classified burn severity product from the National Burned Area Composite annual production was utilized (see @hall2020 for an algorithm description). In NBAC, an internal tracking value "NFIREID" is utilized, which is the final satellite-derived burned area polygon. Fire polygons are split across any subnational administrative boundaries (i.e. provinces and territories). Since carbon pool sizes vary across RU boundaries, this allows for a single NFIREID to be present across multiple RUs.
 
@@ -2415,15 +2417,6 @@ for (i in seq(1:length(source.list.checksum))) {
 
 ```
 
-```{r ComputeDailyFluxes, echo=FALSE, message=FALSE, warning=FALSE}
-### Goal: providing SCANFI and severity data, compute fluxes for a given set of FWI conditions
-
-###basically, provide the following: (1) aligned rasters of SCANFI (corresponding to pool names) and severity data (0,1,2,3?) as well as a global DC value for duff consumption estimates
-
-##outputs: tabular values of the sum of the gas fluxes and updated SCANFI rasters that reflect the fire DMs
-  
-```
-
 ```{r makeTables, echo=FALSE, message=FALSE, warning=FALSE}
  
 ###Function: produce simplified Disturbance Matrix tables
@@ -3006,23 +2999,8 @@ emissions_grid_out_stats_High %>% arrange((Ratio_BUI_40_200_High))
 ## Direct fire carbon emissions as a function of fire severity and drought
 
 ```{r non-GWP-total-C-plot-CALCS, message=FALSE, warning=FALSE, include=FALSE}
-#emissions_grid_out$Severity_uniform <- as.factor(emissions_grid_out$Severity_uniform)
-#emissions_grid_out$Severity_uniform <- factor(emissions_grid_out$Severity_uniform, levels = c("High","Mod","Low"))
 
-##already filtered out some that are a tiny sliver of an area
 emissions_grid_out_plot <- emissions_grid_out 
-
-###I think input data is missing for MP, but have the NIR pools...
-###need to compute MW plains also those extra HP in MB and QC.  add the HP, will still be square once PM YT and BC NWT are gone
-##%>% filter(EcoAdmin != "Mixedwood Plains Ontario") %>% filter(EcoAdmin != "Mixedwood Plains Quebec")
-
-##where is Hudson Plains MB?
-##where is Hudson Plains QC??
-##where is TSE QC?
-
-##what about TSW Nunavut?
-##BSW AB is tiny
-###PM YT is tiny
 
 emissions_grid_out_plot$EcoAdmin <- case_match(emissions_grid_out_plot$EcoAdmin,
                                           "Atlantic Maritime New Brunswick" ~ "AM NB",
@@ -3069,12 +3047,13 @@ emissions_grid_out_plot$EcoAdmin <- case_match(emissions_grid_out_plot$EcoAdmin,
                                           "Taiga Shield West Northwest Territories" ~ "TSW NT")
 
 
-emissions_plot <- ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_bw() + ylab("Direct emissions from wildfire\n(t C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) +  scale_x_continuous(guide = guide_axis(n.dodge = 2)) + ylim(0,100) + theme(panel.grid.minor = element_blank()) + theme(strip.background = element_rect(colour = "black", fill = "white"))
+emissions_plot <- ggplot(emissions_grid_out_plot,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform,linetype=Severity_uniform)) + geom_line(linewidth = 1.5) + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_bw() + ylab("Direct emissions from wildfire\n(t C/ha) not adjusted to GWP") + xlab("Buildup Index of burning") + theme(legend.position="none") + scale_colour_manual(values = c("#440154FF",  "#287C8EFF","#C7E202FF")) +
+  scale_linetype_manual(values = c("solid","longdash","dotdash")) + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) +  scale_x_continuous(guide = guide_axis(n.dodge = 2)) + ylim(0,100) + theme(panel.grid.minor = element_blank()) + theme(strip.background = element_rect(colour = "black", fill = "white"))
 
 ggsave("emissions_plot.png",width=8,height=8,units=c("in"))
 ```
 
-```{r non-GWP-total-C-plot, echo=FALSE, fig.cap="\\label{fig::non-GWP-total-C-plot}Direct emissions by severity class: orange = high, yellow = moderate, green = low severity.  Labelled acronyms \n are RUs named as ecozone then administrative unit, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reconciliation Units,\n so 'Lab' and 'NFLD' is used.  Some small RUs without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure.",out.width="100%"}
+```{r non-GWP-total-C-plot, echo=FALSE, fig.cap="\\label{fig::non-GWP-total-C-plot}Direct emissions by severity class: solid dark line = high severity, green dot-dash = moderate, blue dashed line = low severity.  Labelled acronyms \n are RUs named as ecozone then administrative unit, so BC is both Boreal Cordillera \n and British Columba. Labrador is distinct from the island of Newfoundland for Reconciliation Units,\n so 'Lab' and 'NFLD' is used.  Some small RUs without unique NIR biomass pool data are not shown in this figure but are computed still from adjacent RU from the same ecozone.  Some RU with very small burned area are also not shown in this figure.",out.width="100%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 
@@ -3152,25 +3131,14 @@ colnames(test_fbp_out)[45] <- c("Median_BUI")
 
 library(ggnewscale)
 
+emissions_grid_out_FBP$Severity_uniform <- as.factor(emissions_grid_out_FBP$Severity_uniform)
 
-##label the ecozones by % of CNFDB area burned 1980-2024?
+levels(emissions_grid_out_FBP$Severity_uniform) <- c("High", "Mod", "Low")
 
-DM_vs_FBP <- ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line() + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_classic2() + ylab("Direct emissions from wildfire\n(Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning")  + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold"),guide = "none") + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) + ggnewscale::new_scale_color() +  geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=CFB,shape=FuelType)) + theme(legend.position="bottom") + scale_colour_steps2() 
-
-
-### colourize the FBP data points by CFB.  Note in the legend the CFB approximations for severity classes
+DM_vs_FBP <- ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions)) + geom_line(aes(colour = Severity_uniform),linewidth = 1.5) + facet_wrap(vars(EcoAdmin),labeller = labeller(EcoAdmin = label_wrap_gen(20))) + theme_classic2() + ylab("Direct emissions from wildfire\n(Mg C/ha) not adjusted to GWP") + xlab("Buildup Index of burning")  + scale_colour_manual(name="Severity",values = c("#440154FF","#287C8EFF","#C7E202FF"))  + theme(strip.text.x = element_text(size = 8)) +theme(plot.caption = element_text(hjust = 0.5)) + ggnewscale::new_scale_color() +  geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=CFB,shape=FuelType)) + theme(legend.position="bottom") + scale_colour_steps2()+ theme(legend.direction='vertical')
 
 
-
-#ggplot(emissions_grid_out_FBP,aes(Median_BUI,SumC_direct_emissions,colour = Severity_uniform)) + geom_line(color="#fc6f03") + scale_colour_manual(values = c("#fc6f03",  "darkgreen","gold")) + facet_wrap(vars(EcoAdmin),nrow=2,labeller = labeller(EcoAdmin = label_wrap_gen(20))) + geom_point(data=test_fbp_out,aes(Median_BUI,TFC*5,colour=FuelType))
-
-# + geom_point(aes(Median_BUI,TFC,colour="darkorange"))
-
-## and then some manual labelling at the centroid of each?
-
-##show rugplot etc of BUI from CFSDB?
-
-ggsave("DM_vs_FBP.png")
+ggsave("DM_vs_FBP.png",width=6,height=9,units=c("in"))
 
 ```
 
@@ -3465,13 +3433,13 @@ The RU with the largest burned area in 2023 was in the unmanaged forest of Quebe
 
 ### Relationship to other estimates
 
-The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Buildup Index). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the FBP System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence on severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat ***!!![Ellen's paper]!!!***, estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach. Under severe drought conditions and light winds, very large fires often create more wind and energy than is available in gradient winds as measured at nearby airports and fire weather observing stations [@clarkAnalysisSmallScaleConvective1999]. Thus, fire behaviour and fuel consumption models solely driven by wind inputs from distant meteorological stations can under-predict fire intensity and therefore likely fire severity. While fire-atmosphere models are available for research [@coenGenerationForecastExtreme2018] and some forecasting and planning purposes [@linn2020], modelling resources are typically not made available for the extensive and largely unsuppressed fires in northern Canada. Fire severity mapping after the fact is able to account for high fire severity [@whitman2018] even when fire spread occurs under light winds more associated with lower fire intensity [@whitman2024].
+The forest floor emissions modelling scheme used here builds upon the CanFIRE model [@degroot2013] which incorporates a similar estimate of absolute forest floor emissions based on fuel type and various Fire Weather Index inputs (including but not limited to Buildup Index). While the CanFIRE model is also capable of estimating tree mortality, the premise of CanFIRE lies in the use of the FBP System to model fire intensity and a physiological-thermodynamic model of tree damage and mortality. CanFIRE is able to run entirely in scenario or forecast mode, i.e. no fire severity map is needed to run the model, unlike the focus here on a mechanism to estimate carbon fluxes and pools after fire severity is mapped. Ultimately, models like CanFIRE can be used for near-real time emissions estimates of direct and indirect fire carbon emissions (and also for prescribed fire planning and scenario testing), while this modelling framework is best used solely operational carbon accounting and reporting given its strong dependence on severity maps. While fire severity can be estimated empirically based on geospatial inputs without observation using multispectral satellite data such as Landsat, estimation using coupled fire behaviour and ecology models such as CanFIRE is a more direct approach. Under severe drought conditions and light winds, very large fires often create more wind and energy than is available in gradient winds as measured at nearby airports and fire weather observing stations [@clarkAnalysisSmallScaleConvective1999]. Thus, fire behaviour and fuel consumption models solely driven by wind inputs from distant meteorological stations can under-predict fire intensity and therefore likely fire severity. While fire-atmosphere models are available for research [@coenGenerationForecastExtreme2018] and some forecasting and planning purposes [@linn2020], modelling resources are typically not made available for the extensive and largely unsuppressed fires in northern Canada. Fire severity mapping after the fact is able to account for high fire severity [@whitman2018] even when fire spread occurs under light winds more associated with lower fire intensity [@whitman2024].
 
 While the fire DMs presented here are designed for use in NFCMARS for GHG estimation and reporting, their simplicity and similarity to many other forest carbon schema allows them to be used elsewhere such as in other forest dynamics [@brecka2020] and earth system models [@melton2020] that require estimates of Canadian forest carbon emissions from wildfire. @stenzel2019 showed that severity-informed fire C estimates (with snags) in the US are only 30-40% as large as fixed or variable severity data using their LANDIS-type models. Large over-estimates of in-fire bole consumption in models were not observed to correspond to measurements in the field. In the model presented here, our estimates of snag consumption are based on simple but logical relationships with CFB, but more comprehensive data collection and field observations would be required to extend the accuracy of the snag consumption scheme.
 
 ### Indirect fire emissions
 
-While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operational practice in Canada ***!!!![cite Ellen's upcoming paper]!!!***. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall [@angers2011] and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM-CFS3. For organic soil pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM-CFS3, decomposition rates are calibrated against field decomposition litterbag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
+While fire emissions within the year of the fire are majority of the GHG flux, enhanced post-fire decomposition of dead biomass persists for many years after a fire. The increase in post-fire tree mortality between the year of the fire and the year following the fire is as much as 30% in low and moderate-severity stands [@angers2011]. This extended mortality is not captured in year-of fire severity mapping but is likely better assessed using fire severity data captured the year following fire, as is operational practice in Canada. Similarly, the transition of fire-killed stems (snags) from upright to the forest floor woody debris takes between 5-8 years for 50% of stems to fall [@angers2011] with stemfall rate highest in low-severity fire. Field observations show that initial assessments of fire severity are the primary predictors of snag fall [@angers2011] and decomposition [@boulanger2011] rates, meaning the mapped severity method used here provides a useful input for multi-year fire carbon modelling of the snag pool in CBM-CFS3. For organic soil pools, fire has been shown to suppress decomposition rates in upland soil pools where drier post-fire conditions are present [@holden2015], while in permafrost upland [@odonnell2011] and peatland [@gibson2018; @gibson2019] systems, fire has profound impacts on soil carbon pools by rapidly increasing thaw depths and subsequent decomposition rates. Currently in CBM-CFS3, decomposition rates are calibrated against field decomposition litterbag experiments [@trofymow2002] and annual climate metrics that do not take into account how disturbances such as fire (and fire of varying severity) modify decomposition rates in the absence of a change in climate.
 
 ### Model gaps
 
@@ -3599,7 +3567,7 @@ knitr::include_graphics("FFFC_vs_BUI_plot.png")
 
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
 
-```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
+```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
 
 
 #### expanded Leave-One-Out cross-validation
@@ -3684,7 +3652,7 @@ FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pre
 ggsave("FFFC_biplot.png")
 ```
 
-```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
+```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 
@@ -3793,7 +3761,7 @@ ggsave("FFFC_surface_plot.png")
 
 ```
 
-```{r FFFC-surface-plot, echo=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Rug plots at the axis margins show the marginal density of the data.", message=FALSE, warning=FALSE, out.width="75%"}
+```{r FFFC-surface-plot, echo=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Rug plots at the axis margins show the marginal density of the data.", message=FALSE, warning=FALSE, out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 
@@ -3816,7 +3784,7 @@ ggsave("FFFC_expand_plot.png")
 
 ```
 
-```{r FFFC-plot-next, echo=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer (Medium DOM) Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.", message=FALSE, warning=FALSE, out.width="75%"}
+```{r FFFC-plot-next, echo=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.", message=FALSE, warning=FALSE, out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 

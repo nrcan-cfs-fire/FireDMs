@@ -150,12 +150,6 @@ rmarkdown::render('~/nrcan-cfs-fire/FireDMs/GMD/FireDMs.Rmd'))
 
 ```{r RU-map, echo=FALSE, message=FALSE, warning=FALSE}
 
-#### queue up data for figure 1:
-### map of ecozones and plot locations using ggplot
-### https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-2.html
-##gml link for ecozones is here:http://www.agr.gc.ca/atlas/data_donnees/bio/aafcEcostratification/gml/ECOZONE_V2_2_GML.zip
-###WFS for ecozones is here: http://ecozones.ca/english/services.html
-### using WFS in ggplot is here: https://inbo.github.io/tutorials/tutorials/spatial_wfs_services/
 
 ##read ecozones map from local dir:
 
@@ -877,7 +871,7 @@ MCE = \frac{CO_{2}}{CO_{2}+CO}
 
 where an MCE over 0.90 indicates a dominance of smouldering, and an MCE below 0.85 indicates a dominance of smouldering [@akagi2011]. While MCE is often defined in volumetric gas concentration units (ppmv), in this study we compute MCE as an output of FireDMs on a molar basis. Calculations of MCE from FireDMs is compared to localized smoke plume observations of MCE for distinct periods during the ARCTAS airborne campaign [@hornbrook2011].
 
-While not strictly a carbon emission from wildfire, N~2~O is tracked as part of the NIR process and is an important component of CO~2~-equivalent calculations. CO~2~-equivalent calculations here will use the CBM-CFS3 emission factor of 0.17 g/kg CO~2~ (0.09 g/kg biomass) to simplify comparisons of C emissions between NIR and FireDMs, recognizing that this N~2~O emissions factor is lower than widely cited emissions factors compilations [@binteshahidNEIVAv10NextgenerationEmissions2024;@andreaeEmissionTraceGases2019] between 0.20 and 0.24 g/kg of biomass.
+While not strictly a carbon emission from wildfire, N~2~O is tracked as part of the NIR process and is an important component of CO~2~-equivalent calculations. CO~2~-equivalent calculations here will use the CBM-CFS3 emission factor of 0.17 g/kg CO~2~ (0.09 g/kg biomass) to simplify comparisons of C emissions between NIR and FireDMs, recognizing that this N~2~O emissions factor is lower than widely cited emissions factors compilations [@binteshahidNEIVAv10NextgenerationEmissions2024; @andreaeEmissionTraceGases2019] between 0.20 and 0.24 g/kg of biomass.
 
 ## Calculation of annual direct C emissions from fire
 

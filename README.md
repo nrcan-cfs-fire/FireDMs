@@ -10,18 +10,18 @@ With severity mapping as part of Canada's National Burned Area Composite (https:
 
 The R Markdown code used to compile the in review manuscript in Geoscientific Model Development (GMD) is available here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/GMD/FireDMs.Rmd
 
-And as a compiled
+And as a compiled pdf at https://github.com/nrcan-cfs-fire/FireDMs/blob/main/GMD/FireDMs.pdf
 
+### Modelling Inputs
 The file https://github.com/nrcan-cfs-fire/FireDMs/blob/main/GMD/FireDMTableDefs.csv is populated by an outside process that uses field observations of fire ecosystem impacts from Composite Burn Index plots, stratified by severity class and ecozone to populated values (typically median values from a severity class * ecozone combination).
 
+During the knitr compiling process, the actual CBM-CFS3 compatible fire DM outputs are produced here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/GMD/FireDM-currents.csv.   The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
 
-The actual CBM-CFS3 compatible fire DM outputs are here: https://github.com/nrcan-cfs-fire/FireDMs/blob/main/GMD/FireDM-currents.csv (can change that name as needed).  The format is one long file, aggregating all DM source-sink pairs across all ecozones as one large and simple text file for portability.
-
-Contribution Guidelines
+## Contribution Guidelines
 
 At the moment, with this manuscript in review, please limit outside contributions to bugs or issues in the issues tracker.
 
-Licence Info
+## Licence Info
 
 
 

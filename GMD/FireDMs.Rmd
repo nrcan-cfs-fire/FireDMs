@@ -53,8 +53,8 @@ running:
 competinginterests: The authors declare no competing interests.
 copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada)
 availability:
-  codedata: "This article was produced from an RMarkdown document with underlying data, available at https://doi.org/10.5281/zenodo.17517166"
-authorcontribution: 
+  codedata: "This article was produced from a RMarkdown document with underlying data, available at https://doi.org/10.5281/zenodo.17517166"
+authorcontribution: "DKT, EW, and BH conceived the intitial framework. DKT wrote the algorithm.  EW analyzed and compiled input data.  HF, VMG, OH, CH, and BH assisted in model development and algorithm review. DKT, EW, and BH drafted the manuscript.  All authors contributed manuscript revisions and approved of the final version."
 disclaimer: "The algorithm and results presented only apply to boreal and temperate  forest ecosystems where sufficient ground plots of fire severity are available. As a data-driven model, this framework is not suitable for other ecosystems nor  agricultural or forestry biomass burning practices."
 acknowledgements: 
 appendix:

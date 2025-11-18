@@ -51,7 +51,7 @@ running:
   title: Fire Severity and Canadian Forest GHG Reporting
   author: Thompson et al.
 competinginterests: The authors declare no competing interests.
-copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is distributed under the Creative Commons Attribution 4.0 License.
+copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada)
 availability:
   codedata: "This article was produced from an RMarkdown document with underlying data, available at https://doi.org/10.5281/zenodo.17517166"
 authorcontribution: 
@@ -3561,7 +3561,7 @@ knitr::include_graphics("FFFC_vs_BUI_plot.png")
 
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
 
-```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
+```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
 
 
 #### expanded Leave-One-Out cross-validation
@@ -3646,7 +3646,7 @@ FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pre
 ggsave("FFFC_biplot.png")
 ```
 
-```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
+```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 

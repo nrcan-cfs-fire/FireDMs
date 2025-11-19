@@ -32,11 +32,12 @@ author:
     email: benjamin.hudson@nrcan-rncan.gc.ca
 affiliation:
   - code: 1
-    address: Natural Resources Canada, Canadian Forest Service, Great Lakes Forestry Centre, Sault Ste. Marie, Canada
+    address: Natural Resources Canada, Canadian Forest Service
   - code: 2
     address: Natural Resources Canada, Canadian Forest Service, Northern Forestry Centre, Edmonton, Canada
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
+correspongdingauthors: Dan K. Thompson (daniel.thompson@nrcan-rncan.gc.ca)
 output:
   rticles::copernicus_article:
     highlight: null
@@ -45,18 +46,12 @@ output:
   pdf_document: default
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
-abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Fire severity represents the fate of biomass, partioning survival, consumption, and mortality without consumption. Currently, the impact of fire on carbon stocks is limited to a single parametrization of fire severity that assumes only high severity fires, despite evidence of widespread mixed-severity fires. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFCMARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas emissions in the immediate aftermath of fires. The sub-model also quantifies fire-killed but uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10 to 25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates of forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
+abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Fire severity represents the fate of biomass, partitioning survival, consumption, and mortality without consumption. Currently, the impact of fire on carbon stocks is limited to a single parametrization of fire severity that assumes only high severity fires, despite evidence of widespread mixed-severity fires. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFCMARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas emissions in the immediate aftermath of fires. The sub-model also quantifies fire-killed but uncombusted biomass as a set of distinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10 to 25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates of forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
   title: Fire Severity and Canadian Forest GHG Reporting
   author: Thompson et al.
-competinginterests: The authors declare no competing interests.
-copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada)
-availability:
-  codedata: "This article was produced from a RMarkdown document with underlying data, available at https://doi.org/10.5281/zenodo.17517166"
-authorcontribution: "DKT, EW, and BH conceived the intitial framework. DKT wrote the algorithm.  EW analyzed and compiled input data.  HF, VMG, OH, CH, and BH assisted in model development and algorithm review. DKT, EW, and BH drafted the manuscript.  All authors contributed manuscript revisions and approved of the final version."
-disclaimer: "The algorithm and results presented only apply to boreal and temperate  forest ecosystems where sufficient ground plots of fire severity are available. As a data-driven model, this framework is not suitable for other ecosystems nor  agricultural or forestry biomass burning practices."
-acknowledgements: 
+copyrightstatement: Copyright His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada).
 appendix:
 always_allow_html: true
 editor_options:
@@ -183,6 +178,11 @@ lakesCanada_3978 <- sf::st_transform(lakes50_crop, 3978)
 Canada_3978 <- sf::st_transform(Canada, 3978)
 PT_3978 <- sf::st_transform(PT,3978)
 
+##make a new column called "name" for labelling matching the name column of PT_3978
+ReportingUnits <- ReportingUnits %>% mutate(name=as.character(unit_id))
+
+PT_RU <- bind_rows(PT_3978,ReportingUnits)
+
 
 ```
 
@@ -195,15 +195,18 @@ ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c
 
 lakesCanada_3978_clip <- st_intersection(lakesCanada_3978,ReportingUnits)
 
-ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates") +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_3978,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates") 
+ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_RU,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates") 
 
+###  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates")
+
+###
 
 
 ggsave("RU_plot.png",height=8,width=8,units=c("in"))
 
 ```
 
-```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.", message=FALSE, warning=FALSE, out.width="75%"}
+```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.", message=FALSE, warning=FALSE, out.width="95%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
 
@@ -388,9 +391,13 @@ The fraction of fine roots contained within the combustible forest floor layers 
 
 \begin{equation}
 HWFineRootConsump = HW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation} \begin{equation}
+\end{equation}
+
+\begin{align}
 HWFineRootMort.AG = HW.Mort \times HW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{equation} \begin{equation}
+\end{align}
+
+\begin{equation}
 HWFineRootMort.BG = HW.Mort \times (1-HW.Prop.Fine.Root.duff) \times (1-ReSproutFactor)
 \end{equation}
 
@@ -2456,8 +2463,7 @@ options(knitr.kable.NA = '')
     kable_styling(full_width = F, html_font = "Cambria") %>%
 column_spec(2:(length(sink.col.list) + 1), width = "2cm") %>%
 column_spec(1, width = "3cm") %>%
-  kableExtra::landscape() %>%
-          kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")
   
  
@@ -3369,8 +3375,7 @@ knitr::include_graphics("emissions2023.png")
 
 ```{r tab-RU-CO2e-comp, echo=FALSE}
 kbl(AnnualEmissionsSummary_table,align="c", padding=0L,caption="Comparison of per hectare CO2e direct emissions from this study against the 2025 National Inventory Report for the 2023 wildfire season in Canada. Rows are sorted by decreasing 2023 area burned.  Note that for RUs with no managed forest area, the nearest forest inventory data available is used.") %>% kable_minimal() %>% column_spec(1:9, width = "2cm") %>%
-  kableExtra::landscape() %>%
-          kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")  
 
 
@@ -3449,9 +3454,33 @@ Carbon emissions from wildfires in Canada represent a substantial pulse input of
 
 While this prototype carbon flux framework utilizes regionally-averaged carbon stock estimates, future systems deployment within Canada's carbon accounting system is likely to incorporate precisely mapped (30 m) carbon pools alongside the finely mapped fire severity products (30 m) used here. As both the spatial estimates of carbon stocks across Canada's forested ecosystems improves alongside additional field observations, it is anticipated that this modelling framework will increase in both accuracy and precision over time.
 
-\newpage
+**Code/Data availability**
 
-# Appendix A: Disturbance Matrix Examples
+This article was produced from a RMarkdown document with underlying data is available from the Zenodo repository @thompson2025
+
+**Funding**
+
+This project received no external funding.
+
+**Conflicts of interest**
+
+The authors declare that they have no conflict of interest.
+
+**Author Contributions**
+
+DKT, EW, and BH conceived the intitial framework. DKT wrote the algorithm. EW analyzed and compiled input data. HF, VMG, OH, CH, and BH assisted in model development and algorithm review. DKT, EW, and BH drafted the manuscript. All authors contributed manuscript revisions and approved of the final version.
+
+**Acknowledgements**
+
+The authors would like to thank Werner A. Kurz (retired) for initiating this project during his role as the head of Canada's forest carbon accounting team.
+
+\clearpage
+
+\appendixfigures
+
+\appendixtables
+
+# Appendix: Disturbance Matrix Examples
 
 Note that the pool source is shown in rows, and the destination pool is shown in the columns.
 
@@ -3466,13 +3495,13 @@ DMTables(ecozone = "TSW", SeverityClass = "High")
 
 \newpage
 
-# Appendix B: List of Resprouting Hardwoods of Canada
+# Appendix: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
 
 \newpage
 
-# Appendix C: Modelling of soil organic layer consumption
+# Appendix: Modelling of soil organic layer consumption
 
 For national annual estimates of forest organic soil layer consumption during wildfire, implementations that only utilize Canadian experimental fire data from the Fire Behaviour Prediction System will be limited to a maximum consumption value of 5 kg (biomass) m^-2^ of total surface fuel (woody debris, litter, and duff) of 5 kg m^-2^, or 25 Mg C ha^-1^, given the observation dataset and fitted model parameters. For the common "C-2" boreal spruce fuel type for instance, Surface Fuel Consumption, SFC (biomass units in kg m^-2^ not kg C) is modelled as:
 
@@ -3559,9 +3588,11 @@ ggsave("FFFC_vs_BUI_plot.png")
 knitr::include_graphics("FFFC_vs_BUI_plot.png")
 ```
 
+\clearpage
+
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
 
-```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
+```{r show-biplot-FFFC-new-calcs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 
 #### expanded Leave-One-Out cross-validation
@@ -3641,17 +3672,19 @@ MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_F
 ecozones_colours_4 <- c("#fb9a99","#b2df8a","#7d8b8f","brown")
 
 
-FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
+FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75)+ ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
 
 ggsave("FFFC_biplot.png")
 ```
 
-```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
+```{r show-biplot-FFFC-new, echo=FALSE, message=TRUE, warning=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training. The dotted lines represent an error of plus and minus 25%", out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 
 knitr::include_graphics("FFFC_biplot.png")
 ```
+
+\clearpage
 
 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
 
@@ -3762,6 +3795,8 @@ ggsave("FFFC_surface_plot.png")
 knitr::include_graphics("FFFC_surface_plot.png")
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next-calcs, message=FALSE, warning=FALSE, include=FALSE}
 
 FFFC_expand.BUI$FFFL <- FFFC_expand.BUI$AGSlow.Mg.C.ha/5
@@ -3784,6 +3819,8 @@ ggsave("FFFC_expand_plot.png")
 
 knitr::include_graphics("FFFC_expand_plot.png")
 ```
+
+\clearpage
 
 ```{r more-calcs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 brks_FFFC_abs <- c(1,2.5,5,10,15,20)
@@ -3817,6 +3854,8 @@ knitr::include_graphics("plot_1.png")
 
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next3, eval=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba", message=FALSE, warning=FALSE, include=FALSE, out.width="75%"}
  
 
@@ -3825,12 +3864,14 @@ knitr::include_graphics("plot_2.png")
 
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next4, eval=FALSE, fig.cap="Forest floor consumption as a function of BUI across varying levels of forest floor fuel load (FFFL)", message=FALSE, warning=FALSE, include=FALSE, out.width="75%"}
  ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
 knitr::include_graphics("plot_3.png")
 
 ```
 
-\newpage
+\clearpage
 
 # References

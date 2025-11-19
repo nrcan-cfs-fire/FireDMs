@@ -117,8 +117,7 @@ model CBM-CFS3}
 \Author[3]{Ben}{Hudson}
 
 
-\affil[1]{Natural Resources Canada, Canadian Forest Service, Great Lakes
-Forestry Centre, Sault Ste. Marie, Canada}
+\affil[1]{Natural Resources Canada, Canadian Forest Service}
 \affil[2]{Natural Resources Canada, Canadian Forest Service, Northern
 Forestry Centre, Edmonton, Canada}
 \affil[3]{Natural Resources Canada, Canadian Forest Service, Pacific
@@ -128,8 +127,7 @@ Forestry Centre, Victoria, Canada}
 
 \runningauthor{Thompson et al.}
 
-
-
+\correspondence{Dan K. Thompson (daniel.thompson@nrcan-rncan.gc.ca)}
 
 
 \received{}
@@ -150,7 +148,7 @@ Forestry Centre, Victoria, Canada}
 Among the many natural disturbances that affect Canada's boreal and
 temperate forest biomes, wildfire has the greatest impact on forest
 productivity, landscape structure, timber supply and greenhouse gas
-emissions. Fire severity represents the fate of biomass, partioning
+emissions. Fire severity represents the fate of biomass, partitioning
 survival, consumption, and mortality without consumption. Currently, the
 impact of fire on carbon stocks is limited to a single parametrization
 of fire severity that assumes only high severity fires, despite evidence
@@ -162,7 +160,7 @@ are related to satellite-derived burn severity maps and are interpreted
 from a fire physics and ecology perspective to derive estimates of the
 forest greenhouse gas emissions in the immediate aftermath of fires. The
 sub-model also quantifies fire-killed but uncombusted biomass as a set
-of disctinct pools. Model outputs indicate total direct carbon emissions
+of distinct pools. Model outputs indicate total direct carbon emissions
 range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan
 following low severity fire to over 60 t C/ha in Pacific Maritime
 forests of British Columbia under high severity fire. The existing
@@ -176,10 +174,10 @@ fire season show good model agreement with observations.
 \end{abstract}
 
 
-\copyrightstatement{His Majesty the King in Right of Canada as
+\copyrightstatement{Copyright His Majesty the King in Right of Canada as
 represented by the Minister of Natural Resources Canada. This work is
 available under the Open Government Licence - Canada
-(http://open.canada.ca/en/open-government-licence-canada)}
+(http://open.canada.ca/en/open-government-licence-canada).}
 
 
 \section{Introduction}
@@ -341,7 +339,7 @@ emissions observation during Canada's record fire season in 2023.
 \subsubsection{CBM-CFS3 spatial units}
 
 \begin{figure}
-\includegraphics[width=0.75\linewidth]{../RU_plot} \caption{\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.}\label{fig:Fig1-RU-ecozones}
+\includegraphics[width=0.95\linewidth]{../RU_plot} \caption{\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.}\label{fig:Fig1-RU-ecozones}
 \end{figure}
 
 Carbon reporting in Canada's forests is broken down by Reconciliation
@@ -755,9 +753,13 @@ using hardwood as an example:
 
 \begin{equation}
 HWFineRootConsump = HW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation} \begin{equation}
+\end{equation}
+
+\begin{align}
 HWFineRootMort.AG = HW.Mort \times HW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{equation} \begin{equation}
+\end{align}
+
+\begin{equation}
 HWFineRootMort.BG = HW.Mort \times (1-HW.Prop.Fine.Root.duff) \times (1-ReSproutFactor)
 \end{equation}
 
@@ -1325,8 +1327,8 @@ smoke plumes within 2 km of a large wildfire.
 \includegraphics[width=0.75\linewidth]{emissions2023} \caption{\label{fig::Emissions-2023-by-RU}Comparison of CO~2~-e emissions per hectare between the FireDMs estimate and current methodology, the 2025 National Inventory Report for the 2023 wildfires.  Dots are labelled by RU and coloured by ecozone (see Figure 1), with dot size proportional to 2023 area burned.  The solid line is the 1:1 reference line, and the dashed line represents 25\% deviation from a 1:1 relationship.}\label{fig:Emissions-2023-by-RU}
 \end{figure}
 
-\begin{landscape}\begin{table}[!h]
-\centering
+\begin{table}[!h]
+\centering\centering\centering
 \caption{\label{tab:tab-RU-CO2e-comp}Comparison of per hectare CO2e direct emissions from this study against the 2025 National Inventory Report for the 2023 wildfire season in Canada. Rows are sorted by decreasing 2023 area burned.  Note that for RUs with no managed forest area, the nearest forest inventory data available is used.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
@@ -1368,7 +1370,6 @@ Yukon Territory & boreal cordillera & 46 & 0.11 & 0.16 & 0.58 & 50.0 & 175.7 & 1
 \hline
 \end{tabular}}
 \end{table}
-\end{landscape}
 
 \begin{table}
 \centering
@@ -1640,15 +1641,46 @@ Canada's forested ecosystems improves alongside additional field
 observations, it is anticipated that this modelling framework will
 increase in both accuracy and precision over time.
 
-\newpage
+\textbf{Code/Data availability}
 
-\section{Appendix A: Disturbance Matrix Examples}
+This article was produced from a RMarkdown document with underlying data
+is available from the Zenodo repository \citet{thompson2025}
+
+\textbf{Funding}
+
+This project received no external funding.
+
+\textbf{Conflicts of interest}
+
+The authors declare that they have no conflict of interest.
+
+\textbf{Author Contributions}
+
+DKT, EW, and BH conceived the intitial framework. DKT wrote the
+algorithm. EW analyzed and compiled input data. HF, VMG, OH, CH, and BH
+assisted in model development and algorithm review. DKT, EW, and BH
+drafted the manuscript. All authors contributed manuscript revisions and
+approved of the final version.
+
+\textbf{Acknowledgements}
+
+The authors would like to thank Werner A. Kurz (retired) for initiating
+this project during his role as the head of Canada's forest carbon
+accounting team.
+
+\clearpage
+
+\appendixfigures
+
+\appendixtables
+
+\section{Appendix: Disturbance Matrix Examples}
 
 Note that the pool source is shown in rows, and the destination pool is
 shown in the columns.
 
-\begin{landscape}\begin{table}[!h]
-\centering
+\begin{table}[!h]
+\centering\centering\centering
 \caption{\label{tab:example-DM-tables}Low severity Disturbance Matrix in BP.  Note: only some biomass and atmospheric pools are shown.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
@@ -1677,10 +1709,9 @@ PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
 \end{table}
-\end{landscape}
 
-\begin{landscape}\begin{table}[!h]
-\centering
+\begin{table}[!h]
+\centering\centering\centering
 \caption{\label{tab:example-DM-tables}Mod severity Disturbance Matrix in BP.  Note: only some biomass and atmospheric pools are shown.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
@@ -1709,10 +1740,9 @@ PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
 \end{table}
-\end{landscape}
 
-\begin{landscape}\begin{table}[!h]
-\centering
+\begin{table}[!h]
+\centering\centering\centering
 \caption{\label{tab:example-DM-tables}High severity Disturbance Matrix in BP.  Note: only some biomass and atmospheric pools are shown.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
@@ -1741,10 +1771,9 @@ PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
 \end{table}
-\end{landscape}
 
-\begin{landscape}\begin{table}[!h]
-\centering
+\begin{table}[!h]
+\centering\centering\centering
 \caption{\label{tab:example-DM-tables}High severity Disturbance Matrix in TSW.  Note: only some biomass and atmospheric pools are shown.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
@@ -1773,11 +1802,10 @@ PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
 \end{table}
-\end{landscape}
 
 \newpage
 
-\section{Appendix B: List of Resprouting Hardwoods of Canada}
+\section{Appendix: List of Resprouting Hardwoods of Canada}
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus
 ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre.
@@ -1785,7 +1813,7 @@ Populus tri. Quercus spp. Salix spp.
 
 \newpage
 
-\section{Appendix C: Modelling of soil organic layer consumption}
+\section{Appendix: Modelling of soil organic layer consumption}
 
 For national annual estimates of forest organic soil layer consumption
 during wildfire, implementations that only utilize Canadian experimental
@@ -1918,29 +1946,18 @@ using the model above:
 \includegraphics[width=0.75\linewidth]{FFFC_vs_BUI_plot} \caption{Example of the forest floor consumption model for a duff layer (AGSlow) of 60 Mg C ha-1 (12 kg m-2)}\label{fig:example-FFFC-vs-BUI-plot-nls}
 \end{figure}
 
+\clearpage
+
 With the parameter constrained NLS fitting, the proportional consumption
 model for the forest floor has a leave-one-out (conducted at the
 fire-level, not plot) cross validated r\textsuperscript{2} of 0.52 and a
 Mean Percent Error of 45\%
 
-\begin{verbatim}
-## Scale for y is already present.
-## Adding another scale for y, which will replace the existing scale.
-## Scale for y is already present.
-## Adding another scale for y, which will replace the existing scale.
-## Scale for x is already present.
-## Adding another scale for x, which will replace the existing scale.
-## Saving 6.5 x 4.5 in image
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 4 rows containing missing values or values outside the scale range
-## (`geom_point()`).
-\end{verbatim}
-
 \begin{figure}
-\includegraphics[width=0.75\linewidth]{FFFC_biplot} \caption{Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.}\label{fig:show-biplot-FFFC-new}
+\includegraphics[width=0.75\linewidth]{FFFC_biplot} \caption{Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training. The dotted lines represent an error of plus and minus 25\%}\label{fig:show-biplot-FFFC-new}
 \end{figure}
+
+\clearpage
 
 Across the entire parameter space of Buildup Index and AGSlow pool size,
 the following isolines of proportional consumption in the model can be
@@ -1950,17 +1967,22 @@ plotted:
 \includegraphics[width=0.75\linewidth]{FFFC_surface_plot} \caption{Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.  Rug plots at the axis margins show the marginal density of the data.}\label{fig:FFFC-surface-plot}
 \end{figure}
 
+\clearpage
+
 \begin{figure}
 \includegraphics[width=0.75\linewidth]{FFFC_expand_plot} \caption{Isoline contours of equal organic soil layer consumption fraction as a function of BUI and the organic soil layer Carbon pool in Mg C/ha.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba.}\label{fig:FFFC-plot-next}
 \end{figure}
 
-\newpage
+\clearpage
+
+\clearpage
+
+\clearpage
+
+\clearpage
 
 
 
-\codedataavailability{This article was produced from a RMarkdown
-document with underlying data, available at
-https://doi.org/10.5281/zenodo.17517166} %% use this section when having data sets and software code available
 
 
 
@@ -1970,22 +1992,11 @@ https://doi.org/10.5281/zenodo.17517166} %% use this section when having data se
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontribution{DKT, EW, and BH conceived the intitial framework.
-DKT wrote the algorithm. EW analyzed and compiled input data. HF, VMG,
-OH, CH, and BH assisted in model development and algorithm review. DKT,
-EW, and BH drafted the manuscript. All authors contributed manuscript
-revisions and approved of the final version.} %% optional section
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\competinginterests{The authors declare no competing
-interests.} %% this section is mandatory even if you declare that no competing interests are present
+\competinginterests{} %% this section is mandatory even if you declare that no competing interests are present
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\disclaimer{The algorithm and results presented only apply to boreal and
-temperate forest ecosystems where sufficient ground plots of fire
-severity are available. As a data-driven model, this framework is not
-suitable for other ecosystems nor agricultural or forestry biomass
-burning practices.} %% optional section
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

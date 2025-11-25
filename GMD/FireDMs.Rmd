@@ -187,7 +187,7 @@ PT_RU <- bind_rows(PT_3978,ReportingUnits)
 ```
 
 ```{r Fig1-RU-ecozones-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE, out.width="50%"}
-ReportingUnits <- ReportingUnits %>% filter(eco_name != "arctic cordillera") %>% filter(eco_name != "northern arctic") %>% filter(eco_name != "southern arctic")
+
 
 ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1","brown")
 
@@ -195,7 +195,7 @@ ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c
 
 lakesCanada_3978_clip <- st_intersection(lakesCanada_3978,ReportingUnits)
 
-ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_RU,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates") 
+ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_RU,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates",max.overlaps = Inf) 
 
 ###  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates")
 
@@ -206,7 +206,7 @@ ggsave("RU_plot.png",height=8,width=8,units=c("in"))
 
 ```
 
-```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.", message=FALSE, warning=FALSE, out.width="95%"}
+```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones} Colours corresponds to ecozones, and labels to sub-national provinces and territories. The smaller provinces of New Brunswick (NB), Nova Scotia (NS), and Prince Edward Island (PEI) are not fully spelled out in the labels. Reconciliation Units (RUs) used in the CBM-CFS3 framework are all unique combinations of ecozones and provinces/territories. Biomass estimates used in this analysis are reported as averages at the RU scale. Numbers labelled correspond to RU identifiers used in the text. ", message=FALSE, warning=FALSE, out.width="95%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
 
@@ -391,13 +391,9 @@ The fraction of fine roots contained within the combustible forest floor layers 
 
 \begin{equation}
 HWFineRootConsump = HW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation}
-
-\begin{align}
+\end{equation} \begin{align}
 HWFineRootMort.AG = HW.Mort \times HW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{align}
-
-\begin{equation}
+\end{align} \begin{equation}
 HWFineRootMort.BG = HW.Mort \times (1-HW.Prop.Fine.Root.duff) \times (1-ReSproutFactor)
 \end{equation}
 

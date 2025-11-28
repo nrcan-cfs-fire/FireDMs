@@ -2488,7 +2488,7 @@ column_spec(1, width = "3cm") %>%
 
 
 
-ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",BUI_for_DM=70)
+ExtractFireDM <- function(Ecozone_select="BSE",Severity_select="High",BUI_for_DM=70)
 {
   #DC_for_DM=700
   #Ecozone_select="BP"
@@ -2630,16 +2630,21 @@ DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.high & DM_
 
 DM_temp$Value[DM_temp$FluxID == 9] <- 1-( sum(DM_temp$Value[DM_temp$FluxID >=10 & DM_temp$FluxID <=13]) + DM_temp$Value[DM_temp$FluxID == 102] + DM_temp$Value[DM_temp$FluxID == 119] + DM_temp$Value[DM_temp$FluxID == 136])
 
-DM_temp$Value[DM_temp$FluxID == 22] <- 1-sum(DM_temp$Value[DM_temp$Source == "Softwood Fine Roots"],na.rm=TRUE)
+DM_temp$Value[DM_temp$FluxID == 22] <- 1-(sum(DM_temp$Value[DM_temp$FluxID >=23 & DM_temp$FluxID <=27]) + DM_temp$Value[DM_temp$FluxID ==104] + DM_temp$Value[DM_temp$FluxID == 121]  + DM_temp$Value[DM_temp$FluxID ==138])
+
+#SW_Fine_root_sum <- 1-sum(DM_temp$Value[DM_temp$Source == "Softwood Fine Roots"],na.rm=TRUE)
+#DM_temp$Value[DM_temp$FluxID == 22] <- SW_Fine_root_sum
 
 
-DM_temp$Value[DM_temp$FluxID == 36] <-1-( sum(DM_temp$Value[DM_temp$FluxID >=37 & DM_temp$FluxID <=40]) + DM_temp$Value[DM_temp$FluxID == 106] + DM_temp$Value[DM_temp$FluxID == 123] + DM_temp$Value[DM_temp$FluxID == 140])
+DM_temp$Value[DM_temp$FluxID == 36] <-1-(sum(DM_temp$Value[DM_temp$FluxID >=37 & DM_temp$FluxID <=40]) + DM_temp$Value[DM_temp$FluxID == 106] + DM_temp$Value[DM_temp$FluxID == 123] + DM_temp$Value[DM_temp$FluxID == 140])
 
-DM_temp$Value[DM_temp$FluxID == 49] <- 1-sum(DM_temp$Value[DM_temp$Source == "Hardwood Fine Roots"],na.rm=TRUE)
+#HW_Fine_root_sum <- 1-sum(DM_temp$Value[DM_temp$Source == "Hardwood Fine Roots"],na.rm=TRUE)
 
-  
-  
-  ###then return the new DM
+#DM_temp$Value[DM_temp$FluxID == 49] <- HW_Fine_root_sum
+
+DM_temp$Value[DM_temp$FluxID == 49] <- 1-(sum(DM_temp$Value[DM_temp$FluxID >=50 & DM_temp$FluxID <=54]) + DM_temp$Value[DM_temp$FluxID ==108] + DM_temp$Value[DM_temp$FluxID == 125]  + DM_temp$Value[DM_temp$FluxID ==142])
+
+###then return the new DM
 return(DM_temp)
 #return(Duff.consump.frac.ExtractFireDM) #turn this on to just test the duff consumption model
 
@@ -2648,10 +2653,20 @@ return(DM_temp)
 ###some example function applications
 
 testDM1 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_DM=50)
+
+testDM1$Value[testDM1$FluxID==22] ### fraction of remaining SW roots in test DM1
+testDM1$Value[testDM1$FluxID==49] ### fraction of remaining HW roots in test DM1
+sum(testDM1$Value[testDM1$Source == "Softwood Fine Roots"],na.rm=TRUE)
+sum(testDM1$Value[testDM1$Source == "Hardwood Fine Roots"],na.rm=TRUE)
+
+
+testDM1 <- apply(testDM1,2,as.character)
+write.csv(testDM1,"BSE_High_BUI50.csv")
+
 testDM2 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_DM=150)
 
-testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
-testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
+#testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
+#testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 
 ```
 
@@ -3486,6 +3501,34 @@ DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSW", SeverityClass = "High")
 
+##loop this over severity classes and also BUI levels at increments of 10 from 10 through 200?
+
+```
+
+```{r BSE-DMs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+
+BUI_levels <- seq(from=5, to=120,by=10)
+Severity_levels <- c("Low", "Mod", "High")
+  
+DM_grid <- expand_grid(BUI_levels,Severity_levels)
+
+for(i in seq(1:nrow(DM_grid)))
+{
+tmp_DM <- ExtractFireDM(Ecozone_select="BSE",Severity_select = DM_grid$Severity_levels[i],BUI_for_DM=DM_grid$BUI_levels[i])
+
+tmp_DM$BUI <- DM_grid$BUI_levels[i]
+
+if(i==1) DM_long <- tmp_DM else DM_long <- rbind(DM_long,tmp_DM)
+
+}
+DM_long <- as.data.frame(DM_long)
+
+DM_long$DC <- DM_long$BUI*3.3 ##simple fixed-zero-intercept regression to estimate DC from BUI for fire growth days in the BSE from Barber et al's Canadian Fire Spread Database (R2 = 0.74)
+
+DM_long <- apply(DM_long,2,as.character)
+
+write.csv(DM_long,"BSE_DM_long.csv")
 
 ```
 

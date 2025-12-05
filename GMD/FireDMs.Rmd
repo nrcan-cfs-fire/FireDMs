@@ -2706,7 +2706,7 @@ testDM2 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_D
   ###now load the mean pool size from CBM 2025 (object name is still 2023 due to legacy):
     NIR2023_AverageCPools <- read_csv("./NIR2025_AverageCPools.csv") ### it is in the same dir as the rmd file now
 
-EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_BUI=250)
+EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.35,High_frac=0.45,Median_BUI=70)
 {
  
   ###insert function description here
@@ -3327,7 +3327,7 @@ AnnualEmissionsSummary <- AnnualEmissionsSummary %>% mutate(MgC_perha = SumC_dir
 #AnnualEmissionsSummary$NFIREID <- as.numeric(AnnualEmissionsSummary$NFIREID)
 
 ##optional write csv
-#write.csv(AnnualEmissionsSummary,"AnnualEmissionsSummary_2023_by_fire.csv",na="")
+write.csv(AnnualEmissionsSummary,"AnnualEmissionsSummary_2023_by_fire.csv",na="")
 ```
 
 ```{r Emissions-2023-by-RU-calc, echo=FALSE, message=FALSE, warning=FALSE}
@@ -3505,8 +3505,9 @@ DMTables(ecozone = "TSW", SeverityClass = "High")
 
 ```
 
-```{r BSE-DMs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r BSE-DMs-DO-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
+##example of producing DMs for a single ecozone across a number of BUI levels
 
 BUI_levels <- seq(from=5, to=120,by=10)
 Severity_levels <- c("Low", "Mod", "High")

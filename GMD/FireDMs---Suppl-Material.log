@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.18)  25 AUG 2025 09:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.12.12)  29 DEC 2025 09:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **FireDMs---Suppl-Material.tex
 (./FireDMs---Suppl-Material.tex
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-08-13>
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-14>
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
@@ -23,7 +23,7 @@ File: size10.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 \belowcaptionskip=\skip50
 \bibindent=\dimen148
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2025/06/16 v2.17y AMS math features
+Package: amsmath 2025/07/09 v2.17z AMS math features
 \@mathmargin=\skip51
 For additional information on amsmath, use the `?' option.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -83,8 +83,8 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \multlinegap=\skip52
 \multlinetaggap=\skip53
 \mathdisplay@stack=\toks21
-LaTeX Info: Redefining \[ on input line 2949.
-LaTeX Info: Redefining \] on input line 2950.
+LaTeX Info: Redefining \[ on input line 2950.
+LaTeX Info: Redefining \] on input line 2951.
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
@@ -97,7 +97,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 )) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2024/12/12 v1.0g TeX engine tests
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks22
@@ -146,7 +146,7 @@ Package: microtype 2025/07/09 v3.2b Micro-typographical refinements (RS)
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks24
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count295
 )
 \MT@toks=\toks25
@@ -179,7 +179,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 274.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
+File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
@@ -242,7 +242,7 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@lastruleclass=\count304
 \@thisrulewidth=\dimen181
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2024-12-18 v4.23 Multi-page Table package (DPC)
+Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
 \LTleft=\skip55
 \LTright=\skip56
 \LTpre=\skip57
@@ -260,7 +260,7 @@ Package: longtable 2024-12-18 v4.23 Multi-page Table package (DPC)
 \c@LT@chunks=\count309
 \LT@p@ftn=\toks28
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2025/06/08 v2.6j Tabular extension package (FMi)
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \col@sep=\dimen183
 \ar@mcellbox=\box62
 \extrarowheight=\dimen184
@@ -466,7 +466,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmr on input line 87.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2025-06-09 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count335
 ) (./FireDMs---Suppl-Material.aux
 
@@ -589,9 +589,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 89.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-
-[1
+) [1
 
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -600,13 +598,9 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 175.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 175.
-
-
 [2
 
-]
-
-[3
+] [3
 
 
 ]
@@ -615,8 +609,6 @@ File: ../CFSDB_summary.png Graphic file (type png)
 <use ../CFSDB_summary.png>
 Package pdftex.def Info: ../CFSDB_summary.png  used on input line 265.
 (pdftex.def)             Requested size: 352.31625pt x 433.65137pt.
-
-
 [4
 
  <../CFSDB_summary.png>]
@@ -625,16 +617,12 @@ File: ../AnnualBUI_Vis_Consump.png Graphic file (type png)
 <use ../AnnualBUI_Vis_Consump.png>
 Package pdftex.def Info: ../AnnualBUI_Vis_Consump.png  used on input line 273.
 (pdftex.def)             Requested size: 352.31625pt x 433.65137pt.
-
-
 [5 <../AnnualBUI_Vis_Consump.png>]
 <../AnnualBUI_Vis_frac.png, id=39, 376.7676pt x 463.7325pt>
 File: ../AnnualBUI_Vis_frac.png Graphic file (type png)
 <use ../AnnualBUI_Vis_frac.png>
 Package pdftex.def Info: ../AnnualBUI_Vis_frac.png  used on input line 278.
 (pdftex.def)             Requested size: 352.31625pt x 433.65137pt.
-
-
 [6 <../AnnualBUI_Vis_frac.png>]
 <../Photos/A-2015-06-19_12-18-20_Partial_Litter_LightSurface_Redneedles.jpg, id=46, 1110.0672pt x 832.5504pt>
 File: ../Photos/A-2015-06-19_12-18-20_Partial_Litter_LightSurface_Redneedles.jpg Graphic file (type jpg)
@@ -666,33 +654,25 @@ File: ../Photos/F-2024-PC-JA-2024-08-07-10-56-33-DKThomp.jpg Graphic file (type 
 <use ../Photos/F-2024-PC-JA-2024-08-07-10-56-33-DKThomp.jpg>
 Package pdftex.def Info: ../Photos/F-2024-PC-JA-2024-08-07-10-56-33-DKThomp.jpg  used on input line 306.
 (pdftex.def)             Requested size: 352.31625pt x 264.22992pt.
-
-
-[7 <../Photos/A-2015-06-19_12-18-20_Partial_Litter_LightSurface_Redneedles.jpg>]
-
-[8 <../Photos/B-DSCN1982_Peat_Sheep_PartialConsump_2014.JPG>]
-
-[9 <../Photos/C-2015-06-23_09-29-41_fullduffconsumption.jpg> <../Photos/D-DSCN1992_Surfacefire_Deadunder_Liveover_2014.JPG>]
-
-[10 <../Photos/E-DSCN1978_DeadTrees_OrangeNeedles_WBNP_2014.JPG> <../Photos/F-2024-PC-JA-2024-08-07-10-56-33-DKThomp.jpg>] (./FireDMs---Suppl-Material.aux)
+[7 <../Photos/A-2015-06-19_12-18-20_Partial_Litter_LightSurface_Redneedles.jpg>] [8 <../Photos/B-DSCN1982_Peat_Sheep_PartialConsump_2014.JPG>] [9 <../Photos/C-2015-06-23_09-29-41_fullduffconsumption.jpg> <../Photos/D-DSCN1992_Surfacefire_Deadunder_Liveover_2014.JPG>] [10 <../Photos/E-DSCN1978_DeadTrees_OrangeNeedles_WBNP_2014.JPG> <../Photos/F-2024-PC-JA-2024-08-07-10-56-33-DKThomp.jpg>] (./FireDMs---Suppl-Material.aux)
  ***********
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-08-13>
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-14>
  ***********
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 14838 strings out of 469781
- 240609 string characters out of 5480316
- 772989 words of memory out of 5000000
- 42897 multiletter control sequences out of 15000+600000
- 669682 words of font info for 110 fonts, out of 8000000 for 9000
+ 14849 strings out of 469519
+ 240859 string characters out of 5467979
+ 776662 words of memory out of 5000000
+ 43169 multiletter control sequences out of 15000+600000
+ 670592 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,12n,93p,1516b,487s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,12n,93p,1578b,491s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb>
-Output written on FireDMs---Suppl-Material.pdf (10 pages, 29268201 bytes).
+Output written on FireDMs---Suppl-Material.pdf (10 pages, 29268771 bytes).
 PDF statistics:
  113 PDF objects out of 1000 (max. 8388607)
  80 compressed objects within 1 object stream

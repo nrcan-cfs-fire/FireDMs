@@ -1,11 +1,13 @@
 ---
 title: "Supplementary Material: Incorporating observed fire severity in refined emissions
-  estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3"
-output: pdf_document
+  estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3 v1.2"
+output: 
+  pdf_document:
+    keep_tex: yes
 date: "`r Sys.Date()`"
 ---
 
-# Mean pool size by Reconciliation Unit
+# S1 - Mean pool size by Reconciliation Unit
 
 
 ```{r loadLibsEtc, message=FALSE, warning=FALSE, include=FALSE}
@@ -130,7 +132,7 @@ kbl(NIR_AverageCPools_filterSurface_sorted,align="c",caption="Carbon pool (Mg C/
   
 ```
 
-# Annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
+# S2 - Annual variability in observed Buildup Index during wildfire spread, and impact on modelled ecozone-level forest floor emissions
 
 ```{r AnnualBUI-calcs, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -296,7 +298,7 @@ knitr::include_graphics("~/nrcan-cfs-fire/FireDMs/AnnualBUI_Vis_frac.png")
 ```
 
 \newpage
-# Representative photos
+# S3 - Representative photos
 
 ```{r Appendix-D-photos-load, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 

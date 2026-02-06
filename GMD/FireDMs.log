@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.26)  5 FEB 2026 16:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.26)  6 FEB 2026 11:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -636,23 +636,26 @@ Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count358
 Package hyperref Info: Link coloring OFF on input line 103.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 147.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 146.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 147.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 146.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package xcolor Warning: Incompatible color definition on input line 149.
+Package xcolor Warning: Incompatible color definition on input line 146.
 
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 177.
+
+Package xcolor Warning: Incompatible color definition on input line 148.
+
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 176.
 (c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.54997pt on input line 177.
+(Font)              scaled to size 8.54997pt on input line 176.
 [1
 
 {c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}] [2] [3]
@@ -660,24 +663,24 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 File: ../RU_plot.png Graphic file (type png)
 <use ../RU_plot.png>
 Package pdftex.def Info: ../RU_plot.png  used on input line 343.
-(pdftex.def)             Requested size: 377.71033pt x 377.7051pt.
+(pdftex.def)             Requested size: 478.43153pt x 478.42587pt.
 [4] [5 <../RU_plot.png>] [6] [7]
 Overfull \hbox (6.3806pt too wide) in paragraph at lines 552--564
 \T1/ptm/m/n/10 plot measurements, an adjacent and ecologically similar ecozone with observations was used. As such, Boreal Plains observations
  []
 
 [8] [9] [10]
-Overfull \hbox (14.56512pt too wide) detected at line 759
-$\OML/cmm/m/it/10 HWFineRootMort:AG \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 HW:Mort \OMS/cmsy/m/n/10 ^^B \OML/cmm/m/it/10 HW:Prop:Fine:Root:duff \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Duff:Consump:Fract\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^B \OT1/cmr/m/n/10 (1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ReSproutFactor\OT1/cmr/m/n/10 )$  
+Overfull \hbox (31.23138pt too wide) detected at line 759
+[]
  []
 
-[11] [12] [13] [14] [15]
+[11] [12] [13] [14] [15] [16]
 Overfull \hbox (7.78073pt too wide) in paragraph at lines 1105--1116
 \T1/ptm/m/n/10 In an effort to compare model outputs against an independent, large-scale set of fire atmospheric emissions, fire direct atmospheric
  []
 
-[16] [17]
-<emissions_plot.png, id=429, 578.16pt x 578.16pt>
+[17]
+<emissions_plot.png, id=427, 578.16pt x 578.16pt>
 File: emissions_plot.png Graphic file (type png)
 <use emissions_plot.png>
 Package pdftex.def Info: emissions_plot.png  used on input line 1181.
@@ -686,92 +689,103 @@ Package pdftex.def Info: emissions_plot.png  used on input line 1181.
 LaTeX Warning: Float too large for page by 8.09035pt on input line 1185.
 
 [18] [19 <./emissions_plot.png>]
-<DM_vs_FBP.png, id=445, 433.62pt x 505.89pt>
+<DM_vs_FBP.png, id=443, 433.62pt x 505.89pt>
 File: DM_vs_FBP.png Graphic file (type png)
 <use DM_vs_FBP.png>
 Package pdftex.def Info: DM_vs_FBP.png  used on input line 1239.
 (pdftex.def)             Requested size: 377.71033pt x 440.68423pt.
-[20 <./DM_vs_FBP.png>] [21]
-<emissions2023.png, id=471, 469.755pt x 324.9741pt>
+[20] [21 <./DM_vs_FBP.png>]
+<emissions2023.png, id=469, 469.755pt x 324.9741pt>
 File: emissions2023.png Graphic file (type png)
 <use emissions2023.png>
 Package pdftex.def Info: emissions2023.png  used on input line 1324.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-[22 <./emissions2023.png>]
 
-LaTeX Warning: Float too large for page by 3.54475pt on input line 1369.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[22 <./emissions2023.png>] [23] [24] [25] [26] [27]
+
+Package natbib Warning: Citation `thompson2025' on page 28 undefined on input line 1645.
+
+
+Package natbib Warning: Citation `thompson2025' on page 28 undefined on input line 1651.
+
+
+Package natbib Warning: Citation `thompson2025' on page 28 undefined on input line 1653.
+
+
+Overfull \hbox (7.28194pt too wide) in paragraph at lines 1643--1655
+\T1/ptm/m/n/10 http://dx.doi.org/10.5281/zenodo.17643211 (\T1/ptm/b/n/10 ?\T1/ptm/m/n/10 ). The disturbance matrices were produced in accordance with standards associated
+ []
+
+
+Overfull \hbox (41.52107pt too wide) in paragraph at lines 1643--1655
+\T1/ptm/m/n/10 with the CBM-CFS3 version 1.2 (July 2025), which is available for download (after user registration) at https://ca.nfis.org/index_eng.html.
+ []
+
+[28]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[23] [24
+[29
 
 
-] [25] [26] [27] [28] [29] [30
-
-] [31
-
-
-] [32
-
-
-] [33
-
-
-] [34
-
-]
-Overfull \hbox (4.82135pt too wide) in paragraph at lines 1808--1821
+pdfTeX warning (ext4): destination with the same identifier (name{section.A}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1813 \newpage
+               ] [30]
+Overfull \hbox (4.82135pt too wide) in paragraph at lines 1844--1857
 []\T1/ptm/m/n/10 More recent observations and modelling from []de Groot et al.[] ([]2009[]) extended the FBP data with an additional 128 observations
  []
 
-[35]
-<FFFC_vs_BUI_plot.png, id=686, 469.755pt x 324.9741pt>
+[31]
+<FFFC_vs_BUI_plot.png, id=668, 469.755pt x 324.9741pt>
 File: FFFC_vs_BUI_plot.png Graphic file (type png)
 <use FFFC_vs_BUI_plot.png>
-Package pdftex.def Info: FFFC_vs_BUI_plot.png  used on input line 1917.
+Package pdftex.def Info: FFFC_vs_BUI_plot.png  used on input line 1953.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-[36]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 1925.
-(c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-Overfull \hbox (12.38623pt too wide) in paragraph at lines 1938--1938
-[]\T1/pcr/m/n/10 ## Warning: Removed 4 rows containing missing values or values outside the scale range[] 
- []
-
-LaTeX Info: Symbol \textasciigrave not provided by
-            font family pcr in TS1 encoding.
-            Default family used instead on input line 1938.
-LaTeX Info: Symbol \textasciigrave not provided by
-            font family pcr in TS1 encoding.
-            Default family used instead on input line 1938.
-<FFFC_biplot.png, id=696, 469.755pt x 324.9741pt>
+[32] [33 <./FFFC_vs_BUI_plot.png>]
+<FFFC_biplot.png, id=685, 469.755pt x 324.9741pt>
 File: FFFC_biplot.png Graphic file (type png)
 <use FFFC_biplot.png>
-Package pdftex.def Info: FFFC_biplot.png  used on input line 1941.
+Package pdftex.def Info: FFFC_biplot.png  used on input line 1964.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
+[34
 
-Overfull \hbox (2.29176pt too wide) in paragraph at lines 1944--1947
+ <./FFFC_biplot.png>]
+Overfull \hbox (2.29176pt too wide) in paragraph at lines 1969--1972
 []\T1/ptm/m/n/10 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption
  []
 
-<FFFC_surface_plot.png, id=697, 469.755pt x 324.9741pt>
+<FFFC_surface_plot.png, id=692, 469.755pt x 324.9741pt>
 File: FFFC_surface_plot.png Graphic file (type png)
 <use FFFC_surface_plot.png>
-Package pdftex.def Info: FFFC_surface_plot.png  used on input line 1949.
+Package pdftex.def Info: FFFC_surface_plot.png  used on input line 1974.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-<FFFC_expand_plot.png, id=698, 469.755pt x 324.9741pt>
+[35
+
+ <./FFFC_surface_plot.png>]
+<FFFC_expand_plot.png, id=699, 469.755pt x 324.9741pt>
 File: FFFC_expand_plot.png Graphic file (type png)
 <use FFFC_expand_plot.png>
-Package pdftex.def Info: FFFC_expand_plot.png  used on input line 1953.
+Package pdftex.def Info: FFFC_expand_plot.png  used on input line 1980.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-[37 <./FFFC_vs_BUI_plot.png>] (./FireDMs.bbl [38 <./FFFC_biplot.png>] [39 <./FFFC_surface_plot.png>]
+[36 <./FFFC_expand_plot.png>] (./FireDMs.bbl [37
+
+
+
+
+
+]
 Underfull \hbox (badness 1142) in paragraph at lines 37--38
 []\T1/ptm/m/n/9 Bona, K. A., Shaw, C., Thompson, D. K., Hararuk, O., Webster, K., Zhang, G., Voicu, M., and Kurz, W. A.: The Canadian
  []
 
-[40 <./FFFC_expand_plot.png>]
+[38]
 Underfull \hbox (badness 4505) in paragraph at lines 64--65
 []\T1/ptm/m/n/9 Clark, T. L., Radke, L., Coen, J., and Middleton, D.: Analysis of Small-Scale Convective Dynamics in a Crown Fire
  []
@@ -781,7 +795,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 64--65
 \T1/ptm/m/n/9 Using Infrared Video Camera Imagery, Journal of Applied Meteorology, 38, 1401^^U1420, https://doi.org/[]10.1175/1520-
  []
 
-[41] [42] [43]
+[39] [40] [41]
 Underfull \hbox (badness 3492) in paragraph at lines 190--191
 []\T1/ptm/m/n/9 Linn, R. R., Goodrick, S. L., Brambilla, S., Brown, M. J., Middleton, R. S., O'Brien, J. J., and Hiers, J. K.: QUIC-
  []
@@ -806,7 +820,7 @@ Underfull \hbox (badness 1888) in paragraph at lines 202--203
 \T1/ptm/m/n/9 Model (CTEM) ^^U Part 1: Model framework and site-level performance, Geoscientific Model Development, 13, 2825^^U2850,
  []
 
-[44]
+[42]
 Underfull \hbox (badness 1946) in paragraph at lines 232--233
 []\T1/ptm/m/n/9 Simon, H., Beck, L., Bhave, P. V., Divita, F., Hsu, Y., Luecken, D., Mobley, J. D., Pouliot, G. A., Reff, A., Sarwar, G.,
  []
@@ -816,7 +830,7 @@ Underfull \hbox (badness 2809) in paragraph at lines 232--233
 \T1/ptm/m/n/9 and Strum, M.: The development and uses of EPA's SPECIATE database, Atmospheric Pollution Research, 1, 196--206,
  []
 
-[45]
+[43]
 Underfull \hbox (badness 3407) in paragraph at lines 277--278
 []\T1/ptm/m/n/9 Van Wagner, C. E.: Duff Consumption by Fire in Eastern Pine Stands, Canadian Journal of Forest Research, 2, 34^^U39,
  []
@@ -826,7 +840,7 @@ Underfull \hbox (badness 1867) in paragraph at lines 304--305
 \T1/ptm/m/n/9 of forest disturbance and recovery for Canada using Landsat time series, Remote Sensing of Environment, 194, 303^^U321,
  []
 
-[46]
+[44]
 Underfull \hbox (badness 1546) in paragraph at lines 313--314
 []\T1/ptm/m/n/9 Whitman, E., Barber, Q. E., Jain, P., Parks, S. A., Guindon, L., Thompson, D. K., and Parisien, M.-A.: A modest increase
  []
@@ -836,7 +850,11 @@ Underfull \hbox (badness 1571) in paragraph at lines 313--314
 \T1/ptm/m/n/9 in fire weather overcomes resistance to fire spread in recently burned boreal forests, Global Change Biology, 30, e17363,
  []
 
-) [47] (./FireDMs.aux)
+) [45]
+
+Package natbib Warning: There were undefined citations.
+
+(./FireDMs.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2021/03/21>
@@ -846,18 +864,18 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 18454 strings out of 469514
- 296513 string characters out of 5467923
- 780335 words of memory out of 5000000
- 46567 multiletter control sequences out of 15000+600000
- 676209 words of font info for 114 fonts, out of 8000000 for 9000
+ 18410 strings out of 469514
+ 295821 string characters out of 5467923
+ 814248 words of memory out of 5000000
+ 46533 multiletter control sequences out of 15000+600000
+ 674978 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,93p,905b,824s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on FireDMs.pdf (47 pages, 692090 bytes).
+<c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/Users/danthomp/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on FireDMs.pdf (45 pages, 690160 bytes).
 PDF statistics:
- 986 PDF objects out of 1000 (max. 8388607)
- 887 compressed objects within 9 object streams
- 229 named destinations out of 1000 (max. 500000)
+ 964 PDF objects out of 1000 (max. 8388607)
+ 870 compressed objects within 9 object streams
+ 226 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

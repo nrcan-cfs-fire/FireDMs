@@ -1,5 +1,5 @@
 ---
-title: "Incorporating observed fire severity in refined emissions estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3"
+title: "Incorporating observed fire severity in refined emissions estimates for boreal and temperate forest fires in the carbon budget model CBM-CFS3 v1.2"
 journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'gmd')`"
 author:
   - given_name: Dan K.
@@ -37,6 +37,7 @@ affiliation:
     address: Natural Resources Canada, Canadian Forest Service, Northern Forestry Centre, Edmonton, Canada
   - code: 3
     address: Natural Resources Canada, Canadian Forest Service, Pacific Forestry Centre, Victoria, Canada
+correspongdingauthors: Dan K. Thompson (daniel.thompson@nrcan-rncan.gc.ca)
 output:
   rticles::copernicus_article:
     highlight: null
@@ -45,18 +46,12 @@ output:
   pdf_document: default
   bookdown::pdf_book:
     base_format: rticles::copernicus_article
-abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Fire severity represents the fate of biomass, partioning survival, consumption, and mortality without consumption. Currently, the impact of fire on carbon stocks is limited to a single parametrization of fire severity that assumes only high severity fires, despite evidence of widespread mixed-severity fires. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFCMARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas emissions in the immediate aftermath of fires. The sub-model also quantifies fire-killed but uncombusted biomass as a set of disctinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10 to 25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates of forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
+abstract: "Among the many natural disturbances that affect Canada’s boreal and temperate forest biomes, wildfire has the greatest impact on forest productivity, landscape structure, timber supply and greenhouse gas emissions. Fire severity represents the fate of biomass, partitioning survival, consumption, and mortality without consumption. Currently, the impact of fire on carbon stocks is limited to a single parametrization of fire severity that assumes only high severity fires, despite evidence of widespread mixed-severity fires. This paper describes a sub-model, termed FireDMs (Fire Disturbance Matrix: severity), of the National Forest Carbon Monitoring Accounting and Reporting System for Canada (NFCMARS). In this sub-model, field measurements of biomass consumption are related to satellite-derived burn severity maps and are interpreted from a fire physics and ecology perspective to derive estimates of the forest greenhouse gas emissions in the immediate aftermath of fires. The sub-model also quantifies fire-killed but uncombusted biomass as a set of distinct pools. Model outputs indicate total direct carbon emissions range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan following low severity fire to over 60 t C/ha in Pacific Maritime forests of British Columbia under high severity fire. The existing approach to emissions in NFC-MARS yields regional CO2e emissions that are 10 to 25 percent higher than this new method, owing to lower overall canopy consumption with mixed-severity fires, which is only partially offset by increased estimates of forest floor consumption in this new approach. Comparisons against directly observed fire plume emissions ratios as well as against annualized carbon emissions for Canada's 2023 fire season show good model agreement with observations."
 bibliography: references.bib
 running:
   title: Fire Severity and Canadian Forest GHG Reporting
   author: Thompson et al.
-competinginterests: The authors declare no competing interests.
-copyrightstatement: His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is distributed under the Creative Commons Attribution 4.0 License.
-availability:
-  codedata: "This article was produced from an RMarkdown document with underlying data, available at https://github.com/nrcan-cfs-fire/FireDMs"
-authorcontribution: 
-disclaimer: "The algorithm and results presented only apply to boreal and temperate  forest ecosystems where sufficient ground plots of fire severity are available. As a data-driven model, this framework is not suitable for other ecosystems nor  agricultural or forestry biomass burning practices."
-acknowledgements: 
+copyrightstatement: Copyright His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada).
 appendix:
 always_allow_html: true
 editor_options:
@@ -183,11 +178,16 @@ lakesCanada_3978 <- sf::st_transform(lakes50_crop, 3978)
 Canada_3978 <- sf::st_transform(Canada, 3978)
 PT_3978 <- sf::st_transform(PT,3978)
 
+##make a new column called "name" for labelling matching the name column of PT_3978
+ReportingUnits <- ReportingUnits %>% mutate(name=as.character(unit_id))
+
+PT_RU <- bind_rows(PT_3978,ReportingUnits)
+
 
 ```
 
 ```{r Fig1-RU-ecozones-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE, out.width="50%"}
-ReportingUnits <- ReportingUnits %>% filter(eco_name != "arctic cordillera") %>% filter(eco_name != "northern arctic") %>% filter(eco_name != "southern arctic")
+
 
 ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#7d8b8f", "#c1c1c1","brown")
 
@@ -195,15 +195,18 @@ ecozones_colours <- c("#a6cee3","#1f78b4","#fb9a99","#33a02c","#b2df8a","#e31a1c
 
 lakesCanada_3978_clip <- st_intersection(lakesCanada_3978,ReportingUnits)
 
-ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates") +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_3978,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates") 
+ggplot(data = ReportingUnits) +  geom_sf(aes(fill=factor(eco_name)),show.legend = "polygon") + scale_fill_manual(values=ecozones_colours) +  geom_sf(data = lakesCanada_3978_clip,colour="black",fill="white")  +ylab("")+xlab("") + theme_bw() +theme(legend.title=element_blank(),legend.position = "inside",legend.position.inside = c(0.64,0.88),legend.text = element_text(size = 8),legend.key.size = unit(0.2, 'cm')) + guides(fill = guide_legend(ncol = 3),legend.background = element_blank()) + geom_label_repel(data=PT_RU,size=2.5,aes(label=name,geometry=geom),stat="sf_coordinates",max.overlaps = Inf) 
 
+###  + geom_label_repel(data=ReportingUnits,nudge_y = c(0,0,0,0,250000,0,0,-100000,0,0,+100000),size=2.5,label.padding = unit(0.15, "lines"),aes(label = factor(unit_id),geometry=geom),stat="sf_coordinates")
+
+###
 
 
 ggsave("RU_plot.png",height=8,width=8,units=c("in"))
 
 ```
 
-```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones}Reconciliation Units used in the CBM-CFS3 framework.", message=FALSE, warning=FALSE, out.width="75%"}
+```{r Fig1-RU-ecozones, echo=FALSE, fig.cap="\\label{fig::Fig1-RU-ecozones} Colours corresponds to ecozones, and labels to sub-national provinces and territories. The smaller provinces of New Brunswick (NB), Nova Scotia (NS), and Prince Edward Island (PEI) are not fully spelled out in the labels. Reconciliation Units (RUs) used in the CBM-CFS3 framework are all unique combinations of ecozones and provinces/territories. Biomass estimates used in this analysis are reported as averages at the RU scale. Numbers labelled correspond to RU identifiers used in the text. ", message=FALSE, warning=FALSE, out.width="95%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead (lazy screenshot not ggsave)
 
@@ -388,9 +391,9 @@ The fraction of fine roots contained within the combustible forest floor layers 
 
 \begin{equation}
 HWFineRootConsump = HW.Prop.Fine.Root.duff \times Duff.Consump.Fract
-\end{equation} \begin{equation}
+\end{equation} \begin{align}
 HWFineRootMort.AG = HW.Mort \times HW.Prop.Fine.Root.duff \times (1-Duff.Consump.Fract) \times (1-ReSproutFactor)
-\end{equation} \begin{equation}
+\end{align} \begin{equation}
 HWFineRootMort.BG = HW.Mort \times (1-HW.Prop.Fine.Root.duff) \times (1-ReSproutFactor)
 \end{equation}
 
@@ -1092,14 +1095,14 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 10 & Sourc
 # (Bark.frac.other*Bark.Comb.Frac*FlamingCO2)
 #Note: SW submerch is not consumed in fire (becomes snag or survives) so is not represented here
 
-#Notes:  works so far and gives reasonable values of ~0.17, 0.19, 0.2
+#Notes:  works so far and gives reasonable values of ~0.06, 0.07, 0.11
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "Low"] <-  
-VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
+VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO2)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO2)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
 
 #FluxID: 12
 #Source: SW Other
@@ -1113,11 +1116,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 11 & Sourc
 
 #Notes:  works so far and gives reasonable values of ~0.017, 0.019, 0.02
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCH4)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCH4)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCH4)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCH4)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
 
 #FluxID: 13
 #Source: SW Other
@@ -1131,11 +1134,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 12 & Sourc
 
 #Notes:  works so far 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "Mod"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO)
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO)
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 13 & SourceSink$SeverityClass == "High"] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO)
 
 
 
@@ -1404,16 +1407,16 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 37 & Sourc
 # (Litter.frac.burned*SmTree.frac.other*FlamingCO2)+
 # (Bark.frac.other*Bark.Comb.Frac*FlamingCO2)
 
-#Notes:  works so far and gives reasonable values of ~0.17, 0.19, 0.2
+#Notes:  works so far and gives reasonable values of ~0.06, 0.06, 0.08
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 38 & SourceSink$SeverityClass == 'Low'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO2)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 38 & SourceSink$SeverityClass == 'Mod'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO2)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO2)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 38 & SourceSink$SeverityClass == 'High'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO2)
 
 #FluxID: 39
 #Source: HW Other
@@ -1424,17 +1427,15 @@ VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozo
 # (Litter.frac.burned*SmTree.frac.other*FlamingCH4)+
 # (Bark.frac.other*Bark.Comb.Frac*FlamingCH4)
 
-#Notes:  works so far and gives reasonable values of ~0.017, 0.019, 0.02
-
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 39 & SourceSink$SeverityClass == 'Low'] <- 
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCH4)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCH4)
   
   
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 39 & SourceSink$SeverityClass == 'Mod'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCH4)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCH4)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 39 & SourceSink$SeverityClass == 'High'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + (1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCH4)
 
 #FluxID: 40
 #Source: HW Other
@@ -1445,16 +1446,14 @@ VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozo
 # (Litter.frac.burned*SmTree.frac.other*FlamingCO)+
 # (Bark.frac.other*Bark.Comb.Frac*FlamingCO)
 
-#Notes:  works so far 
-
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 40 & SourceSink$SeverityClass == 'Low'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"] * global.vars$FlamingCO)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 40 & SourceSink$SeverityClass == 'Mod'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"] * global.vars$FlamingCO)
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 40 & SourceSink$SeverityClass == 'High'] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == ecozone] * as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]) * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == ecozone]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == ecozone] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"] * global.vars$FlamingCO)
 
 
 
@@ -1657,11 +1656,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 59 & Sourc
 #*Assume all woody fine+small woody debris is combusted, but only fractional combustion of dead coarse roots alongside duff
 #CWD.frac.of.AGFastDOM
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "Low"] <- VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + (VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(1-as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "Mod"] <-  (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "Mod"] <-  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + (VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(1-as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))))
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 60 & SourceSink$SeverityClass == "High"] <-  VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone] + (VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == ecozone])*(1-as.numeric(FFFC$Duff.consump.frac[FFFC$Ecozone == ecozone]))
 
 
 #FluxID: 61
@@ -1720,11 +1719,11 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 64 & Sourc
 #Pseudocode: =(1-unburned litter area)*(1-MedDOM.Comb.Frac)
 #note: could be from field data, here assuming burns at same rate as duff
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Low"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]) 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "Mod"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]) 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 65 & SourceSink$SeverityClass == "High"] <- (1 - VarDefs$Value[VarDefs$Variable.Name == "MedDOM.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]) 
 
 #FluxID: 66
 #Source: Medium DOM
@@ -2456,8 +2455,7 @@ options(knitr.kable.NA = '')
     kable_styling(full_width = F, html_font = "Cambria") %>%
 column_spec(2:(length(sink.col.list) + 1), width = "2cm") %>%
 column_spec(1, width = "3cm") %>%
-  kableExtra::landscape() %>%
-          kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")
   
  
@@ -2486,7 +2484,7 @@ column_spec(1, width = "3cm") %>%
 
 
 
-ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",BUI_for_DM=70)
+ExtractFireDM <- function(Ecozone_select="BSE",Severity_select="High",BUI_for_DM=70)
 {
   #DC_for_DM=700
   #Ecozone_select="BP"
@@ -2502,11 +2500,13 @@ ExtractFireDM <- function(Ecozone_select="BP",Severity_select="High",BUI_for_DM=
   Duff.consump.frac.ExtractFireDM <- CalcFFFC(AGSlow = AGSlow_for_DM,BUI = BUI_for_DM,Spruce=TRUE)
   
   
-  ###now, need to redefine fluxes 11-12,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
+  ###now, need to redefine fluxes 11-13,23,25-27,38,40,50,53,54,60,70 here just for the given severity and ecozone but for the selected value of Duff.consump.frac
   
-  DM_temp$Value[DM_temp$FluxID == 11] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
+  DM_temp$Value[DM_temp$FluxID == 11] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
 
-  DM_temp$Value[DM_temp$FluxID == 12] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
+  DM_temp$Value[DM_temp$FluxID == 12] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
+  
+  DM_temp$Value[DM_temp$FluxID == 13] <- VarDefs$Value[VarDefs$Variable.Name == "SW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "SW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO)
   
   DM_temp$Value[DM_temp$FluxID == 23] <- VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(1 - Duff.consump.frac.ExtractFireDM)
 
@@ -2519,12 +2519,16 @@ DM_temp$Value[DM_temp$FluxID == 26] <- VarDefs$Value[VarDefs$Variable.Name == "S
 DM_temp$Value[DM_temp$FluxID == 27] <- VarDefs$Value[VarDefs$Variable.Name == "SW.prop.Fine.Root.duff" & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO
 
 
+
 DM_temp$Value[DM_temp$FluxID == 38] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO2 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO2) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO2)
 
 
 DM_temp$Value[DM_temp$FluxID == 40] <-
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCO + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCO) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCO)
+
+DM_temp$Value[DM_temp$FluxID == 41] <-
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
 
 DM_temp$Value[DM_temp$FluxID == 50] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.Mort' & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * (1-VarDefs$Value[VarDefs$Variable.Name == 'HW.ReSprout' & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(1 - Duff.consump.frac.ExtractFireDM)
 
@@ -2535,7 +2539,7 @@ DM_temp$Value[DM_temp$FluxID == 53] <- VarDefs$Value[VarDefs$Variable.Name == 'H
 DM_temp$Value[DM_temp$FluxID == 54] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO
 
 
-DM_temp$Value[DM_temp$FluxID == 60] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select] + ((1 - VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select])*(Duff.consump.frac.ExtractFireDM)))
+DM_temp$Value[DM_temp$FluxID == 60] <- (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select] + ((VarDefs$Value[VarDefs$Variable.Name == "CWD.frac.of.AGFastDOM" & VarDefs$Ecozone == Ecozone_select])*(1-Duff.consump.frac.ExtractFireDM)))
 
 
 ###importantly, the duff remaining calculation also considered unburned litter area, where litter has to burn in order for the duff beneath to burn.  This can be up to 20% unburned litter area in low severity
@@ -2544,7 +2548,7 @@ DM_temp$Value[DM_temp$FluxID == 70] <- (1-(Duff.consump.frac.ExtractFireDM) *(1-
 
 #####
 DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 39] <- 
-VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + (VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select]*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
+VarDefs$Value[VarDefs$Variable.Name == "HW.stumps.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * Duff.consump.frac.ExtractFireDM * global.vars$SmoulderingCH4 + ((1-VarDefs$Value[VarDefs$Variable.Name == "Unburned.litter.area" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select])*VarDefs$Value[VarDefs$Variable.Name == "HW.SmTree.frac.of.other" & VarDefs$Ecozone == Ecozone_select]*global.vars$FlamingCH4) + (VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.other" & VarDefs$Ecozone == Ecozone_select] * VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == Ecozone_select & VarDefs$SeverityClass == Severity_select] * global.vars$FlamingCH4)
 
 
 DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == 52] <- VarDefs$Value[VarDefs$Variable.Name == 'HW.prop.Fine.Root.duff' & VarDefs$Ecozone == Ecozone_select]*(Duff.consump.frac.ExtractFireDM) * global.vars$SmoulderingCO2
@@ -2628,16 +2632,21 @@ DM_temp$Value[DM_temp$Ecozone == Ecozone_select & DM_temp$FluxID == a.high & DM_
 
 DM_temp$Value[DM_temp$FluxID == 9] <- 1-( sum(DM_temp$Value[DM_temp$FluxID >=10 & DM_temp$FluxID <=13]) + DM_temp$Value[DM_temp$FluxID == 102] + DM_temp$Value[DM_temp$FluxID == 119] + DM_temp$Value[DM_temp$FluxID == 136])
 
-DM_temp$Value[DM_temp$FluxID == 22] <- 1-sum(DM_temp$Value[DM_temp$Source == "Softwood Fine Roots"],na.rm=TRUE)
+DM_temp$Value[DM_temp$FluxID == 22] <- 1-(sum(DM_temp$Value[DM_temp$FluxID >=23 & DM_temp$FluxID <=27]) + DM_temp$Value[DM_temp$FluxID ==104] + DM_temp$Value[DM_temp$FluxID == 121]  + DM_temp$Value[DM_temp$FluxID ==138])
+
+#SW_Fine_root_sum <- 1-sum(DM_temp$Value[DM_temp$Source == "Softwood Fine Roots"],na.rm=TRUE)
+#DM_temp$Value[DM_temp$FluxID == 22] <- SW_Fine_root_sum
 
 
-DM_temp$Value[DM_temp$FluxID == 36] <-1-( sum(DM_temp$Value[DM_temp$FluxID >=37 & DM_temp$FluxID <=40]) + DM_temp$Value[DM_temp$FluxID == 106] + DM_temp$Value[DM_temp$FluxID == 123] + DM_temp$Value[DM_temp$FluxID == 140])
+DM_temp$Value[DM_temp$FluxID == 36] <-1-(sum(DM_temp$Value[DM_temp$FluxID >=37 & DM_temp$FluxID <=40]) + DM_temp$Value[DM_temp$FluxID == 106] + DM_temp$Value[DM_temp$FluxID == 123] + DM_temp$Value[DM_temp$FluxID == 140])
 
-DM_temp$Value[DM_temp$FluxID == 49] <- 1-sum(DM_temp$Value[DM_temp$Source == "Hardwood Fine Roots"],na.rm=TRUE)
+#HW_Fine_root_sum <- 1-sum(DM_temp$Value[DM_temp$Source == "Hardwood Fine Roots"],na.rm=TRUE)
 
-  
-  
-  ###then return the new DM
+#DM_temp$Value[DM_temp$FluxID == 49] <- HW_Fine_root_sum
+
+DM_temp$Value[DM_temp$FluxID == 49] <- 1-(sum(DM_temp$Value[DM_temp$FluxID >=50 & DM_temp$FluxID <=54]) + DM_temp$Value[DM_temp$FluxID ==108] + DM_temp$Value[DM_temp$FluxID == 125]  + DM_temp$Value[DM_temp$FluxID ==142])
+
+###then return the new DM
 return(DM_temp)
 #return(Duff.consump.frac.ExtractFireDM) #turn this on to just test the duff consumption model
 
@@ -2646,10 +2655,20 @@ return(DM_temp)
 ###some example function applications
 
 testDM1 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_DM=50)
+
+testDM1$Value[testDM1$FluxID==22] ### fraction of remaining SW roots in test DM1
+testDM1$Value[testDM1$FluxID==49] ### fraction of remaining HW roots in test DM1
+sum(testDM1$Value[testDM1$Source == "Softwood Fine Roots"],na.rm=TRUE)
+sum(testDM1$Value[testDM1$Source == "Hardwood Fine Roots"],na.rm=TRUE)
+
+
+testDM1 <- apply(testDM1,2,as.character)
+write.csv(testDM1,"BSE_High_BUI50.csv")
+
 testDM2 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_DM=150)
 
-testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
-testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
+#testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
+#testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 
 ```
 
@@ -2689,7 +2708,7 @@ testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
   ###now load the mean pool size from CBM 2025 (object name is still 2023 due to legacy):
     NIR2023_AverageCPools <- read_csv("./NIR2025_AverageCPools.csv") ### it is in the same dir as the rmd file now
 
-EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.30,High_frac=0.30,Median_BUI=250)
+EmissionsPerFire <- function(ID=1,Area_ha=1,EcoBoundaryName_select="Boreal Plains",AdminBoundaryName_select="Alberta",Low_frac=0.20,Mod_frac=0.35,High_frac=0.45,Median_BUI=70)
 {
  
   ###insert function description here
@@ -3310,7 +3329,7 @@ AnnualEmissionsSummary <- AnnualEmissionsSummary %>% mutate(MgC_perha = SumC_dir
 #AnnualEmissionsSummary$NFIREID <- as.numeric(AnnualEmissionsSummary$NFIREID)
 
 ##optional write csv
-#write.csv(AnnualEmissionsSummary,"AnnualEmissionsSummary_2023_by_fire.csv",na="")
+write.csv(AnnualEmissionsSummary,"AnnualEmissionsSummary_2023_by_fire.csv",na="")
 ```
 
 ```{r Emissions-2023-by-RU-calc, echo=FALSE, message=FALSE, warning=FALSE}
@@ -3369,8 +3388,7 @@ knitr::include_graphics("emissions2023.png")
 
 ```{r tab-RU-CO2e-comp, echo=FALSE}
 kbl(AnnualEmissionsSummary_table,align="c", padding=0L,caption="Comparison of per hectare CO2e direct emissions from this study against the 2025 National Inventory Report for the 2023 wildfire season in Canada. Rows are sorted by decreasing 2023 area burned.  Note that for RUs with no managed forest area, the nearest forest inventory data available is used.") %>% kable_minimal() %>% column_spec(1:9, width = "2cm") %>%
-  kableExtra::landscape() %>%
-          kable_styling(latex_options = "scale_down")  %>%
+  kable_styling(latex_options = "scale_down")  %>%
   kable_styling(latex_options = "hold_position")  
 
 
@@ -3419,9 +3437,9 @@ kbl(Model_comp_Emissions_2023_table,align="c",caption="Comparison of total carbo
 
 A total of `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C was estimated to be released directly by fires in Canada in 2023. The area-weighted mean Buildup Index for all fires in Canada in 2023 was `r  {round(weighted.mean(AnnualEmissionsSummary$Median_BUI, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=0)}`, representing severe but not uniformly exceptional drought conditions in Canada's northern forests. The area-weighted mean total C emissions per unit area was `r {round(weighted.mean(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, AnnualEmissionsSummary$Area_ha,na.rm=TRUE),digits=2)}` t C/ha, though 90% of the emissions per unit area were between the 5th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.05,na.rm=TRUE),digits=0)}` t C/ha typical of the Taiga Plains ecozone under low drought conditions and the 95th percentile of `r  {round(quantile(AnnualEmissionsSummary$SumC_direct_emissions/AnnualEmissionsSummary$Area_ha, probs=0.95,na.rm=TRUE),digits=0)}` t C/ha typical of Pacific coastal forests.
 
-Comparison of emissions totals against the NIR is only possible for spatial units (i.e. Reconciliation Units, provinces, or ecozones) where the entire RU is composed of managed forest. In British Columbia, across 2.2 Mha burned, these FireDMs estimates were consistently lower than NIR. This was driven by a lower average emissions in FireDMs for both the Taiga Plains with 1.3 Mha burned (124 t CO~2~-eq/ha) and Montane Cordillera with 0.68 Mha burned (127 t CO~2~-eq/ha) as compared to the NIR (161 and 189 t CO~2~-eq/ha, respectively). For Alberta the 1.5 Mha of Boreal Plains ecozone burned showed close agreement (155 vs 163) as well as in the Taiga Plains (130 vs 144). The Taiga Plains fires of both Alberta and British Columbia were largely adjacent, and the FireDMs output was very similar (123 vs 129) across nearly identical moderate and high severity fractions, but the NIR showed a larger contrast (144 vs 161) that may originate from the underlying assumptions of the previous methods of calculating fire emissions in the NIR.
+Comparison of emissions totals against the NIR is only possible for spatial units (i.e. Reconciliation Units, provinces, or ecozones) where the entire RU is composed of managed forest. In British Columbia, across 2.2 Mha burned, these FireDMs estimates were consistently lower than NIR. This was driven by a lower average emissions in FireDMs for both the Taiga Plains with 1.3 Mha burned (125 t CO~2~-eq/ha) and Montane Cordillera with 0.68 Mha burned (130 t CO~2~-eq/ha) as compared to the NIR (161 and 189 t CO~2~-eq/ha, respectively). For Alberta the 1.5 Mha of Boreal Plains ecozone burned showed close agreement (162 vs 163) as well as in the Taiga Plains (130 vs 144). The Taiga Plains fires of both Alberta and British Columbia were largely adjacent, and the FireDMs output was very similar (126 vs 130) across nearly identical moderate and high severity fractions, but the NIR showed a larger contrast (144 vs 161) that may originate from the underlying assumptions of the previous methods of calculating fire emissions in the NIR.
 
-The RU with the largest burned area in 2023 was in the unmanaged forest of Quebec's Taiga Shield East, where NIR pool sizes from the adjacent jurisdiction of Labrador TSE were used in the FireDMs estimates, as no NIR pool sizes were available for Quebec's TSE ecozone RU, as there is no managed forest in that RU (the objective of the NIR being to report on GHG emissions in managed forest). Over this 2.5 Mha of burned area, the Quebec TSE FireDMs emissions estimates were substantially larger (149 t CO~2~-eq/ha) compared to NIR (99 t CO~2~-eq/ha, see Figure \ref{fig:Emissions-2023-by-RU}). In the Quebec Boreal Shield East ecozone where NIR pools are available, the FireDMs were still larger than NIR, though the gap between the two was much smaller (106 vs 92). Only the Manitoba Boreal Plains and Yukon Taiga Plains showed a similarly larger estimate in the FireDMs compared to NIR, with all other RUs showing a typically 10–30% reduction in emissions in the FireDMs compared to the NIR. Overall, this new emissions estimate method will yield more representative fire emissions estimates that are sensitive to annual differences in drought condition and fire-specific patterns of severity. The small overall impact is likely due to larger soil organic layer emissions in the FireDMs being offset by lower canopy consumption in the low and moderate severity areas.
+The RU with the largest burned area in 2023 was in the unmanaged forest of Quebec's Taiga Shield East, where NIR pool sizes from the adjacent jurisdiction of Labrador TSE were used in the FireDMs estimates, as no NIR pool sizes were available for Quebec's TSE ecozone RU, as there is no managed forest in that RU (the objective of the NIR being to report on GHG emissions in managed forest). Over this 2.5 Mha of burned area, the Quebec TSE FireDMs emissions estimates were substantially larger (147 t CO~2~-eq/ha) compared to NIR (99 t CO~2~-eq/ha, see Figure \ref{fig:Emissions-2023-by-RU}). In the Quebec Boreal Shield East ecozone where NIR pools are available, the FireDMs were still larger than NIR, though the gap between the two was much smaller (103 vs 92). Only the Manitoba Boreal Plains and Yukon Taiga Plains showed a similarly larger estimate in the FireDMs compared to NIR, with all other RUs showing a typically 10–30% reduction in emissions in the FireDMs compared to the NIR. Overall, this new emissions estimate method will yield more representative fire emissions estimates that are sensitive to annual differences in drought condition and fire-specific patterns of severity. The small overall impact is likely due to larger soil organic layer emissions in the FireDMs being offset by lower canopy consumption in the low and moderate severity areas.
 
 @byrneCarbonEmissions20232024 used observed total atmospheric column excess CO and a range of MCE values to estimate total fire C emissions in Canada in 2023 of between 570-727 Mt C with a mean estimate of 647 Mt. The uncertainty in the estimate from @byrneCarbonEmissions20232024 lies primarily in the uncertain CO~2~:CO ratio (more commonly computed as the normalized ratio MCE) that was estimated to be between 7.8–10.8 g CO~2~ / g CO. Our bottom-up estimates that partition flaming vs smouldering shows a lower CO~2~:CO estimate of `r  {round(weighted.mean(AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=1)}`. This lower CO~2~:CO ratio (i.e. more smouldering) if applied to the data from @byrneCarbonEmissions20232024 would reduce their lower range of total C emissions to `r  {round(weighted.mean(((AnnualEmissionsSummary$CO2_MgC/AnnualEmissionsSummary$CO_MgC)/7.7)*647, AnnualEmissionsSummary$Area_ha,na.rm=TRUE), digits=0)}` Mt C, which is comparable to the `r {round(sum(AnnualEmissionsSummary$SumC_direct_emissions/10^6,na.rm=TRUE),digits=0)}` Mt C computed from this bottom-up approach. Estimates of total carbon emissions based solely on the sum of observed Fire Radiative Power (FRP) from Copernicus-CAMS (GFASv1.2 [@kaiserBiomassBurningEmissions2012]) was 478 Mt C [@jonesStateWildfires202320242024]. The operational air quality model for Canada produces wildfire smoke emissions estimates using the CFFEPS-FireWork framework [@chen2019] which utilizes active fire satellite detections coupled to biomass burning rates from the Canadian Forest Fire Danger Rating System which are known to underestimate total emissions from forest floor combustion [@degroot2009]. As a result, the CFFEPS-FireWork total emissions in 2023 with their exceptional nation-wide moisture deficits [@jainDriversImpactsRecordBreaking2024] underestimate total emissions compared to other methods, with CFFEPS estimates of CO emissions only \~40% of satellite observed values [@griffinBiomassBurningCO2024; @voshtaniQuantifyingCOEmissions2025]. Even after assimilating satellite CO and tower-based total carbon measurements, CFFEPS still retains 20% understimating bias, likely attributable to an estimate of peak CO (i.e. smouldering) emissions that are lower than reality [@voshtaniQuantifyingCOEmissions2025].
 
@@ -3449,9 +3467,33 @@ Carbon emissions from wildfires in Canada represent a substantial pulse input of
 
 While this prototype carbon flux framework utilizes regionally-averaged carbon stock estimates, future systems deployment within Canada's carbon accounting system is likely to incorporate precisely mapped (30 m) carbon pools alongside the finely mapped fire severity products (30 m) used here. As both the spatial estimates of carbon stocks across Canada's forested ecosystems improves alongside additional field observations, it is anticipated that this modelling framework will increase in both accuracy and precision over time.
 
-\newpage
+**Code/Data availability**
 
-# Appendix A: Disturbance Matrix Examples
+This article was produced from a RMarkdown document with underlying data is available from the Zenodo repository http://dx.doi.org/10.5281/zenodo.17643211 [@thompson2025]. The disturbance matrices were produced in accordance with standards associated with the CBM-CFS3 version 1.2 (July 2025), which is available for download (after user registration) at https://ca.nfis.org/index_eng.html.  CBM-CFS3 is not open source, and is not re-archived here due to licensing restrictions. Only the free and open source @thompson2025 is required to produce the figures and calculations in this document, and all relevant CBM-CFS3 data for comparison are provided as tabular data in the @thompson2025 repository without the need to run or install CBM-CFS3. 
+
+**Funding**
+
+This project received no external funding.
+
+**Conflicts of interest**
+
+The authors declare that they have no conflict of interest.
+
+**Author Contributions**
+
+DKT, EW, and BH conceived the intitial framework. DKT wrote the algorithm. EW analyzed and compiled input data. HF, VMG, OH, CH, and BH assisted in model development and algorithm review. DKT, EW, and BH drafted the manuscript. All authors contributed manuscript revisions and approved of the final version.
+
+**Acknowledgements**
+
+The authors would like to thank Werner A. Kurz (retired) for initiating this project during his role as the head of Canada's forest carbon accounting team.
+
+\clearpage
+
+\appendixfigures
+
+\appendixtables
+
+# Appendix: Disturbance Matrix Examples
 
 Note that the pool source is shown in rows, and the destination pool is shown in the columns.
 
@@ -3461,18 +3503,47 @@ DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSW", SeverityClass = "High")
 
+##loop this over severity classes and also BUI levels at increments of 10 from 10 through 200?
+
+```
+
+```{r BSE-DMs-DO-NOT-RUN, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+##example of producing DMs for a single ecozone across a number of BUI levels
+
+BUI_levels <- seq(from=5, to=120,by=10)
+Severity_levels <- c("Low", "Mod", "High")
+  
+DM_grid <- expand_grid(BUI_levels,Severity_levels)
+
+for(i in seq(1:nrow(DM_grid)))
+{
+tmp_DM <- ExtractFireDM(Ecozone_select="BSE",Severity_select = DM_grid$Severity_levels[i],BUI_for_DM=DM_grid$BUI_levels[i])
+
+tmp_DM$BUI <- DM_grid$BUI_levels[i]
+
+if(i==1) DM_long <- tmp_DM else DM_long <- rbind(DM_long,tmp_DM)
+
+}
+DM_long <- as.data.frame(DM_long)
+
+DM_long$DC <- DM_long$BUI*3.3 ##simple fixed-zero-intercept regression to estimate DC from BUI for fire growth days in the BSE from Barber et al's Canadian Fire Spread Database (R2 = 0.74)
+
+DM_long <- apply(DM_long,2,as.character)
+
+write.csv(DM_long,"BSE_DM_long.csv")
 
 ```
 
 \newpage
 
-# Appendix B: List of Resprouting Hardwoods of Canada
+# Appendix: List of Resprouting Hardwoods of Canada
 
 Alnus spp. Arbutus men. Betula all. Betula pap. Betula pop. Fraxinus ame. Fraxinus nig. Fraxinus pen. Populus bal. Populus gra. Populus tre. Populus tri. Quercus spp. Salix spp.
 
 \newpage
 
-# Appendix C: Modelling of soil organic layer consumption
+# Appendix: Modelling of soil organic layer consumption
 
 For national annual estimates of forest organic soil layer consumption during wildfire, implementations that only utilize Canadian experimental fire data from the Fire Behaviour Prediction System will be limited to a maximum consumption value of 5 kg (biomass) m^-2^ of total surface fuel (woody debris, litter, and duff) of 5 kg m^-2^, or 25 Mg C ha^-1^, given the observation dataset and fitted model parameters. For the common "C-2" boreal spruce fuel type for instance, Surface Fuel Consumption, SFC (biomass units in kg m^-2^ not kg C) is modelled as:
 
@@ -3559,9 +3630,11 @@ ggsave("FFFC_vs_BUI_plot.png")
 knitr::include_graphics("FFFC_vs_BUI_plot.png")
 ```
 
+\clearpage
+
 With the parameter constrained NLS fitting, the proportional consumption model for the forest floor has a leave-one-out (conducted at the fire-level, not plot) cross validated r^2^ of 0.52 and a Mean Percent Error of 45%
 
-```{r show-biplot-FFFC-new-calcs, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", echo=FALSE}
+```{r show-biplot-FFFC-new-calcs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 
 #### expanded Leave-One-Out cross-validation
@@ -3641,17 +3714,19 @@ MAE.nls <- mean(abs(ABoVE_Data_w_FBP_excl_BC$prop_sol_c_combusted-ABoVE_Data_w_F
 ecozones_colours_4 <- c("#fb9a99","#b2df8a","#7d8b8f","brown")
 
 
-FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + ylim(0,1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75) + ylim(0,1) + xlim(0,1) + geom_abline(intercept = 0,linetype = "dotted", slope = 1.55) + geom_abline(intercept = 0,linetype = "dotted", slope = 0.50) + ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
+FFFC_biplot <- ggplot(ABoVE_Data_w_FBP_excl_BC, aes(prop_sol_c_combusted,nls.pred.BUI)) + geom_point(aes(colour = factor(ecozone))) + scale_colour_manual(values=ecozones_colours_4) + geom_abline(intercept = 0, slope = 1) + geom_abline(intercept = 0,linetype = "dotdash", slope = 1.25) + geom_abline(intercept = 0,linetype = "dotdash", slope = 0.75)+ ylim(0,1) + xlim(0,1) + xlab("Observed fraction of forest floor mass loss") + ylab("Modelled fraction of forest floor mass loss") + theme_classic2()
 
 ggsave("FFFC_biplot.png")
 ```
 
-```{r show-biplot-FFFC-new, echo=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, message=FALSE, warning=FALSE, the entire fire was excluded from the training data used in the model training.", out.width="75%"}
+```{r show-biplot-FFFC-new, echo=FALSE, message=TRUE, warning=FALSE, fig.cap="Leave one out cross-validation of the forest floor consumption model.  Where multiple measurements were conducted within a single fire, the entire fire was excluded from the training data used in the model training. The dotted lines represent an error of plus and minus 25%", out.width="75%"}
 
 ### was getting a strange error since the output map in pdf was too large for the latex compiler somehow.  Inserting the above ggplot image as png instead 
 
 knitr::include_graphics("FFFC_biplot.png")
 ```
+
+\clearpage
 
 Across the entire parameter space of Buildup Index and AGSlow pool size, the following isolines of proportional consumption in the model can be plotted:
 
@@ -3762,6 +3837,8 @@ ggsave("FFFC_surface_plot.png")
 knitr::include_graphics("FFFC_surface_plot.png")
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next-calcs, message=FALSE, warning=FALSE, include=FALSE}
 
 FFFC_expand.BUI$FFFL <- FFFC_expand.BUI$AGSlow.Mg.C.ha/5
@@ -3784,6 +3861,8 @@ ggsave("FFFC_expand_plot.png")
 
 knitr::include_graphics("FFFC_expand_plot.png")
 ```
+
+\clearpage
 
 ```{r more-calcs, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 brks_FFFC_abs <- c(1,2.5,5,10,15,20)
@@ -3817,6 +3896,8 @@ knitr::include_graphics("plot_1.png")
 
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next3, eval=FALSE, fig.cap="Isoline contours of equal organic soil layer consumption in kg/m2 as a function of BUI and the organic soil layer fuel load in kg/m2.  Field observations of burn from 547 field measurements across Canada from the Yukon-Alaska border to Manitoba", message=FALSE, warning=FALSE, include=FALSE, out.width="75%"}
  
 
@@ -3825,12 +3906,14 @@ knitr::include_graphics("plot_2.png")
 
 ```
 
+\clearpage
+
 ```{r FFFC-plot-next4, eval=FALSE, fig.cap="Forest floor consumption as a function of BUI across varying levels of forest floor fuel load (FFFL)", message=FALSE, warning=FALSE, include=FALSE, out.width="75%"}
  ###maybe like FBP with FFFC vs BUI, then varying lines of FFFL:
 knitr::include_graphics("plot_3.png")
 
 ```
 
-\newpage
+\clearpage
 
 # References

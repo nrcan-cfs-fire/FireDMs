@@ -645,6 +645,13 @@ ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI <- nlsLM(
 
 summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI)
 
+ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI.zero <- nlsLM(
+  formula = prop_sol_c_combusted_logit ~ c*(1-exp(a*buildup_index/(AGSlow.Mg.C.ha)+b)),
+  data = ABoVE_Data_w_FBP_excl_BC,
+  start = list(a = -0.0021, b = -0.71,c=3))
+
+summary(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI.zero)
+
  ### r2~0.78, MPE~26% unbound #note that the hinge to zero relies on the ln of large numbers, and that using the log of kg m2 of Surface Fuel Load as per FBP leave the DC/BUI == 0 values of SFC consumption as non-zero, but using
 
  ## constraint is ~ ~-0.008 for BUI to get half of max possible consumption at BUI 50 (as per FBP)
@@ -2667,6 +2674,10 @@ write.csv(testDM1,"BSE_High_BUI50.csv")
 
 testDM2 <- ExtractFireDM(Ecozone_select="BSE",Severity_select = "High",BUI_for_DM=150)
 
+
+Jasper_Mod_DM <- ExtractFireDM(Ecozone_select="MC",Severity_select = "Mod",BUI_for_DM=167)
+
+
 #testDM1$Value[testDM1$FluxID==70] ### fraction of remaining duff in test DM1
 #testDM2$Value[testDM2$FluxID==70] ### fraction of remaining duff in test DM2
 
@@ -2855,6 +2866,25 @@ rbind(EmissionsPerFire(ID="test_BP_20_30_30_DC250",Area_ha = 1000,EcoBoundaryNam
 ### real data example from Whitman et al., 2018, the 2014-WB-028 fire:
 
 Fire_2014_WB_028 <- EmissionsPerFire(ID="Fire_2014_WB_028",Area_ha = 60000,EcoBoundaryName="Taiga Plains",AdminBoundaryName="Northwest Territories",Low_frac=0.28,Mod_frac=0.28,High_frac=0.43,Median_BUI=89)
+
+##2016 Fort McMurray fire, using a BUI of 107, which is the average of the May 3-4 spread days (BUI ~83) and the May 17th run at BUI ~132
+Horse_River_2016 <- EmissionsPerFire(ID="Horse_River_2016",Area_ha = 600000,EcoBoundaryName="Boreal Plains",AdminBoundaryName="Alberta",Low_frac=0.28,Mod_frac=0.28,High_frac=0.43,Median_BUI=107)
+
+## Jasper Fire 2024
+
+##2016 Fort McMurray fire, using a BUI of 107, which is the average of the May 3-4 spread days (BUI ~83) and the May 17th run at BUI ~132
+Jasper_2024 <- EmissionsPerFire(ID="Jasper_2024",Area_ha = 32281,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="Alberta",Low_frac=0.05,Mod_frac=0.08,High_frac=0.79,Median_BUI=167)
+
+##2016 Fort McMurray fire, using a BUI of 107, which is the average of the May 3-4 spread days (BUI ~83) and the May 17th run at BUI ~132
+Jasper_2024_mod <- EmissionsPerFire(ID="Jasper_2024",Area_ha = 1,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="Alberta",Low_frac=0.0,Mod_frac=1.0,High_frac=0.0,Median_BUI=167)
+
+Jasper_2024_High <- EmissionsPerFire(ID="Jasper_2024",Area_ha = 1,EcoBoundaryName="Montane Cordillera",AdminBoundaryName="Alberta",Low_frac=0.0,Mod_frac=0.0,High_frac=1,Median_BUI=167)
+
+
+## which gives you about 4,239,822 t C from C
+## www.atmos-chem-phys.net/19/2577/2019/ C Adams et al gives ~1.5 x10^3 kt CO, or 1,500,000 t CO, or only about 1/3 of the bottom-up estimate
+##tricky retrievals since lots of pyroCB events
+
 
 
 ```
@@ -3503,6 +3533,8 @@ DMTables(ecozone = "BP", SeverityClass = "Mod")
 DMTables(ecozone = "BP", SeverityClass = "High")
 DMTables(ecozone = "TSW", SeverityClass = "High")
 
+DMTables(ecozone = "MC", SeverityClass = "Mod")
+
 ##loop this over severity classes and also BUI levels at increments of 10 from 10 through 200?
 
 ```
@@ -3607,7 +3639,7 @@ FFFC.single<- array(NA,dim=c(length(buildup_index)))
 
 for(i in seq(1:length(buildup_index))){
 
-  FFFC.single[i] <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI,newdata=FFFC.single.final.df[i,])))
+  FFFC.single[i] <- as.data.frame(inv.logit(predict(ABoVE.FFFC.Frac.Consume.nlsLM.excl.BC.BUI.zero,newdata=FFFC.single.final.df[i,])))
   }
 
 FFFC.single <- as.data.frame(FFFC.single)

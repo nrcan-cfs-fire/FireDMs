@@ -1,4 +1,7 @@
 %% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL C:\Users\thomp\Downloads\FireDMs-submitted.tex   Tue Mar 10 14:06:34 2026
+%DIF ADD C:\Users\thomp\Downloads\FireDMs-revised.tex     Tue Mar 10 14:08:05 2026
 %% ---------------------------------
 %% This template should be used for copernicus.cls
 %% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
@@ -99,6 +102,45 @@
 %\usepackage{float}
 %\usepackage{subfig}
 %\usepackage{rotating}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
 
 \begin{document}
 
@@ -165,8 +207,8 @@ of distinct pools. Model outputs indicate total direct carbon emissions
 range from a 11 t C/ha in Boreal Shield West forests of Saskatchewan
 following low severity fire to over 60 t C/ha in Pacific Maritime
 forests of British Columbia under high severity fire. The existing
-approach to emissions in NFC-MARS yields regional CO\textsubscript{2}e
-emissions that are 10 to 25 percent higher than this new method, owing
+approach to emissions in NFC-MARS yields regional \DIFdelbegin \DIFdel{CO2e }\DIFdelend \DIFaddbegin \DIFadd{CO\textsubscript{2}e
+}\DIFaddend emissions that are 10 to 25 percent higher than this new method, owing
 to lower overall canopy consumption with mixed-severity fires, which is
 only partially offset by increased estimates of forest floor consumption
 in this new approach. Comparisons against directly observed fire plume
@@ -311,8 +353,9 @@ on satellite hotspot detections
 \citep{guindon2014, guindon2020, hall2020}, this paper describes a local
 scale (30-m) method for defining a per-pixel proportional carbon stock
 change and emissions estimate via a locally calculated fire DM. In this
-document, we outline a new scheme for computing fire DM based on field
-observations aggregated up to a three severity class paradigm (low,
+document, we outline \DIFdelbegin \DIFdel{the evidence-based fire DM updated and designed for
+a planned, spatially-explicit update to the CBM-CFS3, anchored in }\DIFdelend \DIFaddbegin \DIFadd{a new scheme for computing fire DM based on field
+observations aggregated up to }\DIFaddend a three severity class paradigm (low,
 moderate, and high severity). These fire carbon flux models are built
 from a blend of aggregated field data linked to remotely sensed
 severity, as well as insights from fire physics and experimental fires.
@@ -457,32 +500,32 @@ CO\textsubscript{2}:CH\textsubscript{4}:CO gas emissions, are constant
 throughout ecozones, but vary by flaming vs smouldering combustion
 modes. The precise emissions ratios vary slightly between models and
 field studies, but for this initial algorithm assessment, we define
-these emissions ratios as being identical in the flaming phase to those
+these emissions ratios as being identical \DIFaddbegin \DIFadd{in the flaming phase }\DIFaddend to those
 used in Canada's operational wildfire smoke forecasting system, FireWork
-\citep{chen2019}. Smouldering emissions factors used in this framework
+\citep{chen2019}. \DIFaddbegin \DIFadd{Smouldering emissions factors used in this framework
 are taken as the arithmetic mean of smouldering and residual combustion
-phases from FireWork. Emissions ratios are provided in Table
+phases from FireWork. }\DIFaddend Emissions ratios are provided in Table
 \ref{tab:tab-globalVarsEmissions}.
 
 \begin{table}
 \centering
-\caption{\label{tab:tab-globalVarsEmissions}Emissions factors for flaming and smouldering used in this model, which are derived from Canada's operational air quality model (Chen et al., 2019). Values are the molar fraction of carbon in the unburned biomass and the emitted species, e.g. 87 percent of C in biomass is converted to C as carbon dioxide in flaming combustion. NMOG = non-methane organic gases.}
+\caption{\label{tab:tab-globalVarsEmissions}Emissions factors for flaming and smouldering used in this model\DIFaddbeginFL \DIFaddFL{, which are derived from Canada's operational air quality model (Chen et al}\DIFaddendFL .\DIFaddbeginFL \DIFaddFL{, 2019). }\DIFaddendFL Values are the molar fraction of carbon in the unburned biomass and the emitted species, e.g. 87 percent of C in biomass is converted to C as \DIFdelbeginFL \DIFdelFL{CO2 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{carbon dioxide }\DIFaddendFL in flaming combustion. \DIFaddbeginFL \DIFaddFL{NMOG = non-methane organic gases.}\DIFaddendFL }
 \centering
 \begin{tabular}[t]{l|r|r}
 \hline
 Spp & Flaming & Smouldering\\
 \hline
-CO\textsubscript{2} & 0.868 & 0.703\\
+\DIFdelbeginFL \DIFdelFL{CO2 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{CO\textsubscript{2} }\DIFaddendFL & 0.868 & 0.703\\
 \hline
 CO & 0.070 & 0.161\\
 \hline
-PM\textsubscript{10} & 0.022 & 0.048\\
+\DIFdelbeginFL \DIFdelFL{PM10 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{PM\textsubscript{10} }\DIFaddendFL & 0.022 & 0.048\\
 \hline
 NMOG & 0.016 & 0.035\\
 \hline
-PM\textsubscript{2.5} & 0.019 & 0.040\\
+\DIFdelbeginFL \DIFdelFL{PM25 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{PM\textsubscript{2.5} }\DIFaddendFL & 0.019 & 0.040\\
 \hline
-CH\textsubscript{4} & 0.005 & 0.013\\
+\DIFdelbeginFL \DIFdelFL{CH4 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{CH\textsubscript{4} }\DIFaddendFL & 0.005 & 0.013\\
 \hline
 BC & 0.000 & 0.000\\
 \hline
@@ -513,15 +556,21 @@ potentials as compared to CH\textsubscript{4}.
 
 \subsubsection{Ground plot and remotely sensed fire severity data}
 
-Remotely sensed fire severity metrics (i.e.~dNBR and related indices)
-are capable of determining if a specific location falls within a low,
-moderate, or high severity fire area \citep{hall2008} by utilizing the
+\DIFdelbegin \DIFdel{While remotely }\DIFdelend \DIFaddbegin \DIFadd{Remotely }\DIFaddend sensed fire severity metrics \DIFaddbegin \DIFadd{(i.e.~dNBR and related indices)
+}\DIFaddend are capable of determining if a specific location falls within a low,
+moderate, or high severity fire area \citep{hall2008} \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{by utilizing the
 change in the red and shortwave infrared band ratios after a fire
-\citep{key2006}. These remotely sensed fire severity classes can not
-alone inform estimates of fuel consumption down to specific biomass
+\mbox{%DIFAUXCMD
+\citep{key2006}}\hskip0pt%DIFAUXCMD
+. These }\DIFaddend remotely sensed fire severity \DIFdelbegin \DIFdel{metrics alone
+do not
+}\DIFdelend \DIFaddbegin \DIFadd{classes can not
+alone }\DIFaddend inform estimates of fuel consumption down to specific biomass
 pools. Instead, this approach uses the change in biomass pools as
-measured at ground plots at varying satellite burn severity classes,
-using detailed and semi-standardized methods of burn severity ground
+\DIFdelbegin \DIFdel{empirically related to per-pixel satellite spectral reflectance indices
+(i.e.~dNBR,
+RBR), }\DIFdelend \DIFaddbegin \DIFadd{measured at ground plots at varying satellite burn severity classes,
+}\DIFaddend using detailed and semi-standardized methods of burn severity ground
 plots with unburned controls
 \citep[e.g.][]{cockeComparisonBurnSeverity2005, hall2008}. Burn severity
 ground plot measurements are often aggregated into a single ``Composite
@@ -533,7 +582,10 @@ level measurements of individual forest biomass pools (e.g.~conifer
 overstory mortality or canopy consumption) are recorded as part of the
 CBI methodology.
 
-Individual burn severity plots were assigned a severity class based on
+\DIFdelbegin \DIFdel{In this framework we do not use the CBI aggregated metric itself to
+infer biomass consumption, but rather compilations of burn severity
+ground plot measurements that include all the individual biomass pool
+measurements. }\DIFdelend \DIFaddbegin \DIFadd{Individual burn severity plots were assigned a severity class based on
 ground observations, and an ecozone-level median biomass pool
 consumption fraction was computed for each severity class for each
 biomass pool. Field measurements of fire effects on individual ecosystem
@@ -544,7 +596,7 @@ plot level data on tree mortality percentage was available across
 numerous plots within Canada's Boreal Plains ecozone; median values of
 tree mortality per severity class (low, moderate, high) were computed
 based the plot overall severity score as determined by CBI in order to
-compute ecozone-specific values. Field studies with data describing
+compute ecozone-specific values. }\DIFaddend Field studies with data describing
 biomass consumption fractions for individual biomass pools were
 available from the northwestern boreal forest of Canada
 \citep{french2020, whitman2018}. Smaller datasets with eastern Canadian
@@ -562,7 +614,10 @@ diameter mature hardwood trees was only available from
 \citet{whitman2018} (primarily aspen, \emph{Populus tremuloides}), and
 are used in all other ecozones without modification.
 
-For ecozones without ground plot measurements, an adjacent and
+\DIFdelbegin \DIFdel{Individual burn severity plots were assigned a severity class based on
+ground observations, and an ecozone-level median biomass pool
+consumption fraction was computed for each severity class for each
+biomass pool. }\DIFdelend For ecozones without ground plot measurements, an adjacent and
 ecologically similar ecozone with observations was used. As such, Boreal
 Plains observations were used in the Prairies, Boreal Shield, and Hudson
 Plains Ecozones. Similarly, Taiga Shield West observations were used in
@@ -963,10 +1018,15 @@ Duff Moisture Code, as well as their composite, the Buildup Index. Given
 this lack of direct observability of forest floor consumption, this
 model uses fire weather and fuel loading as inputs to the forest floor
 consumption model, without consideration of the remotely sensed fire
-severity observations used in canopy consumption modelling. This
+severity observations used in canopy consumption modelling. \DIFaddbegin \DIFadd{This
 approach mirrors many established and widely-used approaches in Canada
-such as CanFire (e.g. \citet{smyth2026}) as well as Consume
-\citep{ottmar1993} in the United States.
+such as CanFire (e.g. \mbox{%DIFAUXCMD
+\citet{smyth2026}}\hskip0pt%DIFAUXCMD
+) as well as Consume
+\mbox{%DIFAUXCMD
+\citep{ottmar1993} }\hskip0pt%DIFAUXCMD
+in the United States.
+}\DIFaddend 
 
 In the fire literature in Canada, the soil organic layer is sometimes
 termed the Forest Floor Fuel Load (\emph{FFFL}) \citep{letang2012} and
@@ -1654,11 +1714,11 @@ increase in both accuracy and precision over time.
 
 This article was produced from a RMarkdown document with underlying data
 is available from the Zenodo repository
-\url{http://dx.doi.org/10.5281/zenodo.17643211} \citep{thompson2025}.
+\DIFdelbegin \DIFdel{http://dx.doi.org/10.5281/zenodo.17643211 }\DIFdelend \DIFaddbegin \url{http://dx.doi.org/10.5281/zenodo.17643211} \DIFaddend \citep{thompson2025}.
 The disturbance matrices were produced in accordance with standards
 associated with the CBM-CFS3 version 1.2 (July 2025), which is available
 for download (after user registration) at
-\url{https://ca.nfis.org/index_eng.html}. CBM-CFS3 is not open source,
+\DIFdelbegin \DIFdel{https://ca. nfis.org/index\_eng.html. }\DIFdelend \DIFaddbegin \url{https://ca.nfis.org/index_eng.html}\DIFadd{. }\DIFaddend CBM-CFS3 is not open source,
 and is not re-archived here due to licensing restrictions. Only the free
 and open source \citet{thompson2025} is required to produce the figures
 and calculations in this document, and all relevant CBM-CFS3 data for
@@ -1820,11 +1880,11 @@ CO &  &  &  &  &  &  &  &  & \\
 PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
-\end{table}
+\DIFaddbeginFL \end{table}
 
 \begin{table}[!h]
 \centering\centering\centering
-\caption{\label{tab:example-DM-tables}Mod severity Disturbance Matrix in MC.  Note: only some biomass and atmospheric pools are shown.}
+\caption{\label{tab:example-DM-tables}\DIFaddFL{Mod severity Disturbance Matrix in MC.  Note: only some biomass and atmospheric pools are shown.}}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
 \begin{tabular}[t]{>{\raggedright\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}|>{\centering\arraybackslash}p{2cm}}
@@ -1851,7 +1911,7 @@ CO &  &  &  &  &  &  &  &  & \\
 PM25 &  &  &  &  &  &  &  &  & \\
 \hline
 \end{tabular}}
-\end{table}
+\DIFaddendFL \end{table}
 
 \newpage
 

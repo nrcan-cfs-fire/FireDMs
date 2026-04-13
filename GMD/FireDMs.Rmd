@@ -52,12 +52,13 @@ bibliography: references.bib
 running:
   title: Fire Severity and Canadian Forest GHG Reporting
   author: Thompson et al.
-copyrightstatement: Copyright His Majesty the King in Right of Canada as represented by the  Minister of Natural Resources Canada. This work is available under the Open Government Licence - Canada (http://open.canada.ca/en/open-government-licence-canada).
 appendix:
 always_allow_html: true
 editor_options:
   chunk_output_type: console
 ---
+
+\copyrightstatement{{\copyright} His Majesty the King in Right of Canada, as represented by the Minister of Natural Resources Canada, 2026.}
 
 # Introduction
 

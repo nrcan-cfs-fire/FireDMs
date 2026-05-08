@@ -59,7 +59,7 @@ editor_options:
 ---
 
 # Introduction
-
+#Hello
 Wildfire is on par with insects as the largest stand-replacing disturbance process in Canada's forest, impacting \~1–3 Mha of Canada's 367 Mha forested area in a typical year [@hanes2019]. In Canada's updated 54-year burned area record, ten years have exceeded 4 Mha of burned area (or approximately 1% of Canada's forest area) [@skakun2022]. The 2023 fire season in Canada burned a remarkable 15 Mha owing to extreme drought, severe fire weather conditions, and a prolonged fire season length [@jainDriversImpactsRecordBreaking2024].
 
 Managed northern forest areas, adjacent to communities, have shown the effects of local suppression leading to a stand age bias towards older stands; though the effect is largely limited to a c. 25 km radius around these widely dispersed communities [@parisien2020]. More southern boreal forest with extensive suppression activities has historically seen evidence of a reduction in observed vs potential area burned [@cummingEffectiveFireSuppression2005] though this effect has likely been erased given the increasing frequency of extreme burning conditions @wangCriticalFireWeather2023 and corresponding record area burned [@jainDriversImpactsRecordBreaking2024].

@@ -19,7 +19,7 @@ During the knitr compiling process, the actual CBM-CFS3 compatible fire DM outpu
 
 ## Contribution Guidelines
 
-At the moment, with this manuscript in review, please limit outside contributions to bugs or issues in the issues tracker.
+Please limit contributions to bugs or issues in the issues tracker.
 
 ## Licence Info
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.12.19)  10 MAR 2026 13:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.12.19)  10 APR 2026 14:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3108,57 +3108,61 @@ Package xcolor Warning: Incompatible color definition on input line 146.
 Package xcolor Warning: Incompatible color definition on input line 148.
 
 LaTeX Font Info:    Trying to load font information for T1+phv on input line 17
-6.
+8.
 (c:/texlive/2025/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.54997pt on input line 176.
-[1
+(Font)              scaled to size 8.54997pt on input line 178.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+82.
+(c:/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [1
 
 {c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2025/
 texmf-dist/fonts/enc/dvips/base/8r.enc}] [2] [3]
-<../RU_plot.png, id=114, 578.16pt x 578.16pt>
-File: ../RU_plot.png Graphic file (type png)
-<use ../RU_plot.png>
-Package pdftex.def Info: ../RU_plot.png  used on input line 343.
+<../fig1.png, id=114, 578.16pt x 578.16pt>
+File: ../fig1.png Graphic file (type png)
+<use ../fig1.png>
+Package pdftex.def Info: ../fig1.png  used on input line 344.
 (pdftex.def)             Requested size: 478.43153pt x 478.42587pt.
-[4] [5 <../RU_plot.png>] [6] [7] [8] [9] [10]
-Overfull \hbox (31.23138pt too wide) detected at line 768
+[4] [5 <../fig1.png>] [6] [7] [8] [9] [10]
+Overfull \hbox (31.23138pt too wide) detected at line 769
 []
  []
 
 [11] [12] [13] [14] [15] [16]
-Overfull \hbox (7.78073pt too wide) in paragraph at lines 1117--1128
+Overfull \hbox (7.78073pt too wide) in paragraph at lines 1118--1129
 \T1/ptm/m/n/10 In an effort to compare model outputs against an independent, la
 rge-scale set of fire atmospheric emissions, fire direct atmospheric
  []
 
 [17]
-<emissions_plot.png, id=434, 578.16pt x 578.16pt>
-File: emissions_plot.png Graphic file (type png)
-<use emissions_plot.png>
-Package pdftex.def Info: emissions_plot.png  used on input line 1193.
+<fig2.png, id=432, 578.16pt x 578.16pt>
+File: fig2.png Graphic file (type png)
+<use fig2.png>
+Package pdftex.def Info: fig2.png  used on input line 1194.
 (pdftex.def)             Requested size: 503.61377pt x 503.61267pt.
 
-LaTeX Warning: Float too large for page by 8.09035pt on input line 1197.
+LaTeX Warning: Float too large for page by 8.09035pt on input line 1198.
 
-[18] [19 <./emissions_plot.png>]
-<DM_vs_FBP.png, id=452, 433.62pt x 505.89pt>
-File: DM_vs_FBP.png Graphic file (type png)
-<use DM_vs_FBP.png>
-Package pdftex.def Info: DM_vs_FBP.png  used on input line 1251.
+[18] [19 <./fig2.png>]
+<fig3.png, id=450, 433.62pt x 505.89pt>
+File: fig3.png Graphic file (type png)
+<use fig3.png>
+Package pdftex.def Info: fig3.png  used on input line 1252.
 (pdftex.def)             Requested size: 377.71033pt x 440.68423pt.
-[20] [21 <./DM_vs_FBP.png>]
-<emissions2023.png, id=475, 469.755pt x 324.9741pt>
-File: emissions2023.png Graphic file (type png)
-<use emissions2023.png>
-Package pdftex.def Info: emissions2023.png  used on input line 1336.
+[20] [21 <./fig3.png>]
+<fig4.png, id=473, 469.755pt x 324.9741pt>
+File: fig4.png Graphic file (type png)
+<use fig4.png>
+Package pdftex.def Info: fig4.png  used on input line 1337.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[22] [23 <./emissions2023.png>] [24] [25] [26] [27] [28] [29]
+[22] [23 <./fig4.png>] [24] [25] [26] [27] [28] [29]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -3170,55 +3174,46 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [30
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{section.A}) h
-as been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1856 \newpage
-               ] [31]
-Overfull \hbox (4.82135pt too wide) in paragraph at lines 1887--1900
+] [31]
+Overfull \hbox (4.82135pt too wide) in paragraph at lines 1886--1899
 []\T1/ptm/m/n/10 More recent observations and modelling from []de Groot et al.[
 ] ([]2009[]) extended the FBP data with an additional 128 observations
  []
 
 [32] [33]
-<FFFC_vs_BUI_plot.png, id=702, 469.755pt x 324.9741pt>
-File: FFFC_vs_BUI_plot.png Graphic file (type png)
-<use FFFC_vs_BUI_plot.png>
-Package pdftex.def Info: FFFC_vs_BUI_plot.png  used on input line 1996.
+<FigC1.png, id=699, 469.755pt x 324.9741pt>
+File: FigC1.png Graphic file (type png)
+<use FigC1.png>
+Package pdftex.def Info: FigC1.png  used on input line 1995.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-[34 <./FFFC_vs_BUI_plot.png>]
-<FFFC_biplot.png, id=710, 469.755pt x 324.9741pt>
-File: FFFC_biplot.png Graphic file (type png)
-<use FFFC_biplot.png>
-Package pdftex.def Info: FFFC_biplot.png  used on input line 2007.
+[34 <./figC1.png>]
+<figC2.png, id=707, 469.755pt x 324.9741pt>
+File: figC2.png Graphic file (type png)
+<use figC2.png>
+Package pdftex.def Info: figC2.png  used on input line 2006.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
 [35
 
- <./FFFC_biplot.png>]
-Overfull \hbox (2.29176pt too wide) in paragraph at lines 2012--2015
+ <./figC2.png>]
+Overfull \hbox (2.29176pt too wide) in paragraph at lines 2011--2014
 []\T1/ptm/m/n/10 Across the entire parameter space of Buildup Index and AGSlow 
 pool size, the following isolines of proportional consumption
  []
 
-<FFFC_surface_plot.png, id=717, 469.755pt x 324.9741pt>
-File: FFFC_surface_plot.png Graphic file (type png)
-<use FFFC_surface_plot.png>
-Package pdftex.def Info: FFFC_surface_plot.png  used on input line 2017.
+<figC3.png, id=714, 469.755pt x 324.9741pt>
+File: figC3.png Graphic file (type png)
+<use figC3.png>
+Package pdftex.def Info: figC3.png  used on input line 2016.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
 [36
 
- <./FFFC_surface_plot.png>]
-<FFFC_expand_plot.png, id=724, 469.755pt x 324.9741pt>
-File: FFFC_expand_plot.png Graphic file (type png)
-<use FFFC_expand_plot.png>
-Package pdftex.def Info: FFFC_expand_plot.png  used on input line 2023.
+ <./figC3.png>]
+<figC4.png, id=721, 469.755pt x 324.9741pt>
+File: figC4.png Graphic file (type png)
+<use figC4.png>
+Package pdftex.def Info: figC4.png  used on input line 2022.
 (pdftex.def)             Requested size: 377.71033pt x 261.29865pt.
-[37 <./FFFC_expand_plot.png>] (./FireDMs.bbl [38
-
-
-
+[37 <./figC4.png>] (./FireDMs.bbl [38
 
 
 ]
@@ -3315,13 +3310,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 21481 strings out of 467538
- 316157 string characters out of 5423718
- 866778 words of memory out of 5000000
- 49817 multiletter control sequences out of 15000+600000
- 677700 words of font info for 112 fonts, out of 8000000 for 9000
+ 21506 strings out of 467538
+ 315806 string characters out of 5423718
+ 866774 words of memory out of 5000000
+ 49839 multiletter control sequences out of 15000+600000
+ 678014 words of font info for 113 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,93p,729b,828s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,16n,93p,729b,828s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/tex
 live/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2025/texmf-dis
@@ -3332,10 +3327,10 @@ cm/cmsy7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c
 :/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2025/tex
 mf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2025/texmf-dist/fonts/type
 1/urw/times/utmri8a.pfb>
-Output written on FireDMs.pdf (46 pages, 698947 bytes).
+Output written on FireDMs.pdf (46 pages, 677283 bytes).
 PDF statistics:
- 994 PDF objects out of 1000 (max. 8388607)
- 899 compressed objects within 9 object streams
- 232 named destinations out of 1000 (max. 500000)
+ 991 PDF objects out of 1000 (max. 8388607)
+ 896 compressed objects within 9 object streams
+ 231 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

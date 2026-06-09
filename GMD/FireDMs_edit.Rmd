@@ -984,14 +984,20 @@ VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == eco
 #Plain Language Summary of flux: survival of conifers
 #Pseudocode: survival = 1-mortality
 #Notes:  by axiom, survival = 1-mortality,
-#Notes Modification: Changed to SW.Mort so if split by cohort ensure has the correct proportion  
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Mod"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "High"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
-
+#Notes Modification: Changed to SW.Mort so if split by cohort ensure has the correct proportion, added bark component  
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Low"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]))+
+VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+ 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "Mod"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]))+
+VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & SourceSink$SeverityClass == "High"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]))+
+VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+   
 #but, I'm not doing this easily across all three severity classes, no need to run it across each severity class as its own line....
 
 #FluxID: 2
@@ -1001,14 +1007,20 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 1 & Source
 #Pseudocode: as provided from field data, f(ecozone, severity class)
 #Notes: mortality >= CFB; may not be the case in extremely fire-tolerant stands, but valid the vast majority of the time
 #Notes2: just pulling Softwood CFB 
-#Notes Modification: Changed to SW.Mort so if split by cohort ensure has the correct proportion
+#Notes Modification: Changed to SW.Mort so if split by cohort ensure has the correct proportion, added bark portion
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "Low"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])+
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])* (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*(1-VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+ 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "Mod"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])+
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])* (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*(1-VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 2 & SourceSink$SeverityClass == "High"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])+
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])* (VarDefs$Value[VarDefs$Variable.Name == "SW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*(1-VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+  
 
 
 #FluxID: 3
@@ -1024,6 +1036,93 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 3 & Source
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 3 & SourceSink$SeverityClass == "High"] <- 0
 
+#Notes Modification: Added fluxes 152-
+
+#FluxID: 152-157 for combustion of bark in merch pool
+
+#Source: SW Merch
+#Sink: CO2
+#PLS: CO2 emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 152 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO2
+ 
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 152 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO2
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 152 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO2
+  
+#FluxID: 153
+#Source: SW Merch
+#Sink: CH4
+#PLS: CH4 emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 153 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCH4
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 153 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCH4
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 153 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCH4
+  
+#FluxID: 154
+#Source: SW Merch
+#Sink: CO
+#PLS: CO emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 154 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 154 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 154 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO
+  
+#FluxID: 155
+#Source: SW Merch
+#Sink: PM25
+#PLS: PM25 emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 155 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingPM25
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 155 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingPM25
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 155 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingPM25
+  
+#FluxID: 156
+#Source: SW Merch
+#Sink: PM10
+#PLS: PM10 emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 156 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingPM10
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 156 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingPM10
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 156 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingPM10
+  
+#FluxID: 157
+#Source: SW Merch
+#Sink: NMOG
+#PLS: NMOG emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 157 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingNMOG
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 157 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingNMOG
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 157 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "SW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingNMOG
+  
 #FluxID: 4
 #Source: SW Foliage
 #Sink: Sw Foliage
@@ -1565,13 +1664,20 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 27 & Sourc
 #Plain Language Summary of flux: survival of conifers
 #Pseudocode: survival = 1-mortality
 #Notes:  by axiom, survival = 1-mortality,
+#Notes Modification: Added merch bark 
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Low"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Mod"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "High"] <- 1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
-
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Low"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]))+
+VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "Mod"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]))+
+VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & SourceSink$SeverityClass == "High"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]))+
+VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone] * (1 - (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"]))*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+  
 
 
 #FluxID: 29
@@ -1581,13 +1687,20 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 28 & Sourc
 #Pseudocode: as provided from field data, f(ecozone, severity class)
 #Notes: mortality >= CFB; may not be the case in extremely fire-tolerant stands, but valid the vast majority of the time
 #Notes2: just pulling Softwood Mortality from field data
+#Notes Modification: added merch bark
 
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Low"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Mod"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
-
-SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "High"] <- (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
-
+ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Low"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])+
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "Mod"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])+
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 29 & SourceSink$SeverityClass == "High"] <- 
+(1-VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])+
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone]) * (VarDefs$Value[VarDefs$Variable.Name == "HW.Mort" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*(1 - VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])
+  
 #FluxID: 30
 #Source: HW Merch 
 #sink: Black Carbon
@@ -1601,6 +1714,96 @@ SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 30 & Sourc
 
 SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 30 & SourceSink$SeverityClass == 'High'] <- 0
 
+#Notes Modification: Added fluxes 158-163 for combustion of merch bark
+
+#FluxID: 158
+#Source: HW Merch
+#Sink: CO2
+#PLS: CO2 emission from bark consumption of merch pool
+   
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 158 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO2
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 158 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO2
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 158 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO2
+  
+#FluxID: 159
+#Source: HW Merch
+#Sink: CH4
+#PLS: CH4 emission from bark consumption of merch pool
+   
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 159 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCH4
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 159 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCH4
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 159 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCH4
+  
+  
+#FluxID: 160
+#Source: HW Merch
+#Sink: CO
+#PLS: CO emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 160 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingCO
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 160 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingCO
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 160 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingCO
+  
+  
+#FluxID: 161
+#Source: HW Merch
+#Sink: PM25
+#PLS: PM25 emission from bark consumption of merch pool
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 161 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingPM25
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 161 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingPM25
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 161 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingPM25
+  
+  
+   
+#FluxID: 162
+#Source: HW Merch
+#Sink: PM10
+#PLS: PM10 emission from bark consumption of merch pool
+   
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 162 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingPM10
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 162 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingPM10
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 162 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingPM10
+  
+#FluxID: 163
+#Source: HW Merch
+#Sink: NMOG
+#PLS: NMOG emission from bark consumption of merch pool
+   
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 163 & SourceSink$SeverityClass == "Low"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Low"])*global.vars$FlamingNMOG
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 163 & SourceSink$SeverityClass == "Mod"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "Mod"])*global.vars$FlamingNMOG
+  
+SourceSink$Value[SourceSink$Ecozone == ecozone & SourceSink$FluxID == 163 & SourceSink$SeverityClass == "High"] <- 
+(VarDefs$Value[VarDefs$Variable.Name == "HW.bark.frac.of.merch" & VarDefs$Ecozone == ecozone])*(VarDefs$Value[VarDefs$Variable.Name == "Bark.Comb.Frac" & VarDefs$Ecozone == ecozone & VarDefs$SeverityClass == "High"])*global.vars$FlamingNMOG
+  
 #FluxID: 31
 #Source: HW Foliage 
 #sink: HW Foliage
